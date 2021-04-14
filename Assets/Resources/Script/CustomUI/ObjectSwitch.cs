@@ -61,6 +61,16 @@ namespace UnityEngine.UI
             }
         }
 
+        bool checkOutOfRange(int objectNumber)
+        {
+            if (objectNumber >= objectList.Count && objectNumber < 0)
+            {
+                Debug.Log("Error :: Out of range (0~" + (objectList.Count - 1).ToString() + ") -> " + objectNumber.ToString());
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Do refresh
         /// </summary>
@@ -75,12 +85,27 @@ namespace UnityEngine.UI
             turnOn(objectList[activeSwitchNum]);
         }
 
+        public int count()
+        {
+            return objectList.Count;
+        }
+
         /// <summary>
         /// Return activate gmaeobject
         /// </summary>
         public GameObject GetObject()
         {
             return objectList[activeSwitchNum];
+        }
+
+        /// <summary>
+        /// Return gmaeobject by number
+        /// </summary>
+        public GameObject GetObject(int objectNumber)
+        {
+            if (!checkOutOfRange(objectNumber))
+                return null;
+            return objectList[objectNumber];
         }
 
         /// <summary>
@@ -94,7 +119,7 @@ namespace UnityEngine.UI
         /// <summary>
         /// Do only "gmaeobject of switchNumber" active
         /// </summary>
-        public void Set(int switchNum)
+        public void setUp(int switchNum)
         {
             if (switchNum >= objectList.Count)
                 return;

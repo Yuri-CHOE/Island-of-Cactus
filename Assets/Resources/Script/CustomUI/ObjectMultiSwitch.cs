@@ -6,82 +6,103 @@ using UnityEngine.EventSystems;
 
 
 namespace UnityEngine.UI
-{
-    // No need for Refresh() when using Set()
-    // The first operation must be manually Refresh()
-
+{    
     [AddComponentMenu("UI/Custom/ObjectMultiSwitch", 0)]
     [RequireComponent(typeof(RectTransform))]
 
     public class ObjectMultiSwitch : UIBehaviour
     {
         [SerializeField]
-        List<GameObject> btn;
+        List<GameObject> objects;
 
-        List<string> btnSetName = new List<string>();
-        List<bool[]> btnSet = new List<bool[]>();
+        List<bool[]> preset = new List<bool[]>();
+        
 
-
-        // Start is called before the first frame update
-        protected override void Start()
+        /// <summary>
+        /// 제어할 오브젝트 수량 반환
+        /// </summary>
+        public int count()
         {
-
+            return objects.Count;
         }
 
-        // Update is called once per frame
-        void Update()
+        /// <summary>
+        /// 등록된 프리셋 수량 반환
+        /// </summary>
+        public int countPreset()
         {
-
+            return (preset.Count);
         }
 
 
-        public void addBtnSet(string name, bool[] bArr)
+        /// <summary>
+        /// 프리셋 리스트 초기화
+        /// </summary>
+        public void clear()
         {
-            if (bArr.Length != btn.Count || bArr.Length < 0)
+            preset.Clear();
+        }
+
+        /// <summary>
+        /// 입력한 오브젝트 번호의 유효성
+        /// </summary>
+        public bool checkCountObject(int num)
+        {
+            if (num != objects.Count || num < 0)
             {
-                Debug.Log("Error :: Out of Range ( button : 0~" + (btn.Count - 1) + ") -> Array : " + (bArr.Length - 1));
-                return;
+                Debug.Log("Error :: Out of Range ( button : 0~" + (objects.Count - 1) + ") -> input : " + num);
+                return false;
             }
-
-            btnSetName.Add(name);
-            btnSet.Add(bArr);
+            return true;
         }
 
 
+        /// <summary>
+        /// 입력한 프리셋 번호의 유효성
+        /// </summary>
+        public bool checkCountPreset(int num)
+        {
+            if (num >= preset.Count || num < 0)
+            {
+                Debug.Log("Error :: Out of Range ( button : 0~" + (preset.Count - 1) + ") -> input : " + num);
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// 새로운 프리셋 추가 (정확한 오브젝트 수량의 배열 필요)
+        /// </summary>
+        public void addPreset(bool[] bArr)
+        {
+            if (checkCountObject(bArr.Length))
+                preset.Add(bArr);
+            else
+                Debug.Log("fail :: preset add");
+
+        }
+
+
+        /// <summary>
+        /// 프리셋 적용
+        /// </summary>
         public void setUp(int number)
         {
-            if (number >= btnSet.Count || number < 0)
-            {
-                Debug.Log("Error :: Out of Range ( button set Lixt : 0~" + (btnSet.Count - 1) + ") -> Array : " + number);
+            if (!checkCountObject(preset[number].Length))
                 return;
-            }
 
-            if(btn.Count < btnSet[number].Length)
-            {
-                Debug.Log("Error :: Out of Range ( button : 0~" + (btn.Count - 1) + ") -> Array : " + (btnSet[number].Length - 1));
+            if (!checkCountPreset(number))
                 return;
-            }
 
-            for (int i = 0; i < btn.Count; i++)
+            // 오브젝트 별 On, Off 설정
+            for (int i = 0; i < objects.Count; i++)
             {
-                btn[i].SetActive(btnSet[number][i]);
+                objects[i].SetActive(preset[number][i]);
+                Debug.Log("objects :: " + i + " -> " + objects[i].activeSelf.ToString() + " = " + preset[number][i].ToString());
             }
 
-            Debug.Log("Excute :: Button list setup -> [" + number + "]" + btnSetName[number]);
-        }
-
-
-        public void setUp(string name)
-        {
-            for (int i = 0; i < btnSetName.Count; i++)
-            {
-                if(btnSetName[i] == name)
-                {
-                    setUp(i);
-                    return;
-                }
-            }
-            
+            Debug.Log("Excute :: Button list setup -> " + number);
         }
 
 
