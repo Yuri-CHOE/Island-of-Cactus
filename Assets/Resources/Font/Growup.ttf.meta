@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a61e41e6e1513144bb382c66c75e1e71
+guid: 06aa5b154a71e9b4194f7633be4271f8
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,7 +10,8 @@ TrueTypeFontImporter:
   includeFontData: 1
   fontNames:
   - Ballet Harmony
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: ab1952563f77f6245ae62ce117008d2f, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
