@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 2244615670174521476}
   - component: {fileID: 2244615670174521477}
   - component: {fileID: 2244615670174521474}
+  - component: {fileID: 5898321492449144867}
   - component: {fileID: 4086368863985714256}
   m_Layer: 5
   m_Name: DynamicBtn
@@ -199,7 +200,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2244615670174521477}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5898321492449144867}
+        m_TargetAssemblyTypeName: UnityEngine.UI.ButtonFlag, Assembly-CSharp
+        m_MethodName: Clicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5898321492449144867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2244615670174521472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2251b38b44356654587ed1c582df8827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isActive: 0
 --- !u!114 &4086368863985714256
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,11 +43,7 @@ namespace UnityEngine.MapEditor
                 startPoint.y + (intervalSize.y * obj.lossyScale.y * v),
                 startPoint.z + (intervalSize.z * obj.lossyScale.z * d)
                 );
-            //obj.localEulerAngles = new Vector3(
-            //    obj.localEulerAngles.x,
-            //    90 * Random.Range(1, 5),
-            //    obj.localEulerAngles.z
-            //    );
+            obj.Rotate(0, 90 * Random.Range(1, 5), 0);
             Instantiate(obj.gameObject, v3, obj.rotation)
                 .transform.SetParent(transform);
 
@@ -57,7 +53,8 @@ namespace UnityEngine.MapEditor
         void CreateGround()
         {
             if (loopCount.y <= 0)
-                loopCount = new Vector3(loopCount.x, 1, loopCount.z);
+                //loopCount = new Vector3(loopCount.x, 1, loopCount.z);
+                loopCount.y = 1;
 
             for (int yy = 0; yy < loopCount.y; yy++)
             {

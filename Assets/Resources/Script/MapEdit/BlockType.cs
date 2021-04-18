@@ -6,6 +6,7 @@ public class BlockType
 {
     public enum Type
     {
+        None,
         Normal,
         Event,
         Special,
@@ -27,6 +28,54 @@ public class BlockType
         unique,
         shortcutIn,
         shortcutOut,
+    }
+
+    public static Type GetTypeByDetail(TypeDetail typeDetail)
+    {
+        Type ttt;
+        switch (typeDetail)
+        {
+            case TypeDetail.plus:
+                ttt = Type.Normal;
+                break;
+
+            case TypeDetail.minus:
+                ttt = Type.Normal;
+                break;
+
+            case TypeDetail.boss:
+                ttt = Type.Event;
+                break;
+
+            case TypeDetail.trap:
+                ttt = Type.Event;
+                break;
+
+            case TypeDetail.lucky:
+                ttt = Type.Event;
+                break;
+
+            case TypeDetail.shop:
+                ttt = Type.Special;
+                break;
+
+            case TypeDetail.unique:
+                ttt = Type.Special;
+                break;
+
+            case TypeDetail.shortcutIn:
+                ttt = Type.Special;
+                break;
+
+            case TypeDetail.shortcutOut:
+                ttt = Type.Special;
+                break;
+
+            default :
+                ttt = Type.None;
+                break;
+        }
+        return ttt;
     }
 
 }
