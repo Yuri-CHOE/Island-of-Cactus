@@ -13,9 +13,12 @@ public class TouchCameraMover : MonoBehaviour
     float camSpeed = 7.5f;      // 카메라 이동 속도
 
     [SerializeField]
-    Vector3 mouseMove = new Vector3(0f, 0f, 0f);
-    Vector2 mouseNow = new Vector2(0f, 0f);
-    Vector2 mouseBefore = new Vector2(0f, 0f);
+    Vector3 mouseMove = new Vector3(0f, 0f, 0f);        // 좌표 계산값 저장용
+    Vector2 mouseNow = new Vector2(0f, 0f);             // 새로운 좌표
+    Vector2 mouseBefore = new Vector2(0f, 0f);          // 이미 이동 계산된 좌표
+    Vector3 sensitivityFix = new Vector3(1f, 0f, 2f);   // 비율 보정
+    [SerializeField]
+    Vector3 sensitivity = new Vector3(5f, 0f, 5f);      // 설정 가능한 감도
 
     [SerializeField]
     Vector3 distance;
@@ -96,9 +99,9 @@ public class TouchCameraMover : MonoBehaviour
 
         // 갱신값 계산
         Vector3 movePlus = new Vector3(
-            (mouseBefore.x - mouseNow.x) / camY,
+            (mouseBefore.x - mouseNow.x) / camY * sensitivity.x,
             0f,
-            (mouseBefore.y - mouseNow.y) / camY
+            (mouseBefore.y - mouseNow.y) / camY * sensitivity.z
             );
 
         // 갱신값 남은 이동값에 반영

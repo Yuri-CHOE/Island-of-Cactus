@@ -100,7 +100,8 @@ public class BlockManager : MonoBehaviour
         // copyTarget 리스트 및 오브젝트 제거
         for (int i = 0; i < gol.Count; i++)
         {
-            //Destroy(gol[i]);
+            Destroy(gol[i]);
+            //DeleteObject(gol[i]);
         }
         gol.Clear();
 
@@ -191,6 +192,10 @@ public class BlockManager : MonoBehaviour
     {
         // 블록이 아닐경우 차단
         if (obj == null)
+            return;
+
+        // 블록이 아닐경우 차단
+        if (!CheckObjectList(obj))
             return;
 
         // 리스트 제거
