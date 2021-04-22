@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748928a779c8b024e8612dd546c1173a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blockPrefab: {fileID: 6124110220913457941, guid: d42a58c8bda80034ab909e4735110b3d, type: 3}
   gol: []
   blockMaster: {fileID: 5887150760739008225}
 --- !u!1 &6821367821591932447

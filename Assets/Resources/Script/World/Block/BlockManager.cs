@@ -93,6 +93,8 @@ public class BlockManager : MonoBehaviour
     /// <param name="td">결과물 오브젝트 블록 타입 목록</param>
     public void BuildUP(Vector3[] pos, int[] direction, BlockType.TypeDetail[] td)
     {
+        Debug.Log("create block :: batch operation (start)");
+
         // position 배열과 BlockType.TypeDetail 배열의 길이 불일치시 강제종료
         if (pos.Length != td.Length && pos.Length != direction.Length)
             return;
@@ -111,6 +113,8 @@ public class BlockManager : MonoBehaviour
 
         // 모든 리스트 새로고침
         RefreshAllObject();
+
+        Debug.Log("create block :: batch operation (finish)");
     }
 
 
@@ -130,9 +134,10 @@ public class BlockManager : MonoBehaviour
 
         // 생성
         Transform copyObject = Instantiate(
-            blockPrefab,
-            pos,
-            blockPrefab.transform.rotation
+            blockPrefab,                            // 복사할 Ga
+            pos,                                    // position
+            Quaternion.Euler(Vector3.zero),         // rotation
+            blockMaster                             // 부모 지정
             ).transform;
 
         // 블록 속성 지정 및 적용
@@ -147,11 +152,11 @@ public class BlockManager : MonoBehaviour
         //목록 추가
         gol.Add(copyObject.gameObject);
 
-        // 부모 지정
-        copyObject.SetParent(blockMaster);
-
         // 오브젝트 이름 변경
         copyObject.name = string.Format("Block ({0})", gol.Count - 1);
+
+        // 로그 출력
+        Debug.Log(string.Format("create block :: {0}\n position=({1}, {2}, {3}) direction={4} blockType={5} blockTypeDetail{6}", copyObject.name, pos.x, pos.y, pos.z, direction*90, db.blockType, db.blockTypeDetail));
 
         return copyObject;
     }

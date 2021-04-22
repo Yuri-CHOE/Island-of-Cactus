@@ -144,7 +144,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1037849861906522618, guid: 76ccbdda4594fcc4eae5da0915e117e9, type: 3}
       propertyPath: m_Name
-      value: Object
+      value: Decor
       objectReference: {fileID: 0}
     - target: {fileID: 1037849861906522619, guid: 76ccbdda4594fcc4eae5da0915e117e9, type: 3}
       propertyPath: m_RootOrder

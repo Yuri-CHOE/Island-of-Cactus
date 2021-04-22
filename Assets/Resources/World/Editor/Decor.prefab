@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1037849861906522618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1037849861906522619}
+  - component: {fileID: 9109883052813922941}
+  m_Layer: 0
+  m_Name: Decor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1037849861906522619
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037849861906522618}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9109883052813922941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037849861906522618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6181b6473485a4f9fefb105a55514c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decorBone:
+  - {fileID: 175704, guid: 0b3ddaa555c894e48af65308623c3a1f, type: 3}
+  decorCactus:
+  - {fileID: 145196, guid: 47d46569ffd2dce4fbed6bda0a71d85c, type: 3}
+  - {fileID: 108226, guid: 23415e089e68e344ea7bf4efb3402822, type: 3}
+  - {fileID: 105562, guid: 158c166b3a4f83b4c9b62f5c03c945b2, type: 3}
+  - {fileID: 114448, guid: 7035be08a86467b40b7d0fc7b640fb50, type: 3}
+  - {fileID: 143784, guid: 768ba41be09db9546bfe52d3ab75344a, type: 3}
+  - {fileID: 110776, guid: 6b224894ca2cc314399473b160cc68fc, type: 3}
+  decorOasis:
+  - {fileID: 127060, guid: f09bce79d50c5c14bb955cd8ae5f9699, type: 3}
+  decorObelisk:
+  - {fileID: 1000010390738104, guid: 19904cc19286dda42bed6ed571066b31, type: 3}
+  decorPlant:
+  - {fileID: 178436, guid: 587331bb58ede6149bd7d31473a36202, type: 3}
+  decorPyramid:
+  - {fileID: 1000010736078000, guid: a9c44f4f55209744290718151e04e39e, type: 3}
+  - {fileID: 1000010285526238, guid: c0b6a07f8003ab5469dd5b34676a08c4, type: 3}
+  - {fileID: 1000014058142462, guid: 490a2ecd086b99c4ba2947dff132e52c, type: 3}
+  - {fileID: 1000010780680120, guid: 43b959ac5c9bbab458e394c254557121, type: 3}
+  - {fileID: 1000014225362746, guid: c7eea499cdd2e4a48be4400f1fdac3e5, type: 3}
+  decorRock:
+  - {fileID: 128100, guid: 1c43674b9c2574242a3bd10e4c53662a, type: 3}
+  - {fileID: 174148, guid: 15cadb607dc23e949862937c65d7fc91, type: 3}
+  - {fileID: 132076, guid: f4d6d1caa1116424980c663529fd5d53, type: 3}
+  - {fileID: 136132, guid: 96c8f862f38382747b2ee865cd825270, type: 3}
+  - {fileID: 175310, guid: a1284e9290b216344877d7d782c710af, type: 3}
+  - {fileID: 112734, guid: f6472258008bd694798fc0e66991fa57, type: 3}
+  - {fileID: 146236, guid: 509462b92eec2ae47be4de9e62a589f6, type: 3}
+  - {fileID: 118734, guid: 2ac65c1dfb56848489f62619c95a6385, type: 3}
+  - {fileID: 145164, guid: d001343efd1ab0641b965320376a5bf8, type: 3}
+  - {fileID: 1000012423379628, guid: 12e881930fff3be4ca3efe00224a3a1e, type: 3}
+  - {fileID: 1000013736168662, guid: 3476b5d093e85ea4faa8f016f0dcb5cc, type: 3}
+  decorSand:
+  - {fileID: 1000012287201764, guid: 5e702fa0426c89d418f218d18c688f0d, type: 3}
+  decorTemple:
+  - {fileID: 1000011285132168, guid: 2c2da168e7eed0f409f9a5703e0c3cc7, type: 3}
+  - {fileID: 1000013520451200, guid: 2d0cb51f691bfc3439840f66fbcf58c7, type: 3}
+  - {fileID: 1000011894741232, guid: 1ea65fe8f3855e44280aa1984def9f8b, type: 3}
+  - {fileID: 1000011035781986, guid: 5706f6fb45ca6de498341aac9b571d52, type: 3}
+  - {fileID: 1000012046549718, guid: 26ee9b100af1213488ed4098ec9ad0a7, type: 3}
+  - {fileID: 1000011151103506, guid: 9ef261ad2d24ccd4fa5c1107840d1764, type: 3}
+  - {fileID: 1000013239581964, guid: 618b33d80e183e641924bafe54ac4230, type: 3}
+  - {fileID: 1000011859241944, guid: 028dd47a51bf6db409620d27c08942fe, type: 3}
+  - {fileID: 1000012128009412, guid: 66d9945c6a68c264bae204356d34c66d, type: 3}
+  - {fileID: 1000012089989546, guid: 5dd3d8696304a5d47b591d626caf625c, type: 3}
+  - {fileID: 1000013553030096, guid: d14f89eb0d4bd6d4c9f3302552641e36, type: 3}
+  - {fileID: 1000013518663082, guid: f6410ac058a545941957d7543092e8e0, type: 3}
+  - {fileID: 1000013795940460, guid: 85f8a3d817fc21a4fb03608cb40ee241, type: 3}
+  - {fileID: 1000010564498848, guid: e283a2f0decdd744c8e85333883c69b9, type: 3}
+  - {fileID: 1000010572747236, guid: 36ff6f9364d6e0745a3acd4aab7cdc07, type: 3}
+  decorTree:
+  - {fileID: 163980, guid: defd3780bc212ba44a4f98d25746536e, type: 3}
+  - {fileID: 145430, guid: 10f7e3ddae3161749a5b91aa580a2500, type: 3}
+  gol: []
+  decorMaster: {fileID: 1037849861906522619}
