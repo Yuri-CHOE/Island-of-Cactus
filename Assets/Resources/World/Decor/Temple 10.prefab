@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000012789593826}
   - component: {fileID: 33000014006891560}
   - component: {fileID: 23000011253681504}
-  m_Layer: 0
-  m_Name: Desert_Column_TopRuined
+  m_Layer: 9
+  m_Name: Temple 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

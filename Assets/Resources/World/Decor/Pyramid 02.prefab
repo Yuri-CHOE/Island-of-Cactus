@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000010945598816}
   - component: {fileID: 33000013770508786}
   - component: {fileID: 23000012341759608}
-  m_Layer: 0
-  m_Name: Pyramid_Thin_Tip
+  m_Layer: 9
+  m_Name: Pyramid 02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

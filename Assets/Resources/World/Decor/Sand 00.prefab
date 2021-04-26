@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000014091459346}
   - component: {fileID: 33000013617450440}
   - component: {fileID: 23000010646845134}
-  m_Layer: 0
-  m_Name: Desert_SandPlateMedium
+  m_Layer: 9
+  m_Name: Sand 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

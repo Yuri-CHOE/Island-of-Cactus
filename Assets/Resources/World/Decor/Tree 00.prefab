@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 433264}
   - component: {fileID: 3322384}
   - component: {fileID: 2340500}
-  m_Layer: 0
-  m_Name: Mixed_Palm_tree_01
+  m_Layer: 9
+  m_Name: Tree 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

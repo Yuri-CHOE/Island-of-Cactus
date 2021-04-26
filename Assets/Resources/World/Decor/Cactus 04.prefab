@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 400094}
   - component: {fileID: 3374400}
   - component: {fileID: 2362082}
-  m_Layer: 0
-  m_Name: Mixed_Cactus_01
+  m_Layer: 9
+  m_Name: Cactus 04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

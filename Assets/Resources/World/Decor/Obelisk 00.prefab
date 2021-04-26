@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000012333492518}
   - component: {fileID: 33000013778004306}
   - component: {fileID: 23000012103580876}
-  m_Layer: 0
-  m_Name: Desert_Obelisk_Stand
+  m_Layer: 9
+  m_Name: Obelisk 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

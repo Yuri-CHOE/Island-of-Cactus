@@ -59,7 +59,7 @@ namespace UnityEngine.MapEditor
 
         // Update is called once per frame
         void Update()
-        {            
+        {
             RefreshTarget(MapEditor.Targeting());
             BtnCopyOnOFF();
             MoveCamera(dkMove.GetDirection());

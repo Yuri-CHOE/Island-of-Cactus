@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000011041737276}
   - component: {fileID: 33000013304867102}
   - component: {fileID: 23000011067429556}
-  m_Layer: 0
-  m_Name: Desert_Ram_Altar
+  m_Layer: 9
+  m_Name: Temple 05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

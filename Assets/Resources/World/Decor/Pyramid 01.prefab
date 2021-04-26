@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000011488240504}
   - component: {fileID: 33000012641193682}
   - component: {fileID: 23000012860850786}
-  m_Layer: 0
-  m_Name: Pyramid_Thin_Base
+  m_Layer: 9
+  m_Name: Pyramid 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

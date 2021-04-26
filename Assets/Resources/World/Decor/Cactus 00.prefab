@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 482546}
-  m_Layer: 0
-  m_Name: Aloe
+  m_Layer: 9
+  m_Name: Cactus 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 413452}
   - component: {fileID: 3319116}
   - component: {fileID: 2352658}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}

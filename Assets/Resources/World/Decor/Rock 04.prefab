@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 469400}
   - component: {fileID: 3359034}
   - component: {fileID: 2342516}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,8 +90,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 443904}
-  m_Layer: 0
-  m_Name: rock05
+  m_Layer: 9
+  m_Name: Rock 04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

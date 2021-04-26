@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000011095560932}
   - component: {fileID: 33000011154727754}
   - component: {fileID: 23000011543470302}
-  m_Layer: 0
-  m_Name: ColumnSquare_Small1
+  m_Layer: 9
+  m_Name: Temple 03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
