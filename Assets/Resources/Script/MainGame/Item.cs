@@ -117,6 +117,14 @@ public class Item
         }
     }
 
+    // 아이템 테이블
+    public static List<Item> table = new List<Item>();
+
+    // 아이템 테이블 확인용
+    static bool _isReady = false;
+    public static bool isReady { get { return _isReady; } }
+
+
 
     // 아이템 번호
     int _index = -1;
@@ -164,23 +172,61 @@ public class Item
         // 사용 금지
     }
     /// <summary>
-    /// 인덱스로 테이블 참조하여 셋팅
+    /// 테이블 정보를 입력받아 셋팅
     /// </summary>
-    /// <param name="__index">테이블 인덱스</param>
-    public Item(int __index)
+    /// <param name="strArray">테이블 배열로 읽기</param>
+    protected Item(string[] strArray)
     {
-        Set( __index);
+        Set(strArray);
+    }
+
+    /// <summary>
+    /// 테이블 생성
+    /// </summary>
+    public static void SetUp()
+    {
+        // 중복 실행 방지
+        if (_isReady)
+            return;
+
+        // 테이블 읽어오기
+        CSVReader itemReader = new CSVReader("/item.csv");
+
+        // 테이블로 리스트 셋팅
+        for (int i = 1; i < itemReader.table.Count; i++)
+            table.Add(new Item(itemReader.table[i]));
+
+        // 준비완료
+        _isReady = true;
     }
 
 
     /// <summary>
     /// 재설정 함수, 테이블 읽어서 사용할것
     /// </summary>
-    /// <param name="__index"></param>
-    public void Set(int __index)
+    /// <param name="strArray"></param>
+    void Set(string[] strArray)
     {
-        // 인덱스로 테이블 읽어오기=================
-        //Set( __index,  __type,  __name,  __icon,  __rare, __cost,  __isLuckyBoxGet, __expiration,  __count, __target, __what, __value, __info);
+        // out of range 방지
+        if (strArray.Length != 13)
+            return;
+                
+        // 테이블 읽어오기
+        Set(
+            int.Parse(strArray[0]),
+            (Type)int.Parse(strArray[1]),
+            strArray[2],
+            int.Parse(strArray[3]),
+            int.Parse(strArray[4]),
+            int.Parse(strArray[5]),
+            System.Convert.ToBoolean(int.Parse(strArray[6])),
+            (ItemEffect.Expiration)int.Parse(strArray[7]),
+            int.Parse(strArray[8]),
+            (ItemEffect.Target)(int.Parse(strArray[9])),
+            (ItemEffect.What)(int.Parse(strArray[10])),
+            int.Parse(strArray[11]),
+            strArray[12]
+        );
     }
 
 
@@ -198,7 +244,7 @@ public class Item
     /// <param name="__target"></param>
     /// <param name="__what"></param>
     /// <param name="__value"></param>
-    public void Set(int __index, Type __type, string __name, int __icon, int __rare, int __cost, bool __isLuckyBoxGet, ItemEffect.Expiration __expiration, int __count, ItemEffect.Target __target, ItemEffect.What __what, int __value, string __info)
+    void Set(int __index, Type __type, string __name, int __icon, int __rare, int __cost, bool __isLuckyBoxGet, ItemEffect.Expiration __expiration, int __count, ItemEffect.Target __target, ItemEffect.What __what, int __value, string __info)
     {
         SetIndex(__index);
         SetType(__type);
@@ -249,5 +295,31 @@ public class Item
     void SetLuckyBoxGet(bool __isLuckyBoxGet)
     {
         _isLuckyBoxGet = __isLuckyBoxGet;
+    }
+
+
+    /// <summary>
+    /// 아이템 효과
+    /// </summary>
+    /// <param name="___index">작동할 아이템 인덱스</param>
+    public static void Effect(int __index)
+    {
+        switch (__index)
+        {
+            case 0:
+                // 0번은 없음
+                break;
+
+            case 1:
+                // 효과
+                break;
+
+            case 2:
+                // 효과
+                break;
+
+                // 이하 추가 필요========================
+
+        }
     }
 }

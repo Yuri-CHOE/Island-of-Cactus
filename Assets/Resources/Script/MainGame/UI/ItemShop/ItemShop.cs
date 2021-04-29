@@ -45,9 +45,8 @@ public class ItemShop : MonoBehaviour
     {
         for (int i = 0; i < bundle.Count; i++)
         {
-            int max = 1;    
-            int index = Random.Range(0, max);// 이부분 max를 테이블읽어서 아이템 최대 수량으로 교체
-            bundle[i].item = new Item(index);        // new 로 새로 만들지 말고 아이템 테이블에서 인덱스로 참조 시킬것
+            // 아이템 테이블에서 랜덤하게 참조
+            bundle[i].item = Item.table[Random.Range(0, Item.table.Count)];
 
             // 가격 텍스트 설정
             bundle[i].Refresh();

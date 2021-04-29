@@ -9,11 +9,11 @@ public class CSV_TEST : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        List<Dictionary<string, object>> data = CSVReader.Read("Text_Table");
+        //List<Dictionary<string, object>> data = CSVReader.Read("Text_Table");
 
-        for (var i = 0; i < data.Count; i++)
-        {
-            Debug.Log(data[i]["id"] + " " + data[i]["String"]);
-        }
+        //for (var i = 0; i < data.Count; i++)
+        //{
+        //    Debug.Log(data[i]["id"] + " " + data[i]["String"]);
+        //}
     }
 }

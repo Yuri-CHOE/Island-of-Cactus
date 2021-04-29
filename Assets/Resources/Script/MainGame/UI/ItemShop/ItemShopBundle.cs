@@ -9,7 +9,7 @@ public class ItemShopBundle : MonoBehaviour
     Toggle toggle;
 
     [SerializeField]
-    Text name;
+    Text itenName;
 
     [SerializeField]
     Image img;
@@ -37,8 +37,12 @@ public class ItemShopBundle : MonoBehaviour
 
     public void Refresh()
     {
+        // 초기화 안됬을 경우 중단
+        if (item == null)
+            return;
+
         // 아이템명 텍스트 변경
-        name.text = item.name;
+        itenName.text = item.name;
 
         // 아이템 아이콘 변경
         //작업중=====================================================
