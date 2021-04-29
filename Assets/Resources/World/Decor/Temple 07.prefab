@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000011147253788}
   - component: {fileID: 33000014190666842}
   - component: {fileID: 23000014044881256}
-  m_Layer: 0
-  m_Name: Desert_Temple_Entrance
+  m_Layer: 9
+  m_Name: Temple 07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

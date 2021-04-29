@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 448062}
-  m_Layer: 0
-  m_Name: Cactus1
+  m_Layer: 9
+  m_Name: Cactus 01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 468506}
   - component: {fileID: 3308218}
   - component: {fileID: 2375444}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cactus1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

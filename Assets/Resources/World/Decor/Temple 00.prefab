@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000011208106806}
   - component: {fileID: 33000013883609538}
   - component: {fileID: 23000011230670128}
-  m_Layer: 0
-  m_Name: Block_Cube
+  m_Layer: 9
+  m_Name: Temple 00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

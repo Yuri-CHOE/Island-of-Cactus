@@ -905,9 +905,9 @@ MonoBehaviour:
   turnOobject: {fileID: 34462098695117999}
   face: {fileID: 7278324301333141259}
   item:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 389384239374747063}
+  - {fileID: 3403185262033199515}
+  - {fileID: 6477630605405836877}
   Life: 10
   lifeText: {fileID: 7278324300701951812}
   Coin: 0

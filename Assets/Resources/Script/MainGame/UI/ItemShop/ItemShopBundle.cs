@@ -17,6 +17,12 @@ public class ItemShopBundle : MonoBehaviour
     [SerializeField]
     Text price;
 
+    public Item item;
+
+    // 구매 가능 여부
+    public bool canBuy = true;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,5 +33,23 @@ public class ItemShopBundle : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Refresh()
+    {
+        // 아이템명 텍스트 변경
+        name.text = item.name;
+
+        // 아이템 아이콘 변경
+        //작업중=====================================================
+        //img.sprite = new Sprite(아이템 아이콘 리스트 만들어서 사용할것);
+
+        // 아이템 가격 변경
+        price.text = item.cost.ToString();
+    }
+
+    public void SetPriceColor(Color color)
+    {
+        price.color = color;
     }
 }

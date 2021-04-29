@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000012181423232}
   - component: {fileID: 33000012220591194}
   - component: {fileID: 23000012156107880}
-  m_Layer: 0
-  m_Name: Desert_Column_Single
+  m_Layer: 9
+  m_Name: Temple 09
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

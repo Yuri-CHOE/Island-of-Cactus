@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 447314}
   - component: {fileID: 3387234}
   - component: {fileID: 2363890}
-  m_Layer: 0
-  m_Name: Mixed_Rock_01
+  m_Layer: 9
+  m_Name: Rock 08
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

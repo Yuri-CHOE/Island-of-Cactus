@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4000012622637596}
   - component: {fileID: 33000014039978672}
   - component: {fileID: 23000013986466112}
-  m_Layer: 0
-  m_Name: Desert_Pyramid_Small
+  m_Layer: 9
+  m_Name: Pyramid 04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
