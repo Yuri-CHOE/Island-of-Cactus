@@ -9,12 +9,12 @@ using System.Text;
 public class CSVReader
 {
     // 데이터
-    public List<string[]> table = new List<string[]>();
+    public List<List<string>> table = new List<List<string>>();
 
     // 파일 경로
     public string path = null;
 
-    // 저장 가능여부
+    // 저장 불가능여부
     public bool isReadOnly = true;
     // 사본을 다뤄야 할 경우는?
     //  ㄴ Resources는 패킹 후에는 읽기 전용
@@ -39,13 +39,13 @@ public class CSVReader
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
     /// <param name="dataSeparator">데이터 구분자</param>
     /// <param name="lineSeparator">라인 구분자</param>
-    public CSVReader(string fileName, bool _isReadOnly, char dataSeparator, char lineSeparator)
+    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly, char dataSeparator, char lineSeparator)
     {
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
         // 파일 읽기
-        ReadFile(fileName, dataSeparator, lineSeparator);
+        ReadFile(subPathOrNull, fileName, dataSeparator, lineSeparator);
     }
     /// <summary>
     /// 선언과 동시에 파일 읽어오기
@@ -54,13 +54,13 @@ public class CSVReader
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
     /// <param name="dataSeparator">데이터 구분자</param>
-    public CSVReader(string fileName, bool _isReadOnly, char dataSeparator)
+    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly, char dataSeparator)
     {
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
         // 파일 읽기
-        ReadFile(fileName, dataSeparator);
+        ReadFile(subPathOrNull, fileName, dataSeparator);
     }
     /// <summary>
     /// 선언과 동시에 파일 읽어오기
@@ -69,13 +69,13 @@ public class CSVReader
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
-    public CSVReader(string fileName, bool _isReadOnly)
+    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly)
     {
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
         // 파일 읽기
-        ReadFile(fileName);
+        ReadFile(subPathOrNull, fileName);
     }
     /// <summary>
     /// 선언과 동시에 읽기 전용으로 파일 읽어오기
@@ -83,13 +83,13 @@ public class CSVReader
     /// 데이터 구분자 = ','
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
-    public CSVReader(string fileName)
+    public CSVReader(string subPathOrNull, string fileName)
     {
         // 저장 가능 여부 설정
         isReadOnly = true;
 
         // 파일 읽기
-        ReadFile(fileName);
+        ReadFile(subPathOrNull, fileName);
     }
 
 
@@ -97,7 +97,7 @@ public class CSVReader
     /// 폴더 존재를 체크하고 없으면 생성
     /// </summary>
     /// <param name="_path">/세부 경로</param>
-    static void CheckPath(string _path)
+    public static void CheckPath(string _path)
     {
         Debug.Log("폴더 체크 :: " + @_path);
 
@@ -115,23 +115,12 @@ public class CSVReader
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
-    void CheckFile(string fileName, bool _isReadOnly)
+    public static void CheckFile(string _path, string fileName, bool _isReadOnly)
     {
-        // 원본 폴더 체크
-        CheckPath(basicPath);
-
-        // 사본 폴더 체크
-        CheckPath(copyPath);
-
-        // 파일 경로 설정
-        if (_isReadOnly)
-            path = basicPath + fileName;
-        else
-            path = copyPath + fileName;
-        Debug.Log("파일 체크 :: " + @path);
+        Debug.Log("파일 체크 :: " + @_path);
 
         // 파일 체크 및 복사
-        FileInfo fi = new FileInfo(@path);
+        FileInfo fi = new FileInfo(@_path);
         if (fi.Exists)
         {
             Debug.Log("파일 확인됨");
@@ -141,8 +130,8 @@ public class CSVReader
             Debug.Log("파일 누락");
             if (!_isReadOnly)       // 데이터 저장이 필요할 경우
             {
-                Debug.Log("파일 복사됨 :: " + @path);
-                new FileInfo(@basicPath + @fileName).CopyTo(@path);
+                Debug.Log("파일 복사됨 :: " + @_path);
+                new FileInfo(@basicPath + @fileName).CopyTo(@_path);
             }
         }
     }
@@ -163,24 +152,37 @@ public class CSVReader
     /// <summary>
     /// 세부경로 및 파일명으로 읽어오기
     /// </summary>
-    /// <param name="fileName">/세부 경로/파일명.확장자</param>
+    /// <param name="subPathOrNull">세부 경로</param>
+    /// <param name="fileName">파일명.확장자</param>
     /// <param name="dataSeparator">데이터 구분자</param>
     /// <param name="lineSeparator">라인 구분자</param>
-    public void ReadFile(string fileName, char dataSeparator, char lineSeparator)
+    public void ReadFile(string subPathOrNull, string fileName, char dataSeparator, char lineSeparator)
     {
         // 초기화
         Reset();
 
-        // 폴더 및 파일 체크
-        CheckFile(fileName, isReadOnly);
+        // 원본 폴더 체크
+        CheckPath(basicPath);
 
-        // 파일 누락 방지
-        if (path == null)
+        // 사본 폴더 체크
+        CheckPath(copyPath);
+
+        // 파일명 누락 방지
+        if (fileName == null)
             return;
 
+        // 경로 설정
+        if (isReadOnly)
+            path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
+        else
+            path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
+
+        // 파일 체크
+        CheckFile(path, fileName, isReadOnly);
+
         // 열기
-        FileStream fs = new FileStream(@path, FileMode.Open);
-        StreamReader sr = new StreamReader(fs);
+        //FileStream fs = new FileStream(@path, FileMode.Open);
+        StreamReader sr = new StreamReader(@path);
         Debug.Log("File open :: " + @path);
 
         // 라인 단위 읽어오기
@@ -201,33 +203,40 @@ public class CSVReader
 
         // 라인을 데이터 단위로 분할
         for (int i = 0; i < strLine.Count; i++)
-            table.Add(strLine[i].Split(dataSeparator));
+        {
+            List<string> dataTemp = new List<string>();
+            dataTemp.AddRange(strLine[i].Split(dataSeparator));
+
+            table.Add(dataTemp);
+        }
 
         // 닫기
         sr.Close();
-        fs.Close();
+        //fs.Close();
         Debug.Log("File close :: " + @path);
     }
     /// <summary>
     /// 세부경로 및 파일명으로 읽어오기
     /// 라인 구분자 = '\n'
     /// </summary>
-    /// <param name="fileName">/세부 경로/파일명.확장자</param>
+    /// <param name="subPathOrNull">세부 경로</param>
+    /// <param name="fileName">파일명.확장자</param>
     /// <param name="dataSeparator">데이터 구분자</param>
-    public void ReadFile(string fileName, char dataSeparator)
+    public void ReadFile(string subPathOrNull, string fileName, char dataSeparator)
     {
-        ReadFile(fileName, dataSeparator, '\n');
+        ReadFile(subPathOrNull, fileName, dataSeparator, '\n');
     }
     /// <summary>
     /// 세부경로 및 파일명으로 읽어오기
     /// 라인 구분자 = '\n'
     /// 데이터 구분자 = ','
     /// </summary>
-    /// <param name="fileName">/세부 경로/파일명.확장자</param>
+    /// <param name="subPathOrNull">세부 경로</param>
+    /// <param name="fileName">파일명.확장자</param>
     /// <param name="dataSeparator">데이터 구분자</param>
-    public void ReadFile(string fileName)
+    public void ReadFile(string subPathOrNull, string fileName)
     {
-        ReadFile(fileName, ',', '\n');
+        ReadFile(subPathOrNull, fileName, ',', '\n');
     }
 
 
@@ -248,7 +257,7 @@ public class CSVReader
         }
 
         // 저장할 데이터가 없을 경우
-        if (table[0].Length <= 0)
+        if (table[0].Count <= 0)
         {
             Debug.Log("파일 저장 불가 :: 데이터 없음");
             return;
@@ -262,7 +271,7 @@ public class CSVReader
         {
             // 라인 구성
             sb.Append(table[i][0]);
-            for (int j = 1; j < table[i].Length; j++)
+            for (int j = 1; j < table[i].Count; j++)
             {
                 sb.Append(dataSeparator).Append(table[i][j]);
             }
@@ -287,6 +296,55 @@ public class CSVReader
     public void Save()
     {
         Save(',', '\n');
+    }
+
+    /// <summary>
+    /// 라인 구분 없는 스트링을 파일로 저장
+    /// </summary>
+    /// <param name="subPathOrNull">생략 가능, 고정 경로 : Assets/Resources/Data/</param>
+    /// <param name="fileName">이미 존재하지 않는 파일명</param>
+    /// <param name="data">저장 내용</param>
+    public static void SaveNew(string subPathOrNull, string fileName, string data)
+    {
+        Debug.Log("저장 요청됨");
+
+        // 파일명 없을 경우 중단
+        if (fileName == null)
+            return;
+
+        // 데이터 없을 경우 중단
+        if (data == null)
+            return;
+
+        // 경로 조합
+        string __path = basicPath;
+        if (subPathOrNull != null)
+            __path += '/' + @subPathOrNull;
+
+        // 폴더 체크
+        CheckPath(@__path);
+
+        string _file = __path + '/' + fileName;
+
+        // 파일 체크 및 복사
+        FileInfo fi = new FileInfo(@_file);
+        if (fi.Exists)
+        {
+            Debug.Log("저장 실패 :: 파일 중복");
+        }
+        else
+        {
+            // 생성
+            StreamWriter sw = fi.CreateText();
+
+            // 작성
+            sw.WriteLine(data);
+
+            // 닫기
+            sw.Close();
+
+            Debug.Log("저장 성공 :: " + @_file);
+        }
     }
 
     /*

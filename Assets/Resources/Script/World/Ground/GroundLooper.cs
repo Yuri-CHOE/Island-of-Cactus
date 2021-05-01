@@ -8,8 +8,8 @@ using UnityEngine.EventSystems;
 
 namespace UnityEngine.MapEditor
 {
-    [AddComponentMenu("Custom/MapEditor/Ground", 0)]
-    public class Ground : MonoBehaviour
+    [AddComponentMenu("Custom/MapEditor/GroundLooper", 0)]
+    public class GroundLooper : MonoBehaviour
     {
         [SerializeField]
         List<GameObject> prefab = new List<GameObject>();    // 반복 생성할 프리팹
@@ -29,8 +29,8 @@ namespace UnityEngine.MapEditor
 
         void Start()
         {
-            prefab[2].GetComponent<GroundEditor>().Init();
-            Destroy(prefab[2].GetComponent<GroundEditor>());
+            prefab[2].GetComponent<GroundMeshEditor>().Init();
+            Destroy(prefab[2].GetComponent<GroundMeshEditor>());
             CreateGround();
         }
 

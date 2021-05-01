@@ -7,7 +7,7 @@ namespace UnityEngine.MapEditor
 {
     public class DecorEditor : MonoBehaviour
     {
-        [Header("Block Script")]
+        [Header("Decor Script")]
         [SerializeField]
         DecorManager decorManager;
         
@@ -151,7 +151,6 @@ namespace UnityEngine.MapEditor
         /// </summary>
         void CheckBtn()
         {
-
             // + 버튼 (오브젝트 추가)
             if (btnAdd.getFlag())
             {
@@ -170,7 +169,7 @@ namespace UnityEngine.MapEditor
                         Camera.main.transform.position.z + 41f),
                     new Vector3(
                         Random.Range(-5.0f, 5.1f),
-                        Random.Range(0f, 360f),
+                        Random.Range(0, 360),
                         Random.Range(-5.0f, 5.1f)),
                     new Vector3(
                         size * Random.Range(0.90f, 1.21f),

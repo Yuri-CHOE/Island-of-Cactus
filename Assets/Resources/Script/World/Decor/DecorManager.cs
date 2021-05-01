@@ -19,12 +19,12 @@ public class DecorManager : MonoBehaviour
 
     [SerializeField]
     List<GameObject> gol = new List<GameObject>();
-    List<int> golTypeNum = new List<int>();               // gol의 각 오브젝트별 PrefabList 번호
-    List<int> golPrefabNum = new List<int>();             // gol의 각 오브젝트별 Prefab 인덱스값
+    List<int> golTypeNum = new List<int>();                 // gol의 각 오브젝트별 PrefabList 번호
+    List<int> golPrefabNum = new List<int>();               // gol의 각 오브젝트별 Prefab 인덱스값
 
 
     [SerializeField]
-    Transform decorMaster;
+    Transform decorMaster;                                  // 생성시 부모 오브젝트
 
     // Start is called before the first frame update
     void Start()
@@ -73,7 +73,7 @@ public class DecorManager : MonoBehaviour
             if (dataStr[i].Length != 11)
                 return;
 
-            // 오브젝트 ID 구조화
+            // 오브젝트 타입 구조화
             if (int.TryParse(dataStr[i][0], out iTemp)) { }
             // 구조화 완료
             typeNum.Add(iTemp);
@@ -128,7 +128,7 @@ public class DecorManager : MonoBehaviour
         Debug.Log("create decor :: batch operation (start)");
 
         // 각 배열의 길이 불일치시 강제종료
-        if (pos.Length != prefabIndex.Length && pos.Length != rot.Length && pos.Length != scl.Length)
+        if (pos.Length != decorTypeNum.Length && pos.Length != prefabIndex.Length && pos.Length != rot.Length && pos.Length != scl.Length)
             return;
 
         // copyTarget 리스트 및 오브젝트 제거
@@ -169,6 +169,7 @@ public class DecorManager : MonoBehaviour
         // 복사 대상이 없을 경우
         if (prefabIndex < 0 || prefabIndex >= GetDecorList(dt).Count)
             return null;
+
 
         // 생성
         Transform copyObject = Instantiate(
@@ -270,11 +271,11 @@ public class DecorManager : MonoBehaviour
                 .Append(gol[i].transform.position.z)
                 .Append(',')
 
-                .Append(gol[i].transform.rotation.x)
+                .Append(gol[i].transform.rotation.eulerAngles.x)
                 .Append(',')
-                .Append(gol[i].transform.rotation.y)
+                .Append(gol[i].transform.rotation.eulerAngles.y)
                 .Append(',')
-                .Append(gol[i].transform.rotation.z)
+                .Append(gol[i].transform.rotation.eulerAngles.z)
                 .Append(',')
 
                 .Append(gol[i].transform.localScale.x)

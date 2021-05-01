@@ -4,32 +4,32 @@ using UnityEngine;
 
 public class Player
 {
+    public enum Type {
+        System,
+        User,
+        AI,
+    }
+
     // 카운터
-    static int count = 0;               // 참여자 + 시스템 Player 카운터
-    static int sysCount = 0;            // 시스템 Player 카운터
+    static int count = 0;               // 시스템 제외 Player 카운터
+
+
+
+    // 플레이어 타입
+    Type _type = Type.System;
+    public Type type { get { return _type; } }
 
     // 캐릭터 클래스 포함
-    public Character character = new Character(-1);
-
-    // 플레이어 정보 UI 배치
-    public PlayerInfoUI InfoUI = null;
-
+    Character _character = null;
+    public Character character { get { return _character; } }
 
     // 오토 플레이 여부
     bool _isAutoPlay = false;
     public bool isAutoPlay { get { return _isAutoPlay; } }
 
-    // 플레이어 번호
-    int _index = -1;
-    public int index { get { return _index; } }
-
     // 플레이어 이름
     string _name = null;
     public string name { get { return _name; } }
-
-    // 플레이어 순서
-    int _order = -1;
-    public int order { get { return _order; } }
 
 
 
@@ -44,54 +44,27 @@ public class Player
 
     // 생성자
     /// <summary>
-    /// 사용 금지 => Player(int characterIndex) 사용
+    /// 사용 금지
     /// </summary>
-    private Player()
+    protected Player()
     {
         // 사용 방지
     }
-    public Player(string playerName, int characterIndex, bool __isAutoPlay)
+    public Player(Type __type, int characterIndex, bool __isAutoPlay, string playerName)
     {
-        // 캐릭터 셋팅
-        character.SetCharacter(characterIndex);
-
-
-        // 오토 셋팅
-        _isAutoPlay = __isAutoPlay;
-
-        // 플레이어 번호 셋팅
-        _index = count;
-
-        // 플레이어 이름 셋팅
-        _name = playerName;
-
-
+        SetPlayer(__type, characterIndex, __isAutoPlay, playerName);
 
         // 카운터 반영
-        if (character.job == Job.JobType.System)
-        {
-            sysCount++;
+        if (_type != Type.System)
             count++;
-        }
-        else
-        {
-            count++;
-        }
     }
 
     // 소멸자
     ~Player()
     {
         // 카운터 반영
-        if (character.job == Job.JobType.System)
-        {
-            sysCount--;
+        if (_type != Type.System)
             count--;
-        }
-        else
-        {
-            count--;
-        }
     }
 
 
@@ -101,34 +74,35 @@ public class Player
     /// </summary>
     public static int Count()
     {
-        return count - sysCount;
-    }
-
-
-    /// <summary>
-    /// 시스템 플레이어 인원수 반환
-    /// </summary>
-    public static int CountSystem()
-    {
-        return sysCount;
+        return count;
     }
 
 
 
-    public void SetPlayer(string playerName, int characterIndex, bool __isAutoPlay)
+    public void SetPlayer(Type __type, int characterIndex, bool __isAutoPlay, string playerName)
     {
+        // 캐릭터 타입
+        _type = __type;
+
         // 캐릭터 셋팅
-        character.SetCharacter(characterIndex);
-
+        Debug.Log(characterIndex + " => " + Character.table.Count);
+        _character = Character.table[characterIndex];
 
         // 오토 셋팅
         _isAutoPlay = __isAutoPlay;
 
-        // 플레이어 번호 셋팅
-        _index = count;
-
         // 플레이어 이름 셋팅
         _name = playerName;
     }
+
+    /// <summary>
+    /// 자동 플레이 설정
+    /// </summary>
+    /// <param name="__isAutoPlay"></param>
+    public void SetAutoPlay(bool __isAutoPlay)
+    {
+        _isAutoPlay = __isAutoPlay;
+    }
+
 }
 

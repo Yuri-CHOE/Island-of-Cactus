@@ -15,19 +15,63 @@ public class BlockManager : MonoBehaviour
 
     [SerializeField]
     Transform blockMaster;
+        
+    public Transform startBlock;               // 스타트 블록
+    public Transform startPoint;        // 스타트 블록 하위 스타트 포인트 => 첫번째 블록 좌표
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        // 최초 블록 좌표 초기화
+        if (gol.Count > 0) gol[0].transform.position = new Vector3(startPoint.position.x, startPoint.position.y, startPoint.position.z);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    /// <summary>
+    /// 입력된 스트링으로 스타트 블록 설정
+    /// </summary>
+    /// <param name="str">스타트 블록 코드</param>
+    public void SetStartBlock(string str)
+    {
+        // 입력 없을경우 차단
+        if (str == null)
+            return;
+
+        // 데이터 구조화
+        List<string> dataStr = new List<string>();
+        dataStr.AddRange(str.Split(','));
+
+        // 잘못된 데이터 구조 차단
+        if (dataStr.Count != 9)
+            return;
+
+        // 데이터 적용 - 포지션
+        Vector3 pos = new Vector3();
+        if (float.TryParse(dataStr[0], out pos.x)) { }
+        if (float.TryParse(dataStr[1], out pos.y)) { }
+        if (float.TryParse(dataStr[2], out pos.z)) { }
+        startBlock.position = pos;
+
+        // 데이터 적용 - 로테이션
+        Vector3 rot = new Vector3();
+        if (float.TryParse(dataStr[3], out rot.x)) { }
+        if (float.TryParse(dataStr[4], out rot.y)) { }
+        if (float.TryParse(dataStr[5], out rot.z)) { }
+        startBlock.rotation = Quaternion.Euler(rot);
+
+        // 데이터 적용 - 스케일
+        Vector3 scl = new Vector3();
+        if (float.TryParse(dataStr[6], out scl.x)) { }
+        if (float.TryParse(dataStr[7], out scl.y)) { }
+        if (float.TryParse(dataStr[8], out scl.z)) { }
+        startBlock.localScale = scl;
     }
 
 

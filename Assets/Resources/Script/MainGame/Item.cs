@@ -175,9 +175,28 @@ public class Item
     /// 테이블 정보를 입력받아 셋팅
     /// </summary>
     /// <param name="strArray">테이블 배열로 읽기</param>
-    protected Item(string[] strArray)
+    protected Item(List<string> strList)
     {
-        Set(strArray);
+        // out of range 방지
+        if (strList.Count != 13)
+            return;
+
+        // 테이블 읽어오기
+        Set(
+            int.Parse(strList[0]),
+            (Type)int.Parse(strList[1]),
+            strList[2],
+            int.Parse(strList[3]),
+            int.Parse(strList[4]),
+            int.Parse(strList[5]),
+            System.Convert.ToBoolean(int.Parse(strList[6])),
+            (ItemEffect.Expiration)int.Parse(strList[7]),
+            int.Parse(strList[8]),
+            (ItemEffect.Target)(int.Parse(strList[9])),
+            (ItemEffect.What)(int.Parse(strList[10])),
+            int.Parse(strList[11]),
+            strList[12]
+        );
     }
 
     /// <summary>
@@ -190,43 +209,20 @@ public class Item
             return;
 
         // 테이블 읽어오기
-        CSVReader itemReader = new CSVReader("/item.csv");
+        CSVReader itemReader = new CSVReader(null, "Item.csv");
+
+        // 더미 생성
+        table.Add(new Item());
 
         // 테이블로 리스트 셋팅
         for (int i = 1; i < itemReader.table.Count; i++)
+        {
             table.Add(new Item(itemReader.table[i]));
+            Debug.Log(itemReader.table.Count);
+        }
 
         // 준비완료
         _isReady = true;
-    }
-
-
-    /// <summary>
-    /// 재설정 함수, 테이블 읽어서 사용할것
-    /// </summary>
-    /// <param name="strArray"></param>
-    void Set(string[] strArray)
-    {
-        // out of range 방지
-        if (strArray.Length != 13)
-            return;
-                
-        // 테이블 읽어오기
-        Set(
-            int.Parse(strArray[0]),
-            (Type)int.Parse(strArray[1]),
-            strArray[2],
-            int.Parse(strArray[3]),
-            int.Parse(strArray[4]),
-            int.Parse(strArray[5]),
-            System.Convert.ToBoolean(int.Parse(strArray[6])),
-            (ItemEffect.Expiration)int.Parse(strArray[7]),
-            int.Parse(strArray[8]),
-            (ItemEffect.Target)(int.Parse(strArray[9])),
-            (ItemEffect.What)(int.Parse(strArray[10])),
-            int.Parse(strArray[11]),
-            strArray[12]
-        );
     }
 
 

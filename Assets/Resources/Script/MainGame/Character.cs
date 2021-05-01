@@ -4,7 +4,14 @@ using UnityEngine;
 
 public class Character
 {
-    //static 테이블 table; // 예시
+    // 캐릭터 테이블
+    public static List<Character> table = new List<Character>();
+
+    // 캐릭터 테이블 확인용
+    static bool _isReady = false;
+    public static bool isReady { get { return _isReady; } }
+
+
 
     // 캐릭터 번호
     int _index = -1;
@@ -30,9 +37,47 @@ public class Character
         // 사용 금지
     }
 
-    public Character(int characterIndex)
+    protected Character(List<string> strList)
     {
-        SetCharacter(characterIndex);
+        // out of range 방지
+        if (strList.Count != 4)
+            return;
+
+        // 테이블 읽어오기
+        SetCharacter(
+            int.Parse(strList[0]),
+            strList[1],
+            (Job.JobType)int.Parse(strList[2]),
+            strList[3]
+            );
+    }
+
+
+    /// <summary>
+    /// 테이블 생성
+    /// </summary>
+    public static void SetUp()
+    {
+        // 중복 실행 방지
+        if (_isReady)
+            return;
+
+        // 테이블 읽어오기
+        CSVReader characterReader = new CSVReader(null, "Character.csv");
+        Debug.Log(characterReader.table.Count);
+
+        // 더미 생성
+        table.Add(new Character());
+
+        // 테이블로 리스트 셋팅
+        for (int i = 1; i < characterReader.table.Count; i++)
+        {
+            table.Add(new Character(characterReader.table[i]));
+            Debug.Log(characterReader.table.Count);
+        }
+
+        // 준비완료
+        _isReady = true;
     }
 
     /// <summary>
@@ -55,7 +100,7 @@ public class Character
         }
 
     }
-    public void SetCharacter(int __index, string __name, Job.JobType __job, string __info)
+    void SetCharacter(int __index, string __name, Job.JobType __job, string __info)
     {
         // 잘못된 값 초기화
         if (__index < 0)
@@ -72,23 +117,26 @@ public class Character
         SetInfo(__info);
     }
 
-    public void SetIndex(int __index)
+    void SetIndex(int __index)
     {
         _index = __index;
     }
 
-    public void SetName(string __name)
+    void SetName(string __name)
     {
         _name = __name;
     }
 
-    public void SetJob(Job.JobType __job)
+    void SetJob(Job.JobType __job)
     {
         _job = __job;
     }
 
-    public void SetInfo(string __info)
+    void SetInfo(string __info)
     {
         _info = __info;
     }
+
+
+
 }

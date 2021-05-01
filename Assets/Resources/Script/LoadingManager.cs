@@ -25,10 +25,10 @@ public class LoadingManager : MonoBehaviour
     bool isFadeActive = false;
 
 
-
     // 비동기 로딩 도구
     AsyncOperation ao;
 
+    // 로드할 씬
     [SerializeField]
     string nextScene = null;
 
@@ -41,17 +41,31 @@ public class LoadingManager : MonoBehaviour
         Work();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // 페이드 작동
         if (isFadeActive)
             Fade();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         // 씬 로딩 완료 연출
         if (!isFadeActive && ao != null)
-            if (ao.isDone)
+            if (ao.progress >= 0.9f) // 90% 이상 완료된 경우 => allowSceneActivation : true 상태에서 로딩 최대치는 90%이므로 isDone 사용 불가능
+            {
+                // 로딩화면 비활성
+                //transform.parent.gameObject.SetActive(false);
+
+                // 다음 씬 활성화
                 ao.allowSceneActivation = true;
+
+                // 로딩화면 비활성
+                //gameObject.SetActive(false);
+
+            }
 
 
         // 동적 로딩 잔여 매꾸기
@@ -130,13 +144,30 @@ public class LoadingManager : MonoBehaviour
     }
     public void LoadAsync(string sceneName)
     {
+        // 로딩화면 활성화
+        gameObject.SetActive(true);
+
+        // 현재 씬 캔버스 우선순위 상승
+        transform.parent.GetComponent<Canvas>().sortingOrder += 1;
+
+        // 본 오브젝트 파괴 방지
+        DontDestroyOnLoad(transform.root);
+
         // 로딩 시작
         ao = SceneManager.LoadSceneAsync(sceneName);
+
+        // 로딩 완료시 자동 씬전환 비활성
+        ao.allowSceneActivation = false;
 
         // 로딩 시작 연출
         LoadBefore();
     }
 
+    /// <summary>
+    /// 페이드 작동
+    /// StartCoroutine() 으로 호출할것
+    /// </summary>
+    /// <returns></returns>
     void Fade()
     {
         // 페이드 인
@@ -145,7 +176,7 @@ public class LoadingManager : MonoBehaviour
             // 페이드 처리
             if (gameObject.GetComponent<CanvasGroup>().alpha < 1.0f)
             {
-                gameObject.GetComponent<CanvasGroup>().alpha += Time.deltaTime;
+                gameObject.GetComponent<CanvasGroup>().alpha += Time.deltaTime * 2;
             }
             // 페이드 완료
             else
@@ -175,10 +206,34 @@ public class LoadingManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 모든 LoadingManager 스크립트를 찾아 본 스크립트와 중복검사 하여 DontDestroyOnLoad로 보호된 이전 씬 파괴
+    /// </summary>
+    void DestroyOld()
+    {
+        // 로딩 오브젝트 확보
+        LoadingManager[] obj = FindObjectsOfType<LoadingManager>();
+        for (int i = 0; i < obj.Length; i++)
+        {
+            // 본 스크립트와 같은 오브젝트인지 체크
+            if (obj[i].transform != transform)
+            {
+                // 다를경우 DontDestroyOnLoad로 보호된 이전씬으로 판단
+                // 삭제처리
+                Destroy(obj[i].transform.root.gameObject);
+                return;
+            }
+        }
+    }
+
+
+    /// <summary>
     /// 로딩 작업
     /// </summary>
     void Work()
     {
+        // 이전 씬 삭제
+        DestroyOld();
+
         // 씬별 동적 로딩작업
         switch (SceneManager.GetActiveScene().buildIndex)
         {
@@ -205,8 +260,19 @@ public class LoadingManager : MonoBehaviour
         workMax = 10000;
 
         gameObject.SetActive(false);
+        workCount++;
 
+        // 캐릭터 테이블
+        Character.SetUp();
+        workCount+= Character.table.Count;
+
+        // 아이템 테이블
         Item.SetUp();
+        workCount += Item.table.Count;
+
+        // 유저 데이터
+        // 구현 예정
+        GameData.SetpPlayCount(0);     // 0 부분 유저 플레이 횟수로 대체
         workCount++;
     }
 
@@ -215,7 +281,27 @@ public class LoadingManager : MonoBehaviour
         // 작업 목표량 설정
         workMax = 10000;
 
-        Item.SetUp();
+        // 월드 빌드 시작
+        WorldManager wm = GameObject.Find("World").GetComponent<WorldManager>();
+        workCount++;
+
+        // 카메라 한계 설정
+        wm.camMover.SetCameraLimit(WorldManager.worldFile[0]);
+        workCount+=6;
+
+        // 스타트 블록 설정
+        wm.blockManager.SetStartBlock(WorldManager.worldFile[1]);
+
+        // 지형 빌드
+        wm.groundManager.BuildByString(WorldManager.worldFile[2]);
+        workCount++;
+
+        // 블록 빌드
+        wm.blockManager.BuildByString(WorldManager.worldFile[3]);
+        workCount++;
+
+        // 장식물 빌드
+        wm.decorManager.BuildByString(WorldManager.worldFile[4]);
         workCount++;
     }
 }

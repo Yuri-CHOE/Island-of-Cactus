@@ -7,6 +7,17 @@ public class TouchCameraMover : MonoBehaviour
     // [SerializeField] 는 보안상 public 을 사용할 수 없지만 엔진 스크립트 컴포넌트에는 표시되도록 합니다.
 
 
+    [SerializeField]
+    Camera cam;                 // 제어대상
+
+    [SerializeField]
+    Transform camLimit1;       // 좌측 하단 한계 좌표
+    public Vector3 camLimitPos1 { get { return camLimit1.position; }  }
+
+    [SerializeField]
+    Transform camLimit2;       // 우측 상단 한계 좌표
+    public Vector3 camLimitPos2 { get { return camLimit2.position;  } }
+
     public bool isInputBlock = false;
 
     [SerializeField]
@@ -32,9 +43,18 @@ public class TouchCameraMover : MonoBehaviour
     //[SerializeField]
     //Vector3 movePos;
 
+
+    void start()
+    {
+
+    }
+
     // Update is called once per frame
     void Update()
     {
+        // 누락 지정
+        if (cam == null) cam = Camera.main;
+
         CheckMove();
 
         // 터치를 감지할 경우 무조건 터치스크린이 필요합니다 (아마도 이부분때문에 외부 개발킷)
@@ -95,7 +115,7 @@ public class TouchCameraMover : MonoBehaviour
         mouseNow = Input.mousePosition;
 
         // 카메라 높이 보정값
-        float camY = transform.position.y;
+        float camY = cam.transform.position.y;
 
         // 갱신값 계산
         Vector3 movePlus = new Vector3(
@@ -106,6 +126,19 @@ public class TouchCameraMover : MonoBehaviour
 
         // 갱신값 남은 이동값에 반영
         mouseMove = mouseMove + movePlus;
+
+        // 이동 한계치 반영
+        float chkX = cam.transform.position.x + mouseMove.x;
+        if (chkX < camLimitPos1.x)
+            mouseMove.x -= chkX - camLimitPos1.x;
+        else if (chkX > camLimitPos2.x)
+            mouseMove.x -= chkX - camLimitPos2.x;
+
+        float chkZ = cam.transform.position.z + mouseMove.z;
+        if (chkZ < camLimitPos1.z)
+            mouseMove.z -= chkZ - camLimitPos1.z;
+        else if (chkZ > camLimitPos2.z)
+            mouseMove.z -= chkZ - camLimitPos2.z;
     }
 
 
@@ -125,7 +158,7 @@ public class TouchCameraMover : MonoBehaviour
         mouseMove = mouseMove - distance;
 
         // 이동처리
-        transform.position = transform.position + distance;
+        cam.transform.position = cam.transform.position + distance;
 
         // 이동할 거리값 리셋
         distance = Vector3.zero;
@@ -136,4 +169,29 @@ public class TouchCameraMover : MonoBehaviour
             mouseMove.z = 0f;
     }
     
+
+
+    public void SetCameraLimit(string code)
+    {
+        // 오브젝트별 분할
+        List<string> _code = new List<string>();
+        _code.AddRange(code.Split('|'));
+
+        // 좌표별 분할
+        List<string> limit1 = new List<string>();
+        limit1.AddRange(code.Split(','));
+        Vector3 temp1 = new Vector3();
+        float.TryParse(limit1[0], out temp1.x);
+        float.TryParse(limit1[1], out temp1.y);
+        float.TryParse(limit1[2], out temp1.z);
+
+        // 좌표별 분할
+        List<string> limit2 = new List<string>();
+        limit2.AddRange(code.Split(','));
+        Vector3 temp2 = new Vector3();
+        float.TryParse(limit2[0], out temp2.x);
+        float.TryParse(limit2[1], out temp2.y);
+        float.TryParse(limit2[2], out temp2.z);
+
+    }
 }

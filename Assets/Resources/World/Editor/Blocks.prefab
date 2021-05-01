@@ -79,6 +79,8 @@ MonoBehaviour:
   blockPrefab: {fileID: 6124110220913457941, guid: d42a58c8bda80034ab909e4735110b3d, type: 3}
   gol: []
   blockMaster: {fileID: 5887150760739008225}
+  startBlock: {fileID: 1863894577873007614}
+  startPoint: {fileID: 9077926830725869765}
 --- !u!1 &6821367821591932447
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,6 +172,11 @@ PrefabInstance:
 --- !u!4 &1863894577873007614 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 651618553701613525, guid: 7734d5782d6ba89468924a0c9707a673, type: 3}
+  m_PrefabInstance: {fileID: 1213405231272266795}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9077926830725869765 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7867128816419912942, guid: 7734d5782d6ba89468924a0c9707a673, type: 3}
   m_PrefabInstance: {fileID: 1213405231272266795}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2189262380710729876

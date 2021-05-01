@@ -6,9 +6,12 @@ using UnityEngine.UI;
 
 namespace UnityEngine.MapEditor
 {
-    [AddComponentMenu("Custom/MapEditor/GroundEditor", 0)]
-    public class GroundEditor : MonoBehaviour
+    [AddComponentMenu("Custom/MapEditor/GroundMeshEditor", 0)]
+    public class GroundMeshEditor : MonoBehaviour
     {
+        // 인게임에서 3D 지형 모델링 생성하는 스크립트
+
+
         // 제작용
         [SerializeField]
         int x, z;
@@ -58,7 +61,7 @@ namespace UnityEngine.MapEditor
             QuickSide(x, z);
             CreateMesh();
 
-            Destroy(transform.GetComponent<GroundEditor>());
+            Destroy(transform.GetComponent<GroundMeshEditor>());
         }
 
 
@@ -112,11 +115,9 @@ namespace UnityEngine.MapEditor
 
         void CreateMesh()
         {
-            Debug.Log("체크1");
             if (!isActive)
                 return;
 
-            Debug.Log("체크2");
             Mesh myMesh = new Mesh();
 
             myMesh.vertices = meshPoint.ToArray();
