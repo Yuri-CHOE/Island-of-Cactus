@@ -5762,13 +5762,5 @@ PrefabInstance:
       propertyPath: m_FillAmount
       value: 0.142
       objectReference: {fileID: 0}
-    - target: {fileID: 3168212288625450998, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 420
-      objectReference: {fileID: 0}
-    - target: {fileID: 3168212288625450998, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 80
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}

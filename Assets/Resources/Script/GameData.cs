@@ -31,6 +31,9 @@ public static class GameData
     static Turn _turn = new Turn();
     public static Turn turn { get { return _turn; } }
 
+    // 게임 플로우
+    public static GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
+
 
 
     /// <summary>
