@@ -5,7 +5,8 @@ using UnityEngine;
 public class Character
 {
     // 캐릭터 테이블
-    public static List<Character> table = new List<Character>();
+    static List<Character> _table = new List<Character>();
+    public static List<Character> table { get { return _table; } }       // 초기화 안됬으면 초기화 후 반환
 
     // 캐릭터 테이블 확인용
     static bool _isReady = false;
@@ -58,6 +59,8 @@ public class Character
     /// </summary>
     public static void SetUp()
     {
+        Debug.Log("테이블 셋팅 : 캐릭터");
+
         // 중복 실행 방지
         if (_isReady)
             return;

@@ -26,11 +26,20 @@ public class DynamicButton : UIBehaviour
     [SerializeField]
     GameObject iconEffect;
 
+    [SerializeField]
+    bool toggleMode = false;
+    [SerializeField]
+    GameObject checkMark;
+    bool _isOn = false;
+    public bool isOn { get { return _isOn; } }
+
+
     // Start is called before the first frame update
     protected override void Start()
     {
         btnActivate();
     }
+
 
     void btnActivate()
     {
@@ -63,6 +72,17 @@ public class DynamicButton : UIBehaviour
                 Destroy(iconBGM);
                 //Destroy(iconEffect);
                 break;
+        }
+    }
+
+
+    public void Clicked()
+    {
+
+        if (toggleMode)
+        {
+            _isOn = !_isOn;
+            checkMark.SetActive(isOn);
         }
     }
 }

@@ -238,6 +238,10 @@ PrefabInstance:
       propertyPath: btnType
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4086368863985714256, guid: c6aec9c156a7d0940a16e35c8ef6a45a, type: 3}
+      propertyPath: toggleMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6aec9c156a7d0940a16e35c8ef6a45a, type: 3}
 --- !u!224 &53691701 stripped
@@ -723,8 +727,8 @@ RectTransform:
   m_Father: {fileID: 207530261}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.09999992}
-  m_AnchorMax: {x: 1, y: 0.9999999}
+  m_AnchorMin: {x: 0, y: 0.099999905}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1278,6 +1282,10 @@ PrefabInstance:
       propertyPath: btnType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4086368863985714256, guid: c6aec9c156a7d0940a16e35c8ef6a45a, type: 3}
+      propertyPath: toggleMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6aec9c156a7d0940a16e35c8ef6a45a, type: 3}
 --- !u!224 &619109796 stripped
@@ -1378,7 +1386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AllowSwitchOff: 0
+  m_AllowSwitchOff: 1
 --- !u!1 &800409952
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,7 +2592,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\uC774\uC5B4\uD558\uAE30"
+  m_Text: Continue
 --- !u!222 &1107036181
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4340,7 +4348,7 @@ GameObject:
   - component: {fileID: 1591143861}
   - component: {fileID: 1591143860}
   m_Layer: 5
-  m_Name: "btn_\uC774\uC5B4\uD558\uAE30"
+  m_Name: btn_Continue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5096,18 +5104,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1878144641}
-        m_TargetAssemblyTypeName: LoadingManager, Assembly-CSharp
-        m_MethodName: LoadAsync
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Main_game
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 1076784973}
         m_TargetAssemblyTypeName: Scene_Title, Assembly-CSharp
         m_MethodName: SetWorldFileName
@@ -5118,6 +5114,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: world_01_01.iocw
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1878144641}
+        m_TargetAssemblyTypeName: LoadingManager, Assembly-CSharp
+        m_MethodName: LoadAsync
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Main_game
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1999821724
@@ -5240,8 +5248,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 310781728}
   m_HandleRect: {fileID: 310781727}
   m_Direction: 2
-  m_Value: 0.999999
-  m_Size: 0.9
+  m_Value: 1
+  m_Size: 0.9000001
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5644,7 +5652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3168212288327366344, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3168212288327366345, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
       propertyPath: m_Pivot.x
@@ -5730,9 +5738,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3168212288327366346, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
+      propertyPath: nextScene
+      value: Main_game
+      objectReference: {fileID: 0}
     - target: {fileID: 3168212288327366347, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3168212288327366347, guid: 2b811c53568ffbe4482748f8102fbb16, type: 3}
       propertyPath: m_Interactable

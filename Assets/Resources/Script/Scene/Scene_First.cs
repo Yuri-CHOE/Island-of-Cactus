@@ -19,6 +19,8 @@ public class Scene_First : MonoBehaviour
 
     AsyncOperation ao;
 
+    bool isLoadFinish = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,12 @@ public class Scene_First : MonoBehaviour
 
         // 자동 넘어감 금지
         ao.allowSceneActivation = false;
+
+        // 테이블 로드 완료
+        //Item.SetUp();
+        //Character.SetUp();
+        text.text = "Press Anywhere";
+        isLoadFinish = true;
     }
 
     // Update is called once per frame
@@ -38,11 +46,17 @@ public class Scene_First : MonoBehaviour
 
     public void Clicked()
     {
-        if (!ao.isDone)
+        // 터치 차단
+        if (ao.progress < 0.9f)
+        {
             text.text = "wait...";
+            return;
+        }
 
         // 자동 넘어감 활성
-        ao.allowSceneActivation = true;
+        else if (isLoadFinish)
+            ao.allowSceneActivation = true;
+
     }
 
 }

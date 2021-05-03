@@ -81,6 +81,10 @@ public class Player
 
     public void SetPlayer(Type __type, int characterIndex, bool __isAutoPlay, string playerName)
     {
+        // 테이블 체크
+        if (!Character.isReady)
+            Character.SetUp();
+
         // 캐릭터 타입
         _type = __type;
 

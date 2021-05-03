@@ -118,7 +118,8 @@ public class Item
     }
 
     // 아이템 테이블
-    public static List<Item> table = new List<Item>();
+    static List<Item> _table = new List<Item>();
+    public static List<Item> table { get { return _table; } }       // 초기화 안됬으면 초기화 후 반환
 
     // 아이템 테이블 확인용
     static bool _isReady = false;
@@ -204,6 +205,8 @@ public class Item
     /// </summary>
     public static void SetUp()
     {
+        Debug.Log("테이블 셋팅 : 아이템");
+
         // 중복 실행 방지
         if (_isReady)
             return;
@@ -218,7 +221,6 @@ public class Item
         for (int i = 1; i < itemReader.table.Count; i++)
         {
             table.Add(new Item(itemReader.table[i]));
-            Debug.Log(itemReader.table.Count);
         }
 
         // 준비완료

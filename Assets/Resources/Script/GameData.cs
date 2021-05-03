@@ -53,7 +53,7 @@ public static class GameData
 
     public static void SetGameMode(int gameMode)
     {
-        GameData.SetGameMode((GameMode.Mode)gameMode);
+        SetGameMode((GameMode.Mode)gameMode);
     }
 
     public static void SetpPlayCount(int __playCount)
