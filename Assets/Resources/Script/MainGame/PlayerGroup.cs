@@ -8,6 +8,7 @@ public class PlayerGroup
     {
         public Player Starter = new Player(Player.Type.System, 1, true, "Starter");
         public Player Minigame = new Player(Player.Type.System, 1, true, "Minigame");
+        public Player MinigameEnder = new Player(Player.Type.System, 1, true, "MinigameEnder");
         public Player Ender = new Player(Player.Type.System, 1, true, "Ender");
     }
 
