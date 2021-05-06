@@ -31,6 +31,10 @@ public class Character
     public string info { get { return _info; } }
 
 
+    // 캐릭터 오브젝트
+    public GameObject avatar = null;
+
+
 
     // 생성자
     protected Character()
@@ -76,7 +80,6 @@ public class Character
         for (int i = 1; i < characterReader.table.Count; i++)
         {
             table.Add(new Character(characterReader.table[i]));
-            Debug.Log(characterReader.table.Count);
         }
 
         // 준비완료
@@ -139,7 +142,6 @@ public class Character
     {
         _info = __info;
     }
-
 
 
 }

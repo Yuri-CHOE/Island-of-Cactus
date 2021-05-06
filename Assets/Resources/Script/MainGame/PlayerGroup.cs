@@ -24,6 +24,11 @@ public class PlayerGroup
     public Player player_3 = null;
     public Player player_4 = null;
 
+    // 시스템 제외 모든 플레이어
+    public List<Player> allPlayer = new List<Player>();
+
+
     // 턴 진행중 플레이어
-    //public Player isTurn = null;
+    public Player isTurn { get { return GameData.turn.now; } }
+
 }

@@ -51,7 +51,7 @@ namespace UnityEngine.MapEditor
         // Update is called once per frame
         void Update()
         {
-            RefreshTarget(MapEditor.Targeting());
+            RefreshTarget(Tool.Targeting());
             //RefreshDropdown();
 
             CheckBtn();

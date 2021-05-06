@@ -16,14 +16,25 @@ namespace UnityEngine.UI
     {
         [SerializeField]
         int activeSwitchNum = 0;
+        int activeSwitchNumMirror = 0;
+
         [SerializeField]
         List<GameObject> objectList;
+
 
         // Start is called before the first frame update
         protected override void Start()
         {
             Refresh();
         }
+
+        void Update()
+        {
+            if (activeSwitchNum != activeSwitchNumMirror)
+                Refresh();
+        }
+
+
 
         void turnOn(GameObject obj)
         {
@@ -83,6 +94,8 @@ namespace UnityEngine.UI
                 activeSwitchNum = 0;
 
             turnOn(objectList[activeSwitchNum]);
+
+            activeSwitchNum = activeSwitchNumMirror;
         }
 
         public int count()

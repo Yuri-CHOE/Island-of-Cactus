@@ -27,7 +27,7 @@ public class GameMaster : MonoBehaviour
 
     // 캐릭터 오브젝트 부모 스크립트
     [SerializeField]
-    GameObject characterParent = null;
+    Transform characterParent = null;
 
 
     // Start is called before the first frame update
@@ -39,7 +39,7 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        DoFlowWork();
     }
 
     public void DoFlowWork()
@@ -48,52 +48,67 @@ public class GameMaster : MonoBehaviour
         {
             // 아직 게임 시작 안됨
             case Flow.Wait:
-                // 로딩 완료 대기
-                if (loadingManager.isFinish)    return;
+                {
+                    // 로딩 완료 대기
+                    if (loadingManager.isFinish) return;
 
-                // 캐릭터 생성
-                // 미구현================
+                    // 세이브파일 작성
+                    // 미구현================
+                    // 원본에서 복사할것
 
-                // 세이브파일 작성
-                // 미구현================
-                // 원본에서 복사할것
-
-                Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
-                GameData.gameFlow = Flow.Start;
-                break;
+                    Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
+                    GameData.gameFlow = Flow.Start;
+                    break;
+                }
 
 
             // 게임 시작됨
             case Flow.Start:
 
                 // 플레이어 구성 초기화
-                if (GameData.gameMode == GameMode.Mode.None)
-                    return;
-                else if (GameData.gameMode == GameMode.Mode.Online)
                 {
-                    // 미구현 : 별도 지정 필요===========
-                }
-                else
-                {
-                    // 중복 방지 작업
-                    List<int> picked = Tool.RandomNotCross(1, Character.table.Count, 4);
-                    if (picked.Contains(GameData.player.me.character.index))
-                        picked.Remove(GameData.player.me.character.index);
+                    if (GameData.gameMode == GameMode.Mode.None)
+                        return;
+                    else if (GameData.gameMode == GameMode.Mode.Online)
+                    {
+                        // 미구현 : 별도 지정 필요===========
+                    }
+                    else if(GameData.player.allPlayer.Count == 0)
+                    {
+                        // 중복 방지 작업
+                        List<int> picked = Tool.RandomNotCross(1, Character.table.Count, 4);
+                        if (picked.Contains(GameData.player.me.character.index))
+                            picked.Remove(GameData.player.me.character.index);
 
-                    // 초기화 진행
-                    GameData.SetPlayer(
-                        GameData.player.me,
-                        new Player(Player.Type.AI, picked[0], false, null),
-                        new Player(Player.Type.AI, picked[1], false, null),
-                        new Player(Player.Type.AI, picked[2], false, null)
-                        );
+                        // 초기화 진행
+                        GameData.player.player_1 = GameData.player.me;
+                        GameData.player.player_2 = new Player(Player.Type.AI, picked[0], false, "Player02");
+                        GameData.player.player_3 = new Player(Player.Type.AI, picked[1], false, "Player03");
+                        GameData.player.player_4 = new Player(Player.Type.AI, picked[2], false, "Player04");
+
+                        // 플레이어 리스트 구성
+                        GameData.player.allPlayer.Add(GameData.player.player_1);
+                        GameData.player.allPlayer.Add(GameData.player.player_2);
+                        GameData.player.allPlayer.Add(GameData.player.player_3);
+                        GameData.player.allPlayer.Add(GameData.player.player_4);
+                    }
                 }
+
+
+                // 캐릭터 생성
+                for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+                    if (GameData.player.allPlayer[i].character.avatar == null)
+                    {
+                        GameData.player.allPlayer[i].CreateAvatar(characterParent);
+                        GameData.player.allPlayer[i].character.avatar.name = "p" + i;
+                    }
+
 
 
                 // 맵 둘러보기
                 // 미구현==================                
 
-                Debug.Log("게임 플로우 :: 게임 시작 확인됨 => by ");
+                Debug.Log("게임 플로우 :: 게임 시작 확인됨");
                 GameData.gameFlow = Flow.Ordering;
                 break;
 
@@ -101,10 +116,31 @@ public class GameMaster : MonoBehaviour
             // 순서주사위
             case Flow.Ordering:
                 // 순서주사위 굴리기
+                {
+                    Debug.Log("게임 플로우 :: 순서 주사위 확인중");
+
+                    // 순서 배정 미완료시
+                    if(GameData.turn.origin.Count <= 0)
+                    {
+                        // 플레이어별 주사위 굴리기
+                        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+                        {
+                            // 아직 안굴린 경우
+                            if (GameData.player.allPlayer[i].dice.value == 0)
+                            {
+                                Debug.Log(string.Format("게임 플로우 :: Plaayer{0} 주사위 굴리는중", i));
+                                // 주사위 기능 호출 미구현==========
+
+                                // 대기
+                                return;
+                            }
+                        }
+                    }
+                }
                 // 미구현==================
 
                 // 순서큐 셋팅
-                GameData.turn.SetUp();      // 순서 주사위 배정 이후 턴 초기화
+                //GameData.turn.SetUp();      // 순서 주사위 배정 이후 턴 초기화
 
                 //GameData.gameFlow = Flow.CycleStart;
                 GameData.gameFlow = Flow.Cycling;

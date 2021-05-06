@@ -35,7 +35,6 @@ public static class GameData
     public static GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
 
 
-
     /// <summary>
     /// 게임 데이터 초기화
     /// </summary>
@@ -67,33 +66,5 @@ public static class GameData
     public static void SetWorldFileName(string __worldFileName)
     {
         _worldFileName = __worldFileName;
-    }
-
-    public static void SetPlayer(Player __player1, Player __player2, Player __player3, Player __player4)
-    {
-        _player.player_1 = __player1;
-        _player.player_2 = __player2;
-        _player.player_3 = __player3;
-        _player.player_4 = __player4;
-    }
-    public static void SetPlayerMe(Player _me)
-    {
-        _player.me = _me;
-    }
-    public static void SetPlayer1(Player __player1)
-    {
-        _player.player_1 = __player1;
-    }
-    public static void SetPlayer2(Player __player2)
-    {
-        _player.player_2 = __player2;
-    }
-    public static void SetPlayer3(Player __player3)
-    {
-        _player.player_3 = __player3;
-    }
-    public static void SetPlayer4(Player __player4)
-    {
-        _player.player_4 = __player4;
     }
 }

@@ -29,7 +29,8 @@ public class Scene_Title : MonoBehaviour
         for (int i = 0; i < characterList.Count; i++)
             if (characterList[i].GetComponent<Toggle>().isOn)
             {
-                _selected = i;
+                _selected = i + 1;
+                Debug.Log("선택된 캐릭터 인덱스 : " + selected);
                 return;
             }
     }
@@ -41,9 +42,10 @@ public class Scene_Title : MonoBehaviour
         GameData.SetGameMode((GameMode.Mode)gameMode);
     }
 
-    public  void SetPlayerMe()
+    public void SetPlayerMe()
     {
-        GameData.SetPlayerMe(new Player(Player.Type.User, _selected, false, "유저 이름 가저오기 구현 후 대체할것========"));
+        Refresh();
+        GameData.player.me = new Player(Player.Type.User, selected, false, "유저 이름 ======== 유저 테이블 읽어오기로 대체할것");
     }
 
     public static void SetWorldFileName(string __worldFileName)

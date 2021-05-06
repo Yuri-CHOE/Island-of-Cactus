@@ -22,54 +22,44 @@ public class Turn
         return now;
     }
 
-    public void SetUp()
+    public void Clear()
     {
         // 초기화
         origin.Clear();
         queue.Clear();
+    }
+
+    public void Add(Player player)
+    {
+        // 등록
+        origin.Enqueue(player);
+        queue.Enqueue(player);
+    }
+
+    public void SetUp(List<Player> order)
+    {
+        // 오류 방지
+        if (order == null)
+            return;
+
+        // 초기화
+        Clear();
 
         // p스타터 등록
-        origin.Enqueue(GameData.player.system.Starter);
-        queue.Enqueue(GameData.player.system.Starter);
+        Add(GameData.player.system.Starter);
 
-        // p1 등록
-        if (GameData.player.player_1 != null)
-        {
-            origin.Enqueue(GameData.player.player_1);
-            queue.Enqueue(GameData.player.player_1);
-        }
-
-        // p2 등록
-        if (GameData.player.player_2 != null)
-        {
-            origin.Enqueue(GameData.player.player_2);
-            queue.Enqueue(GameData.player.player_2);
-        }
-
-        // p3 등록
-        if (GameData.player.player_3 != null)
-        {
-            origin.Enqueue(GameData.player.player_3);
-            queue.Enqueue(GameData.player.player_3);
-        }
-
-        // p4 등록
-        if (GameData.player.player_4 != null)
-        {
-            origin.Enqueue(GameData.player.player_4);
-            queue.Enqueue(GameData.player.player_4);
-        }
+        // p1~4 등록
+        if (order.Count > 0)
+            for (int i = 0; i < order.Count; i++)
+                Add(order[i]);
 
         // p미니게임 등록
-        origin.Enqueue(GameData.player.system.Minigame);
-        queue.Enqueue(GameData.player.system.Minigame);
+        Add(GameData.player.system.Minigame);
 
         // p미니게임 엔더 등록
-        origin.Enqueue(GameData.player.system.MinigameEnder);
-        queue.Enqueue(GameData.player.system.MinigameEnder);
+        Add(GameData.player.system.MinigameEnder);
 
         // p엔더 등록
-        origin.Enqueue(GameData.player.system.Ender);
-        queue.Enqueue(GameData.player.system.Ender);
+        Add(GameData.player.system.Ender);
     }
 }

@@ -33,6 +33,10 @@ public class Player
 
 
 
+
+    // 주사위
+    public Dice dice = new Dice();
+
     // 플레이어 자원
     public GameResource life = new GameResource(10, 10, -1);
     public GameResource coin = new GameResource(0, 999, 0);
@@ -41,6 +45,7 @@ public class Player
     public List<Item> inventory = new List<Item>();
 
 
+       
 
     // 생성자
     /// <summary>
@@ -57,6 +62,8 @@ public class Player
         // 카운터 반영
         if (_type != Type.System)
             count++;
+
+        Debug.Log("플레이어 생성됨 :: 캐릭터 번호 = " + characterIndex);
     }
 
     // 소멸자
@@ -106,6 +113,38 @@ public class Player
     public void SetAutoPlay(bool __isAutoPlay)
     {
         _isAutoPlay = __isAutoPlay;
+    }
+
+
+
+    public void CreateAvatar(Transform parentObject)
+    {
+        // 부모 미지정시 중단
+        if (parentObject == null)
+            return;
+
+        // 기존 아바타 있을 경우 오브젝트 제거
+        if (character.avatar != null)
+            Transform.Destroy(character.avatar);
+
+        // 오브젝트 유효 검사
+        Debug.Log(@"Data/Character/Character" + character.index.ToString("D4"));
+        GameObject obj = Resources.Load<GameObject>(@"Data/Character/Character" + character.index.ToString("D4"));
+        if (obj == null)
+        {
+            obj = Resources.Load<GameObject>(@"Data/Character/Character0000");
+            Debug.Log(@"Data/Character/Character0000");
+        }
+        if (obj == null)
+            Debug.Log("로드 실패 :: Data/Character/Character0000");
+
+        // 생성 및 등록
+        character.avatar = GameObject.Instantiate(
+            obj,
+            parentObject
+            ) as GameObject;
+
+        Debug.Log("캐릭터 생성 :: " + character.avatar.name);
     }
 
 }

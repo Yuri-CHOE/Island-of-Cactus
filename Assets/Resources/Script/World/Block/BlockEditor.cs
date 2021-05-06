@@ -60,7 +60,7 @@ namespace UnityEngine.MapEditor
         // Update is called once per frame
         void Update()
         {
-            RefreshTarget(MapEditor.Targeting());
+            RefreshTarget(Tool.Targeting());
             BtnCopyOnOFF();
             MoveCamera(dkMove.GetDirection());
             Copy(dkCopy.GetDirection(), BlockType.TypeDetail.plus);
@@ -134,7 +134,7 @@ namespace UnityEngine.MapEditor
             if (direction == MoveDirection.None)
                 return;
 
-            MapEditor.Targeting();
+            Tool.Targeting();
 
             // 복사 대상이 없을 경우
             if (target == null)
