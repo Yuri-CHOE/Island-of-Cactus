@@ -15,14 +15,16 @@ public class DiceController : MonoBehaviour
     }
 
     // 주사위 정보
-    public Dice dice { get { return GameData.turn.now.dice; } }
+    public Dice dice = null;
+    //public Dice diceTurnPlayer { get { return GameData.turn.now.dice; } }
 
     // 주사위 주인
-    public Player owner { get { return GameData.turn.now; } }
+    public Player owner = null;
+    //public Player owner { get { return GameData.turn.now; } }
 
     // 최소 높이
     [SerializeField]
-    float minHeight = 1.9f;
+    float minHeight = 2.5f;
 
     // 최대 높이
     [SerializeField]
@@ -35,24 +37,36 @@ public class DiceController : MonoBehaviour
     // 회전 속도
     [Header("spin")]
     float _rotSpeed = 1.00f;
-    float rotSpeed { get { return _rotSpeed + rotAccel; } }
+    float rotSpeed { get { return _rotSpeed * rotAccel; } }
+    [SerializeField]
+    float rotAccelMax = 100f;
     [SerializeField]
     float rotAccel = 0.00f;
 
     // 상승 하강 속도
     [Header("rise")]
     float _posSpeed = 1.00f;
-    float posSpeed { get { return _posSpeed + posAccel; } }
+    float posSpeed { get { return _posSpeed * posAccel; } }
+    [SerializeField]
+    float posAccelMax = 100f;
+    [SerializeField]
     float posAccel = 0.00f;
+
+
+    // 주사위 눈 별 각도값
+    Quaternion eye1 = Quaternion.Euler(-90, 0, 0);
+    Quaternion eye2 = Quaternion.Euler(0, 0, 0);
+    Quaternion eye3 = Quaternion.Euler(0, 0, 90);
+    Quaternion eye4 = Quaternion.Euler(0, 0, -90);
+    Quaternion eye5 = Quaternion.Euler(0, 0, 180);
+    Quaternion eye6 = Quaternion.Euler(90, 0, 0);
 
 
     [Header("Action")]
     // 액션 종류
     public DiceAction action = DiceAction.Wait;
     // 액션 진행도
-    [SerializeField]
-    ActionProgress actionProgress = ActionProgress.Ready;
-    bool isTimmerWork = false;
+    public ActionProgress actionProgress = ActionProgress.Ready;
     float elapsedTime = 0.00f;
 
 
@@ -73,9 +87,8 @@ public class DiceController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        test();
         ActUpdate();
-        
+        test();
     }
 
     void test()
@@ -86,10 +99,12 @@ public class DiceController : MonoBehaviour
         Debug.Log("테스트 요청됨");
         testRun = false;
 
-        CallDice(testObject);
+        if (GameData.player.me == null)
+            GameData.player.me = new Player(Player.Type.User, 1, false, "테스트");
+
+        CallDice(GameData.player.me, testObject);
 
     }
-
 
     void ActUpdate()
     {
@@ -98,26 +113,8 @@ public class DiceController : MonoBehaviour
             if (actionProgress == ActionProgress.Ready)
             {
 
-            }
-            else if (actionProgress == ActionProgress.Start)
-            {
-
-            }
-            else if (actionProgress == ActionProgress.Working)
-            {
-
-            }
-            else if (actionProgress == ActionProgress.Finish)
-            {
-
-            }
-            return;
-        }
-        else if (action == DiceAction.Hovering)
-        {
-            if (actionProgress == ActionProgress.Ready)
-            {
-                // 주사위 페이드 인 구현??
+                // 스킵
+                //actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
@@ -126,9 +123,39 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 스핀
-                Tool.Spin(transform, rotSpeed);
 
+                // 스킵
+                actionProgress = ActionProgress.Finish;
+            }
+            else if (actionProgress == ActionProgress.Finish)
+            {
+
+                // 스킵
+                actionProgress = ActionProgress.Ready;
+                action = DiceAction.Hovering;
+            }
+            return;
+        }
+        else if (action == DiceAction.Hovering)
+        {
+            if (actionProgress == ActionProgress.Ready)
+            {
+                // 회전 가속 초기화
+                rotAccel = 0f;
+
+                // 주사위 페이드 인 구현??
+
+                // 스킵
+                actionProgress = ActionProgress.Start;
+            }
+            else if (actionProgress == ActionProgress.Start)
+            {            
+                // 스킵
+                actionProgress = ActionProgress.Working;
+                return;
+            }
+            else if (actionProgress == ActionProgress.Working)
+            {
                 // 최소, 최대 높이 보정
                 HeightFix();
 
@@ -136,15 +163,36 @@ public class DiceController : MonoBehaviour
                 if (Input.GetMouseButton(0))
                 {
                     // 가속도
-                    if (rotAccel < 100f)
+                    if (rotAccel < rotAccelMax)
                         rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
-                    else if (rotAccel > 100f)
-                        rotAccel = 100f;
+                    else if (rotAccel > rotAccelMax)
+                        rotAccel = rotAccelMax;
+                }
+                // 클릭 종료될 때
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    actionProgress = ActionProgress.Finish;
+                }
+                // 아무것도 안했을때
+                else
+                {
+                    // 시간 카운트
+                    elapsedTime += Time.deltaTime;
+
+                    // 시간 제한
+                    if(elapsedTime > 20.0f)
+                    {
+                        elapsedTime = 0f;
+                        actionProgress = ActionProgress.Finish;
+
+                        Debug.Log("호버링 타임 오버");
+                    }
+
                 }
 
-                // 클릭 종료될 때
-                if (Input.GetMouseButtonUp(0))
-                    actionProgress = ActionProgress.Finish;
+
+                // 스핀
+                Tool.Spin(transform, rotSpeed);
             }
             else if (actionProgress == ActionProgress.Finish)
             {
@@ -158,21 +206,63 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
+                // 이동 가속도 초기화
+                posAccel = 0f;
+
                 // 스킵
                 actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                // 좌표 저장
+                _posSpeed = transform.position.y;
+
                 // 스킵
                 actionProgress = ActionProgress.Working;
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                // 스핀
+                Tool.Spin(transform, rotSpeed);
+
                 // 상승 처리
+                if (transform.position.y < maxHeight)
+                {
+                    // 회전 가속도 -  한계치까지
+                    if (rotAccel < rotAccelMax)
+                        rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 1f;
+                    else if (rotAccel > rotAccelMax)
+                        rotAccel = rotAccelMax;
+
+                    // 상승
+                    //transform.position = new Vector3(transform.position.x, posSpeed, transform.position.y);
+                    transform.position = Vector3.Lerp(
+                        transform.position, 
+                        new Vector3(transform.position.x, transform.position.y + posSpeed, transform.position.z), 
+                        Time.deltaTime * 5.00f
+                        );
+
+
+                    // 이동 가속도
+                    if (posAccel < posAccelMax)
+                        posAccel += Time.deltaTime * 5.0f + posAccel * Time.deltaTime * 0.5f;
+                    else if (posAccel > posAccelMax)
+                        posAccel = posAccelMax;
+                }
+                else
+                {
+                    // 최소, 최대 높이 보정
+                    HeightFix();
+
+                    // 상승 마감
+                    actionProgress = ActionProgress.Finish;
+                }
             }
             else if (actionProgress == ActionProgress.Finish)
             {
-
+                // 스킵
+                actionProgress = ActionProgress.Ready;
+                action = DiceAction.Spinning;
             }
             return;
         }
@@ -180,19 +270,40 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
-
+                // 스킵
+                actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                // 굴리기 값 생성
+                dice.Rolling();
 
+                // 스킵
+                actionProgress = ActionProgress.Working;
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                // 스핀
+                Tool.Spin(transform, rotSpeed);
+
+                // 회전 가속도 -  한계치까지
+                if (rotAccel < rotAccelMax)
+                    rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                else if (rotAccel > rotAccelMax)
+                    rotAccel = rotAccelMax;
+
+                // 가속 중지하고 다음으로
+                else if (rotAccel == rotAccelMax)
+                {
+                    actionProgress = ActionProgress.Finish;
+                }
 
             }
             else if (actionProgress == ActionProgress.Finish)
             {
-
+                // 스킵
+                actionProgress = ActionProgress.Ready;
+                action = DiceAction.Landing;
             }
             return;
         }
@@ -200,19 +311,63 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
+                // 이동 가속도 초기화
+                posAccel = 0f;
 
+                // 스킵
+                actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                // 주사위 값 설정
+                dice.Rolling();
+                Debug.Log("주사위 값 :: " + dice.value);
 
+                // 스킵
+                actionProgress = ActionProgress.Working;
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                // 스핀
+                Tool.Spin(transform, rotSpeed);
+
+                // 회전 감속
+                if (rotAccel > 0.0f)
+                    rotAccel -= Time.deltaTime * 5.0f - rotAccel * Time.deltaTime * 0.5f;
+                else if (rotAccel < 0.0f)
+                    rotAccel = 0.0f;
+
+                // 하강 처리
+                if (transform.position.y >  minHeight)
+                {
+                    // 하강
+                    transform.position = Vector3.Lerp(
+                        transform.position,
+                        new Vector3(transform.position.x, transform.position.y - posSpeed, transform.position.z),
+                        Time.deltaTime * 5.00f
+                        );
+
+                    // 가속도
+                    if (posAccel < posAccelMax)
+                        posAccel += Time.deltaTime * 5.0f + posAccel * Time.deltaTime * 0.5f;
+                    else if (posAccel > posAccelMax)
+                        posAccel = posAccelMax;
+                }
+                else 
+                {
+                    // 최소, 최대 높이 보정
+                    HeightFix();
+
+                    // 하강 마감
+                    actionProgress = ActionProgress.Finish;
+                }
 
             }
             else if (actionProgress == ActionProgress.Finish)
             {
-
+                // 스킵
+                actionProgress = ActionProgress.Ready;
+                action = DiceAction.Finish;
             }
             return;
         }
@@ -220,19 +375,60 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
-
+                // 스킵
+                actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                // 눈에 따른 각도 지정
+                Quaternion lastRot;
+                if (dice.value == 1)
+                    lastRot = eye1;
+                else if (dice.value == 2)
+                    lastRot = eye2;
+                else if (dice.value == 3)
+                    lastRot = eye3;
+                else if (dice.value == 4)
+                    lastRot = eye4;
+                else if (dice.value == 5)
+                    lastRot = eye5;
+                else //(dice.value == 6)
+                    lastRot = eye6;
 
+                // 최종 회전 처리
+                if (transform.rotation != lastRot)
+                {
+                    // 회전량 계산 (선형 보간)
+                    transform.rotation = Quaternion.Lerp(transform.rotation, lastRot, Time.deltaTime * Mathf.Abs(_rotSpeed -rotAccel));
+                }
+                // 최동 회전 완료시 스킵
+                else
+                {
+                    // 주사위 개수 차감
+                    dice.count--;
+
+                    actionProgress = ActionProgress.Working;
+                }
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                if (dice.value == 1)
+                    Tool.SpinZ(transform, _rotSpeed);
+                else if (dice.value == 2)
+                    Tool.SpinY(transform, _rotSpeed);
+                else if (dice.value == 3)
+                    Tool.SpinX(transform, _rotSpeed);
+                else if (dice.value == 4)
+                    Tool.SpinX(transform, _rotSpeed);
+                else if (dice.value == 5)
+                    Tool.SpinY(transform, _rotSpeed);
+                else //(dice.value == 6)
+                    Tool.SpinZ(transform, _rotSpeed);
 
             }
             else if (actionProgress == ActionProgress.Finish)
             {
-
+                ResetDice();
             }
             return;
         }
@@ -244,25 +440,24 @@ public class DiceController : MonoBehaviour
 
     
     /// <summary>
-    /// 대기 액션 강제 수행
+    /// 강제 초기화 수행
     /// </summary>
     public void ResetDice()
     {
+        // 주사위 소유권 초기화
+        owner = null;
+        dice = null;
+
+        // 액션상태 초기화
         action = DiceAction.Wait;
         actionProgress = ActionProgress.Ready;
-
-        // 타이머 리셋
-        isTimmerWork = false;
 
         // 주사위 부착 해제
         transform.parent = transform.root;
 
         // 안보이도록 땅속에 숨김
         transform.position = new Vector3(0, -10, 0) ;
-
-        // 액션상태 초기화
-        action = DiceAction.Wait;
-
+        
         // 오브젝트 비활성
         transform.GetComponent<MeshRenderer>().enabled = false;
         Debug.Log(transform.GetComponent<MeshRenderer>().enabled);
@@ -272,14 +467,39 @@ public class DiceController : MonoBehaviour
     }
 
 
-    public void CallDice(Transform obj) { CallDice(obj, diceDistance); }
-    public void CallDice(Transform obj, Vector3 distance)
+    public void CallDice(Player __owner, Transform obj) {  CallDice(__owner, obj, diceDistance); }
+    public void CallDice(Player __owner, Transform obj, Vector3 distance)
     {
         // 주사위 사용중이면 중단
         if (action != DiceAction.Wait)
             return;
 
-        action = DiceAction.Hovering;
+        // 주사위 사용중이면 중단
+        if (actionProgress != ActionProgress.Ready)
+            return;
+
+        // 주사위 소유권자 지정
+        owner = __owner;
+        dice = owner.dice;
+
+        // 주사위 개수가 부족하면 중단
+        if (dice.count < 1)
+        {
+            Debug.Log("주사위 개수 부족 :: " + dice.count);
+
+            // 액션 설정
+            action = DiceAction.Finish;
+            actionProgress = ActionProgress.Working;
+
+            Debug.Break();
+            return;
+        }
+
+        // 굴림 시작
+        dice.isRolling = true;
+
+        // 액션 설정
+        action = DiceAction.Wait;
         actionProgress = ActionProgress.Start;
 
         // 오브젝트 이동
@@ -300,7 +520,33 @@ public class DiceController : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///  주사위의 눈을 가져오고 초기화 진행
+    /// </summary>
+    /// <returns></returns>
+    public int UseDice()
+    {
+        // 주사위 남았으면 추가 진행
+        if (dice.count > 1)
+        {
+            // 다시 처음으로 초기화
+            action = DiceAction.Wait;
+            actionProgress = ActionProgress.Start;
+        }
+        else
+        {
+            // 굴림 종료
+            dice.isRolling = false;
+            dice.isRolled = true;
 
+
+            // 초기화 시작
+            actionProgress = ActionProgress.Finish;
+        }
+
+
+        return dice.value;
+    }
 
 
 

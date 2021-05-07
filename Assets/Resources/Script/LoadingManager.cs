@@ -23,6 +23,8 @@ public class LoadingManager : MonoBehaviour
     // 로딩UI 페이드
     bool isFadeIn = true;
     bool isFadeActive = false;
+    bool _isFadeFinish = false;
+    public bool isFadeFinish { get { return _isFadeFinish; } }
 
 
     // 비동기 로딩 도구
@@ -183,6 +185,7 @@ public class LoadingManager : MonoBehaviour
             {
                 gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;
                 isFadeActive = false;
+                _isFadeFinish = true;
                 Debug.Log("fade in done");
             }
         }
@@ -200,6 +203,7 @@ public class LoadingManager : MonoBehaviour
             {
                 gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
                 isFadeActive = false;
+                _isFadeFinish = true;
                 Debug.Log("fade out done");
             }
         }

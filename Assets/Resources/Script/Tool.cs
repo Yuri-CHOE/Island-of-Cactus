@@ -54,14 +54,84 @@ public static class Tool
     /// <param name="obj"></param>
     public static void Spin(Transform obj, float speed)
     {
+        // 각도값 양수화
+        Quaternion rot = Quaternion.Euler(
+            obj.rotation.eulerAngles.x + 360f,
+            obj.rotation.eulerAngles.y + 360f,
+            obj.rotation.eulerAngles.z + 360f
+            );
+
         Quaternion spin = Quaternion.Euler(
-            obj.rotation.eulerAngles.x + Random.Range(144, 170),
-            obj.rotation.eulerAngles.y + Random.Range(144, 170),
-            obj.rotation.eulerAngles.z + Random.Range(144, 170)
+            rot.eulerAngles.x + Random.Range(144, 170),
+            rot.eulerAngles.y + Random.Range(144, 170),
+            rot.eulerAngles.z + Random.Range(144, 170)
             );
 
         // 회전량 계산 (선형 보간)
-        obj.rotation = Quaternion.Lerp(obj.rotation, spin, Time.deltaTime * speed);
+        obj.rotation = Quaternion.Lerp(rot, spin, Time.deltaTime * speed);
+
+        ////Quaternion spin = Quaternion.Euler(
+        //    obj.rotation.eulerAngles.x + Random.Range(144, 170),
+        //    obj.rotation.eulerAngles.y + Random.Range(144, 170),
+        //    obj.rotation.eulerAngles.z + Random.Range(144, 170)
+        //    );
+
+        //// 회전량 계산 (선형 보간)
+        //obj.rotation = Quaternion.Lerp(obj.rotation, spin, Time.deltaTime * speed);
+    }
+    public static void SpinX(Transform obj, float speed)
+    {
+        // 각도값 양수화
+        Quaternion rot = Quaternion.Euler(
+            obj.rotation.eulerAngles.x + 360f,
+            obj.rotation.eulerAngles.y,
+            obj.rotation.eulerAngles.z
+            );
+
+        Quaternion spin = Quaternion.Euler(
+            rot.eulerAngles.x + Random.Range(144, 170),
+            rot.eulerAngles.y,
+            rot.eulerAngles.z
+            );
+
+        // 회전량 계산 (선형 보간)
+        obj.rotation = Quaternion.Lerp(rot, spin, Time.deltaTime * speed);
+    }
+    public static void SpinY(Transform obj, float speed)
+    {
+        // 각도값 양수화
+        Quaternion rot = Quaternion.Euler(
+            obj.rotation.eulerAngles.x,
+            obj.rotation.eulerAngles.y + 360f,
+            obj.rotation.eulerAngles.z
+            );
+
+        Quaternion spin = Quaternion.Euler(
+            rot.eulerAngles.x,
+            rot.eulerAngles.y + Random.Range(144, 170),
+            rot.eulerAngles.z
+            );
+
+        // 회전량 계산 (선형 보간)
+        obj.rotation = Quaternion.Lerp(rot, spin, Time.deltaTime * speed);
+    }
+    public static void SpinZ(Transform obj, float speed)
+    {
+        // 각도값 양수화
+        Quaternion rot = Quaternion.Euler(
+            obj.rotation.eulerAngles.x,
+            obj.rotation.eulerAngles.y,
+            obj.rotation.eulerAngles.z + 360f
+            );
+
+        Quaternion spin = Quaternion.Euler(
+            rot.eulerAngles.x,
+            rot.eulerAngles.y,
+            rot.eulerAngles.z + Random.Range(144, 170)
+            );
+
+        // 회전량 계산 (선형 보간)
+        obj.rotation = Quaternion.Lerp(rot, spin, Time.deltaTime * speed);
     }
 
 

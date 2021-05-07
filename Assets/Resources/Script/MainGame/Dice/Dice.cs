@@ -20,12 +20,19 @@ public class Dice
     public static int minAdded = 0;
     public static int maxAdded = 0;
 
+    // 굴리는중 여부
+    public bool isRolling = false;
+    public bool isRolled = false;
+
+    // 주사위 개수
+    public int count = 1;
+
 
 
     // 랜덤값 호출
     public int Rolling()
     {
-        _value = Random.Range(min, max + 1);
+        _value += Random.Range(min, max);
 
         return value;
     }
