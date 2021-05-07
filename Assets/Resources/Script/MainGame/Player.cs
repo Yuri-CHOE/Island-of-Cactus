@@ -34,6 +34,18 @@ public class Player
 
 
 
+    // 캐릭터 오브젝트
+    public GameObject avatar = null;
+
+    // 캐릭터가 고정될 블록 인덱스
+    public int location = -1;
+
+
+
+
+    // 위치 인덱스
+    int locate = -1;
+
     // 주사위
     public Dice dice = new Dice();
 
@@ -124,8 +136,8 @@ public class Player
             return;
 
         // 기존 아바타 있을 경우 오브젝트 제거
-        if (character.avatar != null)
-            Transform.Destroy(character.avatar);
+        if (avatar != null)
+            Transform.Destroy(avatar);
 
         // 오브젝트 유효 검사
         Debug.Log(@"Data/Character/Character" + character.index.ToString("D4"));
@@ -139,12 +151,12 @@ public class Player
             Debug.Log("로드 실패 :: Data/Character/Character0000");
 
         // 생성 및 등록
-        character.avatar = GameObject.Instantiate(
+        avatar = GameObject.Instantiate(
             obj,
             parentObject
             ) as GameObject;
 
-        Debug.Log("캐릭터 생성 :: " + character.avatar.name);
+        Debug.Log("캐릭터 생성 :: " + avatar.name);
     }
 
 }

@@ -43,6 +43,34 @@ public static class Tool
         return result;
     }
 
+
+    /// <summary>
+    /// 클릭한 오브젝트 가져오기
+    /// </summary>
+    public static GameObject Targeting()
+    {
+        // 클릭 체크
+        if (!Input.GetMouseButtonUp(0))
+            return null;
+
+        // UI 클릭 예외처리
+        if (EventSystem.current.currentSelectedGameObject != null)
+            return null;
+
+
+        RaycastHit hit = new RaycastHit();
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        GameObject clickObj = null;
+
+        if (Physics.Raycast(ray.origin, ray.direction, out hit))
+        {
+            clickObj = hit.transform.gameObject;
+            Debug.Log(clickObj.name);
+        }
+
+        return clickObj;
+    }
+
     /// <summary>
     /// 회전속도 1의 3축 랜덤 스핀
     /// </summary>
@@ -135,36 +163,33 @@ public static class Tool
     }
 
 
+
     /// <summary>
-    /// 클릭한 오브젝트 가져오기
+    /// 고도 제한
     /// </summary>
-    public static GameObject Targeting()
+    public static void HeightLimit(Transform target, float min, float max)
     {
-        // 클릭 체크
-        if (!Input.GetMouseButtonUp(0))
-            return null;
-
-        // UI 클릭 예외처리
-        if (EventSystem.current.currentSelectedGameObject != null)
-            return null;
-
-
-        RaycastHit hit = new RaycastHit();
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        GameObject clickObj = null;
-
-        if (Physics.Raycast(ray.origin, ray.direction, out hit))
+        // 최소값 제한
+        if (target.position.y < min)
         {
-            clickObj = hit.transform.gameObject;
-            Debug.Log(clickObj.name);
+            target.position = new Vector3(
+                target.position.x,
+                min,
+                target.position.z
+                );
+            Debug.Log("최소값 보정");
+            Debug.Log(target.position.ToString());
         }
 
-        return clickObj;
+        // 최대값 제한
+        if (target.position.y > max)
+        {
+            target.position = new Vector3(
+                    target.position.x,
+                    max,
+                    target.position.z
+                    );
+            Debug.Log("최대값 보정 :: " + target.position.ToString());
+        }
     }
-
-
-    //public static float SpeedAcceleration()
-    //{
-
-    //}
 }

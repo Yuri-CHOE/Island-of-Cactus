@@ -24,7 +24,7 @@ public class DiceController : MonoBehaviour
 
     // 최소 높이
     [SerializeField]
-    float minHeight = 2.5f;
+    float minHeight = 1.9f;
 
     // 최대 높이
     [SerializeField]
@@ -32,7 +32,7 @@ public class DiceController : MonoBehaviour
 
     // 최대 높이
     [SerializeField]
-    Vector3 diceDistance = new Vector3(0, 1, -2);
+    Vector3 diceDistance = new Vector3(0, 3.1f, -2);
 
     // 회전 속도
     [Header("spin")]
@@ -68,6 +68,11 @@ public class DiceController : MonoBehaviour
     // 액션 진행도
     public ActionProgress actionProgress = ActionProgress.Ready;
     float elapsedTime = 0.00f;
+
+    // 진행 아웃풋
+    public bool isFree { get { return action == DiceAction.Wait && actionProgress == ActionProgress.Ready; } }
+    public bool isBusy { get { return !isFree && !isFinish; } }
+    public bool isFinish { get { return action == DiceAction.Finish && actionProgress == ActionProgress.Finish; } }
 
 
     [Header("TestTool")]
@@ -141,7 +146,7 @@ public class DiceController : MonoBehaviour
             if (actionProgress == ActionProgress.Ready)
             {
                 // 회전 가속 초기화
-                rotAccel = 0f;
+                rotAccel = 1.0f;
 
                 // 주사위 페이드 인 구현??
 
@@ -156,9 +161,6 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 최소, 최대 높이 보정
-                HeightFix();
-
                 // 꾹 눌렀을때
                 if (Input.GetMouseButton(0))
                 {
@@ -173,29 +175,30 @@ public class DiceController : MonoBehaviour
                 {
                     actionProgress = ActionProgress.Finish;
                 }
-                // 아무것도 안했을때
-                else
-                {
-                    // 시간 카운트
-                    elapsedTime += Time.deltaTime;
 
-                    // 시간 제한
-                    if(elapsedTime > 20.0f)
-                    {
-                        elapsedTime = 0f;
-                        actionProgress = ActionProgress.Finish;
-
-                        Debug.Log("호버링 타임 오버");
-                    }
-
-                }
-
+                // 최소, 최대 높이 보정
+                Tool.HeightLimit(transform, minHeight, maxHeight);
 
                 // 스핀
                 Tool.Spin(transform, rotSpeed);
+
+
+                // 시간 제한
+                if (elapsedTime > 20.0f)
+                {
+                    actionProgress = ActionProgress.Finish;
+
+                    Debug.Log("호버링 타임 오버");
+                }
+
+                // 시간 카운트
+                elapsedTime += Time.deltaTime;
             }
             else if (actionProgress == ActionProgress.Finish)
             {
+                // 시간 초기화
+                elapsedTime = 0f;
+
                 // 스킵
                 actionProgress = ActionProgress.Ready;
                 action = DiceAction.Rising;
@@ -252,7 +255,7 @@ public class DiceController : MonoBehaviour
                 else
                 {
                     // 최소, 최대 높이 보정
-                    HeightFix();
+                    Tool.HeightLimit(transform, minHeight, maxHeight);
 
                     // 상승 마감
                     actionProgress = ActionProgress.Finish;
@@ -356,7 +359,7 @@ public class DiceController : MonoBehaviour
                 else 
                 {
                     // 최소, 최대 높이 보정
-                    HeightFix();
+                    Tool.HeightLimit(transform, minHeight, maxHeight);
 
                     // 하강 마감
                     actionProgress = ActionProgress.Finish;
@@ -396,7 +399,12 @@ public class DiceController : MonoBehaviour
                     lastRot = eye6;
 
                 // 최종 회전 처리
-                if (transform.rotation != lastRot)
+                if (
+                    Mathf.Abs(transform.rotation.x) != Mathf.Abs(lastRot.x) &&
+                    Mathf.Abs(transform.rotation.y) != Mathf.Abs(lastRot.y) &&
+                    Mathf.Abs(transform.rotation.z) != Mathf.Abs(lastRot.z) &&
+                    Mathf.Abs(transform.rotation.w) != Mathf.Abs(lastRot.w)
+                    )
                 {
                     // 회전량 계산 (선형 보간)
                     transform.rotation = Quaternion.Lerp(transform.rotation, lastRot, Time.deltaTime * Mathf.Abs(_rotSpeed -rotAccel));
@@ -425,10 +433,21 @@ public class DiceController : MonoBehaviour
                 else //(dice.value == 6)
                     Tool.SpinZ(transform, _rotSpeed);
 
+
+                // 시간 경과 시 넘김
+                if (elapsedTime > 3.5f)
+                {
+                    elapsedTime = 0f;
+                    actionProgress = ActionProgress.Finish;
+                    Debug.Break();
+                }
+
+                // 시간 카운트
+                elapsedTime += Time.deltaTime;
+
             }
             else if (actionProgress == ActionProgress.Finish)
             {
-                ResetDice();
             }
             return;
         }
@@ -452,6 +471,12 @@ public class DiceController : MonoBehaviour
         action = DiceAction.Wait;
         actionProgress = ActionProgress.Ready;
 
+        // 시간 관련값 리셋
+        rotAccel = 0f;
+        posAccel = 0f;
+        elapsedTime = 0f;
+
+
         // 주사위 부착 해제
         transform.parent = transform.root;
 
@@ -460,7 +485,6 @@ public class DiceController : MonoBehaviour
         
         // 오브젝트 비활성
         transform.GetComponent<MeshRenderer>().enabled = false;
-        Debug.Log(transform.GetComponent<MeshRenderer>().enabled);
         //gameObject.SetActive(false);
 
 
@@ -472,11 +496,8 @@ public class DiceController : MonoBehaviour
     {
         // 주사위 사용중이면 중단
         if (action != DiceAction.Wait)
-            return;
-
-        // 주사위 사용중이면 중단
-        if (actionProgress != ActionProgress.Ready)
-            return;
+            if (actionProgress != ActionProgress.Ready)
+                return;
 
         // 주사위 소유권자 지정
         owner = __owner;
@@ -506,8 +527,6 @@ public class DiceController : MonoBehaviour
         Vector3 pos = new Vector3(obj.position.x, obj.position.y, obj.position.z);
         pos += distance;
         transform.position = pos;
-        Debug.Log(pos.ToString());
-        Debug.Log(transform.position.ToString());
 
 
         // 주사위 부착
@@ -515,7 +534,6 @@ public class DiceController : MonoBehaviour
 
         // 오브젝트 활성
         transform.GetComponent<MeshRenderer>().enabled = true;
-        Debug.Log(transform.GetComponent<MeshRenderer>().enabled);
         //gameObject.SetActive(true);
 
     }
@@ -526,6 +544,8 @@ public class DiceController : MonoBehaviour
     /// <returns></returns>
     public int UseDice()
     {
+        int result = 0;
+
         // 주사위 남았으면 추가 진행
         if (dice.count > 1)
         {
@@ -539,13 +559,15 @@ public class DiceController : MonoBehaviour
             dice.isRolling = false;
             dice.isRolled = true;
 
+            // 결과값 백업
+            result = dice.value;
 
             // 초기화 시작
-            actionProgress = ActionProgress.Finish;
+            ResetDice();
         }
 
 
-        return dice.value;
+        return result;
     }
 
 
@@ -554,30 +576,30 @@ public class DiceController : MonoBehaviour
     /// <summary>
     /// 주사위 고도 제한
     /// </summary>
-    void HeightFix()
-    {
-        // 최소값 제한
-        if (transform.position.y < minHeight)
-        {
-            transform.position = new Vector3(
-                transform.position.x,
-                minHeight,
-                transform.position.z
-                );
-            Debug.Log("최소값 보정");
-            Debug.Log(transform.position.ToString());
-        }
+    //void HeightFix()
+    //{
+    //    // 최소값 제한
+    //    if (transform.position.y < minHeight)
+    //    {
+    //        transform.position = new Vector3(
+    //            transform.position.x,
+    //            minHeight,
+    //            transform.position.z
+    //            );
+    //        Debug.Log("최소값 보정");
+    //        Debug.Log(transform.position.ToString());
+    //    }
 
-        // 최대값 제한
-        if (transform.position.y > maxHeight)
-        {
-            transform.position = new Vector3(
-                    transform.position.x,
-                    maxHeight,
-                    transform.position.z
-                    );
-            Debug.Log("최대값 보정");
-            Debug.Log(transform.position.ToString());
-        }
-    }
+    //    // 최대값 제한
+    //    if (transform.position.y > maxHeight)
+    //    {
+    //        transform.position = new Vector3(
+    //                transform.position.x,
+    //                maxHeight,
+    //                transform.position.z
+    //                );
+    //        Debug.Log("최대값 보정");
+    //        Debug.Log(transform.position.ToString());
+    //    }
+    //}
 }

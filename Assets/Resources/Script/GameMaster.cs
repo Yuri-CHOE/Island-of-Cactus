@@ -98,10 +98,10 @@ public class GameMaster : MonoBehaviour
 
                     // 캐릭터 생성
                     for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                        if (GameData.player.allPlayer[i].character.avatar == null)
+                        if (GameData.player.allPlayer[i].avatar == null)
                         {
                             GameData.player.allPlayer[i].CreateAvatar(characterParent);
-                            GameData.player.allPlayer[i].character.avatar.name = "p" + (i + 1);
+                            GameData.player.allPlayer[i].avatar.name = "p" + (i + 1);
                         }
 
 
@@ -136,28 +136,34 @@ public class GameMaster : MonoBehaviour
                     //Debug.Log("게임 플로우 :: 순서 주사위 확인중");
 
                     // 주사위를 아무도 굴리지 않을때
-                    if (diceController.action == DiceController.DiceAction.Wait && diceController.actionProgress == ActionProgress.Ready)
+                    if (diceController.isFree)
+                    {
                         // 플레이어별 체크
                         for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                         {
-                            // 아직 안굴린 플레이어 굴리기
-                            if (GameData.player.allPlayer[i].dice.count > 0)
-                            {
-                                // 해당 플레이어가 굴리고 있을때 중단
-                                if (GameData.player.allPlayer[i].dice.isRolling)
-                                    return;
+                            // 이미 굴렸으면 다음 플레이어 처리
+                            if (GameData.player.allPlayer[i].dice.isRolled)
+                                continue;
 
-                                Debug.Log(string.Format("게임 플로우 :: Player{0} 주사위 굴리는중", i));
-                                // 주사위 기능 호출 미구현==========
+                            // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
+                            if (!GameData.player.allPlayer[i].dice.isRolling)
+                            {
+                                Debug.Log(string.Format("게임 플로우 :: Player{0} 주사위 굴리는중", i+1));
+                                // 주사위 기능 호출
                                 diceController.CallDice(
-                                    GameData.player.allPlayer[i], 
-                                    GameData.player.allPlayer[i].character.avatar.transform
+                                    GameData.player.allPlayer[i],
+                                    GameData.player.allPlayer[i].avatar.transform
                                     );
 
-                                // 대기
+                                // 다른 플레이어 무시 및 이후 진행 중지
                                 return;
                             }
                         }
+                    }
+                    
+                    // 주사위 마무리
+                    if (diceController.isFinish)
+                        diceController.UseDice();
 
                     // 모두가 주사위 굴리지 않으면 중단
                     for (int i = 0; i < GameData.player.allPlayer.Count; i++)
@@ -170,9 +176,9 @@ public class GameMaster : MonoBehaviour
 
 
                     // 순서큐 셋팅
-                    //GameData.turn.SetUp();      // 순서 주사위 배정 이후 턴 초기화
+                    GameData.turn.SetUp(GameData.player.allPlayer);
 
-                        //GameData.gameFlow = Flow.CycleStart;
+                    //GameData.gameFlow = Flow.CycleStart;
                     GameData.gameFlow = Flow.Cycling;
                     break;
                 }

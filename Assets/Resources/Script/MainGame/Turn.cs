@@ -50,8 +50,23 @@ public class Turn
 
         // p1~4 등록
         if (order.Count > 0)
+        {
+            // 정렬
+            if (order.Count > 1)
+                for (int i = 0; i < order.Count; i++)
+                {
+                    if (order[0].dice.value > order[1].dice.value)
+                    {
+                        // 가장 뒤에 추가
+                        order.Add(order[0]);
+                        order.RemoveAt(0);
+                    }
+                }
+
+            // 등록
             for (int i = 0; i < order.Count; i++)
                 Add(order[i]);
+        }
 
         // p미니게임 등록
         Add(GameData.player.system.Minigame);

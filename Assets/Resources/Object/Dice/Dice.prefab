@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minHeight: 1.9
   maxHeight: 20
-  diceDistance: {x: 0, y: 1, z: -2}
+  diceDistance: {x: 0, y: 3.1, z: -2}
   rotAccelMax: 100
   rotAccel: 0
   posAccelMax: 100

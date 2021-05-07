@@ -31,10 +31,6 @@ public class Character
     public string info { get { return _info; } }
 
 
-    // 캐릭터 오브젝트
-    public GameObject avatar = null;
-
-
 
     // 생성자
     protected Character()

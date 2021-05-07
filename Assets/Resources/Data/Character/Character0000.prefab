@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 307835649206373442}
   - component: {fileID: 307835649206373469}
   - component: {fileID: 307835649206373468}
+  - component: {fileID: 7017281696082432493}
   m_Layer: 0
   m_Name: Character0000
   m_TagString: Untagged
@@ -430,7 +431,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 36
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!143 &307835649206373468
 CharacterController:
@@ -443,13 +444,27 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 5.3
+  m_Radius: 1
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 2.65, z: 0}
+--- !u!114 &7017281696082432493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307835649206373443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd1699963ea7d774280dc3c944036b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  posMinY: 1.9
+  posMaxY: 20
 --- !u!1 &307835649429564410
 GameObject:
   m_ObjectHideFlags: 0
