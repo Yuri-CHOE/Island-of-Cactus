@@ -4,6 +4,14 @@ using UnityEngine;
 
 public static class GameData
 {
+    // 스크립트 빠른 검색
+    public static bool isMainGameScene { get { if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Main_game") return true; else return false; } }
+    public static LoadingManager loadingManager { get { return GameObject.FindObjectOfType<LoadingManager>(); ; } }
+    public static WorldManager worldManager { get { if (isMainGameScene) return GameObject.FindObjectOfType<WorldManager>(); else return null; } }
+    public static GroundManager groundManager { get { if (isMainGameScene) return worldManager.groundManager; else return null; } }
+    public static BlockManager blockManager { get { if (isMainGameScene) return worldManager.blockManager; else return null; } }
+    public static DecorManager decorManager { get { if (isMainGameScene) return worldManager.decorManager; else return null; } }
+
 
     //// 필드 임시구성======================
 

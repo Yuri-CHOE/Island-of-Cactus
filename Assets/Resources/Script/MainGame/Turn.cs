@@ -4,6 +4,28 @@ using UnityEngine;
 
 public class Turn
 {
+    public enum TurnAction
+    {
+        Wait,
+        Opening,
+        DiceRolling,
+        Item,
+        Plan,
+        Action,
+        Block,
+        //LuckyBox,
+        //Shop,
+        //BossGame,
+        // 미완성==================
+        Ending,
+        Finish,
+    }
+
+    // 턴 진행 상태
+    public TurnAction turnAction = TurnAction.Wait;
+    public ActionProgress actionProgress = ActionProgress.Ready;
+
+
     // 턴 원본
     Queue<Player> _origin = new Queue<Player>();
     public Queue<Player> origin { get { return _origin; } }

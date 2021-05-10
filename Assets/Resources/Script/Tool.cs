@@ -192,4 +192,42 @@ public static class Tool
             Debug.Log("최대값 보정 :: " + target.position.ToString());
         }
     }
+
+
+    /// <summary>
+    /// 페이드 처리 - 코루틴 필수
+    /// </summary>
+    /// <param name="canvasGroup">제어 대상</param>
+    /// <param name="isFadeIn">f=페이드 아웃, t=페이드 인</param>
+    /// <param name="timer">목표 시간</param>
+    /// <returns></returns>
+    /// </summary>
+    public static IEnumerator CanvasFade(CanvasGroup canvasGroup, bool isFadeIn, float timer)
+    {
+        // 음수 양수 처리
+        if (isFadeIn)
+            while (canvasGroup.alpha < 1f)
+            {        
+                // 페이드 처리
+                canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, Time.deltaTime / timer); ;
+
+                // 보정
+                if (canvasGroup.alpha > 0.9999f)
+                    canvasGroup.alpha = 1f;
+
+                yield return null;
+            }
+        else
+            while (canvasGroup.alpha > 0f)
+            {
+                // 페이드 처리
+                canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 0f, Time.deltaTime / timer); ;
+
+                // 보정
+                if (canvasGroup.alpha < 0.0001f)
+                    canvasGroup.alpha = 0f;
+
+                yield return null;
+            }
+    }
 }

@@ -9,6 +9,7 @@ public class GameMaster : MonoBehaviour
         Wait,
         Start,
         Ordering,
+        Opening,
         Cycling,
         //CycleStart,
         //Turn,
@@ -21,6 +22,7 @@ public class GameMaster : MonoBehaviour
         Finish,
     }
 
+    [Header("script")]
     // 로딩 매니저 스크립트
     [SerializeField]
     LoadingManager loadingManager = null;
@@ -32,6 +34,16 @@ public class GameMaster : MonoBehaviour
     // 캐릭터 오브젝트 부모 스크립트
     [SerializeField]
     Transform characterParent = null;
+
+    // PlayerInfo UI 오브젝트
+    [Space]
+    public List<PlayerInfoUI> playerInfoUI = new List<PlayerInfoUI>();
+    public CanvasGroup MainUI = null;
+
+
+    // 아이템 사용 명령
+    public bool useItemOrder = false;
+
 
 
     // Start is called before the first frame update
@@ -96,12 +108,16 @@ public class GameMaster : MonoBehaviour
                     }
 
 
-                    // 캐릭터 생성
+                    // 캐릭터 생성 및 캐릭터 아이콘 로드
                     for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                         if (GameData.player.allPlayer[i].avatar == null)
                         {
+                            // 캐릭터 생성
                             GameData.player.allPlayer[i].CreateAvatar(characterParent);
                             GameData.player.allPlayer[i].avatar.name = "p" + (i + 1);
+
+                            // 캐릭터 아이콘 로드
+                            GameData.player.allPlayer[i].LoadFace();
                         }
 
 
@@ -138,6 +154,7 @@ public class GameMaster : MonoBehaviour
                     // 주사위를 아무도 굴리지 않을때
                     if (diceController.isFree)
                     {
+
                         // 플레이어별 체크
                         for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                         {
@@ -155,12 +172,12 @@ public class GameMaster : MonoBehaviour
                                     GameData.player.allPlayer[i].avatar.transform
                                     );
 
-                                // 다른 플레이어 무시 및 이후 진행 중지
-                                return;
+                                // 다른 플레이어 무시
+                                break;
                             }
                         }
                     }
-                    
+
                     // 주사위 마무리
                     if (diceController.isFinish)
                         diceController.UseDice();
@@ -169,16 +186,47 @@ public class GameMaster : MonoBehaviour
                     for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                         if (!GameData.player.allPlayer[i].dice.isRolled)
                             return;
+                    
+                    Debug.Log("게임 플로우 :: 모든 플레이어 주사위 굴림 완료 =>" + GameData.player.allPlayer.Count);
 
                     // 모든 플레이어 주사위 굴림완료 상태 초기화
                     for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                         GameData.player.allPlayer[i].dice.isRolled = false;
 
 
-                    // 순서큐 셋팅
-                    GameData.turn.SetUp(GameData.player.allPlayer);
+                    // 순서용 리스트 복사
+                    List<Player> pOrderList = new List<Player>(GameData.player.allPlayer);
+                    Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + GameData.player.allPlayer.Count);
+
+                    // 순서큐 셋팅 및 리스트 순차 정리
+                    GameData.turn.SetUp(pOrderList);
+
+                    // PlayerInfo UI 초기화
+                    for (int i = 0; i < pOrderList.Count; i++)
+                    {
+                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].name);
+                        pOrderList[i].infoUI = playerInfoUI[i];
+                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].infoUI.transform.name);
+                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].infoUI.transform.name);
+                        pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
+                    }
+
+                    // PlayerInfo UI 활성
+                    StartCoroutine(Tool.CanvasFade(MainUI, true, 1.5f));
+
 
                     //GameData.gameFlow = Flow.CycleStart;
+                    GameData.gameFlow = Flow.Opening;
+                    break;
+                }
+
+
+            // 사이클링 시작 전 오프닝 단계
+            case Flow.Opening:
+                {
+                    // 연출 일단 생략
+
+
                     GameData.gameFlow = Flow.Cycling;
                     break;
                 }
@@ -242,32 +290,444 @@ public class GameMaster : MonoBehaviour
     }
 
 
-    public void TurnWork()
+    void TurnWork()
     {
         // 로그 기록
         Debug.Log("플레이어 호출 :: " + GameData.turn.now.name);
 
+        // 종료 조건 체크
+
+
         // 시스템 플레이어 - 스타터
         if (GameData.turn.now == GameData.player.system.Starter)
         {
+            // 시작 연출 및 각종 초기화
 
+            // 턴 종료 처리
+            GameData.turn.Next();
         }
         // 시스템 플레이어 - 미니게임
         else if(GameData.turn.now == GameData.player.system.Minigame)
         {
+            // 미니게임 선정
 
+            // 턴 종료 처리
+            GameData.turn.Next();
+
+            // 미니게임 로드
+        }
+        // 시스템 플레이어 - 미니게임 엔더
+        else if (GameData.turn.now == GameData.player.system.MinigameEnder)
+        {
+            // 미니게임 정산
+
+            // 턴 종료 처리
+            GameData.turn.Next();
         }
         // 시스템 플레이어 - 엔더
         else if (GameData.turn.now == GameData.player.system.Ender)
         {
+            // 종료 분기 체크
+            
+            // 사이클 증가
 
+            // 턴 종료 처리
+            GameData.turn.Next();
+            Debug.Break();
         }
         // 실제 플레이어
         else
         {
+            PlayerWork();
+        }
+    }
+
+
+    void PlayerWork()
+    {
+        // 로그 기록
+        Debug.Log("턴 진행 :: " + GameData.turn.now.name);
+
+        // 초기화
+        if (GameData.turn.turnAction == Turn.TurnAction.Wait)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+                // 메인 작업
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+
+                // 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Opening;
+                GameData.turn.actionProgress = ActionProgress.Ready;
+            }
+
+        }
+        // 시작 연출
+        else if (GameData.turn.turnAction == Turn.TurnAction.Opening)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 각종 체크
+
+                // 모든 플레이어 대상 라이프 체크
+                CheckLife();
+
+                // 행동 불가능 체크
+                if (GameData.turn.now.isStun)
+                {
+                    // 턴 중단 및 종료 연출로 이동
+                    GameData.turn.turnAction = Turn.TurnAction.Ending;
+                    GameData.turn.actionProgress = ActionProgress.Ready;
+                    return;
+                }
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+                // 시작 연출
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+
+
+                // 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Item;
+                GameData.turn.actionProgress = ActionProgress.Ready;
+            }
+
+        }
+        // 주사위 굴리기
+        else if (GameData.turn.turnAction == Turn.TurnAction.DiceRolling)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+                // 아이템 아이콘 누르면 사용 버튼 활성
+
+                // 주사위를 굴리는중 중단
+                if (diceController.isBusy)
+                    return;
+
+                // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
+                else if (diceController.isFree)
+                {
+                    Debug.Log(string.Format("게임 플로우 :: Player({0}) 주사위 굴리는중", GameData.turn.now.name));
+
+                    // 주사위 기능 호출
+                    diceController.CallDice(
+                        GameData.turn.now,
+                        GameData.turn.now.avatar.transform
+                        );
+                }
+
+                // 아이템 사용시
+                else if(useItemOrder)
+                {
+                    // 시간 정지
+                    diceController.isTimeCountWork = false;
+
+                    // 아이템 사용 단계로 워프
+                    GameData.turn.turnAction = Turn.TurnAction.Item;
+                    GameData.turn.actionProgress = ActionProgress.Ready;
+                }
+
+                // 주사위 마무리
+                else if (diceController.isFinish)
+                {
+                    // 사용 처리
+                    diceController.UseDice();
+
+                    // 주사위 더이상 없을시 스킵
+                    if (diceController.owner.dice.count <= 0)
+                        GameData.turn.actionProgress = ActionProgress.Finish;
+                }
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+
+
+                // 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Plan;
+                GameData.turn.actionProgress = ActionProgress.Ready;
+            }
+
+        }
+        // 아이템 사용 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Item)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+
+                // 소모처리
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                Debug.LogWarning("아이템 사용됨");
+
+
+                // 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+                // 효과 적용
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                Debug.LogWarning("아이템 사용 종료");
+
+                // 사용 종료 연출
+
+
+                // 다시 시간 흐름
+                diceController.isTimeCountWork = true;
+
+                // 다시 주사위 마저 진행
+                GameData.turn.turnAction = Turn.TurnAction.DiceRolling;
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+
+        }
+        // 액션 계획 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Plan)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+                
+                // 다음으로 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Action;
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+
+        }
+        // 액션 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Action)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+
+                // 다음으로 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Block;
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+
+        }
+        // 블록 기능 수행 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Block)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+                // 블록 기능 수행===================미구현
+                BlockWork();
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+
+                // 다음으로 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Ending;
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+
+        }
+        // 종료 연출 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Ending)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+
+                // 다음으로 스킵
+                GameData.turn.turnAction = Turn.TurnAction.Finish;
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+
+        }
+        // 종료 단계
+        else if (GameData.turn.turnAction == Turn.TurnAction.Finish)
+        {
+            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            {
+                // 각종 초기화
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Start;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            {
+                // 시작 연출
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Working;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            {
+
+                // 스킵
+                GameData.turn.actionProgress = ActionProgress.Finish;
+            }
+            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            {
+                // 종료 연출
+
+
+                // 턴 종료 처리
+                GameData.turn.Next();
+            }
 
         }
     }
+
+
+    void BlockWork()
+    {
+    }
+
 
 
     /// <summary>
@@ -275,25 +735,10 @@ public class GameMaster : MonoBehaviour
     /// </summary>
     public void CheckLife()
     {
-        // 1p 체크
-        if (GameData.player.player_1 != null)
-            if (GameData.player.player_1.life.Value <= 0)
-                GotoPrison(GameData.player.player_1);
-
-        // 2p 체크
-        if (GameData.player.player_2 != null)
-            if (GameData.player.player_2.life.Value <= 0)
-                GotoPrison(GameData.player.player_2);
-
-        // 3p 체크
-        if (GameData.player.player_3 != null)
-            if (GameData.player.player_3.life.Value <= 0)
-                GotoPrison(GameData.player.player_3);
-
-        // 4p 체크
-        if (GameData.player.player_4 != null)
-            if (GameData.player.player_4.life.Value <= 0)
-                GotoPrison(GameData.player.player_4);
+        // 체크
+        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+            if (GameData.player.allPlayer[i].life.checkMin(1))
+                GotoPrison(GameData.player.allPlayer[i]);
     }
 
     /// <summary>

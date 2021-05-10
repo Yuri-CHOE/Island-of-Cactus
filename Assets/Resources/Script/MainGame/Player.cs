@@ -33,18 +33,27 @@ public class Player
 
 
 
+    // 플레이어 정보 UI
+    public PlayerInfoUI infoUI = null;
+
+    // 플레이어 아이콘
+    public Sprite face = null;
 
     // 캐릭터 오브젝트
     public GameObject avatar = null;
 
-    // 캐릭터가 고정될 블록 인덱스
-    public int location = -1;
+    //// 위치 인덱스
+    //int _locate = -1;
+    //public int locate { get { return _locate; } set { _locate = GameData.blockManager.indexLoop(_locate, value); } }
+
+    //// 위치 오브젝트
+    //public GameObject locateBlock { get { if (GameData.isMainGameScene) { if (locate >= 0) return GameData.blockManager.gol[locate]; else return GameData.blockManager.startBlock.gameObject; } else return null; } }
+
+    // 이동제어 스크립트
+    public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
 
 
 
-
-    // 위치 인덱스
-    int locate = -1;
 
     // 주사위
     public Dice dice = new Dice();
@@ -56,6 +65,8 @@ public class Player
     // 아이템 슬롯
     public List<Item> inventory = new List<Item>();
 
+    // 행동 가능 여부
+    public bool isStun { get { return true; /* 미구현 =======================*/ } }
 
        
 
@@ -159,5 +170,27 @@ public class Player
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }
 
+
+    public void LoadFace()
+    {
+        // 아이콘 로드
+        Debug.Log(@"Data/Character/Face/Face" + character.index.ToString("D4"));
+        Sprite temp = Resources.Load<Sprite>(@"Data/Character/Face/Face" + character.index.ToString("D4"));
+
+        // 이미지 유효 검사
+        if (temp == null)
+        {
+            // 기본 아이콘 대체 처리
+            Debug.Log(@"UI/playerInfo/player");
+            temp = Resources.Load<Sprite>(@"UI/playerInfo/player");
+        }
+
+        // 최종 실패 처리
+        if (temp == null)
+            Debug.Log("로드 실패 :: UI/playerInfo/player");
+        // 아이콘 변경
+        else
+            face = temp;
+    }
 }
 

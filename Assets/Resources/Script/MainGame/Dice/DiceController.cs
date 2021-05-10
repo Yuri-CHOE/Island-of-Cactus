@@ -68,6 +68,7 @@ public class DiceController : MonoBehaviour
     // 액션 진행도
     public ActionProgress actionProgress = ActionProgress.Ready;
     float elapsedTime = 0.00f;
+    public bool isTimeCountWork = false;
 
     // 진행 아웃풋
     public bool isFree { get { return action == DiceAction.Wait && actionProgress == ActionProgress.Ready; } }
@@ -94,6 +95,10 @@ public class DiceController : MonoBehaviour
     {
         ActUpdate();
         test();
+
+        // 수동 조작시 시간제한 해제
+        if (isTimeCountWork && !owner.isAutoPlay)
+            isTimeCountWork = false;
     }
 
     void test()
@@ -192,7 +197,8 @@ public class DiceController : MonoBehaviour
                 }
 
                 // 시간 카운트
-                elapsedTime += Time.deltaTime;
+                if(isTimeCountWork)
+                    elapsedTime += Time.deltaTime;
             }
             else if (actionProgress == ActionProgress.Finish)
             {
@@ -414,6 +420,7 @@ public class DiceController : MonoBehaviour
                 {
                     // 주사위 개수 차감
                     dice.count--;
+                    Debug.Log("주사위 개수 :: -1 =>" + dice.count);
 
                     actionProgress = ActionProgress.Working;
                 }
@@ -430,7 +437,7 @@ public class DiceController : MonoBehaviour
                     Tool.SpinX(transform, _rotSpeed);
                 else if (dice.value == 5)
                     Tool.SpinY(transform, _rotSpeed);
-                else //(dice.value == 6)
+                else // (dice.value == 6)
                     Tool.SpinZ(transform, _rotSpeed);
 
 
@@ -439,7 +446,6 @@ public class DiceController : MonoBehaviour
                 {
                     elapsedTime = 0f;
                     actionProgress = ActionProgress.Finish;
-                    Debug.Break();
                 }
 
                 // 시간 카운트
@@ -502,6 +508,7 @@ public class DiceController : MonoBehaviour
         // 주사위 소유권자 지정
         owner = __owner;
         dice = owner.dice;
+        Debug.LogError("디버그 :: " + owner.name);
 
         // 주사위 개수가 부족하면 중단
         if (dice.count < 1)
@@ -549,12 +556,21 @@ public class DiceController : MonoBehaviour
         // 주사위 남았으면 추가 진행
         if (dice.count > 1)
         {
+            Debug.Log("주사위 굴림 :: 다시 시작");
+
             // 다시 처음으로 초기화
             action = DiceAction.Wait;
             actionProgress = ActionProgress.Start;
+
+            // 시간 관련값 리셋
+            rotAccel = 0f;
+            posAccel = 0f;
+            elapsedTime = 0f;
         }
         else
         {
+            Debug.Log("주사위 굴림 :: 종료");
+
             // 굴림 종료
             dice.isRolling = false;
             dice.isRolled = true;

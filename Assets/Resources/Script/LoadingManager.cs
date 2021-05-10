@@ -307,5 +307,9 @@ public class LoadingManager : MonoBehaviour
         // 장식물 빌드
         wm.decorManager.BuildByString(WorldManager.worldFile[4]);
         workCount++;
+
+        // 장애물 초기화
+        for (int i = 0; i < wm.blockManager.blockCount; i++)
+            CharacterMover.barricade.Add(0);
     }
 }

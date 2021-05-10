@@ -7,33 +7,82 @@ public class PlayerInfoUI : MonoBehaviour
 {
     public ObjectSwitch turnOobject;
 
-    public Image face;
+    public Player owner = null;
 
-    public List<GameObject> item;
+    public Image face = null;
+
+    public List<GameObject> itemObject;
+
 
     [SerializeField]
-    int Life = 10;
-    public Text lifeText;
-    public int life
+    Text lifeText;
+
+    [SerializeField]
+    Text coinText;
+
+
+    //[SerializeField]
+    //int Life = 10;
+    //public Text lifeText;
+    //public int life
+    //{
+    //    get { return Life; }
+    //    set
+    //    {
+    //        lifeText.text = Life.ToString();
+    //        Life = value;
+    //    }
+    //}
+
+    //[SerializeField]
+    //int Coin = 0;
+    //public Text coinText;
+    //public int coin
+    //{
+    //    get { return Coin; }
+    //    set
+    //    {
+    //        coinText.text = Coin.ToString();
+    //        Coin = value;
+    //    }
+    //}
+
+    //void a() { int i = life; life = 1; }
+
+
+    void Update()
     {
-        get { return Life; }
-        set
+        // 플레이어 지정 이후
+        if (owner != null)
         {
-            lifeText.text = Life.ToString();
+            lifeText.text = owner.life.Value.ToString();
+            coinText.text = owner.coin.Value.ToString();
+            //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
         }
     }
 
-    [SerializeField]
-    int Coin = 0;
-    public Text coinText;
-    public int coin
+
+    // 셋팅
+    public void SetPlayer(Player player)
     {
-        get { return Coin; }
-        set
+        // 플레이어 지정
+        owner = player;
+
+        // null 차단
+        if (owner == null)
+            return;
+
+        // 아이콘 변경
+        else
         {
-            coinText.text = Coin.ToString();
+            if (owner.face == null)
+            {
+                owner.LoadFace();
+                Debug.Log("chk");
+            }
+
+            Debug.Log(owner.face.name);
+            face.sprite = owner.face;
         }
     }
-
-    void a() { int i = life; life = 1; }
 }

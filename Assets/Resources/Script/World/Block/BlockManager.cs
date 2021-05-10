@@ -12,6 +12,8 @@ public class BlockManager : MonoBehaviour
 
     [SerializeField]
     List<GameObject> gol;
+    public int blockCount { get { return gol.Count; } }
+
 
     [SerializeField]
     Transform blockMaster;
@@ -292,5 +294,41 @@ public class BlockManager : MonoBehaviour
         }
 
         return sb.ToString();
+    }
+
+
+    public int indexLoop(int index, int movement)
+    {
+        int result = index + movement;
+
+        // 값 최소화
+        result = result % gol.Count;
+
+        // 음수 처리
+        if (result < 0)
+            result += gol.Count;
+
+        // 초과 처리
+        if(result >= gol.Count)
+            result -= gol.Count;
+        
+        return result;
+    }
+
+    public GameObject GetBlock(int number)
+    {
+        return gol[indexLoop(0, number)];
+    }
+
+    /// <summary>
+    /// 장애물 생성
+    /// </summary>
+    public void CreateBarricade(int blockIndex)
+    {
+        // 유효범위 필터링
+        if (blockIndex > 0 || blockIndex >= gol.Count)
+            return;
+
+        CharacterMover.barricade[blockIndex]++;
     }
 }
