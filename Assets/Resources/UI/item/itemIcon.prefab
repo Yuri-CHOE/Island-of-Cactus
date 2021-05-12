@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 2151380582677504053}
   - component: {fileID: 7974450204664126543}
   - component: {fileID: 2223208406582413486}
+  - component: {fileID: 7653982534102939646}
   m_Layer: 5
   m_Name: itemIcon
   m_TagString: Untagged
@@ -268,7 +269,33 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 7974450204664126543}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7653982534102939646}
+        m_TargetAssemblyTypeName: ItemSlot, Assembly-CSharp
+        m_MethodName: Clicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7653982534102939646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961392726904670124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4333cd4fabf0d1448815fcaf6f44545, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  count: 0
+  icon: {fileID: 2632925609164536840}

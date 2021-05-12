@@ -333,7 +333,7 @@ public class GameMaster : MonoBehaviour
 
             // 턴 종료 처리
             GameData.turn.Next();
-            Debug.Break();
+            //Debug.Break();
         }
         // 실제 플레이어
         else
@@ -346,7 +346,7 @@ public class GameMaster : MonoBehaviour
     void PlayerWork()
     {
         // 로그 기록
-        Debug.Log("턴 진행 :: " + GameData.turn.now.name);
+        Debug.Log("턴 진행 :: " + GameData.turn.turnAction + " & " + GameData.turn.actionProgress + " :: " + GameData.turn.now.name);
 
         // 초기화
         if (GameData.turn.turnAction == Turn.TurnAction.Wait)
@@ -371,6 +371,9 @@ public class GameMaster : MonoBehaviour
             {
                 // 메인 작업
 
+                // 주사위 지급
+                GameData.turn.now.dice.count += 1;
+                Debug.Log("주사위 수량 :: " + GameData.turn.now.dice.count);
 
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Finish;
@@ -430,7 +433,7 @@ public class GameMaster : MonoBehaviour
 
 
                 // 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Item;
+                GameData.turn.turnAction = Turn.TurnAction.DiceRolling;
                 GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
@@ -490,7 +493,7 @@ public class GameMaster : MonoBehaviour
                     diceController.UseDice();
 
                     // 주사위 더이상 없을시 스킵
-                    if (diceController.owner.dice.count <= 0)
+                    if (diceController.owner == null)   // 주사위 0개일 경우 소유권 박탈됨
                         GameData.turn.actionProgress = ActionProgress.Finish;
                 }
             }

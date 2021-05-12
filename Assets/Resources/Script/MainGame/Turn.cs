@@ -74,20 +74,25 @@ public class Turn
         if (order.Count > 0)
         {
             // 정렬
-            if (order.Count > 1)
-                for (int i = 0; i < order.Count; i++)
+            if (order.Count >= 2)
+                while (order.Count > 0)
                 {
-                    if (order[0].dice.value > order[1].dice.value)
+                    int temp = 0;
+                    for (int j = 0; j < order.Count; j++)
                     {
-                        // 가장 뒤에 추가
-                        order.Add(order[0]);
-                        order.RemoveAt(0);
+                        if (order[j].dice.value > order[temp].dice.value)
+                        {
+                            temp = j;
+                        }
                     }
-                }
 
-            // 등록
-            for (int i = 0; i < order.Count; i++)
-                Add(order[i]);
+                    // 등록
+                    Debug.Log(string.Format("순서 = ({0}) {1}",  order[temp].dice.value, order[temp].name));
+                    Add(order[temp]);
+
+                    //제외
+                    order.RemoveAt(temp);
+                }
         }
 
         // p미니게임 등록

@@ -22,13 +22,16 @@ public class DiceController : MonoBehaviour
     public Player owner = null;
     //public Player owner { get { return GameData.turn.now; } }
 
+    // 소유자 확인
+    public bool isMyDice { get { return owner == GameData.player.me; } }
+
     // 최소 높이
     [SerializeField]
     float minHeight = 1.9f;
 
     // 최대 높이
     [SerializeField]
-    float maxHeight = 50.0f;
+    float maxHeight = 20.0f;
 
     // 최대 높이
     [SerializeField]
@@ -53,6 +56,9 @@ public class DiceController : MonoBehaviour
     float posAccel = 0.00f;
 
 
+    // 반응 제어
+    public bool isInputBlock { get { return !GameData.worldManager.camMover.isInputBlock; } }
+
     // 주사위 눈 별 각도값
     Quaternion eye1 = Quaternion.Euler(-90, 0, 0);
     Quaternion eye2 = Quaternion.Euler(0, 0, 0);
@@ -74,6 +80,7 @@ public class DiceController : MonoBehaviour
     public bool isFree { get { return action == DiceAction.Wait && actionProgress == ActionProgress.Ready; } }
     public bool isBusy { get { return !isFree && !isFinish; } }
     public bool isFinish { get { return action == DiceAction.Finish && actionProgress == ActionProgress.Finish; } }
+
 
 
     [Header("TestTool")]
@@ -133,6 +140,8 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                // 시점 변경
+                GameData.worldManager.camMover.CamMoveTo(owner.avatar.transform, TouchCameraMover.CamAngle.Middle);
 
                 // 스킵
                 actionProgress = ActionProgress.Finish;
@@ -166,19 +175,22 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 꾹 눌렀을때
-                if (Input.GetMouseButton(0))
+                if (!isInputBlock)
                 {
-                    // 가속도
-                    if (rotAccel < rotAccelMax)
-                        rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
-                    else if (rotAccel > rotAccelMax)
-                        rotAccel = rotAccelMax;
-                }
-                // 클릭 종료될 때
-                else if (Input.GetMouseButtonUp(0))
-                {
-                    actionProgress = ActionProgress.Finish;
+                    // 꾹 눌렀을때
+                    if (Input.GetMouseButton(0))
+                    {
+                        // 가속도
+                        if (rotAccel < rotAccelMax)
+                            rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                        else if (rotAccel > rotAccelMax)
+                            rotAccel = rotAccelMax;
+                    }
+                    // 클릭 종료될 때
+                    else if (Input.GetMouseButtonUp(0))
+                    {
+                        actionProgress = ActionProgress.Finish;
+                    }
                 }
 
                 // 최소, 최대 높이 보정
@@ -189,7 +201,7 @@ public class DiceController : MonoBehaviour
 
 
                 // 시간 제한
-                if (elapsedTime > 20.0f)
+                if (elapsedTime > 15.0f)
                 {
                     actionProgress = ActionProgress.Finish;
 
@@ -223,6 +235,9 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                // 시점 변경
+                GameData.worldManager.camMover.CamMoveTo(owner.avatar.transform, TouchCameraMover.CamAngle.Top);
+
                 // 좌표 저장
                 _posSpeed = transform.position.y;
 
@@ -543,6 +558,7 @@ public class DiceController : MonoBehaviour
         transform.GetComponent<MeshRenderer>().enabled = true;
         //gameObject.SetActive(true);
 
+
     }
 
     /// <summary>
@@ -580,6 +596,9 @@ public class DiceController : MonoBehaviour
 
             // 초기화 시작
             ResetDice();
+
+            // 시점 변경
+            GameData.worldManager.camMover.CamMoveTo(GameData.worldManager.camMover.cam, TouchCameraMover.CamAngle.Top);
         }
 
 
