@@ -13,6 +13,8 @@ public class DiceController : MonoBehaviour
         Landing,
         Finish,
     }
+    [SerializeField]
+    CameraManager cm = null;
 
     // 주사위 정보
     public Dice dice = null;
@@ -57,7 +59,7 @@ public class DiceController : MonoBehaviour
 
 
     // 반응 제어
-    public bool isInputBlock { get { return !GameData.worldManager.camMover.isInputBlock; } }
+    public bool isInputBlock { get { return GameData.worldManager.cameraManager.controller.isFreeMode; } }
 
     // 주사위 눈 별 각도값
     Quaternion eye1 = Quaternion.Euler(-90, 0, 0);
@@ -103,9 +105,12 @@ public class DiceController : MonoBehaviour
         ActUpdate();
         test();
 
-        // 수동 조작시 시간제한 해제
-        if (isTimeCountWork && !owner.isAutoPlay)
-            isTimeCountWork = false;
+        if(owner != null)
+        {
+            // 수동 조작시 시간제한 해제
+            if (isTimeCountWork && !owner.isAutoPlay)
+                isTimeCountWork = false;
+        }
     }
 
     void test()
@@ -129,6 +134,7 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
+                isTimeCountWork = true;
 
                 // 스킵
                 //actionProgress = ActionProgress.Start;
@@ -141,7 +147,7 @@ public class DiceController : MonoBehaviour
             else if (actionProgress == ActionProgress.Working)
             {
                 // 시점 변경
-                GameData.worldManager.camMover.CamMoveTo(owner.avatar.transform, TouchCameraMover.CamAngle.Middle);
+                cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Middle);
 
                 // 스킵
                 actionProgress = ActionProgress.Finish;
@@ -175,7 +181,8 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                if (!isInputBlock)
+                // 입력 가능 상태 및 UI 클릭 아닐경우
+                if (!isInputBlock && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
                 {
                     // 꾹 눌렀을때
                     if (Input.GetMouseButton(0))
@@ -189,6 +196,7 @@ public class DiceController : MonoBehaviour
                     // 클릭 종료될 때
                     else if (Input.GetMouseButtonUp(0))
                     {
+                        //Debug.Break();
                         actionProgress = ActionProgress.Finish;
                     }
                 }
@@ -236,7 +244,7 @@ public class DiceController : MonoBehaviour
             else if (actionProgress == ActionProgress.Start)
             {
                 // 시점 변경
-                GameData.worldManager.camMover.CamMoveTo(owner.avatar.transform, TouchCameraMover.CamAngle.Top);
+                cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Top);
 
                 // 좌표 저장
                 _posSpeed = transform.position.y;
@@ -534,7 +542,7 @@ public class DiceController : MonoBehaviour
             action = DiceAction.Finish;
             actionProgress = ActionProgress.Working;
 
-            Debug.Break();
+            //Debug.Break();
             return;
         }
 
@@ -598,7 +606,7 @@ public class DiceController : MonoBehaviour
             ResetDice();
 
             // 시점 변경
-            GameData.worldManager.camMover.CamMoveTo(GameData.worldManager.camMover.cam, TouchCameraMover.CamAngle.Top);
+            cm.CamMoveTo(cm.controller.cam, CameraManager.CamAngle.Top);
         }
 
 

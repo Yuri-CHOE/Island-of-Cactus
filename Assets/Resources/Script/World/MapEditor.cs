@@ -17,7 +17,7 @@ namespace UnityEngine.MapEditor
         [SerializeField]
         WorldManager wm;
         [SerializeField]
-        TouchCameraMover cm;
+        CameraController cm;
         [SerializeField]
         GroundManager gm;
         [SerializeField]

@@ -2,15 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TouchCameraMover : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
-    public enum CamAngle
-    {
-        Top,
-        Middle,
-        Low,
-    }
-
     // [SerializeField] 는 보안상 public 을 사용할 수 없지만 엔진 스크립트 컴포넌트에는 표시되도록 합니다.
 
 
@@ -24,10 +17,11 @@ public class TouchCameraMover : MonoBehaviour
     Transform camLimit2;       // 우측 상단 한계 좌표
     public Vector3 camLimitPos2 { get { return camLimit2.position;  } }
 
-    public bool isInputBlock = false;
+    public bool isFreeMode = false;
 
     [SerializeField]
-    float camSpeed = 7.5f;      // 카메라 이동 속도
+    float _camSpeed = 7.5f;      // 카메라 이동 속도
+    public float camSpeed { get { return _camSpeed; } }
 
     [SerializeField]
     Vector3 mouseMove = new Vector3(0f, 0f, 0f);        // 좌표 계산값 저장용
@@ -39,12 +33,6 @@ public class TouchCameraMover : MonoBehaviour
 
     [SerializeField]
     Vector3 distance;
-
-    [SerializeField]
-    CamAngle camAngle = CamAngle.Top;
-
-    Coroutine coroutinePos = null;
-    Coroutine coroutineRot = null;
 
 
     //[SerializeField]
@@ -106,7 +94,7 @@ public class TouchCameraMover : MonoBehaviour
     void CheckMove()
     {
         // 인풋 차단상태일 경우 리턴
-        if (isInputBlock)
+        if (isFreeMode)
             return;
 
         // 클릭상태 아닐 경우 처리
@@ -162,7 +150,7 @@ public class TouchCameraMover : MonoBehaviour
     void MoveCamera()
     {
         // 이동 불가시 남은 이동거리 초기화 후 중단
-        if (isInputBlock)
+        if (isFreeMode)
         {
             mouseMove = Vector3.zero;
             return;
@@ -214,98 +202,5 @@ public class TouchCameraMover : MonoBehaviour
         float.TryParse(limit2[1], out temp2.y);
         float.TryParse(limit2[2], out temp2.z);
 
-    }
-
-
-
-    public void CamMoveTo(Transform obj, CamAngle _camAngle)
-    {
-        // 메인 시점 움직임 가능처리
-        if (obj == cam)
-            isInputBlock = false;
-        // 그 외 시점 움직임 불가능 처리
-        else
-            isInputBlock = true;
-
-        // 계층구조 변경
-        Camera.main.transform.SetParent(obj);
-
-        Vector3 anglePos = new Vector3();
-        Vector3 angleRot = new Vector3();
-
-        // 상단 앵글
-        if(_camAngle == CamAngle.Top)
-        {
-            anglePos.x = 0;
-            anglePos.y = 50;
-            anglePos.z = -50;
-
-            angleRot.x = 50;
-            angleRot.y = 0;
-            angleRot.z = 0;
-        }
-        // 하단 앵글
-        else if (_camAngle == CamAngle.Middle)
-        {
-            anglePos.x = 0;
-            anglePos.y = 10;
-            anglePos.z = -25;
-
-            angleRot.x = 10;
-            angleRot.y = 0;
-            angleRot.z = 0;
-        }
-        // 하단 앵글
-        else if (_camAngle == CamAngle.Low)
-        {
-            anglePos.x = 0;
-            anglePos.y = 1;
-            anglePos.z = -20;
-
-            angleRot.x = -10;
-            angleRot.y = 0;
-            angleRot.z = 0;
-        }
-
-        //anglePos = anglePos + obj.position;
-        //angleRot = angleRot + obj.rotation.eulerAngles;
-
-
-        // 이전 요청 중지
-        if(coroutinePos != null)
-            StopCoroutine(coroutinePos);
-        if (coroutineRot != null)
-            StopCoroutine(coroutineRot);
-
-        // 이동 및 회전
-        coroutinePos = StartCoroutine(ChangePos(Camera.main.transform, anglePos));
-        coroutineRot = StartCoroutine(ChangeRot(Camera.main.transform, angleRot));
-    }
-
-    IEnumerator ChangePos(Transform target, Vector3 pos)
-    {
-        while (Mathf.Abs(Vector3.Distance(target.position, pos)) > 0.0001f)
-        {
-            target.position = Vector3.Lerp(target.position, pos, Time.deltaTime * camSpeed);
-
-            yield return null;
-        }
-
-        // 보정
-        target.position = pos;
-    }
-
-    IEnumerator ChangeRot(Transform target, Vector3 rot)
-    {
-        while (Mathf.Abs(Vector3.Distance(target.rotation.eulerAngles, rot)) > 0.0001f)
-        {
-
-            target.rotation = Quaternion.Lerp(target.rotation, Quaternion.Euler(rot), Time.deltaTime * camSpeed);
-
-            yield return null;
-        }
-
-        // 보정
-        target.rotation = Quaternion.Euler(rot);
     }
 }

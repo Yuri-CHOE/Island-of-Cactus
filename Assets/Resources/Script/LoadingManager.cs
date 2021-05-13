@@ -184,6 +184,7 @@ public class LoadingManager : MonoBehaviour
             else
             {
                 gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;
+                gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
                 isFadeActive = false;
                 _isFadeFinish = true;
                 Debug.Log("fade in done");
@@ -202,6 +203,7 @@ public class LoadingManager : MonoBehaviour
             else
             {
                 gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
+                gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 isFadeActive = false;
                 _isFadeFinish = true;
                 Debug.Log("fade out done");
@@ -290,7 +292,7 @@ public class LoadingManager : MonoBehaviour
         workCount++;
 
         // 카메라 한계 설정
-        wm.camMover.SetCameraLimit(WorldManager.worldFile[0]);
+        wm.cameraManager.controller.SetCameraLimit(WorldManager.worldFile[0]);
         workCount+=6;
 
         // 스타트 블록 설정

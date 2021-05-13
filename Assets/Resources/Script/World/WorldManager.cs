@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour
 {
     [Header("ManagerScript")]
-    public TouchCameraMover camMover;
+    public CameraManager cameraManager;
     public GroundManager groundManager;
     public BlockManager blockManager;
     public DecorManager decorManager;

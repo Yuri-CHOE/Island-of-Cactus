@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4661282723510625131}
-  - component: {fileID: 1444546660714446110}
+  - component: {fileID: 3777823060021571821}
   m_Layer: 0
   m_Name: CamManager
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 1537881992487163081}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1444546660714446110
+--- !u!114 &3777823060021571821
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,17 +42,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 592877239262275036}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: def133881e61c7d4592c5f61dfa299ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d50143018ac9014e8f1e64971d004bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 0}
-  camLimit1: {fileID: 2225634391229390367}
-  camLimit2: {fileID: 5905636230473999027}
-  isInputBlock: 0
-  camSpeed: 7.5
-  mouseMove: {x: 0, y: 0, z: 0}
-  sensitivity: {x: 5, y: 0, z: 5}
-  distance: {x: 0, y: 0, z: 0}
+  controller: {fileID: 0}
+  LockBtn: {fileID: 0}
 --- !u!1 &1537881992487163080
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c3d540313ae9e469c10598f7ff42fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camMover: {fileID: 1444546660714446110}
+  cameraManager: {fileID: 3777823060021571821}
+  camMover: {fileID: 0}
   groundManager: {fileID: 737556260333163439}
   blockManager: {fileID: 8054697670722515734}
   decorManager: {fileID: 7303790948570327699}

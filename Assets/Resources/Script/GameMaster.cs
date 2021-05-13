@@ -121,6 +121,11 @@ public class GameMaster : MonoBehaviour
                         }
 
 
+                    // PlayerInfo UI 활성
+                    MainUI.GetComponent<CanvasGroup>().alpha = 0f;
+                    MainUI.blocksRaycasts = false;
+
+
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
                     GameData.gameFlow = Flow.Start;
                     break;
@@ -198,9 +203,6 @@ public class GameMaster : MonoBehaviour
                     List<Player> pOrderList = new List<Player>(GameData.player.allPlayer);
                     Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + GameData.player.allPlayer.Count);
 
-                    // 순서큐 셋팅 및 리스트 순차 정리
-                    GameData.turn.SetUp(pOrderList);
-
                     // PlayerInfo UI 초기화
                     for (int i = 0; i < pOrderList.Count; i++)
                     {
@@ -211,8 +213,12 @@ public class GameMaster : MonoBehaviour
                         pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
                     }
 
+                    // 순서큐 셋팅 및 리스트 순차 정리
+                    GameData.turn.SetUp(pOrderList);
+
                     // PlayerInfo UI 활성
                     StartCoroutine(Tool.CanvasFade(MainUI, true, 1.5f));
+                    MainUI.blocksRaycasts = true;
 
 
                     //GameData.gameFlow = Flow.CycleStart;
