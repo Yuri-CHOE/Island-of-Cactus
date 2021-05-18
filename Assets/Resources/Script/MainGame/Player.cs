@@ -63,7 +63,7 @@ public class Player
     public GameResource coin = new GameResource(0, 999, 0);
 
     // 아이템 슬롯
-    public List<Item> inventory = new List<Item>();
+    public List<ItemSlot> inventory = new List<ItemSlot>();
 
     // 행동 불가능 여부
     public bool isStun { get { return false; /* 미구현 =======================*/ } }

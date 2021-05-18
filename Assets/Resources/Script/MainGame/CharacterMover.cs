@@ -19,6 +19,10 @@ public class CharacterMover : MonoBehaviour
     // 액션 큐
     public Queue<Action> actionsQueue = new Queue<Action>();
 
+    // 현재 액션
+    public Action actNow = new Action();
+
+
     // 위치 인덱스
     int _location = -1;
     public int location { get { return _location; } /*set { _location = GameData.blockManager.indexLoop(_location, value); }*/ }
@@ -26,7 +30,7 @@ public class CharacterMover : MonoBehaviour
     // 이동량
     public int moveCount = 0;
 
-    // 위치 오브젝트
+    // 현재 위치 기반 오브젝트
     public Transform locateBlock { get { if (GameData.isMainGameScene) { if (location >= 0) return GameData.blockManager.GetBlock(location).transform; else return GameData.blockManager.startBlock; } else return null; } }
 
 
@@ -59,10 +63,10 @@ public class CharacterMover : MonoBehaviour
     }
 
     /// <summary>
-    /// moveLocation 위치로 전진 스케줄링
+    /// 특정 위치로 전진 스케줄링
     /// </summary>
     /// <param name="moveLocation">위치</param>
-    void PlanMoveTo(int moveLocation)
+    public void PlanMoveTo(int moveLocation)
     {
         // 이동량 계산
         int distance = moveLocation - location;
@@ -76,10 +80,10 @@ public class CharacterMover : MonoBehaviour
     }
 
     /// <summary>
-    /// moveValue 만큼 이동 스케줄링
+    /// 값 만큼 이동 스케줄링
     /// </summary>
     /// <param name="moveValue"></param>
-    void PlanMoveBy(int moveValue)
+    public void PlanMoveBy(int moveValue)
     {
         // 최종 목표
         int movePoint = GameData.blockManager.indexLoop(_location, moveValue);
@@ -101,5 +105,12 @@ public class CharacterMover : MonoBehaviour
                 counter = 0;
             }
         }
+    }
+
+
+    public Action GetAction()
+    {
+        actNow = actionsQueue.Dequeue();
+        return actNow;
     }
 }

@@ -22,7 +22,9 @@ public class Dice
     // 값
     int _value = 0;
     public int value { get { return _value; } }
-    public int valueTotal = 0;
+    // 누적 값
+    public int _valueTotal = 0;
+    public int valueTotal { get { return _valueTotal + value; } }       // 주사위를 굴릴때 이전값을 누적처리 하므로 주사위 1개만 굴리면 누적값=0, 값=1~ 상태 => _valueTotal + value 해야 진짜 누적값 나옴
 
     // 굴리는중 여부
     public bool isRolling = false;
@@ -36,9 +38,18 @@ public class Dice
     // 랜덤값 호출
     public int Rolling()
     {
-        valueTotal += _value;
+        _valueTotal += _value;
         _value = Random.Range(min, max);
 
         return value;
+    }
+
+    /// <summary>
+    /// 주사위 값 및 누적값 제거
+    /// </summary>
+    public void Clear()
+    {
+        _value = 0;
+        _valueTotal = 0;
     }
 }

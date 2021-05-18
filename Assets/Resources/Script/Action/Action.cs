@@ -37,7 +37,12 @@ public struct Action
 
     // 진행 시간
     public float elapsedTime;
-    
+
+    // 종료됨
+    public bool isFinish;
+    //public bool isFinish { get { if (progress == ActionProgress.Finish) { return true; } else { return false; } } }
+
+
     // 생성자
     public Action(ActionType _type, float _speed)
     {
@@ -46,6 +51,7 @@ public struct Action
         count = 0;
         speed = _speed;
         elapsedTime = 0.00f;
+        isFinish = false;
     }
 
     // 생성자
@@ -56,5 +62,41 @@ public struct Action
         count = _count;
         speed = _speed;
         elapsedTime = 0.00f;
+        isFinish = false;
+    }
+
+
+
+    /// <summary>
+    /// 업데이트 및 그 하위 함수를 통해 액션 수행
+    /// </summary>
+    public void ActMove()
+    {
+        if (progress == ActionProgress.Ready)
+        {
+            // 각종 초기화
+
+            // 스킵
+            progress = ActionProgress.Start;
+        }
+        else if (progress == ActionProgress.Start)
+        {
+            // 시작 연출
+
+            // 스킵
+            progress = ActionProgress.Working;
+        }
+        else if (progress == ActionProgress.Working)
+        {
+            // 이동
+
+            // 스킵
+            //progress = ActionProgress.Finish;
+        }
+        else if (progress == ActionProgress.Finish)
+        {
+            // 종료 처리
+            isFinish = true;
+        }
     }
 }

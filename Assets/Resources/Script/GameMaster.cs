@@ -578,6 +578,10 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
+                // 액션 스케줄링
+                GameData.turn.now.movement.PlanMoveBy(
+                    GameData.turn.now.dice.valueTotal
+                    );
 
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Finish;
@@ -612,9 +616,37 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
+                // 스크립트 퀵 등록
+                CharacterMover movement = GameData.turn.now.movement;
 
-                // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                // 액션 미수행 경우
+                if (movement.actNow.type == Action.ActionType.None)
+                {
+                    // 액션 미수행 및 잔여 액션 있음
+                    if (movement.actionsQueue.Count > 0)
+                        movement.GetAction();
+                    // 플로우 종료 절차
+                    else
+                    {
+                        // 스킵
+                        GameData.turn.actionProgress = ActionProgress.Finish;
+                    }
+                }
+                // 액션 수행중
+                else if (!movement.actNow.isFinish)
+                {
+                    Debug.LogWarning("액션 수행중");
+                    // 지속적 수행
+                    // 액션을 메소드로 처리하는게 맞나??????????? ==================== 좀 더 생각 해보자
+                    // 차라리 액션 종류별 메소드 만들어서 이곳에서 분류하여 호출하자
+                    movement.actNow.Act();
+                }
+                // 모든 액션 소진
+                else
+                    movement.actNow = new Action();
+
+
+
             }
             else if (GameData.turn.actionProgress == ActionProgress.Finish)
             {
