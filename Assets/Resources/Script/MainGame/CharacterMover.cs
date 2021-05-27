@@ -448,17 +448,16 @@ public class CharacterMover : MonoBehaviour
         // 목표 바라보기
         Tool.HeightLimit(bodyObject, posMinY - transform.position.y, posMaxY - transform.position.y);
         Vector3 posY = new Vector3(pos.x, bodyObject.position.y, pos.z);
-        //Vector3 dir = transform.position;
-        //dir.y = pos.y - transform.position.y;
         float elapsedTime = 0.000f;
-        //while (Quaternion.LookRotation((posY - transform.position).normalized).y / transform.rotation.y > 0.1f)
-        while (Mathf.Abs(Quaternion.LookRotation((posY - bodyObject.position).normalized).y) - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
+        //while (Mathf.Abs(Quaternion.LookRotation((posY - bodyObject.position).normalized).y) - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
+        while (Mathf.Abs(Quaternion.LookRotation((bodyObject.position- posY).normalized).y) - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
         {
             elapsedTime += Time.deltaTime;
             // 회전
             bodyObject.rotation = Quaternion.Lerp(
                 bodyObject.rotation,
-                Quaternion.LookRotation((posY - bodyObject.position).normalized),
+                //Quaternion.LookRotation((posY - bodyObject.position).normalized),
+                Quaternion.LookRotation((bodyObject.position - posY).normalized),
                 elapsedTime * speed
                 );
 
@@ -467,7 +466,8 @@ public class CharacterMover : MonoBehaviour
         // 회전 보정
         bodyObject.rotation = Quaternion.Lerp(
             bodyObject.rotation,
-            Quaternion.LookRotation((posY - bodyObject.position).normalized),
+            //Quaternion.LookRotation((posY - bodyObject.position).normalized),
+            Quaternion.LookRotation((bodyObject.position- posY).normalized),
             1f
             );
     }
