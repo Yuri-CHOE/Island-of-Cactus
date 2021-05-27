@@ -297,6 +297,12 @@ public class BlockManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 출발지에서 일정량 떨어진 블록의 인덱스값 계산
+    /// </summary>
+    /// <param name="index">출발지 인덱스</param>
+    /// <param name="movement"> 이동 할 거리</param>
+    /// <returns></returns>
     public int indexLoop(int index, int movement)
     {
         int result = index + movement;
@@ -315,6 +321,11 @@ public class BlockManager : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// 인덱스 값으로 블록 오브젝트 반환
+    /// </summary>
+    /// <param name="number">인덱스 값</param>
+    /// <returns></returns>
     public GameObject GetBlock(int number)
     {
         return gol[indexLoop(0, number)];

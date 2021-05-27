@@ -73,6 +73,9 @@ public class GameMaster : MonoBehaviour
                     // 원본에서 복사할것
 
 
+                    // 중력 설정
+                    Physics.gravity = Physics.gravity *10;
+
 
                     // 플레이어 구성 초기화
                     {
@@ -116,9 +119,15 @@ public class GameMaster : MonoBehaviour
                             GameData.player.allPlayer[i].CreateAvatar(characterParent);
                             GameData.player.allPlayer[i].avatar.name = "p" + (i + 1);
 
+                            // 캐릭터 이동
+                            GameData.player.allPlayer[i].avatar.transform.position = GameData.blockManager.startBlock.position;
+                                                       
                             // 캐릭터 아이콘 로드
                             GameData.player.allPlayer[i].LoadFace();
                         }
+
+                    // 캐릭터 겹침 해소
+                    GameData.player.allPlayer[0].avatar.GetComponent<CharacterMover>().AvatarOverFix();
 
 
                     // PlayerInfo UI 활성
@@ -308,6 +317,10 @@ public class GameMaster : MonoBehaviour
         if (GameData.turn.now == GameData.player.system.Starter)
         {
             // 시작 연출 및 각종 초기화
+
+            // 모든 플레이어 주사위 초기화
+            for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+                GameData.player.allPlayer[i].dice.Clear();
 
             // 턴 종료 처리
             GameData.turn.Next();
@@ -579,6 +592,7 @@ public class GameMaster : MonoBehaviour
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
                 // 액션 스케줄링
+                Debug.LogError(GameData.turn.now.dice.valueTotal);
                 GameData.turn.now.movement.PlanMoveBy(
                     GameData.turn.now.dice.valueTotal
                     );
@@ -593,7 +607,7 @@ public class GameMaster : MonoBehaviour
                 
                 // 다음으로 스킵
                 GameData.turn.turnAction = Turn.TurnAction.Action;
-                GameData.turn.actionProgress = ActionProgress.Working;
+                GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
         }
@@ -610,6 +624,9 @@ public class GameMaster : MonoBehaviour
             else if (GameData.turn.actionProgress == ActionProgress.Start)
             {
                 // 시작 연출
+
+                // 카메라 부착
+                GameData.worldManager.cameraManager.CamMoveTo(GameData.turn.now.avatar.transform, CameraManager.CamAngle.Top);
 
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Working;
@@ -635,15 +652,35 @@ public class GameMaster : MonoBehaviour
                 // 액션 수행중
                 else if (!movement.actNow.isFinish)
                 {
-                    Debug.LogWarning("액션 수행중");
-                    // 지속적 수행
-                    // 액션을 메소드로 처리하는게 맞나??????????? ==================== 좀 더 생각 해보자
-                    // 차라리 액션 종류별 메소드 만들어서 이곳에서 분류하여 호출하자
-                    movement.actNow.Act();
+                    //Debug.LogWarning("액션 수행중");
+
+                    // 이동 처리
+                    if (movement.actNow.type == Action.ActionType.Move)
+                        movement.MoveByAction(ref movement.actNow);
+                }
+                // 액션 종료
+                else if (movement.actNow.isFinish)
+                {
+                    //Debug.LogWarning("액션 종료됨");
+
+                    // 액션 소거
+                    movement.actNow = new Action();
                 }
                 // 모든 액션 소진
-                else
+                else if(movement.actionsQueue.Count == 0)
+                {
+                    // 카메라 부착
+                    GameData.worldManager.cameraManager.CamFree();
+
+                    // 좌표 변경
+                    movement.location += GameData.turn.now.dice.valueTotal;
+
+                    // 겹침 정렬
+                    movement.AvatarOverFix();
+
+                    // 초기화
                     movement.actNow = new Action();
+                }
 
 
 

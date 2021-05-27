@@ -41,6 +41,7 @@ public class Player
 
     // 캐릭터 오브젝트
     public GameObject avatar = null;
+    public Transform avatarBody = null;
 
     //// 위치 인덱스
     //int _locate = -1;
@@ -166,6 +167,7 @@ public class Player
             obj,
             parentObject
             ) as GameObject;
+        avatarBody = avatar.transform.Find("BodyObject");
 
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }

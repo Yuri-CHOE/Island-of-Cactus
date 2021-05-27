@@ -169,7 +169,7 @@ public class CameraManager : MonoBehaviour
         {
             anglePos.x = 0;
             anglePos.y = 45;
-            anglePos.z = -40;
+            anglePos.z = -30;
         }
         // го╢э ╬ч╠ш
         else if (_camAngle == CamAngle.Middle)

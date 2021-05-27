@@ -33,7 +33,7 @@ public class DiceController : MonoBehaviour
 
     // 최대 높이
     [SerializeField]
-    float maxHeight = 20.0f;
+    float maxHeight = 30.0f;
 
     // 최대 높이
     [SerializeField]
@@ -50,12 +50,8 @@ public class DiceController : MonoBehaviour
 
     // 상승 하강 속도
     [Header("rise")]
-    float _posSpeed = 1.00f;
-    float posSpeed { get { return _posSpeed * posAccel; } }
-    [SerializeField]
-    float posAccelMax = 100f;
-    [SerializeField]
-    float posAccel = 0.00f;
+    float posSpeed = 5.00f;
+    float timeLimit = 3.00f;
 
 
     // 반응 제어
@@ -77,6 +73,7 @@ public class DiceController : MonoBehaviour
     public ActionProgress actionProgress = ActionProgress.Ready;
     float elapsedTime = 0.00f;
     public bool isTimeCountWork = false;
+
 
     // 진행 아웃풋
     public bool isFree { get { return action == DiceAction.Wait && actionProgress == ActionProgress.Ready; } }
@@ -168,7 +165,7 @@ public class DiceController : MonoBehaviour
                 // 회전 가속 초기화
                 rotAccel = 1.0f;
 
-                // 주사위 페이드 인 구현??
+                // 주사위 페이드 인 구현 예정 ===============
 
                 // 스킵
                 actionProgress = ActionProgress.Start;
@@ -189,7 +186,7 @@ public class DiceController : MonoBehaviour
                     {
                         // 가속도
                         if (rotAccel < rotAccelMax)
-                            rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                            rotAccel += 0.1f+ Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
                         else if (rotAccel > rotAccelMax)
                             rotAccel = rotAccelMax;
                     }
@@ -233,10 +230,19 @@ public class DiceController : MonoBehaviour
         }
         else if (action == DiceAction.Rising)
         {
+            // 스핀
+            Tool.Spin(transform, rotSpeed);
+
+            // 회전 가속도 -  한계치까지
+            if (rotAccel < rotAccelMax)
+                rotAccel += 1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+            else if (rotAccel > rotAccelMax)
+                rotAccel = rotAccelMax;
+
             if (actionProgress == ActionProgress.Ready)
             {
-                // 이동 가속도 초기화
-                posAccel = 0f;
+                // 중력 활성화
+                transform.GetComponent<Rigidbody>().useGravity = true;
 
                 // 스킵
                 actionProgress = ActionProgress.Start;
@@ -246,46 +252,21 @@ public class DiceController : MonoBehaviour
                 // 시점 변경
                 cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Top);
 
+                // 상승 처리
+                transform.GetComponent<Rigidbody>().isKinematic = false;
+                transform.GetComponent<Rigidbody>().AddForce(Vector3.up * 50f * transform.GetComponent<Rigidbody>().mass, ForceMode.Impulse);
+
                 // 좌표 저장
-                _posSpeed = transform.position.y;
+                //_posSpeed = transform.position.y;
 
                 // 스킵
                 actionProgress = ActionProgress.Working;
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 스핀
-                Tool.Spin(transform, rotSpeed);
-
-                // 상승 처리
-                if (transform.position.y < maxHeight)
+                // 상승 인식
+                if (transform.GetComponent<Rigidbody>().velocity.y > 0)
                 {
-                    // 회전 가속도 -  한계치까지
-                    if (rotAccel < rotAccelMax)
-                        rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 1f;
-                    else if (rotAccel > rotAccelMax)
-                        rotAccel = rotAccelMax;
-
-                    // 상승
-                    //transform.position = new Vector3(transform.position.x, posSpeed, transform.position.y);
-                    transform.position = Vector3.Lerp(
-                        transform.position, 
-                        new Vector3(transform.position.x, transform.position.y + posSpeed, transform.position.z), 
-                        Time.deltaTime * 5.00f
-                        );
-
-
-                    // 이동 가속도
-                    if (posAccel < posAccelMax)
-                        posAccel += Time.deltaTime * 5.0f + posAccel * Time.deltaTime * 0.5f;
-                    else if (posAccel > posAccelMax)
-                        posAccel = posAccelMax;
-                }
-                else
-                {
-                    // 최소, 최대 높이 보정
-                    Tool.HeightLimit(transform, minHeight, maxHeight);
-
                     // 상승 마감
                     actionProgress = ActionProgress.Finish;
                 }
@@ -300,6 +281,15 @@ public class DiceController : MonoBehaviour
         }
         else if (action == DiceAction.Spinning)
         {
+            // 스핀
+            Tool.Spin(transform, rotSpeed);
+
+            // 회전 가속도 -  한계치까지
+            if (rotAccel < rotAccelMax)
+                rotAccel += 1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+            else if (rotAccel > rotAccelMax)
+                rotAccel = rotAccelMax;
+
             if (actionProgress == ActionProgress.Ready)
             {
                 // 스킵
@@ -307,25 +297,17 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Start)
             {
-                // 굴리기 값 생성
+                // 주사위 값 설정
                 dice.Rolling();
+                Debug.Log("주사위 값 :: " + dice.value);
 
                 // 스킵
                 actionProgress = ActionProgress.Working;
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 스핀
-                Tool.Spin(transform, rotSpeed);
-
-                // 회전 가속도 -  한계치까지
-                if (rotAccel < rotAccelMax)
-                    rotAccel += Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
-                else if (rotAccel > rotAccelMax)
-                    rotAccel = rotAccelMax;
-
                 // 가속 중지하고 다음으로
-                else if (rotAccel == rotAccelMax)
+                if (rotAccel == rotAccelMax)
                 {
                     actionProgress = ActionProgress.Finish;
                 }
@@ -343,18 +325,11 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
-                // 이동 가속도 초기화
-                posAccel = 0f;
-
                 // 스킵
                 actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
-                // 주사위 값 설정
-                dice.Rolling();
-                Debug.Log("주사위 값 :: " + dice.value);
-
                 // 스킵
                 actionProgress = ActionProgress.Working;
             }
@@ -369,29 +344,21 @@ public class DiceController : MonoBehaviour
                 else if (rotAccel < 0.0f)
                     rotAccel = 0.0f;
 
-                // 하강 처리
-                if (transform.position.y >  minHeight)
+                // 하강 인식
+                if (transform.GetComponent<Rigidbody>().velocity.y < 0)
                 {
-                    // 하강
-                    transform.position = Vector3.Lerp(
-                        transform.position,
-                        new Vector3(transform.position.x, transform.position.y - posSpeed, transform.position.z),
-                        Time.deltaTime * 5.00f
-                        );
+                    if (transform.position.y <= minHeight)
+                    {
+                        // 중력 비활성화
+                        transform.GetComponent<Rigidbody>().isKinematic = true;
+                        transform.GetComponent<Rigidbody>().useGravity = false;
 
-                    // 가속도
-                    if (posAccel < posAccelMax)
-                        posAccel += Time.deltaTime * 5.0f + posAccel * Time.deltaTime * 0.5f;
-                    else if (posAccel > posAccelMax)
-                        posAccel = posAccelMax;
-                }
-                else 
-                {
-                    // 최소, 최대 높이 보정
-                    Tool.HeightLimit(transform, minHeight, maxHeight);
+                        // 최소, 최대 높이 보정
+                        Tool.HeightLimit(transform, minHeight, maxHeight);
 
-                    // 하강 마감
-                    actionProgress = ActionProgress.Finish;
+                        // 하강 마감
+                        actionProgress = ActionProgress.Finish;
+                    }
                 }
 
             }
@@ -407,6 +374,9 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
+                // 시간 카운터 리셋
+                elapsedTime = 0f;
+
                 // 스킵
                 actionProgress = ActionProgress.Start;
             }
@@ -445,27 +415,31 @@ public class DiceController : MonoBehaviour
                     dice.count--;
                     Debug.Log("주사위 개수 :: -1 =>" + dice.count);
 
+                    // 보정
+                    transform.rotation = lastRot;
+
                     actionProgress = ActionProgress.Working;
                 }
             }
             else if (actionProgress == ActionProgress.Working)
             {
+                Debug.LogError(dice.value +" :: " + transform.rotation.eulerAngles);
+
                 if (dice.value == 1)
                     Tool.SpinZ(transform, _rotSpeed);
                 else if (dice.value == 2)
                     Tool.SpinY(transform, _rotSpeed);
                 else if (dice.value == 3)
-                    Tool.SpinX(transform, _rotSpeed);
+                    Tool.SpinY(transform, _rotSpeed);
                 else if (dice.value == 4)
-                    Tool.SpinX(transform, _rotSpeed);
+                    Tool.SpinY(transform, _rotSpeed);
                 else if (dice.value == 5)
                     Tool.SpinY(transform, _rotSpeed);
                 else // (dice.value == 6)
                     Tool.SpinZ(transform, _rotSpeed);
 
-
                 // 시간 경과 시 넘김
-                if (elapsedTime > 3.5f)
+                if (elapsedTime > 3.0f)
                 {
                     elapsedTime = 0f;
                     actionProgress = ActionProgress.Finish;
@@ -502,9 +476,11 @@ public class DiceController : MonoBehaviour
 
         // 시간 관련값 리셋
         rotAccel = 0f;
-        posAccel = 0f;
         elapsedTime = 0f;
 
+        // 중력 비활성화
+        transform.GetComponent<Rigidbody>().isKinematic = true;
+        transform.GetComponent<Rigidbody>().useGravity = false;
 
         // 주사위 부착 해제
         transform.parent = transform.root;
@@ -588,7 +564,6 @@ public class DiceController : MonoBehaviour
 
             // 시간 관련값 리셋
             rotAccel = 0f;
-            posAccel = 0f;
             elapsedTime = 0f;
         }
         else

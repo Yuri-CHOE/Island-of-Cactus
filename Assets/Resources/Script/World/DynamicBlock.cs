@@ -15,6 +15,9 @@ public class DynamicBlock : MonoBehaviour
 
     public BlockType.TypeDetail blockTypeDetail = BlockType.TypeDetail.plus;
 
+
+    public List<Player> guest = new List<Player>();
+
     // Start is called before the first frame update
     void Start()
     {

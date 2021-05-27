@@ -58,7 +58,7 @@ public class CameraController : MonoBehaviour
 
         CheckMove();
 
-        // 터치를 감지할 경우 무조건 터치스크린이 필요합니다 (아마도 이부분때문에 외부 개발킷)
+        // 터치를 감지할 경우 무조건 터치스크린이 필요합니다
         // 터치는 기본적으로 마우스 L클릭과 같습니다
         // 따라서 궂이 터치 코딩 할 필요 없이 아닌 마우스 코딩 하는게 편합니다
         //if (Input.touchCount == 1)
@@ -94,7 +94,7 @@ public class CameraController : MonoBehaviour
     void CheckMove()
     {
         // 인풋 차단상태일 경우 리턴
-        if (isFreeMode)
+        if (!isFreeMode)
             return;
 
         // 클릭상태 아닐 경우 처리
@@ -150,7 +150,7 @@ public class CameraController : MonoBehaviour
     void MoveCamera()
     {
         // 이동 불가시 남은 이동거리 초기화 후 중단
-        if (isFreeMode)
+        if (!isFreeMode)
         {
             mouseMove = Vector3.zero;
             return;

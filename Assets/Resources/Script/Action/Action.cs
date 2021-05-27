@@ -17,6 +17,7 @@ public struct Action
         None,
         Idle,
         Move,
+        Turn,
         Attack,
         Hit,
         Stop,
@@ -63,40 +64,5 @@ public struct Action
         speed = _speed;
         elapsedTime = 0.00f;
         isFinish = false;
-    }
-
-
-
-    /// <summary>
-    /// 업데이트 및 그 하위 함수를 통해 액션 수행
-    /// </summary>
-    public void ActMove()
-    {
-        if (progress == ActionProgress.Ready)
-        {
-            // 각종 초기화
-
-            // 스킵
-            progress = ActionProgress.Start;
-        }
-        else if (progress == ActionProgress.Start)
-        {
-            // 시작 연출
-
-            // 스킵
-            progress = ActionProgress.Working;
-        }
-        else if (progress == ActionProgress.Working)
-        {
-            // 이동
-
-            // 스킵
-            //progress = ActionProgress.Finish;
-        }
-        else if (progress == ActionProgress.Finish)
-        {
-            // 종료 처리
-            isFinish = true;
-        }
     }
 }
