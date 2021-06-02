@@ -6,15 +6,19 @@ public class Check : MonoBehaviour
 {
     public Mouse_Click mouse_Click1;
     public Mouse_Click mouse_Click2;
-    public set_active set_Active;
+    public Scenes_mini num_player;
     public string num1, num2, name1, name2;
-    public int x, z = 0;
+    public int player,x, z = 0, number;
 
     void Awake()
     {
+        num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴
+        player = num_player.member_num;
         num1 = "";
         num2 = "";
         x = 1;
+        number = 1;
+        turn(player, 1);
     }
     
     // Update is called once per frame
@@ -30,30 +34,111 @@ public class Check : MonoBehaviour
                 mouse_Click2.i = 4;
                 mouse_Click1.i = 4;
                 z += 1;
+                if (z == 9)
+                {
+                    GameObject.Find("Canvas").transform.Find("Ending").gameObject.SetActive(true);
+                }
             }
             else
             {
                 mouse_Click2.i = 2;
                 mouse_Click1.i = 2;
             }
-        }
-        x = 1;
-        if(z == 9)
-        {
-            set_Active = GameObject.Find("End").GetComponent<set_active>();
-            set_Active.active = true;
+            turn(player, number);
+            x = 1;
         }
     }
 
     public void num1_set(string number, string card_name)
     {
+        //첫번째 카드 숫자와 카드 번호
         num1 = number;
         name1 = card_name;
     }
 
     public void num2_set(string number, string card_name)
     {
+        //두번째 카드 숫자와 카드 번호
         num2 = number;
         name2 = card_name;
+    }
+
+    public void score(int num)
+    {
+
+    }
+
+    public void turn(int player_num, int num)
+    {
+        // 자신의 차례인 플레이어의 경우 death 비활성화 그외 플레이어는 death를 활성화 시켜 누구 차례인지 구분할 수 있도록 함
+        if (player_num == 2)
+        {
+            if(num == 1)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(false);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(true);
+                number = 2;
+            }
+            if(num == 2)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(false);
+                number = 1;
+            }
+           
+        }
+        if (player_num == 3)
+        {
+            if (num == 1)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(false);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (3)").transform.Find("death").gameObject.SetActive(true);
+                number = 2;
+            }
+            if (num == 2)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(false);
+                number = 3;
+            }
+            if (num == 3)
+            {
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (3)").transform.Find("death").gameObject.SetActive(false);
+                number = 1;
+            }
+
+        }
+        if (player_num == 4)
+        {
+            if (num == 1)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(false);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (3)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (4)").transform.Find("death").gameObject.SetActive(true);
+                number = 2;
+            }
+            if (num == 2)
+            {
+                GameObject.Find("player (1)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(false);
+                number = 3;
+            }
+            if (num == 3)
+            {
+                GameObject.Find("player (2)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (3)").transform.Find("death").gameObject.SetActive(false);
+                number = 4;
+            }
+            if (num == 3)
+            {
+                GameObject.Find("player (3)").transform.Find("death").gameObject.SetActive(true);
+                GameObject.Find("player (4)").transform.Find("death").gameObject.SetActive(false);
+                number = 1;
+            }
+        }
+
     }
 }
