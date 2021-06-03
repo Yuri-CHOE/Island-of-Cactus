@@ -20,34 +20,9 @@ public class PlayerInfoUI : MonoBehaviour
     [SerializeField]
     Text coinText;
 
-
-    //[SerializeField]
-    //int Life = 10;
-    //public Text lifeText;
-    //public int life
-    //{
-    //    get { return Life; }
-    //    set
-    //    {
-    //        lifeText.text = Life.ToString();
-    //        Life = value;
-    //    }
-    //}
-
-    //[SerializeField]
-    //int Coin = 0;
-    //public Text coinText;
-    //public int coin
-    //{
-    //    get { return Coin; }
-    //    set
-    //    {
-    //        coinText.text = Coin.ToString();
-    //        Coin = value;
-    //    }
-    //}
-
-    //void a() { int i = life; life = 1; }
+    // 자원 갱신
+    Coroutine lifeRefresh = null;
+    Coroutine coinRefresh = null;
 
 
     void Update()
@@ -55,9 +30,22 @@ public class PlayerInfoUI : MonoBehaviour
         // 플레이어 지정 이후
         if (owner != null)
         {
+            // 라이프 갱신
+            owner.life.RefreshOne();
             lifeText.text = owner.life.Value.ToString();
+
+            // 코인 갱신
+            owner.coin.RefreshOne();
             coinText.text = owner.coin.Value.ToString();
+
+            // 아이템 갱신
             //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
+
+            // 주인이 턴 진행중일 경우
+            if (GameData.turn.now == owner)
+                turnOobject.setUp(1);
+            else
+                turnOobject.setUp(0);
         }
     }
 
@@ -84,5 +72,7 @@ public class PlayerInfoUI : MonoBehaviour
             Debug.Log(owner.face.name);
             face.sprite = owner.face;
         }
+
+        // 자원 갱신 등록
     }
 }

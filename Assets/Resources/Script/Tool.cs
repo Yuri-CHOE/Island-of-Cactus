@@ -230,4 +230,62 @@ public static class Tool
                 yield return null;
             }
     }
+
+
+    /// <summary>
+    /// 오브젝트를 목표 좌표로 포물선 날리기
+    /// BoxCollider, Rigidbody와 중력 사용 필수
+    /// </summary>
+    /// <param name="obj">날릴 오브젝트</param>
+    /// <param name="destination">목적지 좌표</param>
+    /// <param name="height">포물선 높이</param>
+    /// <param name="time">예상 시간</param>
+    public static void ThrowParabola(Transform obj, Vector3 destination, float height, float time)
+    {
+        // 잘못된 오브젝트 중단
+        if (obj == null)
+            return;
+
+        // 퀵 등록
+        Rigidbody objRigidbody = obj.GetComponent<Rigidbody>();
+
+        // Rigidbody 미사용시 중단
+        if (objRigidbody == null)
+            return;
+
+        // 캐릭터 겹침 방지 충돌 해제
+        obj.GetComponent<Collider>().isTrigger = true;
+
+
+        // 방향 백터 계산
+
+        // 거리 확보
+        Vector3 distance = destination - obj.position;
+
+        // 높이 제거된 거리
+        Vector3 distanceXZ = new Vector3(distance.x, 0, distance.z);
+
+        // 속도
+        float spdY = height / time + (Mathf.Abs(Physics.gravity.y) * time / 2f);
+        float spdXZ = distanceXZ.magnitude / time;
+
+        // 결과물
+        Vector3 result = distanceXZ.normalized * spdXZ;
+        result.y = spdY;
+
+
+        // 날리기
+        objRigidbody.velocity = result;
+
+        /*
+         참고 : https://foo897.tistory.com/24
+        */
+    }
+
+
+
+
+
+
+
 }

@@ -38,7 +38,7 @@ public class ItemSlot : MonoBehaviour
     void Refresh()
     {
         // 아이콘 로드
-        LoadIcon();
+        icon.sprite = LoadIcon(item);
 
         // 싱크
         itemMirror = item;
@@ -47,11 +47,11 @@ public class ItemSlot : MonoBehaviour
     /// <summary>
     /// 아이콘 로드
     /// </summary>
-    void LoadIcon()
+    public static Sprite LoadIcon(Item _item)
     {
         // 아이콘 로드
-        Debug.Log(@"Data/Item/icon/item" + item.index.ToString("D4"));
-        Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + item.index.ToString("D4"));
+        Debug.Log(@"Data/Item/icon/item" + _item.index.ToString("D4"));
+        Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + _item.index.ToString("D4"));
 
         // 이미지 유효 검사
         if (temp == null)
@@ -61,12 +61,21 @@ public class ItemSlot : MonoBehaviour
             temp = Resources.Load<Sprite>(@"Data/Item/icon/item0000");
         }
 
+        //// 최종 실패 처리
+        //if (temp == null)
+        //    Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        //// 아이콘 리턴
+        //else
+        //    _icon.sprite = temp;
+
+
+        // 아이콘 리턴
+        if (temp != null)
+            return temp;
+
         // 최종 실패 처리
-        if (temp == null)
-            Debug.Log("로드 실패 :: Data/Item/icon/item0000");
-        // 아이콘 변경
-        else
-            icon.sprite = temp;
+        Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        return null;
     }
 
     /// <summary>

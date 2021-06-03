@@ -26,7 +26,8 @@ public class CharacterMover : MonoBehaviour
 
     // 위치 인덱스
     int _location = -1;
-    public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(_location, value); } }
+    //public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(_location, value); } }
+    public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(value, 0); } }
 
     // 이동량
     public int moveCount = 0;
@@ -230,10 +231,8 @@ public class CharacterMover : MonoBehaviour
                 break;
             }
 
-            Debug.LogError(counter + " , " + (i + _sign == moveValue));
-            Debug.LogError(i + " , " + _sign + " , " + moveValue);
+            Debug.Log(counter + " , " + (i + _sign == moveValue));
         }
-        Debug.Break();
 
         //스케줄링 추가 - 정면 보기
         //actionsQueue.Enqueue(new Action(Action.ActionType.Turn, 2, moveSpeed));

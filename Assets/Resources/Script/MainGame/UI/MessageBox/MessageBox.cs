@@ -6,6 +6,14 @@ using UnityEngine.UI.MessageBox;
 
 public class MessageBox : MonoBehaviour
 {
+    public enum Type
+    {
+        Message,
+        Setting,
+        Itemshop,
+        LuckyBox,
+    }
+
     [SerializeField]
     Image m_box;
     [SerializeField]
@@ -19,7 +27,7 @@ public class MessageBox : MonoBehaviour
     List<int[]> mBoxPreset = new List<int[]>();
 
     [SerializeField]
-    const int btnMax = 6;
+    const int btnMax = 5;
 
     [SerializeField]
     bool[] preMessage = new bool[btnMax];    // 메시지박스 모드
@@ -30,6 +38,9 @@ public class MessageBox : MonoBehaviour
     [SerializeField]
     bool[] preItemshop = new bool[btnMax];   // 아이템 상점 모드
 
+    [SerializeField]
+    bool[] preLuckyBox = new bool[btnMax];   // 럭키 박스 모드
+
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +49,7 @@ public class MessageBox : MonoBehaviour
         addPreset(preMessage, 0);
         addPreset(preSetting, 1);
         addPreset(preItemshop, 2);
+        addPreset(preLuckyBox, 3);
     }
 
     // Update is called once per frame
@@ -160,6 +172,9 @@ public class MessageBox : MonoBehaviour
             close();
             return;
         }
+
+        // 테스트 비활성
+        runBtn = false;
 
         m_box.enabled = isBoxUse;
         Innerbox.SetActive(isInnerBoxUse);

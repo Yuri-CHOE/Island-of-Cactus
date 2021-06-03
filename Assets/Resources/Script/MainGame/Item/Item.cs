@@ -119,7 +119,7 @@ public class Item
 
     // 아이템 테이블
     static List<Item> _table = new List<Item>();
-    public static List<Item> table { get { return _table; } }       // 초기화 안됬으면 초기화 후 반환
+    public static List<Item> table { get { return _table; } }
 
     // 아이템 테이블 확인용
     static bool _isReady = false;
@@ -165,6 +165,7 @@ public class Item
 
 
     // 생성자
+
     /// <summary>
     /// 사용 금지
     /// </summary>
@@ -175,7 +176,7 @@ public class Item
     /// <summary>
     /// 테이블 정보를 입력받아 셋팅
     /// </summary>
-    /// <param name="strArray">테이블 배열로 읽기</param>
+    /// <param name="strList">테이블 리스트로 읽기</param>
     protected Item(List<string> strList)
     {
         // out of range 방지

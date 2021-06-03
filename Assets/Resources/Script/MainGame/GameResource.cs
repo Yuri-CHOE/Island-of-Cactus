@@ -15,10 +15,30 @@ public class GameResource
     public int Value
     {
         get { return _Value; }
-        set { Set(value); }
+        //set { Set(value); }
     }
 
-    void Set(int newValue)
+    // 자원 변경 요청값
+    int waitingValue = 0;
+
+    //생성자
+    /// <summary>
+    /// 사용 금지
+    /// </summary>
+    protected GameResource()
+    {
+        // 사용 금지
+    }
+    public GameResource(int __value, int _max, int _min)
+    {
+        _Value = __value;
+        max = _max;
+        min = _min;
+    }
+
+
+
+    void ChangeValue(int newValue)
     {
         _Value = newValue;
 
@@ -67,18 +87,56 @@ public class GameResource
             return false;
     }
 
-    //생성자
-    /// <summary>
-    /// 사용 금지
-    /// </summary>
-    protected GameResource()
+    public void Add(int __value)
     {
-        // 사용 금지
+        waitingValue += __value;
     }
-    public GameResource(int __value, int _max, int _min)
+    public void subtract(int __value)
     {
-        _Value = __value;
-        max = _max;
-        min = _min;
+        waitingValue -= __value;
+    }
+    public void Set(int __value)
+    {
+        ChangeValue(__value);
+    }
+
+    // 구형 갱신
+    /*
+    /// <summary>
+    /// 비동기 갱신
+    /// 사용 안함
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator Refresh()
+    {
+        while(waitingValue != 0)
+        {
+            // 갱신 단위수량
+            int i = (int)Mathf.Sign(waitingValue);
+
+            // 단위수량 만큼 제거
+            waitingValue -= i;
+
+            // 값에 반영
+            ChangeValue(i);
+
+            yield return null;
+        }
+    }
+    */
+
+    public void RefreshOne()
+    {
+        if (waitingValue != 0)
+        {
+            // 갱신 단위수량
+            int i = (int)Mathf.Sign(waitingValue);
+
+            // 단위수량 만큼 제거
+            waitingValue -= i;
+
+            // 값에 반영
+            ChangeValue(i);
+        }
     }
 }

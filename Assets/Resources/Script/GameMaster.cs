@@ -28,10 +28,16 @@ public class GameMaster : MonoBehaviour
     LoadingManager loadingManager = null;
 
     // 주사위 컨트롤러 스크립트
+    public MessageBox messageBox = null;
+
+    // 주사위 컨트롤러 스크립트
     [SerializeField]
     DiceController diceController = null;
 
-    // 캐릭터 오브젝트 부모 스크립트
+    // 아이템 관리 스크립트
+    public ItemManager itemManager = null;
+
+    // 캐릭터 오브젝트 부모
     [SerializeField]
     Transform characterParent = null;
 
@@ -568,7 +574,7 @@ public class GameMaster : MonoBehaviour
 
                 // 다시 주사위 마저 진행
                 GameData.turn.turnAction = Turn.TurnAction.DiceRolling;
-                GameData.turn.actionProgress = ActionProgress.Working;
+                GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
         }
@@ -639,12 +645,25 @@ public class GameMaster : MonoBehaviour
                 // 액션 미수행 경우
                 if (movement.actNow.type == Action.ActionType.None)
                 {
-                    // 액션 미수행 및 잔여 액션 있음
+                    // 잔여 액션 있음
                     if (movement.actionsQueue.Count > 0)
                         movement.GetAction();
-                    // 플로우 종료 절차
+
+                    // 모든 액션 소진
                     else
                     {
+                        // 카메라 탈착
+                        GameData.worldManager.cameraManager.CamFree();
+
+                        // 좌표 변경
+                        movement.location = movement.location+GameData.turn.now.dice.valueTotal;
+
+                        // 겹침 정렬
+                        movement.AvatarOverFix();
+
+                        // 초기화
+                        movement.actNow = new Action();
+
                         // 스킵
                         GameData.turn.actionProgress = ActionProgress.Finish;
                     }
@@ -666,33 +685,15 @@ public class GameMaster : MonoBehaviour
                     // 액션 소거
                     movement.actNow = new Action();
                 }
-                // 모든 액션 소진
-                else if(movement.actionsQueue.Count == 0)
-                {
-                    // 카메라 부착
-                    GameData.worldManager.cameraManager.CamFree();
-
-                    // 좌표 변경
-                    movement.location += GameData.turn.now.dice.valueTotal;
-
-                    // 겹침 정렬
-                    movement.AvatarOverFix();
-
-                    // 초기화
-                    movement.actNow = new Action();
-                }
-
-
 
             }
             else if (GameData.turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
-
                 // 다음으로 스킵
                 GameData.turn.turnAction = Turn.TurnAction.Block;
-                GameData.turn.actionProgress = ActionProgress.Working;
+                GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
         }
@@ -703,23 +704,27 @@ public class GameMaster : MonoBehaviour
             {
                 // 각종 초기화
 
+                // 블록 기능 초기화
+                BlockWork.Clear();
+
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Start;
             }
             else if (GameData.turn.actionProgress == ActionProgress.Start)
             {
-                // 시작 연출
 
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Working;
             }
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
-                // 블록 기능 수행===================미구현
-                BlockWork();
+                // 블록 기능 수행===================구현중
+                if (!BlockWork.isWork)
+                    BlockWork.Work(GameData.turn.now);
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                if (BlockWork.isEnd)
+                    GameData.turn.actionProgress = ActionProgress.Finish;
             }
             else if (GameData.turn.actionProgress == ActionProgress.Finish)
             {
@@ -728,7 +733,7 @@ public class GameMaster : MonoBehaviour
 
                 // 다음으로 스킵
                 GameData.turn.turnAction = Turn.TurnAction.Ending;
-                GameData.turn.actionProgress = ActionProgress.Working;
+                GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
         }
@@ -762,7 +767,7 @@ public class GameMaster : MonoBehaviour
 
                 // 다음으로 스킵
                 GameData.turn.turnAction = Turn.TurnAction.Finish;
-                GameData.turn.actionProgress = ActionProgress.Working;
+                GameData.turn.actionProgress = ActionProgress.Ready;
             }
 
         }
@@ -793,17 +798,16 @@ public class GameMaster : MonoBehaviour
             {
                 // 종료 연출
 
+                // 진행 초기화
+                GameData.turn.turnAction = Turn.TurnAction.Wait;
+                GameData.turn.actionProgress = ActionProgress.Ready;
+
 
                 // 턴 종료 처리
                 GameData.turn.Next();
             }
 
         }
-    }
-
-
-    void BlockWork()
-    {
     }
 
 

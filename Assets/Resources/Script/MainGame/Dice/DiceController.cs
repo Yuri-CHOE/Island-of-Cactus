@@ -423,8 +423,6 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                Debug.LogError(dice.value +" :: " + transform.rotation.eulerAngles);
-
                 if (dice.value == 1)
                     Tool.SpinZ(transform, _rotSpeed);
                 else if (dice.value == 2)

@@ -95,7 +95,7 @@ namespace UnityEngine.UI
 
             turnOn(objectList[activeSwitchNum]);
 
-            activeSwitchNum = activeSwitchNumMirror;
+            activeSwitchNumMirror = activeSwitchNum;
         }
 
         public int count()
