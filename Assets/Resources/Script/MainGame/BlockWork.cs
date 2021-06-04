@@ -60,6 +60,9 @@ public static class BlockWork
         else if (blockType == BlockType.TypeDetail.lucky)
             BlockLuckyBox(currentPlayer);
 
+        else if (blockType == BlockType.TypeDetail.shop)
+            BlockShop(currentPlayer);
+
 
         /*
         
@@ -68,14 +71,14 @@ public static class BlockWork
         
 
 
-        --none,
+        ++none,
 
-        --plus,
-        --minus,
+        ++plus,
+        ++minus,
 
         boss,
-        --trap,
-        lucky,
+        ++trap,
+        ++lucky,
 
         shop,
         unique,
@@ -134,6 +137,15 @@ public static class BlockWork
         // 코인 수량 확보
         int coinValue = currentPlayer.coin.Value;
 
+        // 코인 없으면 중단
+        if (coinValue <= 0)
+        {
+            // 종료 판정
+            isEnd = true;
+
+            return;
+        }
+
         // 코인 몰수
         currentPlayer.coin.subtract(coinValue);
 
@@ -160,8 +172,8 @@ public static class BlockWork
         // 장애물 등록
         CharacterMover.barricade[loc]++;
 
-        // 종료 판정
-        isEnd = true;
+        // 종료 판정 -> DynamicItem 에서 길과 충돌할때 처리
+        //isEnd = true;
     }
 
 
@@ -176,7 +188,7 @@ public static class BlockWork
         for (int i = 1; i < LuckyBox.table.Count; i++)
         {
             dropTable.rare.Add(LuckyBox.table[i].rare);
-            Debug.LogError("드랍 테이블 :: 추가됨 -> " + LuckyBox.table[i].rare);
+            Debug.Log("드랍 테이블 :: 추가됨 -> " + LuckyBox.table[i].rare);
         }
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
@@ -204,6 +216,70 @@ public static class BlockWork
 
         // 스트링 입력
         lbm.SetTextByIndex(select);
+    }
+
+
+    static void BlockShop(Player currentPlayer)
+    {
+        /*
+         드랍 테이블 생성
+         랜덤 아이템 인덱스 4개 추첨
+         번들에 대입
+         UI 출력
+         */
+
+        // 아이템번들 드랍테이블
+        DropTable dropTable = new DropTable();
+
+        // 첫번째 아이템 인댁스 (레이블과 코인 제외 => 2)
+        int first = 2;
+
+        // 드랍테이블 셋팅
+        dropTable.rare = new List<int>();
+        Debug.LogError(Item.table.Count);
+        for (int i = first; i < Item.table.Count; i++)
+        {
+            dropTable.rare.Add(Item.table[i].rare);
+            Debug.Log("드랍 테이블 :: 추가됨 -> " + Item.table[i].rare);
+        }
+
+        //// 아이템 상점 갱신
+        //for(int i = 0; i < ItemShop.script.bundle.Count; i++)
+        //{
+        //    // 드랍 테이블 작동
+        //    int select = first + dropTable.Drop();
+        //    Debug.LogWarning("아이템 상점 :: 추가됨 -> " + select);
+
+        //    // 아이템 번들 등록
+        //    ItemShop.script.SetItemBundle(i, Item.table[select]);
+
+        //    // 드랍 테이블에서 제외
+        //    dropTable.rare.RemoveAt(select - first);
+        //}
+
+
+
+        // 드랍 테이블 작동
+        List<int> select = dropTable.Drop(ItemShop.script.bundle.Count);
+
+        // 아이템 상점 갱신
+        for (int i = 0; i < ItemShop.script.bundle.Count; i++)
+        {
+            int trueIndex = select[i] + first;
+
+            // 드랍 테이블 작동
+            Debug.LogWarning("아이템 상점 :: 추가됨 -> " + trueIndex);
+             
+            // 아이템 번들 등록
+            ItemShop.script.SetItemBundle(i, Item.table[trueIndex]);
+        }
+
+        // UI 출력
+        GameMaster.script.messageBox.PopUp(true, true, true, MessageBox.Type.Itemshop); 
+
+
+        // 종료판정은 UI에서 버튼 클릭으로 처리됨
+
     }
 
 }

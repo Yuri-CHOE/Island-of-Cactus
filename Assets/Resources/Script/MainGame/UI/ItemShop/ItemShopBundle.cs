@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class ItemShopBundle : MonoBehaviour
 {
-    [SerializeField]
-    Toggle toggle;
+    public Toggle toggle;
+
+    public ItemSlot slot;
 
     [SerializeField]
     Text itenName;
@@ -16,8 +17,9 @@ public class ItemShopBundle : MonoBehaviour
 
     [SerializeField]
     Text price;
+    public int priceValue = 0;
 
-    public Item item;
+    public Item item { get { return slot.item; } set { slot.item = value; } }
 
     // 구매 가능 여부
     public bool canBuy = true;
@@ -50,6 +52,13 @@ public class ItemShopBundle : MonoBehaviour
 
         // 아이템 가격 변경
         price.text = item.cost.ToString();
+        priceValue = item.cost;
+    }
+
+    public void Clear()
+    {
+        toggle.isOn = false;
+        canBuy = true;
     }
 
     public void SetPriceColor(Color color)

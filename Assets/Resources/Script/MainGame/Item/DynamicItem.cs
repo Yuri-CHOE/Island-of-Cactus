@@ -57,6 +57,9 @@ public class DynamicItem : MonoBehaviour
 
             // 배치 보정
             transform.position = GameData.blockManager.GetBlock(location).transform.position;
+
+            // 종료 판정
+            BlockWork.isEnd = true;
             
             // 회전 시작
             Spin(true);

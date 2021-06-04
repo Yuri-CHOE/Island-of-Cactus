@@ -65,6 +65,8 @@ public class Player
 
     // 아이템 슬롯
     public List<ItemSlot> inventory = new List<ItemSlot>();
+    public int inventoryCount { get { int c = 0; for (int i = 0; i < inventory.Count; i++) { if (!inventory[i].isEmpty) c++; } return c; } }
+    public static int inventoryMax = 3;
 
     // 행동 불가능 여부
     public bool isStun { get { return false; /* 미구현 =======================*/ } }
@@ -193,6 +195,24 @@ public class Player
         // 아이콘 변경
         else
             face = temp;
+    }
+
+    public void AddItem(ItemSlot itemSlot, int count)
+    {
+        // 잔여 슬롯 부족 시 버림 === 시간 여유 된다면 소거할 아이템 선택하여 버리게 바꿀것
+        if (inventoryCount >= Player.inventoryMax)
+            return;
+
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            // 빈칸일경우 넣고 종료
+            if (inventory[i].isEmpty)
+            {
+                inventory[i].item = itemSlot.item;
+                break;
+            }
+
+        }
     }
 }
 

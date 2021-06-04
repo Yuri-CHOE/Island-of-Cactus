@@ -126,6 +126,10 @@ public class Item
     public static bool isReady { get { return _isReady; } }
 
 
+    // 공백 아이템
+    static string[] emptyItem = { "0", "0", "empty", "0", "0", "0", "0", "0", "0", "0", "0", "0", "is empty" };
+    public static Item empty = new Item(new List<string>(emptyItem) );
+
 
     // 아이템 번호
     int _index = -1;

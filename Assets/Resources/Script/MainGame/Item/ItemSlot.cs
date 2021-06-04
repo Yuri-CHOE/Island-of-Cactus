@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
+    // 빈 슬롯 파악
+    public bool isEmpty {get { return item == null; } }
+
     // 아이템
     public Item item = null;
     Item itemMirror = null;
@@ -29,13 +32,16 @@ public class ItemSlot : MonoBehaviour
     {
         // 아이템 변경시 자동 새로고침
         if (item != itemMirror)
+        {
+
             Refresh();
+        }
     }
 
     /// <summary>
     ///  아이템에 맞게 갱신
     /// </summary>
-    void Refresh()
+    public void Refresh()
     {
         // 아이콘 로드
         icon.sprite = LoadIcon(item);

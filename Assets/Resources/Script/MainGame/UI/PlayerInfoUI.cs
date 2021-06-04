@@ -11,7 +11,7 @@ public class PlayerInfoUI : MonoBehaviour
 
     public Image face = null;
 
-    public List<GameObject> itemObject;
+    public List<ItemSlot> inventory;
 
 
     [SerializeField]
@@ -20,9 +20,8 @@ public class PlayerInfoUI : MonoBehaviour
     [SerializeField]
     Text coinText;
 
-    // 자원 갱신
-    Coroutine lifeRefresh = null;
-    Coroutine coinRefresh = null;
+    [SerializeField]
+    Text moveText;
 
 
     void Update()
@@ -40,6 +39,10 @@ public class PlayerInfoUI : MonoBehaviour
 
             // 아이템 갱신
             //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
+
+            // 행동력 갱신
+            moveText.text = owner.dice.valueTotal.ToString();
+
 
             // 주인이 턴 진행중일 경우
             if (GameData.turn.now == owner)
@@ -73,6 +76,7 @@ public class PlayerInfoUI : MonoBehaviour
             face.sprite = owner.face;
         }
 
-        // 자원 갱신 등록
+        // 인벤토리 싱크
+        player.inventory = inventory;
     }
 }

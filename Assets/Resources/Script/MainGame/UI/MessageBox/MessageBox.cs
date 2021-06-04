@@ -183,4 +183,6 @@ public class MessageBox : MonoBehaviour
     }
     public void PopUp(MessageBoxRule rule, int mBoxPresetNum) { PopUp(rule.isBoxUse, rule.isInnerBoxUse, rule.isNpcSpaceUse, mBoxPresetNum); }
     public void PopUp(int mBoxPresetNum) { PopUp(true, true, false, mBoxPresetNum); }
+    public void PopUp(bool isBoxUse, bool isInnerBoxUse, bool isNpcSpaceUse, Type mBoxPresetType) { PopUp(isBoxUse, isInnerBoxUse, isNpcSpaceUse, (int)mBoxPresetType); }
+    public void PopUp(Type mBoxPresetType) { PopUp(true, true, false, (int)mBoxPresetType); }
 }

@@ -2415,8 +2415,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 3
-  m_Spacing: 10
+  m_ChildAlignment: 4
+  m_Spacing: 20
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -2856,6 +2856,34 @@ PrefabInstance:
     - target: {fileID: 3992640498804892352, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1089995543}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Buy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemShop, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5825930494144724128, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_Text
@@ -3700,7 +3728,6 @@ MonoBehaviour:
   npc: {fileID: 1034425292}
   npcImg: {fileID: 716475031}
   npcText: {fileID: 28183829}
-  playerMoney: 999
   bundle:
   - {fileID: 1702648665}
   - {fileID: 701700818}
@@ -4745,23 +4772,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 291009387}
+      objectReference: {fileID: 1089995543}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: PopUp
+      value: Out
       objectReference: {fileID: 0}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MessageBox, Assembly-CSharp
+      value: ItemShop, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5264483953422924523, guid: 985118977c3f08b4db117508bba32520, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
@@ -6404,6 +6431,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2095561025807799035, guid: 4dcc53ad51a236b47908a80f8506d74d, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4701545536882369772, guid: 4dcc53ad51a236b47908a80f8506d74d, type: 3}
+      propertyPath: m_IsOn
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4701545536882369774, guid: 4dcc53ad51a236b47908a80f8506d74d, type: 3}

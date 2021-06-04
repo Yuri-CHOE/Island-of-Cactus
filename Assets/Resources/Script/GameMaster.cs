@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour
 {
+    public static GameMaster script = null;
+
     public enum Flow
     {
         Wait,
@@ -51,6 +53,11 @@ public class GameMaster : MonoBehaviour
     public bool useItemOrder = false;
 
 
+    private void Awake()
+    {
+        // Äü µî·Ï
+        script = this;
+    }
 
     // Start is called before the first frame update
     void Start()
