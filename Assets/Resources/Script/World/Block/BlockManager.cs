@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class BlockManager : MonoBehaviour
 {
+    public static BlockManager script = null;
 
     [SerializeField]
     GameObject blockPrefab;
@@ -17,11 +18,18 @@ public class BlockManager : MonoBehaviour
 
     [SerializeField]
     Transform blockMaster;
-        
-    public Transform startBlock;               // 스타트 블록
-    public Transform startPoint;        // 스타트 블록 하위 스타트 포인트 => 첫번째 블록 좌표
+
+    // 스타트 블록
+    public Transform startBlock = null;    
+    // 스타트 블록 하위 스타트 포인트 => 첫번째 블록 좌표     
+    public Transform startPoint = null;
 
 
+    private void Awake()
+    {
+        // 퀵등록
+        script = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -342,4 +350,7 @@ public class BlockManager : MonoBehaviour
 
         CharacterMover.barricade[blockIndex]++;
     }
+
+
+
 }

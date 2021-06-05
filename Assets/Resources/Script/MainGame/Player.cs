@@ -61,7 +61,7 @@ public class Player
 
     // 플레이어 자원
     public GameResource life = new GameResource(10, 10, -1);
-    public GameResource coin = new GameResource(0, 999, 0);
+    public GameResource coin = new GameResource(110, 999, 0);
 
     // 아이템 슬롯
     public List<ItemSlot> inventory = new List<ItemSlot>();

@@ -12,6 +12,7 @@ public class MessageBox : MonoBehaviour
         Setting,
         Itemshop,
         LuckyBox,
+        ShortCut,
     }
 
     [SerializeField]
@@ -27,7 +28,7 @@ public class MessageBox : MonoBehaviour
     List<int[]> mBoxPreset = new List<int[]>();
 
     [SerializeField]
-    const int btnMax = 5;
+    const int btnMax = 6;
 
     [SerializeField]
     bool[] preMessage = new bool[btnMax];    // 메시지박스 모드
@@ -41,6 +42,9 @@ public class MessageBox : MonoBehaviour
     [SerializeField]
     bool[] preLuckyBox = new bool[btnMax];   // 럭키 박스 모드
 
+    [SerializeField]
+    bool[] preShortCut = new bool[btnMax];   // 숏컷 질문 모드
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +54,7 @@ public class MessageBox : MonoBehaviour
         addPreset(preSetting, 1);
         addPreset(preItemshop, 2);
         addPreset(preLuckyBox, 3);
+        addPreset(preShortCut, 4);
     }
 
     // Update is called once per frame
@@ -185,4 +190,16 @@ public class MessageBox : MonoBehaviour
     public void PopUp(int mBoxPresetNum) { PopUp(true, true, false, mBoxPresetNum); }
     public void PopUp(bool isBoxUse, bool isInnerBoxUse, bool isNpcSpaceUse, Type mBoxPresetType) { PopUp(isBoxUse, isInnerBoxUse, isNpcSpaceUse, (int)mBoxPresetType); }
     public void PopUp(Type mBoxPresetType) { PopUp(true, true, false, (int)mBoxPresetType); }
+
+    
+
+    public void Out()
+    {
+        // 메시지 박스 초기화 및 닫기
+        PopUp(-1);
+
+        // 종료 판정
+        BlockWork.isEnd = true;
+    }
+
 }

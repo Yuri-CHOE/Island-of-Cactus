@@ -14,13 +14,15 @@ public class CharacterMover : MonoBehaviour
     public Action actNow = new Action();
 
 
+    public static float ActTurnSpeed = 5f;
+
 
     // 목표 이동 좌표
     Vector3 movePoint = Vector3.zero;
 
     // 이동 제어용
     Coroutine moveCoroutine = null;
-    bool isBusy = false;
+    public bool isBusy = false;
 
 
 
@@ -96,26 +98,47 @@ public class CharacterMover : MonoBehaviour
                 fixTarget.Add(GameData.player.allPlayer[i]);
         }
 
+        // 겹쳤다 떠나도 포메이션 그대로 =========== 큰 문제는 아님
+
+        // 겹친 장소
+        Vector3 corssPoint = new Vector3();
+        if (location == -1)     // 스타트 블록
+            corssPoint = BlockManager.script.startBlock.transform.position;
+        else                    // 그 외
+            corssPoint = BlockManager.script.GetBlock(location).transform.position;
+
         // 4명 중복
         if (fixTarget.Count >= 4)
         {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), 5f, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), 5f  , true);
-            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[2].avatar.transform.position + new Vector3(2, 0, -2), 5f , true);
-            fixTarget[3].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[3].avatar.transform.position + new Vector3(-2, 0, -2), 5f, true);
+            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 2), ActTurnSpeed, true);
+            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, 2), ActTurnSpeed, true);
+            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, -2), ActTurnSpeed, true);
+            fixTarget[3].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, -2), ActTurnSpeed, true);
+
+            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), ActTurnSpeed, true);
+            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), ActTurnSpeed, true);
+            //fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[2].avatar.transform.position + new Vector3(2, 0, -2), ActTurnSpeed, true);
+            //fixTarget[3].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[3].avatar.transform.position + new Vector3(-2, 0, -2), ActTurnSpeed, true);
         }
         // 3명 중복
         else if (fixTarget.Count == 3)
         {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), 5f, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), 5f , true);
-            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[2].avatar.transform.position + new Vector3(0, 0, -2), 5f, true);
+            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 2), ActTurnSpeed, true);
+            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, 2), ActTurnSpeed, true);
+            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(0, 0, -2), ActTurnSpeed, true);
+
+            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), ActTurnSpeed, true);
+            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), ActTurnSpeed, true);
+            //fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[2].avatar.transform.position + new Vector3(0, 0, -2), ActTurnSpeed, true);
         }
         // 2명 중복
         else if (fixTarget.Count == 2)
         {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 0), 5f, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveAdd(fixTarget[1].avatar.transform.position + new Vector3(+2, 0, 0), 5f, true);
+            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 0), ActTurnSpeed, true);
+            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(+2, 0, 0), ActTurnSpeed, true);
+
+            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 0), ActTurnSpeed, true);
+            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(+2, 0, 0), ActTurnSpeed, true);
         }
         // 중복 없음
         else if (fixTarget.Count == 1)
@@ -284,7 +307,7 @@ public class CharacterMover : MonoBehaviour
                 movePoint = Vector3.zero;
 
                 // 정면 보기
-                MoveSet(transform.position, 5f, true);
+                MoveSet(transform.position, ActTurnSpeed, true);
 
                 // 스킵
                 act.progress = ActionProgress.Finish;
@@ -310,7 +333,7 @@ public class CharacterMover : MonoBehaviour
         movePoint = pos;
 
         if (!isBusy)
-            moveCoroutine = StartCoroutine(ActMove(pos, speed, isTurnAfterMove));
+            moveCoroutine = StartCoroutine(ActMove(movePoint, speed, isTurnAfterMove));
     }
 
     /// <summary>
@@ -325,7 +348,7 @@ public class CharacterMover : MonoBehaviour
         movePoint += pos;
 
         if (!isBusy)
-            moveCoroutine = StartCoroutine(ActMove(pos, speed, isTurnAfterMove));
+            moveCoroutine = StartCoroutine(ActMove(movePoint, speed, isTurnAfterMove));
     }
 
     /// <summary>

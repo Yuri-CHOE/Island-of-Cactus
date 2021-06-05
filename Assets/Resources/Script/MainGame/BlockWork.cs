@@ -62,6 +62,10 @@ public static class BlockWork
 
         else if (blockType == BlockType.TypeDetail.shop)
             BlockShop(currentPlayer);
+        else if (blockType == BlockType.TypeDetail.shortcutIn)
+            BlockshortcutIn(currentPlayer);
+        else if (blockType == BlockType.TypeDetail.shortcutOut)
+            BlockPlus(currentPlayer);
 
 
         /*
@@ -80,7 +84,7 @@ public static class BlockWork
         ++trap,
         ++lucky,
 
-        shop,
+        ++shop,
         unique,
         shortcutIn,
         shortcutOut, 
@@ -221,13 +225,6 @@ public static class BlockWork
 
     static void BlockShop(Player currentPlayer)
     {
-        /*
-         드랍 테이블 생성
-         랜덤 아이템 인덱스 4개 추첨
-         번들에 대입
-         UI 출력
-         */
-
         // 아이템번들 드랍테이블
         DropTable dropTable = new DropTable();
 
@@ -242,21 +239,6 @@ public static class BlockWork
             dropTable.rare.Add(Item.table[i].rare);
             Debug.Log("드랍 테이블 :: 추가됨 -> " + Item.table[i].rare);
         }
-
-        //// 아이템 상점 갱신
-        //for(int i = 0; i < ItemShop.script.bundle.Count; i++)
-        //{
-        //    // 드랍 테이블 작동
-        //    int select = first + dropTable.Drop();
-        //    Debug.LogWarning("아이템 상점 :: 추가됨 -> " + select);
-
-        //    // 아이템 번들 등록
-        //    ItemShop.script.SetItemBundle(i, Item.table[select]);
-
-        //    // 드랍 테이블에서 제외
-        //    dropTable.rare.RemoveAt(select - first);
-        //}
-
 
 
         // 드랍 테이블 작동
@@ -279,6 +261,28 @@ public static class BlockWork
 
 
         // 종료판정은 UI에서 버튼 클릭으로 처리됨
+
+    }
+
+
+    static void BlockshortcutIn(Player currentPlayer)
+    {
+        /*
+         
+        사용 질문 UI 출력
+        사용 거부시 중단 및 종료판정
+
+        사용시 비용 지불
+        이동
+        도착 및 종료 판정
+         
+         */
+
+        // 퀵 등록
+        ShortcutManager sm = ShortcutManager.script;
+
+        // 사용 질문 UI 호출
+        sm.CallShortcutUI(currentPlayer);
 
     }
 

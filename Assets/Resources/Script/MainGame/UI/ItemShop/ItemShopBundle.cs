@@ -46,10 +46,6 @@ public class ItemShopBundle : MonoBehaviour
         // 아이템명 텍스트 변경
         itenName.text = item.name;
 
-        // 아이템 아이콘 변경
-        //작업중=====================================================
-        //img.sprite = new Sprite(아이템 아이콘 리스트 만들어서 사용할것);
-
         // 아이템 가격 변경
         price.text = item.cost.ToString();
         priceValue = item.cost;

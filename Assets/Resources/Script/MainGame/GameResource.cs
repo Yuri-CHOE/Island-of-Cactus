@@ -136,7 +136,7 @@ public class GameResource
             waitingValue -= i;
 
             // 값에 반영
-            ChangeValue(i);
+            ChangeValue(_Value + i);
         }
     }
 }

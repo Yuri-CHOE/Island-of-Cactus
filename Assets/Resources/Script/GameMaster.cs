@@ -148,6 +148,10 @@ public class GameMaster : MonoBehaviour
                     MainUI.blocksRaycasts = false;
 
 
+                    // 숏컷 등록
+                    ShortcutManager.script.SetUp();
+
+
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
                     GameData.gameFlow = Flow.Start;
                     break;

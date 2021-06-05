@@ -71,7 +71,7 @@ public class ItemShop : MonoBehaviour
 
         // 종료 판정
         if (buyCount > 0)
-            Out();
+            GameMaster.script.messageBox.Out();
     }
 
     /// <summary>
@@ -86,15 +86,6 @@ public class ItemShop : MonoBehaviour
 
         // 아이템 지급
         customer.AddItem(ib.slot, 1);
-    }
-
-    public void Out()
-    {
-        // 메시지 박스 초기화 및 닫기
-        GameMaster.script.messageBox.PopUp(-1);
-
-        // 종료 판정
-        BlockWork.isEnd = true;
     }
 
     public void OpenShop()
@@ -117,32 +108,6 @@ public class ItemShop : MonoBehaviour
 
     void CheckMoney()
     {
-        //// 가용 금액
-        //int spareMoney = playerMoney - totalSelectMoney;
-
-        //for (int i = 0; i < bundle.Count; i++)
-        //{
-        //    Debug.LogError("가격 체크"+ spareMoney +" <--> "+ bundle[i].item.cost);
-        //    // 선택되지 않은 번들에 대한 가격 체크
-        //    if (!bundle[i].toggle.isOn)
-        //    {
-        //        if (bundle[i].item.cost > spareMoney)
-        //        {
-        //            // 예산 초과
-        //            bundle[i].SetPriceColor(redPrice);
-        //            bundle[i].canBuy = false;
-        //            bundle[i].toggle.enabled = false;
-        //        }
-        //        else
-        //        {
-        //            // 구매 가능
-        //            bundle[i].SetPriceColor(normalPrice);
-        //            bundle[i].canBuy = true;
-        //            bundle[i].toggle.enabled = true;
-        //        }
-        //    }
-        //} 
-
         // 가용 금액
         int spareMoney = playerMoney - totalSelectMoney;
 
