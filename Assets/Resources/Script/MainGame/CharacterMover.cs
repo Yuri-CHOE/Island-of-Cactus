@@ -7,6 +7,9 @@ public class CharacterMover : MonoBehaviour
     // 장애물 목록
     public static List<int> barricade = new List<int>();
 
+    // 플레이어
+    public Player owner = null;
+
     // 액션 큐
     public Queue<Action> actionsQueue = new Queue<Action>();
 
@@ -14,6 +17,7 @@ public class CharacterMover : MonoBehaviour
     public Action actNow = new Action();
 
 
+    // 회전 속도
     public static float ActTurnSpeed = 5f;
 
 
@@ -23,6 +27,22 @@ public class CharacterMover : MonoBehaviour
     // 이동 제어용
     Coroutine moveCoroutine = null;
     public bool isBusy = false;
+
+
+
+    // 공격 리스트
+    List<Player> attackTarget = new List<Player>();
+    bool attackNow = false;
+
+
+    // 아이템 습득 리스트
+    List<DynamicItem> itemList = new List<DynamicItem>();
+
+    // 아이템 습득 제어용
+    public bool isPickingUpItem = false;
+    bool itemFinish = false;
+
+    bool eventFinish = false;
 
 
 
@@ -40,7 +60,7 @@ public class CharacterMover : MonoBehaviour
 
 
     // 이동 속도
-    float moveSpeed = 1.00f;
+    float moveSpeed = 2.00f;
 
 
     [SerializeField]
@@ -201,6 +221,37 @@ public class CharacterMover : MonoBehaviour
                 counter = 0;
             }
 
+            // 플레이어 체크
+            for (int p = 0; p < owner.otherPlayers.Count; p++)
+            {
+                // 공격 최소 사이클 제한
+                if (GameData.cycle.now < 5)
+                    break;
+                   
+
+                // 체크 대상
+                Player current = owner.otherPlayers[p];
+
+                // 경로에 있을 경우
+                if (current.movement.location == locNext)
+                {
+                    Debug.Log("플레이어 탐지 : " + counter);
+
+                    //스케줄링 추가 - counter만큼 칸수 지정
+                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
+
+                    //스케줄링 추가 - 공격 처리
+                    actionsQueue.Enqueue(new Action(Action.ActionType.Attack, locNext, moveSpeed));
+
+                    // 카운터 리셋
+                    counter = 0;
+
+                    // 중단
+                    break;
+                }
+            }
+
+
             // 장애물 체크
             if (barricade[locNext] > 0)
             {
@@ -210,8 +261,8 @@ public class CharacterMover : MonoBehaviour
                 actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
                 //actionsQueue.Enqueue(new Action(Action.ActionType.Move, counter, moveSpeed));
 
-                //스케줄링 추가 - 정지 추가
-                //actionsQueue.Enqueue(new Action(Action.ActionType.Stop, 1, moveSpeed));
+                //스케줄링 추가 - 장애물 처리 추가
+                actionsQueue.Enqueue(new Action(Action.ActionType.Barricade, locNext, moveSpeed));
 
                 // 카운터 리셋
                 counter = 0;
@@ -270,6 +321,203 @@ public class CharacterMover : MonoBehaviour
 
 
 
+    /// <summary>
+    /// 공격 액션을 사용한 공격
+    /// </summary>
+    /// <param name="act"></param>
+    public void AttackPlayer(ref Action act)
+    {
+        // 위치
+        int loc = act.count;
+
+        if (act.progress == ActionProgress.Ready)
+        {
+            // 각종 초기화
+            attackTarget.Clear();
+            attackNow = false;
+
+            // 스킵
+            act.progress = ActionProgress.Start;
+        }
+        else if (act.progress == ActionProgress.Start)
+        {
+            Debug.LogWarning("공격 목록 작성");
+
+            // 공격 대상 스캔
+            for (int i = 0; i < owner.otherPlayers.Count; i++)
+                // 액션위치에 있는 다른 플레이어
+                if (owner.otherPlayers[i].movement.location == loc)
+                {
+                    // 등록
+                    attackTarget.Add(owner.otherPlayers[i]);
+
+                    // 로그
+                    Debug.LogWarning("공격 목록 추가 :: " + owner.otherPlayers[i].name + "가 추가됨");
+                }
+                //else Debug.LogWarning("공격 대상 아님 :: " + owner.otherPlayers[i].name);
+
+            // 스킵
+            act.progress = ActionProgress.Working;
+        }
+        else if (act.progress == ActionProgress.Working)
+        {
+            // 공격중이 아닐때
+            if (!attackNow)
+            {
+                // 공격 대상이 있을 경우
+                if ( attackTarget.Count > 0)
+                {
+                    // 공격 처리
+                    attackNow = true;
+                    
+                    // 대상들에게 일괄 공격
+                    for (int i = 0; i < attackTarget.Count; i++)
+                    {
+                        // 공격
+                        owner.Attack(attackTarget[i]);
+
+                        // 로그
+                        Debug.LogWarning("공격 시도 :: " + owner.name + "가 " + attackTarget[i].name + "를 공격");
+                    }
+                    // 임시 : 아래의 종료판정으로 옮길것
+                    attackTarget.Clear();
+                    attackNow = false;
+                }
+                else
+                    // 공격 종료시 스킵
+                    act.progress = ActionProgress.Finish;
+            }
+            // 공격중일때
+            else
+            {
+                // 공격 종료 판정
+                // ================조건 변경 할것 => 애니메이션 상태 이용
+                if (false)
+                    attackNow = false;
+            }
+        }
+        else if (act.progress == ActionProgress.Finish)
+        {
+
+            // 종료 처리
+            act.isFinish = true;
+        }
+    }
+
+
+    public void CheckBarricade(ref Action act)
+    {
+        // 위치
+        int loc = act.count;
+
+        if (act.progress == ActionProgress.Ready)
+        {
+            Debug.LogWarning("아이템 오브젝트 :: 액션 위치 = " + act.count);
+
+            // 아이템 : 초기화
+            itemList.Clear();
+            isPickingUpItem = false;
+            itemFinish = false;
+
+            // 이벤트 : 초기화
+            // 이벤트 리스트 클리어 미구현==========
+            // 이벤트 작동중 bool값 미구현============
+            eventFinish = false;
+
+            // 스킵
+            act.progress = ActionProgress.Start;
+        }
+        else if (act.progress == ActionProgress.Start)
+        {
+            // 아이템 : 리스트 작성
+            for (int i = 0; i < ItemManager.itemObjectList.Count; i++)
+            {
+                // 위치가 일치할 경우
+                if (ItemManager.itemObjectList[i].location == loc)
+                {
+                    // 인벤토리가 남았을 경우
+                    if (owner.inventoryCount < Player.inventoryMax)
+                    {
+                        // 획득 대기열 추가
+                        itemList.Add(ItemManager.itemObjectList[i]);
+
+                        // 획득
+                        //ItemManager.itemObjectList[i].GetItem(owner);
+
+                        // 로그
+                        Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + ItemManager.itemObjectList[i].item.index);
+                    }
+                    else
+                        break;
+                }
+            }
+
+            // 이벤트 : 리스트 작성
+
+            // 스킵
+            act.progress = ActionProgress.Working;
+        }
+        else if (act.progress == ActionProgress.Working)
+        {
+
+            // 아이템 : 습득
+            {
+                if (itemList.Count > 0)
+                {
+                    // 습득중이지 않을때
+                    if (!isPickingUpItem)
+                    {
+                        // 획득중 처리
+                        isPickingUpItem = true;
+
+                        // 습득 연출
+                        // 미구현
+                    }
+                    else
+                    {
+
+                        // ==========연출 종료를 조건으로 하위 묶을것
+
+                        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + itemList[0].item.index);
+
+                        // 획득
+                        itemList[0].GetItem(owner);
+
+                        // 리스트에서 제거
+                        itemList.RemoveAt(0);
+
+                        // 획득 종료 처리 
+                        isPickingUpItem = false;
+                    }
+                }
+                // 습득 목록 비었을때
+                else
+                {
+                    //습득중이지 않을때
+                    if (!isPickingUpItem)
+                        itemFinish = true;
+                }
+            }
+
+            // 이벤트 : 작동
+            {
+                // 미구현=========================
+                // 임시 처리
+                eventFinish = true;
+            }
+
+            // 완료 체크
+            if (itemFinish && eventFinish)
+                // 스킵
+                act.progress = ActionProgress.Finish;
+        }
+        else if (act.progress == ActionProgress.Finish)
+        {
+            // 종료 처리
+            act.isFinish = true;
+        }
+    }
+
     public void MoveByAction(ref Action act)
     {
 
@@ -307,6 +555,7 @@ public class CharacterMover : MonoBehaviour
                 movePoint = Vector3.zero;
 
                 // 정면 보기
+                // 버그 발생! =============== 이동 한번 할때마다 정면 바라봄 => 정면보기 액션 플랜 독립시킬것
                 MoveSet(transform.position, ActTurnSpeed, true);
 
                 // 스킵
@@ -440,13 +689,13 @@ public class CharacterMover : MonoBehaviour
             // x축 최대치 보정
             if (Mathf.Abs(targetPos.x - transform.position.x) > Mathf.Abs(limitePos.x - transform.position.x))
             {
-                Debug.Log("x축 보정됨");
+                //Debug.Log("x축 보정됨");
                 targetPos.x = limitePos.x;
             }
             // z축 최대치 보정
             if (Mathf.Abs(targetPos.z - transform.position.z) > Mathf.Abs(limitePos.z - transform.position.z))
             {
-                Debug.Log("z축 보정됨");
+                //Debug.Log("z축 보정됨");
                 targetPos.z = limitePos.z;
             }
 

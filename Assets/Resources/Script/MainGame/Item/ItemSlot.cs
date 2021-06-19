@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
+
     // 빈 슬롯 파악
     public bool isEmpty {get { return item == null; } }
 
@@ -36,6 +37,14 @@ public class ItemSlot : MonoBehaviour
 
             Refresh();
         }
+    }
+
+    public void Clear()
+    {
+        item = Item.table[0];
+        count = 0;
+
+        Refresh();
     }
 
     /// <summary>
@@ -89,8 +98,43 @@ public class ItemSlot : MonoBehaviour
     /// </summary>
     public void Clicked()
     {
-        /// 미구현===========
-        /// 누르면 메시지 박스로 아이템 정보 및 닫기버튼 출력 + 자신의 턴, 자신의 아이템일 경우 사용버튼 출력
+        // 없는 아이템 중단
+        if (item == null)
+            return;
+
+        if (count <= 0)
+            return;
+
+        // UI 셋팅
+        GameData.gameMaster.itemManager.selected = this;
+        Debug.LogError(GameData.gameMaster.itemManager.selected.item.index);
+        GameData.gameMaster.itemManager.nameText.text = item.name;
+        GameData.gameMaster.itemManager.infoText.text = item.info;
+
+        // UI 호출
+        GameMaster.script.itemManager.CallItemUseBox();
+
+        // 사용 버튼 비활성
+        GameData.gameMaster.itemManager.btnUse.interactable = false;
+
+        // 소유권 없을 시 사용 버튼 비활성
+        if (transform.parent.name == "item") // 플레이어 정보 UI 오브젝트일 경우
+        {
+
+            PlayerInfoUI piui = transform.parent.parent.parent.parent.GetComponent<PlayerInfoUI>();
+            
+            if (piui.owner == GameData.player.me) // 사용자가 아이템 소유권자일 경우
+            {
+                if (GameData.turn.now == GameData.player.me)    // 사용자가 턴 진행중일 경우
+                {
+                    // 사용 버튼 활성
+                    GameData.gameMaster.itemManager.btnUse.interactable = true;
+                }
+
+            }
+
+
+        }
     }
 
 }

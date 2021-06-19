@@ -305,7 +305,7 @@ public class Item
     /// 아이템 효과
     /// </summary>
     /// <param name="___index">작동할 아이템 인덱스</param>
-    public static void Effect(int __index)
+    public static void Effect(int __index, Player targetPlayer_Or_null)
     {
         switch (__index)
         {

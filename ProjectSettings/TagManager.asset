@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Card_0
+  - ItemObject
   layers:
   - Default
   - TransparentFX

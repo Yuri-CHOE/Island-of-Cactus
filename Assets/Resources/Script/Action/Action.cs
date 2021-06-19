@@ -19,8 +19,8 @@ public struct Action
         Move,
         Turn,
         Attack,
-        Hit,
         Stop,
+        Barricade,
     }
 
 

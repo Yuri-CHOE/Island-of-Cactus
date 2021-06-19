@@ -86,8 +86,8 @@ public static class BlockWork
 
         ++shop,
         unique,
-        shortcutIn,
-        shortcutOut, 
+        ++shortcutIn,
+        ++shortcutOut, 
          */
     }
 

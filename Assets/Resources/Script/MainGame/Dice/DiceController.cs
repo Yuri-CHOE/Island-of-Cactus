@@ -505,7 +505,7 @@ public class DiceController : MonoBehaviour
         // 주사위 소유권자 지정
         owner = __owner;
         dice = owner.dice;
-        Debug.LogError("디버그 :: " + owner.name);
+        Debug.LogWarning("주사위 :: 소유자 = " + owner.name);
 
         // 주사위 개수가 부족하면 중단
         if (dice.count < 1)

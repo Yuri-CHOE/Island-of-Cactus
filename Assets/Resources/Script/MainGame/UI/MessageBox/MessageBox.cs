@@ -13,22 +13,26 @@ public class MessageBox : MonoBehaviour
         Itemshop,
         LuckyBox,
         ShortCut,
+        ItemUse,
     }
 
     [SerializeField]
     Image m_box;
     [SerializeField]
     GameObject Innerbox;
-    [SerializeField]
-    GameObject npcSpace;
+    public GameObject npcSpace;
         
     public ObjectMultiSwitch btnSwitch;
     public ObjectSwitch pageSwitch;
 
     List<int[]> mBoxPreset = new List<int[]>();
 
+
+
     [SerializeField]
     const int btnMax = 6;
+
+    [Header("preset")]
 
     [SerializeField]
     bool[] preMessage = new bool[btnMax];    // 메시지박스 모드
@@ -44,6 +48,14 @@ public class MessageBox : MonoBehaviour
 
     [SerializeField]
     bool[] preShortCut = new bool[btnMax];   // 숏컷 질문 모드
+
+
+    // 테스트용 시작
+    [Header("testMode")]
+    [SerializeField]
+    bool runBtn = false;
+    [SerializeField]
+    int runID = 0;
 
 
     // Start is called before the first frame update
@@ -64,11 +76,6 @@ public class MessageBox : MonoBehaviour
     }
 
 
-    // 테스트용 시작
-    [SerializeField]
-    bool runBtn = false;
-    [SerializeField]
-    int runID = 0;
     void tempSet()
     {
         if (runBtn == true)
@@ -192,6 +199,7 @@ public class MessageBox : MonoBehaviour
     public void PopUp(Type mBoxPresetType) { PopUp(true, true, false, (int)mBoxPresetType); }
 
     
+
 
     public void Out()
     {

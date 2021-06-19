@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 7017281696082432493}
   m_Layer: 0
   m_Name: Character0000
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -427,6 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd1699963ea7d774280dc3c944036b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBusy: 0
   moveCount: 0
   posMinY: 1.9
   posMaxY: 20

@@ -35,4 +35,10 @@ public class Cycle
         else
             return true;
     }
+
+    public void NextCycle()
+    {
+        now++;
+
+    }
 }

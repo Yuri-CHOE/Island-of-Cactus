@@ -29,7 +29,10 @@ public class GameMaster : MonoBehaviour
     [SerializeField]
     LoadingManager loadingManager = null;
 
-    // 주사위 컨트롤러 스크립트
+    // 사이클 UI 관리 스크립트
+    public CycleManager cycleManager = null;
+
+    // 메시지 박스 스크립트
     public MessageBox messageBox = null;
 
     // 주사위 컨트롤러 스크립트
@@ -47,6 +50,9 @@ public class GameMaster : MonoBehaviour
     [Space]
     public List<PlayerInfoUI> playerInfoUI = new List<PlayerInfoUI>();
     public CanvasGroup MainUI = null;
+
+    // 플레이어 선택기
+    public List<Transform> playerSelecter = new List<Transform>();
 
 
     // 아이템 사용 명령
@@ -116,6 +122,20 @@ public class GameMaster : MonoBehaviour
                             GameData.player.allPlayer.Add(GameData.player.player_2);
                             GameData.player.allPlayer.Add(GameData.player.player_3);
                             GameData.player.allPlayer.Add(GameData.player.player_4);
+
+                            // 플레이어별 "다른 플레이어" 구성
+                            for(int i = 0; i < GameData.player.allPlayer.Count; i++)
+                            {
+                                // 퀵 지정 (등록자)
+                                Player temp = GameData.player.allPlayer[i];
+
+                                // 모든 플레이어 등록
+                                for (int j = 0; j < GameData.player.allPlayer.Count; j++)
+                                    temp.otherPlayers.Add(GameData.player.allPlayer[j]);
+
+                                // 등록자 본인 제외
+                                temp.otherPlayers.Remove(temp);
+                            }
 
                             // 임시 큐 구성
                             //for(int i = 0; i < GameData.player.allPlayer.Count; i++)
@@ -325,7 +345,7 @@ public class GameMaster : MonoBehaviour
     void TurnWork()
     {
         // 로그 기록
-        Debug.Log("플레이어 호출 :: " + GameData.turn.now.name);
+        //Debug.Log("플레이어 호출 :: " + GameData.turn.now.name);
 
         // 종료 조건 체크
 
@@ -338,6 +358,9 @@ public class GameMaster : MonoBehaviour
             // 모든 플레이어 주사위 초기화
             for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                 GameData.player.allPlayer[i].dice.Clear();
+
+            // 사이클 UI 갱신
+            cycleManager.Refresh();
 
             // 턴 종료 처리
             GameData.turn.Next();
@@ -364,8 +387,11 @@ public class GameMaster : MonoBehaviour
         else if (GameData.turn.now == GameData.player.system.Ender)
         {
             // 종료 분기 체크
-            
+
+
+
             // 사이클 증가
+            GameData.cycle.NextCycle();
 
             // 턴 종료 처리
             GameData.turn.Next();
@@ -381,15 +407,15 @@ public class GameMaster : MonoBehaviour
 
     void PlayerWork()
     {
-        // 로그 기록
-        Debug.Log("턴 진행 :: " + GameData.turn.turnAction + " & " + GameData.turn.actionProgress + " :: " + GameData.turn.now.name);
-
         // 초기화
         if (GameData.turn.turnAction == Turn.TurnAction.Wait)
         {
             if (GameData.turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
+
+                // 로그 기록
+                Debug.Log("턴 진행 :: " + GameData.turn.turnAction + " & " + GameData.turn.actionProgress + " :: " + GameData.turn.now.name);
 
 
                 // 스킵
@@ -687,6 +713,15 @@ public class GameMaster : MonoBehaviour
                     // 이동 처리
                     if (movement.actNow.type == Action.ActionType.Move)
                         movement.MoveByAction(ref movement.actNow);
+
+                    // 장애물 처리
+                    if (movement.actNow.type == Action.ActionType.Barricade)
+                        movement.CheckBarricade(ref movement.actNow);
+
+                    // 공격 처리
+                    if (movement.actNow.type == Action.ActionType.Attack)
+                        movement.AttackPlayer(ref movement.actNow);
+
                 }
                 // 액션 종료
                 else if (movement.actNow.isFinish)

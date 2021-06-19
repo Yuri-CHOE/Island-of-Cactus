@@ -79,4 +79,12 @@ public class PlayerInfoUI : MonoBehaviour
         // 인벤토리 싱크
         player.inventory = inventory;
     }
+
+
+    public void Targeting()
+    {
+        // 선택된 플레이어 타겟팅
+        GameData.gameMaster.itemManager.ItemUse(owner);
+    }
+
 }

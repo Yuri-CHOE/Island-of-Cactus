@@ -15,6 +15,11 @@ public class Player
 
 
 
+    // 다른 플레이어
+    public List<Player> otherPlayers = new List<Player>();
+
+
+
     // 플레이어 타입
     Type _type = Type.System;
     public Type type { get { return _type; } }
@@ -70,6 +75,9 @@ public class Player
 
     // 행동 불가능 여부
     public bool isStun { get { return false; /* 미구현 =======================*/ } }
+
+    // 전투 속성
+    public Battle battle = new Battle(1f, 0f);
 
        
 
@@ -171,6 +179,9 @@ public class Player
             ) as GameObject;
         avatarBody = avatar.transform.Find("BodyObject");
 
+        // 소유권 등록
+        movement.owner = this;
+
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }
 
@@ -199,6 +210,32 @@ public class Player
 
     public void AddItem(ItemSlot itemSlot, int count)
     {
+        AddItem(itemSlot.item, count);
+        //// 잔여 슬롯 부족 시 버림 === 시간 여유 된다면 소거할 아이템 선택하여 버리게 바꿀것
+        //if (inventoryCount >= Player.inventoryMax)
+        //    return;
+
+        //for (int i = 0; i < inventory.Count; i++)
+        //{
+        //    // 빈칸일경우 넣고 종료
+        //    if (inventory[i].isEmpty)
+        //    {
+        //        inventory[i].item = itemSlot.item;
+        //        inventory[i].count = count;
+        //        break;
+        //    }
+
+        //}
+    }
+    public void AddItem(Item _item, int count)
+    {
+        // 코인 아이템일 경우
+        if(_item.index == 1)
+        {
+            coin.Add(count);
+            return;
+        }
+
         // 잔여 슬롯 부족 시 버림 === 시간 여유 된다면 소거할 아이템 선택하여 버리게 바꿀것
         if (inventoryCount >= Player.inventoryMax)
             return;
@@ -208,11 +245,46 @@ public class Player
             // 빈칸일경우 넣고 종료
             if (inventory[i].isEmpty)
             {
-                inventory[i].item = itemSlot.item;
+                inventory[i].item = _item;
+                inventory[i].count = count;
                 break;
             }
 
         }
+    }
+
+    public void RemoveItem(ItemSlot currentSlot)
+    {
+        // 인벤토리 순회 체크
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            // 일치하는 슬롯 검색
+            if (inventory[i] == currentSlot)
+                inventory[i].Clear();
+        }
+    }
+
+
+
+    public void Attack(Player target)
+    {
+        // 공격 애니메이션
+        // 미구현=================
+
+        // 데미지 요청
+        target.Hit(this, battle.atk.value);
+    }
+
+    public void Hit(Player Attacker, float rawDamage)
+    {
+        // 피격 애니메이션
+        // 미구현=================
+
+        // 데미지 계산
+        float finalDamage = battle.Damage(rawDamage);
+
+        // 체력 반영
+        life.subtract((int)finalDamage);
     }
 }
 

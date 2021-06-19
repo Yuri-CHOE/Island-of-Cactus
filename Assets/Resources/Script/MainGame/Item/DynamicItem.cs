@@ -12,7 +12,7 @@ public class DynamicItem : MonoBehaviour
 
 
     // 아이템 위치
-    public int location = -1;
+    public int location = -2;
     
 
     // 아이템 정보  =====  (아이템 주인, 획득 대상 등을 추가해야할 경우 여기에 추가)
@@ -25,7 +25,7 @@ public class DynamicItem : MonoBehaviour
 
 
     // 회전 동작 여부
-    public bool doSpin = true;      
+    public bool doSpin = false;      
     // 회전 정보
     Coroutine coroutineRot = null;
     bool isSpin = false;
@@ -50,7 +50,7 @@ public class DynamicItem : MonoBehaviour
         if (target.transform.name == "road")
         {
             // 충돌 거부 기능 비활성
-            transform.GetComponent<BoxCollider>().isTrigger = false;
+            //transform.GetComponent<BoxCollider>().isTrigger = false;
 
             // 관성 제거
             transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -74,6 +74,22 @@ public class DynamicItem : MonoBehaviour
     //    if (target.transform.parent.name == "Character")
     //        transform.GetComponent<BoxCollider>().isTrigger = false;
     //}
+
+
+    public void GetItem(Player current)
+    {
+        // 획득
+        current.AddItem(item, count);
+
+        // 목록 제외
+        ItemManager.itemObjectList.Remove(this);
+
+        // 장애물 제거
+        CharacterMover.barricade[location]--;
+
+        // 제거
+        Destroy(gameObject);
+    }
 
     /// <summary>
     /// 오브젝트 셋팅

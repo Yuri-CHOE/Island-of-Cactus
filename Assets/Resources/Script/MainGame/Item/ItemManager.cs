@@ -1,14 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
     public static List<DynamicItem> itemObjectList = new List<DynamicItem>();
 
+    [Header("itemObject")]
     // 복사할 프리팹
     [SerializeField]
     GameObject itemPrefab = null;
+
+    // 아이템 사용 UI
+    [Header("itemUseMessegeBox")]
+    public ItemSlot selected = null;
+    public Transform itemUseBox = null;
+    public Text nameText = null;
+    public Text infoText = null;
+    public Button btnUse = null;
 
 
     // Start is called before the first frame update
@@ -20,7 +30,84 @@ public class ItemManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+
+    public void CallItemUseBox()
+    {
+        MessageBox mb = GameData.gameMaster.messageBox;
+
+        // 메시지 박스 닫기
+        if (!mb.gameObject.activeSelf)
+            mb.PopUp(0);
+
+        // 호출
+        itemUseBox.gameObject.SetActive(true);
+    }
+
+    public void CloseItemUseBox()
+    {
+        MessageBox mb = GameData.gameMaster.messageBox;
+
+        // 메시지 박스 임시모드일 경우 닫기
+        if (mb.pageSwitch.objectList[0].activeSelf)
+            mb.PopUp(-1);
+
+        // 비활성
+        itemUseBox.gameObject.SetActive(false);
+
+        // 타겟팅 UI 비활성
+        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
+
+    }
+
+    /// <summary>
+    /// PlayerInfoUI를 바탕으로 playerSelecter를 활성화하며 자신의 것만 비활성
+    /// </summary>
+    public void CallPlayerSelecter()
+    {
+        List<PlayerInfoUI> piuil = GameData.gameMaster.playerInfoUI;
+        for (int i = 0; i < piuil.Count; i++)
+        {
+            // 선택 버튼 전체 활성화
+            GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(true);
+
+            // 선택 버튼 중 자신의 것 비활성
+            if (piuil[i].owner == GameData.player.me)
+                GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
+        }
+
+        // UI 활설
+        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(true);
+    }
+
+    public void ItemUse()
+    {
+        // 개수 차감
+        selected.count--;
+
+        // 타겟팅 형 아이템
+        if (selected.item.type == Item.Type.Target)
+        {
+            CallPlayerSelecter();
+            return;
+        }
+
+        // 아이템 사용
+        ItemUse(null);
+    }
+
+    public void ItemUse(Player targetPlayer_Or_null)
+    {
+        // UI 비활성
+        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
+
+        // 아이템 제거
+        GameData.player.me.RemoveItem(selected);
+
+        // 아이템 사용 요청
+        Item.Effect(selected.item.index, targetPlayer_Or_null);
     }
 
 

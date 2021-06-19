@@ -18,8 +18,7 @@ namespace UnityEngine.UI
         int activeSwitchNum = 0;
         int activeSwitchNumMirror = 0;
 
-        [SerializeField]
-        List<GameObject> objectList;
+        public List<GameObject> objectList;
 
 
         // Start is called before the first frame update

@@ -196,6 +196,9 @@ public class ItemShop : MonoBehaviour
         // 아이템 설정
         target.item = item;
 
+        // 수량 설정
+        target.slot.count = 1;
+
         // 새로고침
         target.Refresh();
     }

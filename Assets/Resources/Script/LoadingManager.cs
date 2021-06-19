@@ -315,6 +315,8 @@ public class LoadingManager : MonoBehaviour
         workCount++;
 
         // 장애물 초기화
+        // ================ 버그 수정 필요 : 이러면 씬 새로 로딩했을때 장애물 전부 날아감
+        // ㄴ 해결법 : 로딩할때 말고 로딩 끝나고 메인게임 플로우 초기화구간에서 처리할것
         for (int i = 0; i < wm.blockManager.blockCount; i++)
             CharacterMover.barricade.Add(0);
     }
