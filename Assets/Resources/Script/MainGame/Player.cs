@@ -65,7 +65,9 @@ public class Player
     public Dice dice = new Dice();
 
     // 플레이어 자원
-    public GameResource life = new GameResource(10, 10, -1);
+    //public GameResource life = new GameResource(5, 10, -1);
+    //public GameResource coin = new GameResource(0, 999, 0);
+    public GameResource life = new GameResource(1, 10, -1);
     public GameResource coin = new GameResource(110, 999, 0);
 
     // 아이템 슬롯
@@ -74,7 +76,9 @@ public class Player
     public static int inventoryMax = 3;
 
     // 행동 불가능 여부
-    public bool isStun { get { return false; /* 미구현 =======================*/ } }
+    public bool isDead = false;
+    public bool isStun { get { return (stunCount > 0); } }
+    public int stunCount = 0;
 
     // 전투 속성
     public Battle battle = new Battle(1f, 0f);
@@ -208,6 +212,7 @@ public class Player
             face = temp;
     }
 
+
     public void AddItem(ItemSlot itemSlot, int count)
     {
         AddItem(itemSlot.item, count);
@@ -265,7 +270,10 @@ public class Player
     }
 
 
-
+    /// <summary>
+    /// 공격
+    /// </summary>
+    /// <param name="target">공격 대상</param>
     public void Attack(Player target)
     {
         // 공격 애니메이션
@@ -275,6 +283,11 @@ public class Player
         target.Hit(this, battle.atk.value);
     }
 
+    /// <summary>
+    /// 피격
+    /// </summary>
+    /// <param name="Attacker">공격자</param>
+    /// <param name="rawDamage">미가공 데미지</param>
     public void Hit(Player Attacker, float rawDamage)
     {
         // 피격 애니메이션
@@ -285,6 +298,22 @@ public class Player
 
         // 체력 반영
         life.subtract((int)finalDamage);
+    }
+
+    /// <summary>
+    /// 부활
+    /// </summary>
+    public void Resurrect()
+    {
+        // 초기화
+        stunCount = 0;
+        isDead = false;
+
+        // 라이프 지급
+        life.Add(5);
+
+        // UI 제거
+        infoUI.dead.gameObject.SetActive(false);
     }
 }
 

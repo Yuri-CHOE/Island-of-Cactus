@@ -73,8 +73,12 @@ public class ItemManager : MonoBehaviour
             // 선택 버튼 전체 활성화
             GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(true);
 
-            // 선택 버튼 중 자신의 것 비활성
+            // 자신 비활성
             if (piuil[i].owner == GameData.player.me)
+                GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
+
+            // 사망자 비활성
+            if (piuil[i].owner.isDead)
                 GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
         }
 

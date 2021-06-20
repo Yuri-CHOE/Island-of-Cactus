@@ -349,6 +349,23 @@ public class GameMaster : MonoBehaviour
 
         // 종료 조건 체크
 
+        // 라이프 체크
+        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+        {
+            // 라이프 0 또는 음수일 경우
+            if (GameData.player.allPlayer[i].life.Value < 1)
+            {
+                // 이미 감옥일 경우 중단
+                if (GameData.player.allPlayer[i].isDead)
+                {
+                    //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + GameData.player.allPlayer[i].name);
+                    continue;
+                }
+
+                //Debug.LogError("라이프 체크 :: 감지됨 => " + GameData.player.allPlayer[i].name);
+                GameData.player.allPlayer[i].movement.GotoJail();
+            }
+        }
 
         // 시스템 플레이어 - 스타터
         if (GameData.turn.now == GameData.player.system.Starter)
@@ -423,7 +440,38 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Start)
             {
-                // 시작 연출
+                // 각종 체크
+
+                // 부활 체크
+                if (GameData.turn.now.isDead)
+                    if (GameData.turn.now.stunCount <= 0)
+                        GameData.turn.now.Resurrect();
+
+                // 행동 가능 여부 체크
+                if (GameData.turn.now.isStun)
+                {
+                    // 남은 대기 턴 감소
+                    GameData.turn.now.stunCount--;
+
+                    // 행동권 박탈
+                    GameData.turn.turnAction = Turn.TurnAction.Ending;
+                }
+
+                // 모든 플레이어 대상 라이프 체크
+                CheckLife();
+
+                // 행동 불가능 체크
+                if (GameData.turn.now.isStun)
+                {
+                    // 턴 중단 및 종료 연출로 이동
+                    GameData.turn.turnAction = Turn.TurnAction.Ending;
+                    GameData.turn.actionProgress = ActionProgress.Ready;
+                    return;
+                }
+
+                // 주사위 지급
+                GameData.turn.now.dice.count = 1;
+                Debug.Log("주사위 수량 :: " + GameData.turn.now.dice.count);
 
 
                 // 스킵
@@ -433,9 +481,6 @@ public class GameMaster : MonoBehaviour
             {
                 // 메인 작업
 
-                // 주사위 지급
-                GameData.turn.now.dice.count += 1;
-                Debug.Log("주사위 수량 :: " + GameData.turn.now.dice.count);
 
                 // 스킵
                 GameData.turn.actionProgress = ActionProgress.Finish;
@@ -464,19 +509,7 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Start)
             {
-                // 각종 체크
-
-                // 모든 플레이어 대상 라이프 체크
-                CheckLife();
-
-                // 행동 불가능 체크
-                if (GameData.turn.now.isStun)
-                {
-                    // 턴 중단 및 종료 연출로 이동
-                    GameData.turn.turnAction = Turn.TurnAction.Ending;
-                    GameData.turn.actionProgress = ActionProgress.Ready;
-                    return;
-                }
+                // 연출 준비
 
 
                 // 스킵

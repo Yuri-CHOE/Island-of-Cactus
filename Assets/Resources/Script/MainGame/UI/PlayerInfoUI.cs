@@ -11,6 +11,9 @@ public class PlayerInfoUI : MonoBehaviour
 
     public Image face = null;
 
+    public Image dead = null;
+    public Text deadCounter = null;
+
     public List<ItemSlot> inventory;
 
 
@@ -49,6 +52,19 @@ public class PlayerInfoUI : MonoBehaviour
                 turnOobject.setUp(1);
             else
                 turnOobject.setUp(0);
+
+
+
+            // 감옥 UI 활성 , 비활성
+            if (owner.isStun || dead.gameObject.activeSelf)
+            {
+                dead.gameObject.SetActive(true);
+
+                // 라이프 반영
+                deadCounter.text = owner.stunCount.ToString();
+            }
+            //else
+                //dead.gameObject.SetActive(false);
         }
     }
 

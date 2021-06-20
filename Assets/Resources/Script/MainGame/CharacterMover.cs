@@ -225,7 +225,7 @@ public class CharacterMover : MonoBehaviour
             for (int p = 0; p < owner.otherPlayers.Count; p++)
             {
                 // 공격 최소 사이클 제한
-                if (GameData.cycle.now < 5)
+                if (GameData.cycle.now < 0)
                     break;
                    
 
@@ -682,7 +682,7 @@ public class CharacterMover : MonoBehaviour
             // 부호 추출
             Vector3 signPos = new Vector3(Mathf.Sign(targetPos.x - transform.position.x), 0, Mathf.Sign(targetPos.z - transform.position.z));
             // 최대치 계산
-            Vector3 limitePos = transform.position + signPos * speed / 5.00f;
+            Vector3 limitePos = transform.position + signPos * speed / 5.00f * 0.5f;
 
 
 
@@ -784,5 +784,109 @@ public class CharacterMover : MonoBehaviour
         //    Quaternion.LookRotation((dir - bodyObject.position).normalized),
         //    1f
         //    );
+    }
+
+
+    public void GotoJail()
+    {
+        Debug.LogWarning("감옥으로 이동 :: " + transform.name);
+
+        // 행동제한 부여
+        owner.stunCount = 3;
+
+        // 위치 변경
+        _location = -1;
+
+        // 위치 변경
+        owner.isDead = true;
+
+        // 좌표 확보
+        Vector3 jailPos = GameData.blockManager.startBlock.position;
+
+        // 기존 이동 중단
+        if (moveCoroutine != null)
+            StopCoroutine(moveCoroutine);
+
+        // 이동
+        moveCoroutine = StartCoroutine(ActFly(jailPos, 2f, true));
+    }
+
+    /// <summary>
+    /// 공중으로 상승하여 이동 후 하강
+    /// </summary>
+    /// <param name="pos">착지 지점</param>
+    /// <param name="speed">속도</param>
+    /// <param name="isTurnAfterMove">이동 후 정면</param>
+    /// <returns></returns>
+    IEnumerator ActFly(Vector3 pos, float speed, bool isTurnAfterMove)
+    {
+        float height = transform.position.y;
+
+        // 상승
+        yield return StartCoroutine(ActFlyPoint(transform.position + Vector3.up * 5, speed));
+
+        // 좌표 지정
+        Vector3 flyPoint = pos;
+        flyPoint.y = transform.position.y;
+
+        // 이동
+        yield return StartCoroutine(ActMovePoint(flyPoint, speed * 5f));
+
+        // 좌표 지정
+        flyPoint.y = height;
+
+        // 하강
+        yield return StartCoroutine(ActFlyPoint(flyPoint, speed));
+
+        // 정면 바라보기
+        if (isTurnAfterMove)
+            yield return StartCoroutine(ActTurnFornt(speed));
+
+    }
+
+    /// <summary>
+    /// 특정 좌표를 향해 이동
+    /// </summary>
+    /// <param name="pos">특정 좌표</param>
+    /// <param name="speed"></param>
+    /// <returns></returns>
+    IEnumerator ActFlyPoint(Vector3 pos, float speed)
+    {
+        // 목표로 이동
+        Tool.HeightLimit(bodyObject, posMinY - transform.position.y, posMaxY - transform.position.y);
+        while (Vector3.Distance(transform.position, pos) > 0.1f)
+        {
+            //transform.position = Vector3.Lerp(transform.position, posY, Time.deltaTime * speed);
+
+            // 프레임 목표점 계산
+            Vector3 targetPos = Vector3.Lerp(transform.position, pos, Time.deltaTime * speed);
+
+            // 부호 추출
+            Vector3 signPos = new Vector3(Mathf.Sign(targetPos.x - transform.position.x), 0, Mathf.Sign(targetPos.z - transform.position.z));
+            // 최대치 계산
+            Vector3 limitePos = transform.position + signPos * speed / 5.00f * 0.5f;
+
+
+
+            // x축 최대치 보정
+            if (Mathf.Abs(targetPos.x - transform.position.x) > Mathf.Abs(limitePos.x - transform.position.x))
+            {
+                //Debug.Log("x축 보정됨");
+                targetPos.x = limitePos.x;
+            }
+            // z축 최대치 보정
+            if (Mathf.Abs(targetPos.z - transform.position.z) > Mathf.Abs(limitePos.z - transform.position.z))
+            {
+                //Debug.Log("z축 보정됨");
+                targetPos.z = limitePos.z;
+            }
+
+            // 이동 처리
+            transform.position = targetPos;
+
+            yield return null;
+        }
+        // 값 보정
+        transform.position = pos;
     }
 }
