@@ -16,15 +16,10 @@ public static class GameData
     public static ItemManager itemManager { get { if (isMainGameScene) return gameMaster.itemManager; else return null; } }
 
 
-    //// 필드 임시구성======================
 
     // 게임모드
     static GameMode.Mode _gameMode = GameMode.Mode.None;
     public static GameMode.Mode gameMode { get { return _gameMode; } }
-
-    // 플레이 회차 - 유저 데이터 테이블 읽어올것==============
-    static int _playCount = -1;
-    public static int playCount { get { return _playCount; } }
 
     // 선택한 월드
     static string _worldFileName = null;
@@ -52,7 +47,6 @@ public static class GameData
     public static void Clear()
     {
         _gameMode = GameMode.Mode.None;
-        _playCount = -1;
         _worldFileName = null;
         _player = new PlayerGroup();
         _cycle = new Cycle();
@@ -67,11 +61,6 @@ public static class GameData
     public static void SetGameMode(int gameMode)
     {
         SetGameMode((GameMode.Mode)gameMode);
-    }
-
-    public static void SetpPlayCount(int __playCount)
-    {
-        _playCount = __playCount;
     }
 
     public static void SetWorldFileName(string __worldFileName)

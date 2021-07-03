@@ -14,12 +14,15 @@ public class CSVReader
     // 파일 경로
     public string path = null;
 
-    // 저장 불가능여부
-    public bool isReadOnly = true;
+    // 복사본 사용 여부
+    public bool isCopyFile = false;
     // 사본을 다뤄야 할 경우는?
     //  ㄴ Resources는 패킹 후에는 읽기 전용
     //  ㄴ 유저 데이터나 세이브 데이터 등 수정이 필요한 파일의 경우 앱 데이터 폴더에서 관리해야함
     //  ㄴ 이럴땐 _isReadOnly 를 false로 할것
+
+    // 저장 불가능여부
+    public bool isReadOnly = true;
 
 
     // 데이터 위치
@@ -39,8 +42,17 @@ public class CSVReader
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
     /// <param name="dataSeparator">데이터 구분자</param>
     /// <param name="lineSeparator">라인 구분자</param>
-    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly, char dataSeparator, char lineSeparator)
+    public CSVReader(string subPathOrNull, string fileName, bool _isCopyFile, bool _isReadOnly, char dataSeparator, char lineSeparator)
     {
+        // 원본 폴더 체크
+        CheckPath(basicPath);
+
+        // 사본 폴더 체크
+        CheckPath(copyPath);
+
+        // 복사본 사용 여부 설정
+        isCopyFile = _isCopyFile;
+
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
@@ -54,8 +66,17 @@ public class CSVReader
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
     /// <param name="dataSeparator">데이터 구분자</param>
-    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly, char dataSeparator)
+    public CSVReader(string subPathOrNull, string fileName, bool _isCopyFile, bool _isReadOnly, char dataSeparator)
     {
+        // 원본 폴더 체크
+        CheckPath(basicPath);
+
+        // 사본 폴더 체크
+        CheckPath(copyPath);
+
+        // 복사본 사용 여부 설정
+        isCopyFile = _isCopyFile;
+
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
@@ -69,8 +90,17 @@ public class CSVReader
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
-    public CSVReader(string subPathOrNull, string fileName, bool _isReadOnly)
+    public CSVReader(string subPathOrNull, string fileName, bool _isCopyFile, bool _isReadOnly)
     {
+        // 원본 폴더 체크
+        CheckPath(basicPath);
+
+        // 사본 폴더 체크
+        CheckPath(copyPath);
+
+        // 복사본 사용 여부 설정
+        isCopyFile = _isCopyFile;
+
         // 저장 가능 여부 설정
         isReadOnly = !_isReadOnly;
 
@@ -85,8 +115,17 @@ public class CSVReader
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     public CSVReader(string subPathOrNull, string fileName)
     {
-        // 저장 가능 여부 설정
-        isReadOnly = true;
+        // 원본 폴더 체크
+        CheckPath(basicPath);
+
+        // 사본 폴더 체크
+        CheckPath(copyPath);
+
+        //// 복사본 사용 여부 설정
+        //isCopyFile = _isCopyFile;
+
+        //// 저장 가능 여부 설정
+        //isReadOnly = !_isReadOnly;
 
         // 파일 읽기
         ReadFile(subPathOrNull, fileName);
@@ -115,7 +154,7 @@ public class CSVReader
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
-    public static void CheckFile(string _path, string fileName, bool _isReadOnly)
+    public static void CheckFile(string _path, string subPathOrNull, string fileName, bool _isCopyFile)
     {
         Debug.Log("파일 체크 :: " + @_path);
 
@@ -127,11 +166,15 @@ public class CSVReader
         }
         else
         {
-            Debug.Log("파일 누락");
-            if (!_isReadOnly)       // 데이터 저장이 필요할 경우
+            Debug.LogWarning("파일 누락");
+            if (_isCopyFile)       // 데이터 저장이 필요할 경우
             {
-                Debug.Log("파일 복사됨 :: " + @_path);
-                new FileInfo(@basicPath + @fileName).CopyTo(@_path);
+                string path_basic = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
+
+                Debug.Log("파일 복사 요청됨 :: " + @path_basic);
+                CheckPath(string.Format("{0}/{1}", copyPath, subPathOrNull));
+                FileInfo temp = new FileInfo(@path_basic).CopyTo(@_path);
+                Debug.Log("파일 복사됨 :: \t" + @_path + "\n\t\t" + temp.FullName);
             }
         }
     }
@@ -145,6 +188,7 @@ public class CSVReader
         // 초기화
         table.Clear();
         path = null;
+        isCopyFile = false;
         isReadOnly = true;
     }
 
@@ -159,26 +203,29 @@ public class CSVReader
     public void ReadFile(string subPathOrNull, string fileName, char dataSeparator, char lineSeparator)
     {
         // 초기화
-        Reset();
-
-        // 원본 폴더 체크
-        CheckPath(basicPath);
-
-        // 사본 폴더 체크
-        CheckPath(copyPath);
+        //Reset();
 
         // 파일명 누락 방지
         if (fileName == null)
             return;
 
+        //// 경로 설정
+        //if (isCopyFile)
+        //    path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
+        //else
+        //    path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
+
+        //// 파일 체크
+        //CheckFile(path, fileName, isCopyFile);
+
         // 경로 설정
-        if (isReadOnly)
-            path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
-        else
+        if (isCopyFile)
             path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
+        else
+            path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
 
         // 파일 체크
-        CheckFile(path, fileName, isReadOnly);
+        CheckFile(path, subPathOrNull, fileName, isCopyFile);
 
         // 열기
         //FileStream fs = new FileStream(@path, FileMode.Open);
@@ -243,6 +290,13 @@ public class CSVReader
     public void Save(char dataSeparator, char lineSeparator)
     {
         // 읽기 전용일 경우
+        if (!isCopyFile)
+        {
+            Debug.Log("파일 저장 불가 :: 원본 파일 수정 불가");
+            return;
+        }
+
+        // 읽기 전용일 경우
         if (!isReadOnly)
         {
             Debug.Log("파일 저장 불가 :: 읽기 전용");
@@ -277,21 +331,30 @@ public class CSVReader
             }
 
             // 개행 문자 삽입
-            if (i == table.Count - 1)
+            if (i < table.Count - 1)
                 if (lineSeparator == '\n')
                     sb.Append('\r').Append('\n');
                 else
                     sb.Append(lineSeparator);
+            else
+                Debug.LogError("개행 종료");
         }
 
-        // 파일 작성
+        // 파일 초기화
         FileStream fs = new FileStream(@path, FileMode.Create);
-        StreamWriter sw = new StreamWriter(fs);
+        fs.Close();
+
+        // 파일 작성
+        StreamWriter sw = new StreamWriter(@path);
         sw.Write(sb);
 
         // 파일 닫기
-        fs.Close();
+        //fs.Close();
         sw.Close();
+    }
+    public void Save(char dataSeparator)
+    {
+        Save(dataSeparator, '\n');
     }
     public void Save()
     {

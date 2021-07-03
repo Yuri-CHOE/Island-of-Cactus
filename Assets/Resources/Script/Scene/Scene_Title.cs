@@ -8,6 +8,11 @@ public class Scene_Title : MonoBehaviour
     [SerializeField]
     List<Transform> characterList = new List<Transform>();
 
+
+    [SerializeField]
+    Text userName = null;
+
+
     // 선택한 캐릭터 인덱스
     int _selected = 0;
     public int selected { get { return _selected; } }
@@ -21,6 +26,9 @@ public class Scene_Title : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 유저 이름 갱신
+        if (UserData.userName != null)
+            userName.text = UserData.userName;
         
     }
 
@@ -45,7 +53,7 @@ public class Scene_Title : MonoBehaviour
     public void SetPlayerMe()
     {
         Refresh();
-        GameData.player.me = new Player(Player.Type.User, selected, false, "유저 이름 ======== 유저 테이블 읽어오기로 대체할것");
+        GameData.player.me = new Player(Player.Type.User, selected, false, UserData.userName);
     }
 
     public static void SetWorldFileName(string __worldFileName)
@@ -55,5 +63,10 @@ public class Scene_Title : MonoBehaviour
 
         // 코드 가져오기
         WorldManager.BuildWorld(GameData.worldFileName);
+    }
+
+    public void Tester()
+    {
+        UserData.SaveData();
     }
 }

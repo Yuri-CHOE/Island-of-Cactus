@@ -55,7 +55,7 @@ public class WorldManager : MonoBehaviour
             fName = filename + extension;
 
         // 파일 읽기
-        CSVReader worldFileReader = new CSVReader(subRoot, fName, true, tableSplit, endSplit);
+        CSVReader worldFileReader = new CSVReader(subRoot, fName, false, true, tableSplit, endSplit);
 
         worldFile = worldFileReader.table[0];
     }

@@ -268,6 +268,13 @@ public class LoadingManager : MonoBehaviour
         gameObject.SetActive(false);
         workCount++;
 
+
+        // 유저 데이터 로드
+        // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
+        UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
+        UserData.SetUp();
+        workCount += UserData.file.table.Count;
+        
         // 캐릭터 테이블
         Character.SetUp();
         workCount+= Character.table.Count;
@@ -279,11 +286,6 @@ public class LoadingManager : MonoBehaviour
         // 럭키박스 테이블
         LuckyBox.SetUp();
         workCount += LuckyBox.table.Count;
-
-        // 유저 데이터
-        // 구현 예정
-        GameData.SetpPlayCount(0);     // 0 부분 유저 플레이 횟수로 대체
-        workCount++;
     }
 
     void Work_MainGame()
