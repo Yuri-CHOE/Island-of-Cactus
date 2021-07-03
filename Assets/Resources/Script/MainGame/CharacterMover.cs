@@ -225,7 +225,7 @@ public class CharacterMover : MonoBehaviour
             for (int p = 0; p < owner.otherPlayers.Count; p++)
             {
                 // 공격 최소 사이클 제한
-                if (GameData.cycle.now < 0)
+                if (GameData.cycle.now < 5)
                     break;
                    
 

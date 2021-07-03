@@ -78,10 +78,12 @@ public class LuckyBox
     /// 테이블 정보를 입력받아 셋팅
     /// </summary>
     /// <param name="strList">테이블 리스트로 읽기</param>
-    protected LuckyBox(List<string> strList)
+    protected LuckyBox(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
         if (strList.Count != 9)
+            return;
+        if (loaclList.Count != 3)
             return;
 
         // 테이블 읽어오기
@@ -93,7 +95,8 @@ public class LuckyBox
         _type = (Type)int.Parse(strList[1]);
 
         // 이름
-        _name = strList[2];
+        //_name = strList[2];
+        _name = loaclList[1];
 
         // 레어도
         _rare = int.Parse(strList[3]);
@@ -111,7 +114,8 @@ public class LuckyBox
         _value = int.Parse(strList[7]);
 
         // 정보
-        _info = strList[8];
+        //_info = strList[8];
+        _info = loaclList[2].Replace("\\n", "\n").Replace("value", strList[7]);
     }
 
 
@@ -129,6 +133,7 @@ public class LuckyBox
 
         // 테이블 읽어오기
         CSVReader luckyReader = new CSVReader(null, "LuckyBox.csv");
+        CSVReader local = new CSVReader(null, "LuckyBox_local.csv", true, false);
 
         // 더미 생성
         table.Add(new LuckyBox());
@@ -136,7 +141,7 @@ public class LuckyBox
         // 테이블로 리스트 셋팅
         for (int i = 1; i < luckyReader.table.Count; i++)
         {
-            table.Add(new LuckyBox(luckyReader.table[i]));
+            table.Add(new LuckyBox(luckyReader.table[i], local.table[i]));
         }
 
         // 준비완료

@@ -38,18 +38,22 @@ public class Character
         // 사용 금지
     }
 
-    protected Character(List<string> strList)
+    protected Character(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
         if (strList.Count != 4)
+            return;
+        if (loaclList.Count != 3)
             return;
 
         // 테이블 읽어오기
         SetCharacter(
             int.Parse(strList[0]),
-            strList[1],
+            //strList[1],
+            loaclList[1],
             (Job.JobType)int.Parse(strList[2]),
-            strList[3]
+            //strList[3]
+            loaclList[2].Replace("\\n", "\n")
             );
     }
 
@@ -67,6 +71,7 @@ public class Character
 
         // 테이블 읽어오기
         CSVReader characterReader = new CSVReader(null, "Character.csv");
+        CSVReader local = new CSVReader(null, "Character_local.csv", true, false);
         Debug.Log(characterReader.table.Count);
 
         // 더미 생성
@@ -75,7 +80,7 @@ public class Character
         // 테이블로 리스트 셋팅
         for (int i = 1; i < characterReader.table.Count; i++)
         {
-            table.Add(new Character(characterReader.table[i]));
+            table.Add(new Character(characterReader.table[i], local.table[i]));
         }
 
         // 준비완료

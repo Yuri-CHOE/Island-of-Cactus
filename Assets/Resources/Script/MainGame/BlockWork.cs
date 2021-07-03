@@ -13,6 +13,9 @@ public static class BlockWork
     // 아이템 띄우기
     static float liftY = 3f;
 
+    // 노말 블록 보정치
+    static public int nomalValue = 0;
+
     /// <summary>
     /// 플레이어의 현재 위치를 기반으로 블록 작업 수행
     /// </summary>
@@ -61,7 +64,9 @@ public static class BlockWork
             BlockLuckyBox(currentPlayer);
 
         else if (blockType == BlockType.TypeDetail.shop)
-            BlockShop(currentPlayer);
+            BlockShop(currentPlayer); 
+        else if (blockType == BlockType.TypeDetail.unique)
+            BlockUnique(currentPlayer); 
         else if (blockType == BlockType.TypeDetail.shortcutIn)
             BlockshortcutIn(currentPlayer);
         else if (blockType == BlockType.TypeDetail.shortcutOut)
@@ -114,7 +119,7 @@ public static class BlockWork
 
     static void BlockPlus(Player currentPlayer)
     {
-        int coinValue = 1;
+        int coinValue = 1 + nomalValue;
 
         // 코인 추가
         currentPlayer.coin.Add(coinValue);
@@ -126,7 +131,7 @@ public static class BlockWork
 
     static void BlockMinus(Player currentPlayer)
     {
-        int coinValue = 2;
+        int coinValue = 2 + nomalValue;
 
         // 코인 감소
         currentPlayer.coin.subtract(coinValue);
@@ -257,11 +262,21 @@ public static class BlockWork
         }
 
         // UI 출력
-        GameMaster.script.messageBox.PopUp(true, true, true, MessageBox.Type.Itemshop); 
+        GameMaster.script.messageBox.PopUp(true, true, true, MessageBox.Type.Itemshop);
 
 
         // 종료판정은 UI에서 버튼 클릭으로 처리됨
 
+    }
+
+
+    static void BlockUnique(Player currentPlayer)
+    {
+        // 작동
+        UniqueManager.script.Active(currentPlayer);
+
+        // 종료 판정
+        //isEnd = true;
     }
 
 

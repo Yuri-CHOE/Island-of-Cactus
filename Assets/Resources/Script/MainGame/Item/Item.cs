@@ -127,8 +127,9 @@ public class Item
 
 
     // 공백 아이템
-    static string[] emptyItem = { "0", "0", "empty", "0", "0", "0", "0", "0", "0", "0", "0", "0", "is empty" };
-    public static Item empty = new Item(new List<string>(emptyItem) );
+    static string[] emptyItem = { "0", "0", "", "0", "0", "0", "0", "0", "0", "0", "0", "0", "" };
+    static string[] emptyItem_local = { "0", "empty", "is empty" };
+    public static Item empty = new Item(new List<string>(emptyItem), new List<string>(emptyItem_local));
 
 
     // 아이템 번호
@@ -181,17 +182,21 @@ public class Item
     /// 테이블 정보를 입력받아 셋팅
     /// </summary>
     /// <param name="strList">테이블 리스트로 읽기</param>
-    protected Item(List<string> strList)
+    protected Item(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
         if (strList.Count != 13)
             return;
+        if (loaclList.Count != 3)
+            return;
+
 
         // 테이블 읽어오기
         Set(
             int.Parse(strList[0]),
             (Type)int.Parse(strList[1]),
-            strList[2],
+            //strList[2],
+            loaclList[1],
             int.Parse(strList[3]),
             int.Parse(strList[4]),
             int.Parse(strList[5]),
@@ -201,7 +206,8 @@ public class Item
             (ItemEffect.Target)(int.Parse(strList[9])),
             (ItemEffect.What)(int.Parse(strList[10])),
             int.Parse(strList[11]),
-            strList[12]
+            //strList[12].Replace("value", strList[11])
+            loaclList[2].Replace("\\n","\n").Replace("value", strList[11])
         );
     }
 
@@ -218,6 +224,7 @@ public class Item
 
         // 테이블 읽어오기
         CSVReader itemReader = new CSVReader(null, "Item.csv");
+        CSVReader local = new CSVReader(null, "Item_local.csv", true, false);
 
         // 더미 생성
         table.Add(new Item());
@@ -225,7 +232,7 @@ public class Item
         // 테이블로 리스트 셋팅
         for (int i = 1; i < itemReader.table.Count; i++)
         {
-            table.Add(new Item(itemReader.table[i]));
+            table.Add(new Item(itemReader.table[i], local.table[i]));
         }
 
         // 준비완료
@@ -241,12 +248,14 @@ public class Item
     /// <param name="__name"></param>
     /// <param name="__icon"></param>
     /// <param name="__rare"></param>
+    /// <param name="__cost"></param>
     /// <param name="__isLuckyBoxGet"></param>
     /// <param name="__expiration"></param>
     /// <param name="__count"></param>
     /// <param name="__target"></param>
     /// <param name="__what"></param>
     /// <param name="__value"></param>
+    /// <param name="__info"></param>
     void Set(int __index, Type __type, string __name, int __icon, int __rare, int __cost, bool __isLuckyBoxGet, ItemEffect.Expiration __expiration, int __count, ItemEffect.Target __target, ItemEffect.What __what, int __value, string __info)
     {
         SetIndex(__index);
@@ -290,14 +299,14 @@ public class Item
         _cost = __cost;
     }
 
-    void SetInfo(string __info)
-    {
-        _info = __info;
-    }
-
     void SetLuckyBoxGet(bool __isLuckyBoxGet)
     {
         _isLuckyBoxGet = __isLuckyBoxGet;
+    }
+
+    void SetInfo(string __info)
+    {
+        _info = __info;
     }
 
 

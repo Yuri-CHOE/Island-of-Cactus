@@ -286,6 +286,10 @@ public class LoadingManager : MonoBehaviour
         // 럭키박스 테이블
         LuckyBox.SetUp();
         workCount += LuckyBox.table.Count;
+
+        // 유니크 테이블
+        Unique.SetUp();
+        workCount += Unique.table.Count;
     }
 
     void Work_MainGame()

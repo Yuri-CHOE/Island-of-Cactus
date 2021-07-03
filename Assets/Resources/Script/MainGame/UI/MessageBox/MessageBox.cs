@@ -13,6 +13,7 @@ public class MessageBox : MonoBehaviour
         Itemshop,
         LuckyBox,
         ShortCut,
+        UniqueBlock,
         ItemUse,
     }
 
@@ -49,6 +50,9 @@ public class MessageBox : MonoBehaviour
     [SerializeField]
     bool[] preShortCut = new bool[btnMax];   // 숏컷 질문 모드
 
+    [SerializeField]
+    bool[] preUniqueBlock = new bool[btnMax];   // 유니크 블록 모드
+
 
     // 테스트용 시작
     [Header("testMode")]
@@ -67,6 +71,7 @@ public class MessageBox : MonoBehaviour
         addPreset(preItemshop, 2);
         addPreset(preLuckyBox, 3);
         addPreset(preShortCut, 4);
+        addPreset(preUniqueBlock, 5);
     }
 
     // Update is called once per frame
