@@ -1,9 +1,7 @@
 id,name,job,info
 1,Character_local:name,1,Character_local:info
-2,Character_local:name,1,Character_local:info
-3,Character_local:name,1,Character_local:info
-4,Character_local:name,2,Character_local:info
-5,Character_local:name,3,Character_local:info
-6,Character_local:name,4,Character_local:info
-7,Character_local:name,5,Character_local:info
-8,Character_local:name,6,Character_local:info
+2,Character_local:name,2,Character_local:info
+3,Character_local:name,3,Character_local:info
+4,Character_local:name,4,Character_local:info
+5,Character_local:name,5,Character_local:info
+6,Character_local:name,6,Character_local:info
