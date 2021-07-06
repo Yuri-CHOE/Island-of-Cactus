@@ -5,17 +5,20 @@ using UnityEngine.UI;
 
 public class Check : MonoBehaviour
 {
-    public Text score_p1, score_p2, score_p3, score_p4;
-    public Mouse_Click mouse_Click1;
-    public Mouse_Click mouse_Click2;
-    public Scenes_mini num_player;
+    public Scenes_mini num_player;  //미니게임에 참가한 플레이어 수
+    public Text score_p1, score_p2, score_p3, score_p4; //player1의score Txt오브젝트, player2의score Txt오브젝트,  player3의score Txt오브젝트,  player4의score Txt오브젝트
+    public set_Ranking ranking;
+    public Mouse_Click mouse_Click1;    //첫번째 마우스 클릭
+    public Mouse_Click mouse_Click2;    //두번째 마우스 클릭
+    //첫번째 카드 숫자, 두번째 카드 숫자, 첫번째 클릭한 오브젝트 이름, 두번째로 클릭한 오브젝트 이름
     public string num1, num2, name1, name2;
+    //참여하는 플레이어 수, 몇번 클릭했는지, 뒤집힌 카드짝 수, 누구 차례로 바뀌어야 하는지, 전 차례 플레이어, player1의score, player2의score,  player3의score,  player4의score
     public int player,x, z = 0, number, ex_number, score1,score2,score3,score4;
 
     void Awake()
     {
         num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴    
-        player = num_player.member_num;
+        player = num_player.member_num;     
         num1 = "";
         num2 = "";
         x = 1;
@@ -25,19 +28,17 @@ public class Check : MonoBehaviour
         score2 = 0;
         score3 = 0;
         score4 = 0;
-        Text_ob_set(player);
+        ob_set(player);
         turn(player, 1);
     }
     
-    //텍스트 오브젝트 점수 0으로 세팅
-    void Text_ob_set(int player)
+    //플레이어 수에 맞게 오브젝트 변수 불러옴
+    void ob_set(int player)
     {
         score_p1 = GameObject.Find("player (1)").transform.Find("Text").GetComponent<Text>();
-        score_p1.text = "0";
         if (player == 2)
         {
             score_p2 = GameObject.Find("player (2)").transform.Find("Text").GetComponent<Text>();
-            score_p2.text = "0";
         }
         else
         {
@@ -45,23 +46,16 @@ public class Check : MonoBehaviour
             {
                 score_p2 = GameObject.Find("player (2)").transform.Find("Text").GetComponent<Text>();
                 score_p3 = GameObject.Find("player (3)").transform.Find("Text").GetComponent<Text>();
-                score_p2.text = "0";
-                score_p3.text = "0";
             }
             else
             {
                 score_p2 = GameObject.Find("player (2)").transform.Find("Text").GetComponent<Text>();
                 score_p3 = GameObject.Find("player (3)").transform.Find("Text").GetComponent<Text>();
                 score_p4 = GameObject.Find("player (4)").transform.Find("Text").GetComponent<Text>();
-                score_p2.text = "0";
-                score_p3.text = "0";
-                score_p4.text = "0";
             }
         }
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         if(x == 3)
@@ -75,9 +69,11 @@ public class Check : MonoBehaviour
                 mouse_Click1.i = 4;
                 z += 1;
                 score(ex_number);
-                if (z == 9)
+                if (z == 9)         //카드짝이 다 맞추어짐
                 {
                     GameObject.Find("Canvas").transform.Find("Ending").gameObject.SetActive(true);
+                    ranking = GameObject.Find("Ending").GetComponent<set_Ranking>();
+                    ranking.calRank = true;
                 }
             }
             else

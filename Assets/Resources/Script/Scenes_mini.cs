@@ -5,14 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class Scenes_mini : MonoBehaviour
 {
-    public bool player1, player2, player3, player4, ob_delete;
+    public static Scenes_mini Instance;       //DontDestroy중복생성 확인
+    
+    public bool player1, player2, player3, player4;
     public int member_num;
     public int random;
 
     void Awake()
     {
+
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
         DontDestroyOnLoad(gameObject);
-        ob_delete = false;
+
     }
 
     // Update is called once per frame
@@ -55,11 +65,6 @@ public class Scenes_mini : MonoBehaviour
             }
 
             SceneManager.LoadScene(random);
-        }
-
-        if (ob_delete)
-        {
-            Destroy(gameObject);
         }
         
     }
