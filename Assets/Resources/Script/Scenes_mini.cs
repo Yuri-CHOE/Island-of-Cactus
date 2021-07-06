@@ -5,13 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class Scenes_mini : MonoBehaviour
 {
-    public bool player2, player3, player4;
+    public bool player1, player2, player3, player4, ob_delete;
     public int member_num;
     public int random;
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
+        ob_delete = false;
     }
 
     // Update is called once per frame
@@ -20,7 +21,8 @@ public class Scenes_mini : MonoBehaviour
         //space 입력시 씬 변경
         if(Input.GetKeyDown(KeyCode.Space)) 
         {
-            member_num = 1; //플레이어 수 초기화
+            member_num = 0; //플레이어 수 초기화
+            player_set(player1);
             player_set(player2);
             player_set(player3);
             player_set(player4);
@@ -55,7 +57,11 @@ public class Scenes_mini : MonoBehaviour
             SceneManager.LoadScene(random);
         }
 
-        //Destroy(gameObject);
+        if (ob_delete)
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     // 게임에 참여하는 플레이어 수 확인
