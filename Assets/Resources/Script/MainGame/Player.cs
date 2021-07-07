@@ -83,6 +83,12 @@ public class Player
     // 전투 속성
     public Battle battle = new Battle(1f, 0f);
 
+
+
+    // AI - 주사위 던지기
+    AI aiDice = new AI(AI.AIElement.intelligence, AI.AIElement.latency);
+
+
        
 
     // 생성자
