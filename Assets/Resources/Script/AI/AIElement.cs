@@ -5,9 +5,9 @@ using UnityEngine;
 /// <summary>
 /// 0 ~ 1사이의 정확도, 반응 지연, 반응 가능 여부 
 /// </summary>
-public struct AIProperty
+public struct AIElement
 {
-    public struct AIElement
+    public struct AIProperty
     {
         // 기본값
         public float basic;
@@ -25,7 +25,7 @@ public struct AIProperty
         /// </summary>
         /// <param name="_valueBasic">음수값 사용 불가능</param>
         /// <param name="_errorRange">음수값 사용 불가능</param>
-        public AIElement(float _valueBasic, float _errorRange)
+        public AIProperty(float _valueBasic, float _errorRange)
         {
             basic = _valueBasic;
             if (_valueBasic < 0)
@@ -35,10 +35,10 @@ public struct AIProperty
         }
 
         // 기본값
-        public static AIElement intelligence { get { return new AIElement(0.5f, 0.05f); } }
-        public static AIElement Intelligence(float _valueBasic)
+        public static AIProperty intelligence { get { return new AIProperty(0.5f, 0.05f); } }
+        public static AIProperty Intelligence(float _valueBasic)
         {
-            AIElement prop = AIElement.intelligence;
+            AIProperty prop = AIProperty.intelligence;
 
             if (_valueBasic >= 1.0f)
                 prop.basic = 1.0f;
@@ -52,10 +52,10 @@ public struct AIProperty
             return prop;
         }
 
-        public static AIElement latency { get { return new AIElement(2f, 1.5f); } }
-        public static AIElement Latency(float _valueBasic)
+        public static AIProperty latency { get { return new AIProperty(2f, 1.5f); } }
+        public static AIProperty Latency(float _valueBasic)
         {
-            AIElement prop = AIElement.latency;
+            AIProperty prop = AIProperty.latency;
 
             if (_valueBasic < 0.0f)
                 prop.basic = 0.0f;
@@ -68,29 +68,29 @@ public struct AIProperty
     }
 
     // 정확도 0 ~ 1 (완벽한 정도)
-    AIElement _intelligence;
-    public AIElement intelligenceElement { get { return _intelligence; } }
-    public float intelligence { get { return _intelligence.value; } }
+    AIProperty _intelligence;
+    public AIProperty intelligence { get { return _intelligence; } }
+    //public float intelligence { get { return _intelligence.value; } }
 
     // 반응 지연시간 평균
-    AIElement _latency;
-    public AIElement latencyElement { get { return _latency; } }
-    public float latency { get { return _latency.value; } }
+    AIProperty _latency;
+    public AIProperty latency { get { return _latency; } }
+    //public float latency { get { return _latency.value; } }
 
     // 반응 지연시간 카운터
     float _elapsedTime;
     public float elapsedTime { get { return (_elapsedTime); } }
     bool _isTime;
-    public bool isTime { get { if (!_isTime) _isTime = (elapsedTime >= latency); return _isTime; } }
+    public bool isTime { get { if (!_isTime) _isTime = (elapsedTime >= latency.value); return _isTime; } }
 
 
 
 
     //생성자
-    public AIProperty(AIElement __intelligence, AIElement __latency)
+    public AIElement(AIProperty __intelligence, AIProperty __latency)
     {
-        _intelligence = AIElement.intelligence;
-        _latency = AIElement.latency;
+        _intelligence = AIProperty.intelligence;
+        _latency = AIProperty.latency;
 
         _elapsedTime = 0f;
         _isTime = false;
@@ -103,30 +103,64 @@ public struct AIProperty
     /// 기본 생성자 대신 사용할것
     /// </summary>
     /// <returns></returns>
-    public static AIProperty New()
+    public static AIElement New()
     {
-        AIProperty newAI = new AIProperty();
+        AIElement newAI = new AIElement();
 
         newAI.Reset();
 
         return newAI;
     }
 
+    /// <summary>
+    /// intelligence 재설정 (0.75배 ~ 1.25배)
+    /// </summary>
+    public AIElement Randomize()
+    {
+        return Randomize(0.75f, 1.25f);
+    }
+    /// <summary>
+    /// intelligence 랜덤 비율로 재설정
+    /// </summary>
+    /// <param name="minRatio">최소 비율</param>
+    /// <param name="maxRatio">최대 비율</param>
+    /// <returns></returns>
+    public AIElement Randomize(float minRatio, float maxRatio )
+    {
+        // 지능값 확보
+        float intel = intelligence.value;
+
+        // 최대 및 최소 비율 설정
+        float min = intel * minRatio;
+        float max = intel * maxRatio;
+
+        // 랜덤화
+        _intelligence.basic = Random.Range(min, max);
+
+        return this;
+    }
+
     public void Reset()
     {        
-        _intelligence = AIElement.intelligence;
-        _latency = AIElement.latency;
+        _intelligence = AIProperty.intelligence;
+        _latency = AIProperty.latency;
 
         _elapsedTime = 0f;
         _isTime = false;
     }
 
-    public void Set(AIElement __intelligence, AIElement __latency)
+    public void Set(AIProperty __intelligence, AIProperty __latency)
     {
         _intelligence = __intelligence;
         _latency = __latency;
     }
 
+
+
+    public bool CheckTime(float time)
+    {
+        return (time >= elapsedTime);
+    }
 
     public void Aging(float __elapsedTime)
     {
@@ -135,6 +169,16 @@ public struct AIProperty
     public void Aging()
     {
         Aging(Time.deltaTime);
+    }
+
+    public void AgeSet()
+    {
+        AgeSet(0f);
+    }
+
+    public void AgeSet(float sec)
+    {
+        _elapsedTime = sec;
     }
 
 

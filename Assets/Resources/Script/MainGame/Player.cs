@@ -86,7 +86,7 @@ public class Player
 
 
     // AI - 주사위 던지기
-    AI aiDice = new AI(AI.AIElement.intelligence, AI.AIElement.latency);
+    public AIGroup ai = null;
 
 
        
@@ -106,6 +106,10 @@ public class Player
         // 카운터 반영
         if (_type != Type.System)
             count++;
+
+        // AI 지정
+        //if (__isAutoPlay)
+        ai = new AIGroup(this);
 
         Debug.Log("플레이어 생성됨 :: 캐릭터 번호 = " + characterIndex);
     }

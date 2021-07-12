@@ -75,6 +75,11 @@ public class DiceController : MonoBehaviour
     public bool isTimeCountWork = false;
 
 
+    // AI 제어
+    public Coroutine AIWork = null;
+    // 진행 인풋
+    public bool doForceClick = false;
+    public bool doForceClickUp = false;
     // 진행 아웃풋
     public bool isFree { get { return action == DiceAction.Wait && actionProgress == ActionProgress.Ready; } }
     public bool isBusy { get { return !isFree && !isFinish; } }
@@ -133,6 +138,12 @@ public class DiceController : MonoBehaviour
             {
                 isTimeCountWork = true;
 
+                // AI 관련 초기화
+                if(owner != null)
+                    owner.ai.mainGame.dice.Ready();
+                doForceClick = false;
+                doForceClickUp = false;
+
                 // 스킵
                 //actionProgress = ActionProgress.Start;
             }
@@ -178,11 +189,22 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 입력 가능 상태 및 UI 클릭 아닐경우
+                // 오토 플레이
+                if (owner.isAutoPlay)
+                {
+                    // AI 초도 작동
+                    if (!owner.ai.mainGame.dice.isStart)
+                    {
+                        //AI 활성화
+                        owner.ai.mainGame.dice.Work();
+                    }
+                }
+
+                // 입력 가능 상태 및 UI 클릭 아닐경우 ================= 주인 인식해서 제어권 통제해야함
                 if (!isInputBlock && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
                 {
                     // 꾹 눌렀을때
-                    if (Input.GetMouseButton(0))
+                    if (Input.GetMouseButton(0) || doForceClick)
                     {
                         // 가속도
                         if (rotAccel < rotAccelMax)
@@ -191,7 +213,7 @@ public class DiceController : MonoBehaviour
                             rotAccel = rotAccelMax;
                     }
                     // 클릭 종료될 때
-                    else if (Input.GetMouseButtonUp(0))
+                    else if (Input.GetMouseButtonUp(0) || doForceClickUp)
                     {
                         //Debug.Break();
                         actionProgress = ActionProgress.Finish;
@@ -457,7 +479,6 @@ public class DiceController : MonoBehaviour
 
 
 
-
     
     /// <summary>
     /// 강제 초기화 수행
@@ -471,6 +492,12 @@ public class DiceController : MonoBehaviour
         // 액션상태 초기화
         action = DiceAction.Wait;
         actionProgress = ActionProgress.Ready;
+
+        // AI 관련 초기화
+        if (owner != null)
+            owner.ai.mainGame.dice.Ready();
+        doForceClick = false;
+        doForceClickUp = false;
 
         // 시간 관련값 리셋
         rotAccel = 0f;
@@ -551,6 +578,11 @@ public class DiceController : MonoBehaviour
     {
         int result = 0;
 
+        // AI 관련 초기화
+        owner.ai.mainGame.dice.Ready();
+        doForceClick = false;
+        doForceClickUp = false;
+
         // 주사위 남았으면 추가 진행
         if (dice.count > 1)
         {
@@ -586,6 +618,18 @@ public class DiceController : MonoBehaviour
         return result;
     }
 
+
+    /// <summary>
+    /// AI 작동
+    /// </summary>
+    public void RunAI(IEnumerator script)
+    {
+        AIWork =
+                // 작업 수행
+                StartCoroutine(
+                    script
+                    );
+    }
 
 
 

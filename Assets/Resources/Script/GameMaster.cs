@@ -36,8 +36,7 @@ public class GameMaster : MonoBehaviour
     public MessageBox messageBox = null;
 
     // 주사위 컨트롤러 스크립트
-    [SerializeField]
-    DiceController diceController = null;
+    public DiceController diceController = null;
 
     // 아이템 관리 스크립트
     public ItemManager itemManager = null;
@@ -113,7 +112,8 @@ public class GameMaster : MonoBehaviour
 
                             // 초기화 진행
                             GameData.player.player_1 = GameData.player.me;
-                            GameData.player.player_2 = new Player(Player.Type.AI, picked[0], false, "Player02");
+                            GameData.player.player_2 = new Player(Player.Type.AI, picked[0], true, "Player02");
+                            //GameData.player.player_2 = new Player(Player.Type.AI, picked[0], false, "Player02");
                             GameData.player.player_3 = new Player(Player.Type.AI, picked[1], false, "Player03");
                             GameData.player.player_4 = new Player(Player.Type.AI, picked[2], false, "Player04");
 
@@ -552,8 +552,6 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
-                // 아이템 아이콘 누르면 사용 버튼 활성
-
                 // 주사위를 굴리는중 중단
                 if (diceController.isBusy)
                     return;
