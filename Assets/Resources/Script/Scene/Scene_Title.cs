@@ -56,6 +56,21 @@ public class Scene_Title : MonoBehaviour
         GameData.player.me = new Player(Player.Type.User, selected, false, UserData.userName);
     }
 
+
+    public static void SetWorldFileName()
+    {
+        // 파일명 입력
+        GameData.SetWorldFileName(
+            string.Format(
+                "world_{0}_{1}.iocw", 
+                GameRule.area.ToString("D2"), 
+                GameRule.section.ToString("D2")
+                )
+            );
+
+        // 코드 가져오기
+        WorldManager.BuildWorld(GameData.worldFileName);
+    }
     public static void SetWorldFileName(string __worldFileName)
     {
         // 파일명 입력
