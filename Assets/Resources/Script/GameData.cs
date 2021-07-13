@@ -17,6 +17,7 @@ public static class GameData
 
 
 
+
     // 게임모드
     static GameMode.Mode _gameMode = GameMode.Mode.None;
     public static GameMode.Mode gameMode { get { return _gameMode; } }

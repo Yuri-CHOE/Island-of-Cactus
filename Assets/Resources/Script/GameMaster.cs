@@ -110,21 +110,31 @@ public class GameMaster : MonoBehaviour
                             if (picked.Contains(GameData.player.me.character.index))
                                 picked.Remove(GameData.player.me.character.index);
 
-                            // 초기화 진행
+                            // 플레이어 초기화 및 리스트 구성
                             GameData.player.player_1 = GameData.player.me;
-                            GameData.player.player_2 = new Player(Player.Type.AI, picked[0], true, "Player02");
-                            //GameData.player.player_2 = new Player(Player.Type.AI, picked[0], false, "Player02");
-                            GameData.player.player_3 = new Player(Player.Type.AI, picked[1], false, "Player03");
-                            GameData.player.player_4 = new Player(Player.Type.AI, picked[2], false, "Player04");
-
-                            // 플레이어 리스트 구성
                             GameData.player.allPlayer.Add(GameData.player.player_1);
-                            GameData.player.allPlayer.Add(GameData.player.player_2);
-                            GameData.player.allPlayer.Add(GameData.player.player_3);
-                            GameData.player.allPlayer.Add(GameData.player.player_4);
+
+                            if (GameRule.playerCount >= 2)
+                            {
+                                GameData.player.player_2 = new Player(Player.Type.AI, picked[0], true, "Player02");
+                                GameData.player.allPlayer.Add(GameData.player.player_2);
+                            }
+
+                            if (GameRule.playerCount >= 3)
+                            {
+                                GameData.player.player_3 = new Player(Player.Type.AI, picked[1], true, "Player03");
+                                GameData.player.allPlayer.Add(GameData.player.player_3);
+                            }
+
+                            if (GameRule.playerCount >= 4)
+                            {
+                                GameData.player.player_4 = new Player(Player.Type.AI, picked[2], true, "Player04");
+                                GameData.player.allPlayer.Add(GameData.player.player_4);
+                            }
+                            
 
                             // 플레이어별 "다른 플레이어" 구성
-                            for(int i = 0; i < GameData.player.allPlayer.Count; i++)
+                            for (int i = 0; i < GameData.player.allPlayer.Count; i++)
                             {
                                 // 퀵 지정 (등록자)
                                 Player temp = GameData.player.allPlayer[i];
@@ -162,14 +172,17 @@ public class GameMaster : MonoBehaviour
                     // 캐릭터 겹침 해소
                     GameData.player.allPlayer[0].avatar.GetComponent<CharacterMover>().AvatarOverFix();
 
-
-                    // PlayerInfo UI 활성
+                    
+                    // PlayerInfo UI 비활성
                     MainUI.GetComponent<CanvasGroup>().alpha = 0f;
                     MainUI.blocksRaycasts = false;
 
 
                     // 숏컷 등록
                     ShortcutManager.script.SetUp();
+
+                    // 사이클 설정
+                    GameData.cycle.goal = GameRule.cycleMax;
 
 
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
@@ -258,6 +271,10 @@ public class GameMaster : MonoBehaviour
                         Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].infoUI.transform.name);
                         pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
                     }
+
+                    // 미할당 PlayerInfo UI 제거
+                    for (int i = GameData.player.allPlayer.Count; i < playerInfoUI.Count; i++)
+                        playerInfoUI[i].gameObject.SetActive(false);
 
                     // 순서큐 셋팅 및 리스트 순차 정리
                     GameData.turn.SetUp(pOrderList);
