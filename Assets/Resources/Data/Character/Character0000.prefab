@@ -393,6 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 307835649206373442}
   - component: {fileID: 7017281696082432493}
+  - component: {fileID: 2188365840639103127}
   m_Layer: 0
   m_Name: Character0000
   m_TagString: Player
@@ -428,10 +429,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBusy: 0
+  isPickingUpItem: 0
   moveCount: 0
   posMinY: 1.9
   posMaxY: 20
   bodyObject: {fileID: 7670662628703826037}
+--- !u!114 &2188365840639103127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307835649206373443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fe42dbfc70af846842f4797601ea31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &307835649429564410
 GameObject:
   m_ObjectHideFlags: 0

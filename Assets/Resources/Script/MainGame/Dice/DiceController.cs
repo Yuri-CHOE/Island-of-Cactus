@@ -75,8 +75,6 @@ public class DiceController : MonoBehaviour
     public bool isTimeCountWork = false;
 
 
-    // AI 제어
-    public Coroutine AIWork = null;
     // 진행 인풋
     public bool doForceClick = false;
     public bool doForceClickUp = false;
@@ -578,8 +576,7 @@ public class DiceController : MonoBehaviour
     {
         int result = 0;
 
-        // AI 관련 초기화
-        owner.ai.mainGame.dice.Ready();
+        // 인풋 초기화
         doForceClick = false;
         doForceClickUp = false;
 
@@ -616,19 +613,6 @@ public class DiceController : MonoBehaviour
 
 
         return result;
-    }
-
-
-    /// <summary>
-    /// AI 작동
-    /// </summary>
-    public void RunAI(IEnumerator script)
-    {
-        AIWork =
-                // 작업 수행
-                StartCoroutine(
-                    script
-                    );
     }
 
 

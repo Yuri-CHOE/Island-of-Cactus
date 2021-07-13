@@ -58,6 +58,9 @@ public class Player
     // 이동제어 스크립트
     public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
 
+    // AI 제어 스크립트
+    public AIWorker ai { get { if (avatar == null) return null; else return avatar.GetComponent<AIWorker>(); } }
+
 
 
 
@@ -85,9 +88,6 @@ public class Player
 
 
 
-    // AI - 주사위 던지기
-    public AIGroup ai = null;
-
 
        
 
@@ -106,10 +106,6 @@ public class Player
         // 카운터 반영
         if (_type != Type.System)
             count++;
-
-        // AI 지정
-        //if (__isAutoPlay)
-        ai = new AIGroup(this);
 
         Debug.Log("플레이어 생성됨 :: 캐릭터 번호 = " + characterIndex);
     }
@@ -195,6 +191,9 @@ public class Player
 
         // 소유권 등록
         movement.owner = this;
+
+        // AI 소유자 지정
+        ai.SetUp(this);
 
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }
