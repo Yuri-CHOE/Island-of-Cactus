@@ -283,6 +283,10 @@ public class LoadingManager : MonoBehaviour
         Item.SetUp();
         workCount += Item.table.Count;
 
+        // 이벤트 테이블
+        IocEvent.SetUp();
+        workCount += IocEvent.table.Count;
+
         // 럭키박스 테이블
         LuckyBox.SetUp();
         workCount += LuckyBox.table.Count;

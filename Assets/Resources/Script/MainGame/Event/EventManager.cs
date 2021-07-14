@@ -1,30 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ItemManager : MonoBehaviour
+public class EventManager : MonoBehaviour
 {
-    public static List<DynamicItem> itemObjectList = new List<DynamicItem>();
+    public static List<DynamicEvent> eventObjectList = new List<DynamicEvent>();
 
-    [Header("itemObject")]
+    [Header("eventObject")]
     // 복사할 프리팹
     [SerializeField]
-    GameObject itemPrefab = null;
+    GameObject eventPrefab = null;
 
-    // 아이템 사용 UI
-    [Header("itemUseMessegeBox")]
-    public ItemSlot selected = null;
-    public Transform itemUseBox = null;
-    public Text nameText = null;
-    public Text infoText = null;
-    public Button btnUse = null;
+    // 이벤트 작동 UI
+    [Header("EventMessegeBox")]
+    //public IocEvent selected = null;
+    public Transform eventBox = null;
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -34,7 +30,7 @@ public class ItemManager : MonoBehaviour
     }
 
 
-    public void CallItemUseBox()
+    public void CallMessageBox()
     {
         MessageBox mb = GameData.gameMaster.messageBox;
 
@@ -43,10 +39,10 @@ public class ItemManager : MonoBehaviour
             mb.PopUp(0);
 
         // 호출
-        itemUseBox.gameObject.SetActive(true);
+        eventBox.gameObject.SetActive(true);
     }
 
-    public void CloseItemUseBox()
+    public void CloseMessageBox()
     {
         MessageBox mb = GameData.gameMaster.messageBox;
 
@@ -55,64 +51,9 @@ public class ItemManager : MonoBehaviour
             mb.PopUp(-1);
 
         // 비활성
-        itemUseBox.gameObject.SetActive(false);
-
-        // 타겟팅 UI 비활성
-        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
-
+        eventBox.gameObject.SetActive(false);
     }
-
-    /// <summary>
-    /// PlayerInfoUI를 바탕으로 playerSelecter를 활성화하며 자신의 것만 비활성
-    /// </summary>
-    public void CallPlayerSelecter()
-    {
-        List<PlayerInfoUI> piuil = GameData.gameMaster.playerInfoUI;
-        for (int i = 0; i < piuil.Count; i++)
-        {
-            // 선택 버튼 전체 활성화
-            GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(true);
-
-            // 자신 비활성
-            if (piuil[i].owner == GameData.player.me)
-                GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
-
-            // 사망자 비활성
-            if (piuil[i].owner.isDead)
-                GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
-        }
-
-        // UI 활설
-        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(true);
-    }
-
-    public void ItemUse()
-    {
-        // 개수 차감
-        selected.count--;
-
-        // 타겟팅 형 아이템
-        if (selected.item.type == Item.Type.Target)
-        {
-            CallPlayerSelecter();
-            return;
-        }
-
-        // 아이템 사용
-        ItemUse(null);
-    }
-
-    public void ItemUse(Player targetPlayer_Or_null)
-    {
-        // UI 비활성
-        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
-
-        // 아이템 제거
-        GameData.player.me.RemoveItem(selected);
-
-        // 아이템 사용 요청
-        Item.Effect(selected.item, targetPlayer_Or_null);
-    }
+    /*
 
 
     /// <summary>
@@ -128,7 +69,7 @@ public class ItemManager : MonoBehaviour
         pos.y = 2.5f;
 
         // 아이템 오브젝트 생성
-        Transform obj = Instantiate(itemPrefab, pos, Quaternion.identity ,transform).transform;
+        Transform obj = Instantiate(itemPrefab, pos, Quaternion.identity, transform).transform;
 
 
         return obj.GetComponent<DynamicItem>();
@@ -174,4 +115,5 @@ public class ItemManager : MonoBehaviour
 
         return dItem;
     }
+    */
 }

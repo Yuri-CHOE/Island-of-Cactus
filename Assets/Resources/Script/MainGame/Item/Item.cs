@@ -313,10 +313,11 @@ public class Item
     /// <summary>
     /// 아이템 효과
     /// </summary>
-    /// <param name="___index">작동할 아이템 인덱스</param>
-    public static void Effect(int __index, Player targetPlayer_Or_null)
+    /// <param name="___index">작동할 아이템</param>
+    /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
+    public static void Effect(Item __item, Player targetPlayer_Or_null)
     {
-        switch (__index)
+        switch (__item.index)
         {
             case 0:
                 // 0번은 없음

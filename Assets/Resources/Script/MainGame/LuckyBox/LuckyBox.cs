@@ -163,10 +163,11 @@ public class LuckyBox
     /// <summary>
     /// 럭키박스 효과
     /// </summary>
-    /// <param name="___index">작동할 럭키박스 인덱스</param>
-    public static void Effect(int __index)
+    /// <param name="__luckyBox">작동할 럭키박스</param>
+    /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
+    public static void Effect(LuckyBox __luckyBox, Player targetPlayer_Or_null)
     {
-        switch (__index)
+        switch (__luckyBox.index)
         {
             case 0:
                 // 0번은 없음

@@ -1,0 +1,129 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DynamicEvent : MonoBehaviour
+{
+    // 이벤트 오브젝트
+    public Transform eventObject = null;
+
+
+    // 이벤트 위치
+    public int location = -2;
+
+
+    // 생성한 플레이어
+    public Player creator = null;
+
+    // 이벤트 정보  =====  (이벤트 주인, 획득 대상 등을 추가해야할 경우 여기에 추가)
+    public IocEvent iocEvent = null;
+    public int count = 0;
+
+
+    // 사용 준비
+    public bool isReady = false;
+
+
+    // 애니메이션 동작 여부
+    public bool doAnimate = false;
+    //// 애니메이션 정보
+    //Coroutine coroutineAnimate = null;
+    //bool isAnimate = false;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+
+    // 충돌한 경우
+    private void OnTriggerEnter(Collider target)
+    {
+        // 캐릭터와 충돌할 경우
+        if (target.transform.parent.name == "Character")
+        {
+
+        }
+    }
+
+    // 충돌중인 경우
+    //private void OnTriggerStay(Collider target)
+    //{
+    //    // 캐릭터와 충돌할 경우
+    //    if (target.transform.parent.name == "Character")
+    //    {
+
+    //    }
+
+    //}
+
+    //    // 충돌에서 벗어난 경우
+    //void OnTriggerExit(Collider target)
+    ////
+    //{
+    //    // 캐릭터와 충돌에서 벗어난 경우
+    //    if (target.transform.parent.name == "Character")
+    //        transform.GetComponent<BoxCollider>().isTrigger = false;
+    //}
+
+
+    public void GetEvent(Player current)
+    {
+        // 작동
+        IocEvent.Effect(iocEvent, current);
+
+        // 목록 제외
+        EventManager.eventObjectList.Remove(this);
+
+        // 장애물 제거
+        CharacterMover.barricade[location]--;
+
+        // 제거
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 오브젝트 셋팅
+    /// </summary>
+    /// <param name="index">인덱스</param>
+    /// <param name="_count"> 수량</param>
+    public void SetUp(int index, int _count)
+    {
+        // 아이템 참조 설정
+        iocEvent = IocEvent.table[index];
+
+        // 아이템 개수 설정
+        count = _count;
+
+        // 모델 오브젝트 체크
+        GameObject obj = Resources.Load<GameObject>(@"Data/Event/Event" + iocEvent.index.ToString("D4"));
+        if (obj == null)
+        {
+            obj = Resources.Load<GameObject>(@"Data/Event/Event0000");
+            Debug.Log(@"Data/Event/Event0000");
+        }
+        if (obj == null)
+            Debug.LogError("로드 실패 :: Data/Event/Event0000");
+
+        // 모델 오브젝트 생성 및 설정
+        eventObject = Instantiate(
+            obj,
+            transform.position,
+            Quaternion.identity,
+            eventObject
+            ).transform;
+
+
+        // 준비 완료
+        isReady = true;
+    }
+
+}
