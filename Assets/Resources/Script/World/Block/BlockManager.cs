@@ -342,14 +342,14 @@ public class BlockManager : MonoBehaviour
     /// <summary>
     /// 장애물 생성
     /// </summary>
-    public void CreateBarricade(int blockIndex)
-    {
-        // 유효범위 필터링
-        if (blockIndex > 0 || blockIndex >= gol.Count)
-            return;
+    //public void CreateBarricade(int blockIndex, DynamicObject dynamicObject)
+    //{
+    //    // 유효범위 필터링
+    //    if (blockIndex > 0 || blockIndex >= gol.Count)
+    //        return;
 
-        CharacterMover.barricade[blockIndex]++;
-    }
+    //    CharacterMover.barricade[blockIndex].Add(dynamicObject);
+    //}
 
 
 

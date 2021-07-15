@@ -5068,6 +5068,7 @@ MonoBehaviour:
   messageBox: {fileID: 291009387}
   diceController: {fileID: 458809167}
   itemManager: {fileID: 1357877252}
+  eventManager: {fileID: 1271112273}
   characterParent: {fileID: 1808710456}
   playerInfoUI:
   - {fileID: 1770667508}

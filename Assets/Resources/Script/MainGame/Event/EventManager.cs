@@ -71,8 +71,14 @@ public class EventManager : MonoBehaviour
         // 이벤트 오브젝트 생성
         Transform obj = Instantiate(eventPrefab, pos, Quaternion.identity, transform).transform;
 
+        // 결과물
+        DynamicEvent result = obj.GetComponent<DynamicEvent>();
 
-        return obj.GetComponent<DynamicEvent>();
+        // 위치 설정
+        result.location = blockIndex;
+
+
+        return result;
     }
 
     /// <summary>
@@ -82,9 +88,9 @@ public class EventManager : MonoBehaviour
     /// <param name="eventIndex">초기화 값 : 이벤트 인덱스</param>
     /// <param name="_count">초기화 값 : 수량</param>
     /// <param name="creator">초기화 값 : 이벤트 생성자</param>
-    public DynamicEvent CreateItemObject(int blockIndex, int eventIndex, int _count, Player creator)
+    public DynamicEvent CreateEventObject(int blockIndex, int eventIndex, int _count, Player creator)
     {
-        Debug.LogError("아이템 생성 :: " + blockIndex + " 에서 생성됨");
+        Debug.LogWarning("아이템 생성 :: " + blockIndex + " 에서 생성됨");
 
         // 아이템 오브젝트 생성 후 스크립트 확보
         DynamicEvent dEvent = Create(blockIndex);
@@ -96,12 +102,53 @@ public class EventManager : MonoBehaviour
         // 목록에 추가
         eventObjectList.Add(dEvent);
 
+        // 장애물 등록
+        dEvent.CreateBarricade();
+
         return dEvent;
     }
 
+
+    public static void ReCreateAll()
+    {
+        // 백업
+        List<DynamicEvent> temp = eventObjectList;
+
+        // 초기화
+        eventObjectList = new List<DynamicEvent>();
+
+        // 반복 재생성
+        for (int i = 0; i < temp.Count; i++)
+        {
+            DynamicEvent dTemp = temp[i];
+
+            // 리스트 및 장애물 제거
+            dTemp.Remove();
+
+            // 생성
+            GameMaster.script.eventManager.CreateEventObject(
+                dTemp.location,
+                dTemp.iocEvent.index,
+                dTemp.count,
+                dTemp.creator
+                );
+
+            // 제거
+            Destroy(dTemp.transform);            
+        }
+    }
+
+
+
+
+
+
+
+
+
     public void Tester(int eventID)
     {
-        CreateItemObject(
+        CreateEventObject(
             GameData.player.me.movement.location, 
             eventID, 
             1,

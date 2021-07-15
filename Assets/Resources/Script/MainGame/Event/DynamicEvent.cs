@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DynamicEvent : MonoBehaviour
+public class DynamicEvent : DynamicObject
 {
     // 이벤트 오브젝트
     public Transform eventObject = null;
 
 
     // 이벤트 위치
-    public int location = -2;
+    //public int location = -2;             // 상속받은 클래스(DynamicObject)로 이전됨
 
 
     // 생성한 플레이어
@@ -17,11 +17,11 @@ public class DynamicEvent : MonoBehaviour
 
     // 이벤트 정보  =====  (이벤트 주인, 획득 대상 등을 추가해야할 경우 여기에 추가)
     public IocEvent iocEvent = null;
-    public int count = 0;
+    //public int count = 0;                 // 상속받은 클래스(DynamicObject)로 이전됨
 
 
     // 사용 준비
-    public bool isReady = false;
+    //public bool isReady = false;          // 상속받은 클래스(DynamicObject)로 이전됨
 
 
     // 애니메이션 동작 여부
@@ -80,14 +80,23 @@ public class DynamicEvent : MonoBehaviour
         // 작동
         IocEvent.Effect(iocEvent, current);
 
+        // 목록 및 장애물 제외
+        Remove();
+
+        // 제거
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 리스트 및 바리케이트 제거
+    /// </summary>
+    public void Remove()
+    {
         // 목록 제외
         EventManager.eventObjectList.Remove(this);
 
         // 장애물 제거
-        CharacterMover.barricade[location]--;
-
-        // 제거
-        Destroy(gameObject);
+        RemoveBarricade();
     }
 
     /// <summary>

@@ -5,7 +5,8 @@ using UnityEngine;
 public class CharacterMover : MonoBehaviour
 {
     // 장애물 목록
-    public static List<int> barricade = new List<int>();
+    //public static List<int> barricade = new List<int>();
+    public static List<List<DynamicObject>> barricade = new List<List<DynamicObject>>();
 
     // 플레이어
     public Player owner = null;
@@ -253,7 +254,7 @@ public class CharacterMover : MonoBehaviour
 
 
             // 장애물 체크
-            if (barricade[locNext] > 0)
+            if (barricade[locNext].Count > 0)
             {
                 Debug.Log("장애물 탐지 : " + counter);
 
@@ -316,6 +317,9 @@ public class CharacterMover : MonoBehaviour
     public ref Action GetAction()
     {
         actNow = actionsQueue.Dequeue();
+
+        Debug.LogWarning("액션 :: " + actNow.type.ToString());
+
         return ref actNow;
     }
 

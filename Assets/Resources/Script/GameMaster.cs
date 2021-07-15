@@ -41,6 +41,9 @@ public class GameMaster : MonoBehaviour
     // 아이템 관리 스크립트
     public ItemManager itemManager = null;
 
+    // 이벤트 관리 스크립트
+    public EventManager eventManager = null;
+
     // 캐릭터 오브젝트 부모
     [SerializeField]
     Transform characterParent = null;
@@ -683,7 +686,7 @@ public class GameMaster : MonoBehaviour
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
                 // 액션 스케줄링
-                Debug.LogError(GameData.turn.now.dice.valueTotal);
+                Debug.LogWarning( "액션 스케줄링 :: 총 이동력 => " +GameData.turn.now.dice.valueTotal);
                 GameData.turn.now.movement.PlanMoveBy(
                     GameData.turn.now.dice.valueTotal
                     );
@@ -812,13 +815,20 @@ public class GameMaster : MonoBehaviour
             }
             else if (GameData.turn.actionProgress == ActionProgress.Working)
             {
-                // 블록 기능 수행===================구현중
+                // 블록 기능 수행
                 if (!BlockWork.isWork)
                     BlockWork.Work(GameData.turn.now);
 
                 // 스킵
                 if (BlockWork.isEnd)
+                {
+                    if (messageBox.gameObject.activeSelf)
+                    {
+                        Debug.LogError("왜 턴이 멋대로 넘어갈까?");
+                        Debug.Break();
+                    }
                     GameData.turn.actionProgress = ActionProgress.Finish;
+                }
             }
             else if (GameData.turn.actionProgress == ActionProgress.Finish)
             {

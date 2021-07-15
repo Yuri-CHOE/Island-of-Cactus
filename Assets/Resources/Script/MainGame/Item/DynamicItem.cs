@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DynamicItem : MonoBehaviour
+public class DynamicItem : DynamicObject
 {
     // 아이템 오브젝트
     public Transform itemObject = null;
@@ -12,16 +12,16 @@ public class DynamicItem : MonoBehaviour
 
 
     // 아이템 위치
-    public int location = -2;
-    
+    //public int location = -2;         // 상속받은 클래스(DynamicObject)로 이전됨
+
 
     // 아이템 정보  =====  (아이템 주인, 획득 대상 등을 추가해야할 경우 여기에 추가)
     public Item item = null;
-    public int count = 0;
+    //public int count = 0;             // 상속받은 클래스(DynamicObject)로 이전됨
     public Sprite icon = null;
 
     // 사용 준비
-    public bool isReady = false;
+    //public bool isReady = false;      // 상속받은 클래스(DynamicObject)로 이전됨
 
 
     // 회전 동작 여부
@@ -81,14 +81,23 @@ public class DynamicItem : MonoBehaviour
         // 획득
         current.AddItem(item, count);
 
+        // 목록 및 장애물 제외
+        Remove();
+
+        // 제거
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// 리스트 및 바리케이트 제거
+    /// </summary>
+    public void Remove()
+    {
         // 목록 제외
         ItemManager.itemObjectList.Remove(this);
 
         // 장애물 제거
-        CharacterMover.barricade[location]--;
-
-        // 제거
-        Destroy(gameObject);
+        RemoveBarricade();
     }
 
     /// <summary>
@@ -113,26 +122,35 @@ public class DynamicItem : MonoBehaviour
         // 준비 완료
         isReady = true;
     }
-    /// <summary>
-    /// 아이템 슬롯으로 오브젝트 셋팅
-    /// </summary>
-    /// <param name="itemSlot">아이템 슬롯</param>
-    public void SetUp(ItemSlot itemSlot)
-    {
-        // 아이템 참조 설정
-        item = itemSlot.item;
+    ///// <summary>
+    ///// 아이템 슬롯으로 오브젝트 셋팅
+    ///// </summary>
+    ///// <param name="itemSlot">아이템 슬롯</param>
+    //public void SetUp(ItemSlot itemSlot)
+    //{
+    //    SetUp(
+    //        itemSlot.item.index,
+    //        itemSlot.count,
+    //        itemSlot.icon.sprite
+    //        );
 
-        // 아이템 개수 설정
-        count = itemSlot.count;
+    //    //// 아이템 참조 설정
+    //    //item = itemSlot.item;
 
-        // 아이템 아이콘 설정
-        icon = itemSlot.icon.sprite;
-        iconObject.sprite = icon;
+    //    //// 아이템 개수 설정
+    //    //count = itemSlot.count;
+
+    //    //// 아이템 아이콘 설정
+    //    //icon = itemSlot.icon.sprite;
+    //    //iconObject.sprite = icon;
 
 
-        // 준비 완료
-        isReady = true;
-    }
+    //    //// 준비 완료
+    //    //isReady = true;
+
+    //    //// 장애물 등록
+    //    //CreateBarricade();
+    //}
 
 
     /// <summary>

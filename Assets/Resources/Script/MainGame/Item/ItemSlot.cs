@@ -107,7 +107,7 @@ public class ItemSlot : MonoBehaviour
 
         // UI 셋팅
         GameData.gameMaster.itemManager.selected = this;
-        Debug.LogError(GameData.gameMaster.itemManager.selected.item.index);
+        Debug.LogWarning("아이템 :: 상세보기 => " + GameData.gameMaster.itemManager.selected.item.index);
         GameData.gameMaster.itemManager.nameText.text = item.name;
         GameData.gameMaster.itemManager.infoText.text = item.info;
 

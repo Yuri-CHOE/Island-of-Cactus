@@ -52,8 +52,13 @@ public class Scene_Title : MonoBehaviour
 
     public void SetPlayerMe()
     {
+        SetPlayerMe(false);
+    }
+
+    public void SetPlayerMe(bool isAuto)
+    {
         Refresh();
-        GameData.player.me = new Player(Player.Type.User, selected, false, UserData.userName);
+        GameData.player.me = new Player(Player.Type.User, selected, isAuto, UserData.userName);
     }
 
 

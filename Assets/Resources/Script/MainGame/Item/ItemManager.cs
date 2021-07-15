@@ -127,6 +127,9 @@ public class ItemManager : MonoBehaviour
 
         // 아이템 사용 요청
         Item.Effect(selected.item, targetPlayer_Or_null);
+
+        // 메시지 박스 닫기
+        GameMaster.script.messageBox.PopUp(MessageBox.Type.Close);
     }
 
 
@@ -145,8 +148,14 @@ public class ItemManager : MonoBehaviour
         // 아이템 오브젝트 생성
         Transform obj = Instantiate(itemPrefab, pos, Quaternion.identity ,transform).transform;
 
+        // 결과물
+        DynamicItem result = obj.GetComponent<DynamicItem>();
 
-        return obj.GetComponent<DynamicItem>();
+        // 위치 설정
+        result.location = blockIndex;
+
+
+        return result;
     }
 
     /// <summary>
@@ -156,15 +165,12 @@ public class ItemManager : MonoBehaviour
     /// <param name="itemSlot">초기화 값</param>
     public void CreateItemObject(int blockIndex, ItemSlot itemSlot)
     {
-        // 아이템 오브젝트 생성 후 스크립트 확보
-        DynamicItem dItem = Create(blockIndex);
-
-        // 아이템 셋팅
-        dItem.SetUp(itemSlot);
-
-
-        // 목록에 추가
-        itemObjectList.Add(dItem);
+        CreateItemObject(
+            blockIndex,
+            itemSlot.item.index,
+            itemSlot.count,
+            itemSlot.icon.sprite
+            );
     }
     /// <summary>
     /// 특정 블록에 아이템 생성 후 초기화
@@ -175,7 +181,7 @@ public class ItemManager : MonoBehaviour
     /// <param name="_icon">초기화 값 : 아이콘 리소스</param>
     public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count, Sprite _icon)
     {
-        Debug.LogError("아이템 생성 :: " + blockIndex + " 에서 생성됨");
+        Debug.LogWarning("아이템 생성 :: " + blockIndex + " 에서 생성됨");
 
         // 아이템 오브젝트 생성 후 스크립트 확보
         DynamicItem dItem = Create(blockIndex);
@@ -187,6 +193,41 @@ public class ItemManager : MonoBehaviour
         // 목록에 추가
         itemObjectList.Add(dItem);
 
+        // 장애물 등록
+        dItem.CreateBarricade();
+
+
+
         return dItem;
+    }
+
+
+    public static void ReCreateAll()
+    {
+        // 백업
+        List<DynamicItem> temp = itemObjectList;
+
+        // 초기화
+        itemObjectList = new List<DynamicItem>();
+
+        // 반복 재생성
+        for (int i = 0; i < temp.Count; i++)
+        {
+            DynamicItem dTemp = temp[i];
+
+            // 리스트 및 장애물 제거
+            dTemp.Remove();
+
+            // 생성
+            GameMaster.script.itemManager.CreateItemObject(
+                dTemp.location,
+                dTemp.item.index,
+                dTemp.count,
+                dTemp.icon
+                );
+
+            // 제거
+            Destroy(dTemp.transform);
+        }
     }
 }

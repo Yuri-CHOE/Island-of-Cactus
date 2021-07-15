@@ -45,8 +45,7 @@ public static class BlockWork
         // 블록 종류 파악
         BlockType.TypeDetail blockType = GetBlockType(location);
 
-        Debug.LogError(currentPlayer.name);
-        Debug.LogError(blockType);
+        Debug.LogWarning("블록 기능 :: " + currentPlayer.name  +" 에 의해 작동됨 => "+ blockType );
         //Debug.Break();
 
         // 블록 별 기능
@@ -168,18 +167,20 @@ public static class BlockWork
 
         // 배치할 위치
         int loc = GameData.blockManager.indexLoop(currentPlayer.movement.location, -1);
-        Debug.LogError("날릴 위치 : " + loc);
+        Debug.LogWarning("트랩 블록 : 날릴 위치 => " + loc);
         Vector3 pos = GameData.blockManager.GetBlock(loc).transform.position;
 
 
         // 아이템 날리기
         Tool.ThrowParabola(obj.transform, pos, liftY, 1f);
 
-        // 오브젝트 배치
+        // 오브젝트 재배치
+        obj.RemoveBarricade();
         obj.location = loc;
+        obj.CreateBarricade();
 
         // 장애물 등록
-        CharacterMover.barricade[loc]++;
+        //CharacterMover.barricade[loc]++;          // 생성시 자동 등록
 
         // 종료 판정 -> DynamicItem 에서 길과 충돌할때 처리
         //isEnd = true;
@@ -193,7 +194,7 @@ public static class BlockWork
 
         // 드랍테이블 셋팅
         dropTable.rare = new List<int>();
-        Debug.LogError(LuckyBox.table.Count);
+        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + LuckyBox.table.Count);
         for (int i = 1; i < LuckyBox.table.Count; i++)
         {
             dropTable.rare.Add(LuckyBox.table[i].rare);
@@ -202,7 +203,7 @@ public static class BlockWork
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
-        Debug.LogError("럭키박스 :: 선택됨 -> "+ select);
+        Debug.LogWarning("럭키박스 :: 선택됨 -> "+ select);
 
 
         // 럭키박스 연출 시작
@@ -238,7 +239,7 @@ public static class BlockWork
 
         // 드랍테이블 셋팅
         dropTable.rare = new List<int>();
-        Debug.LogError(Item.table.Count);
+        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + Item.table.Count);
         for (int i = first; i < Item.table.Count; i++)
         {
             dropTable.rare.Add(Item.table[i].rare);

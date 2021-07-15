@@ -134,19 +134,19 @@ public class DiceController : MonoBehaviour
         {
             if (actionProgress == ActionProgress.Ready)
             {
-                isTimeCountWork = true;
-
-                // AI 관련 초기화
-                if(owner != null)
-                    owner.ai.mainGame.dice.Ready();
-                doForceClick = false;
-                doForceClickUp = false;
-
                 // 스킵
                 //actionProgress = ActionProgress.Start;
             }
             else if (actionProgress == ActionProgress.Start)
             {
+                isTimeCountWork = true;
+
+                // AI 관련 초기화
+                if (owner != null)
+                    owner.ai.mainGame.dice.Ready();
+                doForceClick = false;
+                doForceClickUp = false;
+
                 // 스킵
                 actionProgress = ActionProgress.Working;
             }
@@ -198,23 +198,28 @@ public class DiceController : MonoBehaviour
                     }
                 }
 
-                // 입력 가능 상태 및 UI 클릭 아닐경우 ================= 주인 인식해서 제어권 통제해야함
-                if (!isInputBlock && UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
+                // 입력 가능 상태일 경우 ================= 주인 인식해서 제어권 통제해야함
+                if (!isInputBlock)
                 {
-                    // 꾹 눌렀을때
-                    if (Input.GetMouseButton(0) || doForceClick)
+                    // UI 클릭 아닐 경우
+                    // 또는 강제 클릭처리된 경우
+                    if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null || doForceClick || doForceClickUp)
                     {
-                        // 가속도
-                        if (rotAccel < rotAccelMax)
-                            rotAccel += 0.1f+ Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
-                        else if (rotAccel > rotAccelMax)
-                            rotAccel = rotAccelMax;
-                    }
-                    // 클릭 종료될 때
-                    else if (Input.GetMouseButtonUp(0) || doForceClickUp)
-                    {
-                        //Debug.Break();
-                        actionProgress = ActionProgress.Finish;
+                        // 꾹 눌렀을때
+                        if (Input.GetMouseButton(0) || doForceClick)
+                        {
+                            // 가속도
+                            if (rotAccel < rotAccelMax)
+                                rotAccel += 0.1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                            else if (rotAccel > rotAccelMax)
+                                rotAccel = rotAccelMax;
+                        }
+                        // 클릭 종료될 때
+                        else if (Input.GetMouseButtonUp(0) || doForceClickUp)
+                        {
+                            //Debug.Break();
+                            actionProgress = ActionProgress.Finish;
+                        }
                     }
                 }
 
