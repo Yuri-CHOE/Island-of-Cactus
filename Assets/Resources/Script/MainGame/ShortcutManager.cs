@@ -170,7 +170,7 @@ public class ShortcutManager : MonoBehaviour
         Pay();
 
         // 메시지 박스 닫기
-        GameMaster.script.messageBox.PopUp(-1);
+        GameMaster.script.messageBox.PopUp(MessageBox.Type.Close);
 
         // 기존 대기 중단
         if (endWait != null)

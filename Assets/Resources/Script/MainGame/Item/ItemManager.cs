@@ -52,7 +52,7 @@ public class ItemManager : MonoBehaviour
 
         // 메시지 박스 임시모드일 경우 닫기
         if (mb.pageSwitch.objectList[0].activeSelf)
-            mb.PopUp(-1);
+            mb.PopUp(MessageBox.Type.Close);
 
         // 비활성
         itemUseBox.gameObject.SetActive(false);
@@ -75,11 +75,24 @@ public class ItemManager : MonoBehaviour
 
             // 자신 비활성
             if (piuil[i].owner == GameData.player.me)
+            {
                 GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
+                continue;
+            }
+
+            // 존재하지 않는 플레이어 비활성
+            if (piuil[i].owner == null)
+            {
+                GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
+                continue;
+            }
 
             // 사망자 비활성
             if (piuil[i].owner.isDead)
+            {
                 GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
+                continue;
+            }
         }
 
         // UI 활설
@@ -97,6 +110,8 @@ public class ItemManager : MonoBehaviour
             CallPlayerSelecter();
             return;
         }
+        else
+            Debug.LogError("타겟팅 아님");
 
         // 아이템 사용
         ItemUse(null);

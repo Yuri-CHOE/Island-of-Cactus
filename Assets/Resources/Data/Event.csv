@@ -1,0 +1,6 @@
+id,active_type,name,model_id,count,target,where,what,value,info
+1,2,Event_local:name,0,1,0,0,5,-1,Event_local:info
+2,2,Event_local:name,0,1,1,0,5,-999999,Event_local:info
+3,1,Event_local:name,0,1,1,-1,2,1,Event_local:info
+4,2,Event_local:name,0,1,0,0,7,8,Event_local:info
+5,1,Event_local:name,0,1,0,1,2,1,Event_local:info

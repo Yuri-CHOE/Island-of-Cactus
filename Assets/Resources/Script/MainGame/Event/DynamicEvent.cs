@@ -95,13 +95,16 @@ public class DynamicEvent : MonoBehaviour
     /// </summary>
     /// <param name="index">인덱스</param>
     /// <param name="_count"> 수량</param>
-    public void SetUp(int index, int _count)
+    public void SetUp(int index, int _count, Player _creator)
     {
         // 아이템 참조 설정
         iocEvent = IocEvent.table[index];
 
         // 아이템 개수 설정
         count = _count;
+
+        // 생성자 설정
+        creator = _creator;
 
         // 모델 오브젝트 체크
         GameObject obj = Resources.Load<GameObject>(@"Data/Event/Event" + iocEvent.index.ToString("D4"));
@@ -118,7 +121,7 @@ public class DynamicEvent : MonoBehaviour
             obj,
             transform.position,
             Quaternion.identity,
-            eventObject
+            transform
             ).transform;
 
 

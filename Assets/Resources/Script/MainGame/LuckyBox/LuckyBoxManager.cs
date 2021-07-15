@@ -128,7 +128,8 @@ public class LuckyBoxManager : MonoBehaviour
 
         // 결과물 출력
         MessageBox mb = GameData.gameMaster.messageBox;
-        mb.PopUp(mb.pageSwitch.GetObject(3).GetComponent<UnityEngine.UI.MessageBox.MessageBoxRule>(), 3);     // 럭키박스 타입은 현재 3번 ====== 이후 열거형으로 변경할것
+        //mb.PopUp(mb.pageSwitch.GetObject(3).GetComponent<UnityEngine.UI.MessageBox.MessageBoxRule>(), 3);     // 럭키박스 타입은 현재 3번 ====== 이후 열거형으로 변경할것
+        mb.PopUp(MessageBox.Type.LuckyBox);
 
 
         // 메시지 박스 확인 대기

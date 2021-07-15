@@ -193,7 +193,7 @@ public class CharacterMover : MonoBehaviour
         // 최종 목표
         int movePoint = GameData.blockManager.indexLoop(_location, moveValue);
 
-        Debug.LogError(moveValue + " = " + movePoint);
+        Debug.LogWarning("이동 예상 :: "+moveValue + " 칸 이동하여 도착지점 = " + movePoint);
 
         // 총 이동 거리(moveValue) 이내에 장애물 계산
         int counter = 0;

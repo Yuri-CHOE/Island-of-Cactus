@@ -18,6 +18,8 @@ namespace UnityEngine.UI
         int activeSwitchNum = 0;
         int activeSwitchNumMirror = 0;
 
+        public int now { get { return activeSwitchNum; } }
+
         public List<GameObject> objectList;
 
 
