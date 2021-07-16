@@ -367,7 +367,7 @@ public class CSVReader
     /// <param name="subPathOrNull">생략 가능, 고정 경로 : Assets/Resources/Data/</param>
     /// <param name="fileName">이미 존재하지 않는 파일명</param>
     /// <param name="data">저장 내용</param>
-    public static void SaveNew(string subPathOrNull, string fileName, string data)
+    public static void SaveNew(string subPathOrNull, string fileName, bool _isCopyFile, bool useOverWrite, string data)
     {
         Debug.Log("저장 요청됨");
 
@@ -380,7 +380,13 @@ public class CSVReader
             return;
 
         // 경로 조합
-        string __path = basicPath;
+        string __path = null;
+
+        if (_isCopyFile)
+            __path = copyPath;
+        else
+            __path = basicPath;
+
         if (subPathOrNull != null)
             __path += '/' + @subPathOrNull;
 
@@ -391,22 +397,28 @@ public class CSVReader
 
         // 파일 체크 및 복사
         FileInfo fi = new FileInfo(@_file);
-        if (fi.Exists)
+        if (fi.Exists && !useOverWrite)
         {
-            Debug.Log("저장 실패 :: 파일 중복");
+            Debug.LogError("저장 실패 :: 파일 중복");
         }
         else
         {
+            // 파일 초기화
+            FileStream fs = new FileStream(@_file, FileMode.Create);
+            fs.Close();
+
             // 생성
-            StreamWriter sw = fi.CreateText();
+            //StreamWriter sw = fi.CreateText();
+            StreamWriter sw = new StreamWriter(@_file);
 
             // 작성
-            sw.WriteLine(data);
+            //sw.WriteLine(data);
+            sw.Write(data);
 
             // 닫기
             sw.Close();
 
-            Debug.Log("저장 성공 :: " + @_file);
+            Debug.LogWarning("저장 성공 :: " + @_file);
         }
     }
 

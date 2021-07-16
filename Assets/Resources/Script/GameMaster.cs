@@ -322,6 +322,10 @@ public class GameMaster : MonoBehaviour
                     // 연출 일단 생략
 
 
+                    // 턴 시작
+                    if(GameData.cycle.now == 0)
+                        GameData.cycle.now = 1;
+
                     GameData.gameFlow = Flow.Cycling;
                     break;
                 }
@@ -956,6 +960,12 @@ public class GameMaster : MonoBehaviour
     /// <param name="targetPlayer"></param>
     public void GotoPrison(Player targetPlayer)
     {
-        // 미구현================
+        targetPlayer.movement.GotoJail();
+    }
+
+
+    public void SaveGame()
+    {
+        GameSaver.GameSave();
     }
 }

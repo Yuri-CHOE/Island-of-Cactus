@@ -104,4 +104,24 @@ public class Turn
         // p엔더 등록
         Add(GameData.player.system.Ender);
     }
+
+    /// <summary>
+    /// 현재 플레이어의 플레이어 리스트 인덱스를 반환
+    /// </summary>
+    /// <returns></returns>
+    public int NowIndex()
+    {
+        Player temp = now;
+
+        int result = -1;
+
+        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+            if (temp == GameData.player.allPlayer[i])
+            {
+                result = i;
+                break;
+            }
+
+        return result;
+    }
 }

@@ -42,6 +42,10 @@ public static class GameData
     public static GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
 
 
+
+
+
+
     /// <summary>
     /// 게임 데이터 초기화
     /// </summary>
@@ -68,4 +72,9 @@ public static class GameData
     {
         _worldFileName = __worldFileName;
     }
+
+
+
+
+
 }

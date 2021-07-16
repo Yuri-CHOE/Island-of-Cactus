@@ -130,7 +130,7 @@ namespace UnityEngine.MapEditor
             GetBuildCode();
 
             // ¿˙¿Â
-            CSVReader.SaveNew(WorldManager.subRoot, fileName.text + WorldManager.extension, buildOutput );
+            CSVReader.SaveNew(WorldManager.subRoot, fileName.text + WorldManager.extension, false, false, buildOutput );
         }
 
 
