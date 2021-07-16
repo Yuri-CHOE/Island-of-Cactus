@@ -50,7 +50,7 @@ public class CharacterMover : MonoBehaviour
     // 위치 인덱스
     int _location = -1;
     //public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(_location, value); } }
-    public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(value, 0); } }
+    public int location { get { return _location; } set { _location = GameData.blockManager.indexLoop(value, 0); owner.MirrorLoaction(); } }
 
     // 이동량
     public int moveCount = 0;
@@ -74,8 +74,7 @@ public class CharacterMover : MonoBehaviour
     [SerializeField]
     Transform bodyObject = null;
 
-
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -251,7 +250,6 @@ public class CharacterMover : MonoBehaviour
                     break;
                 }
             }
-
 
             // 장애물 체크
             if (barricade[locNext].Count > 0)

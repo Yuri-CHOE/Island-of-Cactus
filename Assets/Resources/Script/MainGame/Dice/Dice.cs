@@ -22,9 +22,12 @@ public class Dice
     // 값
     int _value = 0;
     public int value { get { return _value; } }
-    // 누적 값
+    // 최종 값
     int _valueTotal = 0;
     public int valueTotal { get { return _valueTotal + value; } }       // 주사위를 굴릴때 이전값을 누적처리 하므로 주사위 1개만 굴리면 누적값=0, 값=1~ 상태 => _valueTotal + value 해야 진짜 누적값 나옴
+
+    // 누적 값 기록
+    public int valueRecord = 0;
 
     // 굴리는중 여부
     public bool isRolling = false;
@@ -49,6 +52,10 @@ public class Dice
     /// </summary>
     public void Clear()
     {
+        // 기록 처리
+        valueRecord += valueTotal;
+
+        // 초기화
         _value = 0;
         _valueTotal = 0;
     }

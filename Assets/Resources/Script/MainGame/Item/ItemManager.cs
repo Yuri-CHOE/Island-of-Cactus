@@ -202,8 +202,11 @@ public class ItemManager : MonoBehaviour
     }
 
 
-    public static void ReCreateAll()
+    public static void ReCreateAll() { ReCreateAll(false); }
+    public static void ReCreateAll(bool isDeleted)
     {
+        Debug.LogError("아이템 오브젝트 :: 재생성 요청됨 => 총 "+itemObjectList.Count);
+
         // 백업
         List<DynamicItem> temp = itemObjectList;
 
@@ -216,9 +219,11 @@ public class ItemManager : MonoBehaviour
             DynamicItem dTemp = temp[i];
 
             // 리스트 및 장애물 제거
-            dTemp.Remove();
+            //dTemp.Remove();
+            dTemp.RemoveBarricade();
 
             // 생성
+            DynamicItem dNew =
             GameMaster.script.itemManager.CreateItemObject(
                 dTemp.location,
                 dTemp.item.index,
@@ -226,8 +231,38 @@ public class ItemManager : MonoBehaviour
                 dTemp.icon
                 );
 
+            Tool.ThrowParabola(dNew.transform, dNew.transform.position, 2f, 1f);
+
             // 제거
-            Destroy(dTemp.transform);
+            if (!isDeleted)
+                Destroy(dTemp.transform);
         }
+    }
+
+
+
+
+    public void Tester(string blockIndex_itemIndex_value)
+    {
+        int blockIndex = 7;
+        int itemIndex = 1;
+        int value = 1;
+
+        string[] str = blockIndex_itemIndex_value.Split('_');
+        int.TryParse(str[0], out blockIndex);
+        if(str.Length > 1)
+        int.TryParse(str[1], out itemIndex);
+        if (str.Length > 2)
+            int.TryParse(str[2], out value);
+
+        DynamicItem di =
+        CreateItemObject(
+            blockIndex,
+            itemIndex,
+            value,
+            ItemSlot.LoadIcon(Item.table[itemIndex])
+            );
+
+        Tool.ThrowParabola(di.transform, di.transform.position, 2f, 1f);
     }
 }

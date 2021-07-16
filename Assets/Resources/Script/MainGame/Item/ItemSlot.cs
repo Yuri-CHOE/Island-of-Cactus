@@ -22,6 +22,12 @@ public class ItemSlot : MonoBehaviour
     public Image icon = null;
 
 
+    public void CopyByMirror(ItemSlot mirror)
+    {
+        item = mirror.item;
+        count = mirror.count;
+    }
+
     // Start is called before the first frame update
     void Start()
     {

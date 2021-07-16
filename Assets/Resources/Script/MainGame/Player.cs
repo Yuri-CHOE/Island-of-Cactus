@@ -56,7 +56,10 @@ public class Player
     //public GameObject locateBlock { get { if (GameData.isMainGameScene) { if (locate >= 0) return GameData.blockManager.gol[locate]; else return GameData.blockManager.startBlock.gameObject; } else return null; } }
 
     // 이동제어 스크립트
-    public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
+    int location = -1;
+    //public CharacterMover movementMirror = new CharacterMover();
+    //public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
+    public CharacterMover movement = null;
 
     // AI 제어 스크립트
     public AIWorker ai { get { if (avatar == null) return null; else return avatar.GetComponent<AIWorker>(); } }
@@ -189,8 +192,14 @@ public class Player
             ) as GameObject;
         avatarBody = avatar.transform.Find("BodyObject");
 
-        // 소유권 등록
+        // 이동제어 셋업
+        movement = avatar.GetComponent<CharacterMover>();
         movement.owner = this;
+        //if (movementMirror.location != -1)
+        //    movement.CopyByMirror(movementMirror);
+        //movementMirror = movement;
+        if (location != -1)
+            movement.location = location;
 
         // AI 소유자 지정
         ai.SetUp(this);
@@ -276,6 +285,11 @@ public class Player
             if (inventory[i] == currentSlot)
                 inventory[i].Clear();
         }
+    }
+
+    public void MirrorLoaction()
+    {
+         location = movement.location;
     }
 
 

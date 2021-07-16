@@ -268,6 +268,9 @@ public class LoadingManager : MonoBehaviour
         gameObject.SetActive(false);
         workCount++;
 
+        // 게임 플로우 리셋
+        GameData.gameFlow = GameMaster.Flow.Wait;
+        
 
         // 유저 데이터 로드
         // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
@@ -298,6 +301,56 @@ public class LoadingManager : MonoBehaviour
 
     void Work_MainGame()
     {
+        {
+            /*
+            // 작업 목표량 설정
+            workMax = 10000;
+
+            // 월드 빌드 시작
+            WorldManager wm = GameObject.Find("World").GetComponent<WorldManager>();
+            workCount++;
+
+            // 카메라 한계 설정
+            wm.cameraManager.controller.SetCameraLimit(WorldManager.worldFile[0]);
+            workCount+=6;
+
+            // 스타트 블록 설정
+            wm.blockManager.SetStartBlock(WorldManager.worldFile[1]);
+
+            // 지형 빌드
+            wm.groundManager.BuildByString(WorldManager.worldFile[2]);
+            workCount++;
+
+            // 블록 빌드
+            wm.blockManager.BuildByString(WorldManager.worldFile[3]);
+            workCount++;
+
+            // 장식물 빌드
+            wm.decorManager.BuildByString(WorldManager.worldFile[4]);
+            workCount++;
+
+            // 장애물 초기화
+            // ================ 버그 수정 필요 : 이러면 씬 새로 로딩했을때 장애물 전부 날아감
+            // ㄴ 해결법 : 로딩할때 말고 로딩 끝나고 메인게임 플로우 초기화구간에서 처리할것
+            // ㄴ 해결법 : 그냥 아이템,이벤트 오브젝트 리스트 읽어서 재구성할것
+            // 초기화 안됬을 경우 초기화
+            if(CharacterMover.barricade.Count == 0)
+            {
+                for (int i = 0; i < wm.blockManager.blockCount; i++)
+                    CharacterMover.barricade.Add(new List<DynamicObject>());
+            }
+            // 이미 초기화 된 경우 재생성
+            else
+            {
+                // 아이템 재생성
+                ItemManager.ReCreateAll();
+
+                // 이벤트 재생성
+                EventManager.ReCreateAll();
+            }
+            */
+        }
+
         // 작업 목표량 설정
         workMax = 10000;
 
@@ -307,7 +360,7 @@ public class LoadingManager : MonoBehaviour
 
         // 카메라 한계 설정
         wm.cameraManager.controller.SetCameraLimit(WorldManager.worldFile[0]);
-        workCount+=6;
+        workCount += 6;
 
         // 스타트 블록 설정
         wm.blockManager.SetStartBlock(WorldManager.worldFile[1]);
@@ -324,24 +377,35 @@ public class LoadingManager : MonoBehaviour
         wm.decorManager.BuildByString(WorldManager.worldFile[4]);
         workCount++;
 
-        // 장애물 초기화
-        // ================ 버그 수정 필요 : 이러면 씬 새로 로딩했을때 장애물 전부 날아감
-        // ㄴ 해결법 : 로딩할때 말고 로딩 끝나고 메인게임 플로우 초기화구간에서 처리할것
-        // ㄴ 해결법 : 그냥 아이템,이벤트 오브젝트 리스트 읽어서 재구성할것
-        // 초기화 안됬을 경우 초기화
-        if(CharacterMover.barricade.Count == 0)
+        // 첫 로드
+        if (GameMaster.flowCopy == GameMaster.Flow.Wait)
         {
+            Debug.LogWarning("로딩 :: 오브젝트 리스트 초기화됨");
+
+            // 장애물 초기화
             for (int i = 0; i < wm.blockManager.blockCount; i++)
                 CharacterMover.barricade.Add(new List<DynamicObject>());
         }
-        // 이미 초기화 된 경우 재생성
+        // 다시 로드
         else
         {
-            // 아이템 재생성
-            ItemManager.ReCreateAll();
+            // 장애물 재생성
+            {
+                Debug.LogWarning(string.Format(
+                    "로딩 :: 오브젝트 재생성 요청됨\n합산 : {0}\n아이템 : {1}\n이벤트 : {2}",
+                    ItemManager.itemObjectList.Count + EventManager.eventObjectList.Count, 
+                    ItemManager.itemObjectList.Count, 
+                    EventManager.eventObjectList.Count
+                    ) );
 
-            // 이벤트 재생성
-            EventManager.ReCreateAll();
+                // 아이템 재생성
+                ItemManager.ReCreateAll(true);
+
+                // 이벤트 재생성
+                EventManager.ReCreateAll(true);
+            }
+
+            GameData.gameFlow = GameMaster.Flow.Wait;
         }
     }
 }

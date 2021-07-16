@@ -84,7 +84,7 @@ public static class BlockWork
         ++plus,
         ++minus,
 
-        boss,
+        boss,               ============== ¹Ì±¸Çö
         ++trap,
         ++lucky,
 

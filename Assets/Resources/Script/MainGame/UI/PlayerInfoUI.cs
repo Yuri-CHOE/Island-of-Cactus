@@ -93,7 +93,14 @@ public class PlayerInfoUI : MonoBehaviour
         }
 
         // 인벤토리 싱크
-        player.inventory = inventory;
+        if(player.inventory.Count == 0)
+            player.inventory = inventory;        
+        else
+        {
+            // 인벤토리 계승
+            for(int i = 0; i < inventory.Count; i++)
+                inventory[i].CopyByMirror(player.inventory[i]);
+        }
     }
 
 

@@ -136,7 +136,7 @@ public class IocEvent
     public string info { get { return _info; } }
 
     // 이벤트 설명
-    iocEventEffect _effect = null;
+    iocEventEffect _effect = new iocEventEffect();
     public iocEventEffect effect { get { return _effect; } }
 
 
@@ -150,7 +150,7 @@ public class IocEvent
     protected IocEvent(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 11)
+        if (strList.Count != 10)
             return;
         if (loaclList.Count != 3)
             return;
@@ -178,7 +178,7 @@ public class IocEvent
     /// </summary>
     public static void SetUp()
     {
-        Debug.Log("테이블 셋팅 : 캐릭터");
+        Debug.Log("테이블 셋팅 : 이벤트");
 
         // 중복 실행 방지
         if (_isReady)

@@ -90,7 +90,7 @@ public class EventManager : MonoBehaviour
     /// <param name="creator">초기화 값 : 이벤트 생성자</param>
     public DynamicEvent CreateEventObject(int blockIndex, int eventIndex, int _count, Player creator)
     {
-        Debug.LogWarning("아이템 생성 :: " + blockIndex + " 에서 생성됨");
+        Debug.LogWarning("이벤트 생성 :: " + blockIndex + " 에서 생성됨");
 
         // 아이템 오브젝트 생성 후 스크립트 확보
         DynamicEvent dEvent = Create(blockIndex);
@@ -109,8 +109,11 @@ public class EventManager : MonoBehaviour
     }
 
 
-    public static void ReCreateAll()
+    public static void ReCreateAll() { ReCreateAll(false); }
+    public static void ReCreateAll(bool isDeleted)
     {
+        Debug.LogError("이벤트 오브젝트 :: 재생성 요청됨 => 총 " + eventObjectList.Count);
+
         // 백업
         List<DynamicEvent> temp = eventObjectList;
 
@@ -123,7 +126,13 @@ public class EventManager : MonoBehaviour
             DynamicEvent dTemp = temp[i];
 
             // 리스트 및 장애물 제거
-            dTemp.Remove();
+            //dTemp.Remove();
+            dTemp.RemoveBarricade();
+
+            Debug.LogError(dTemp.location);
+            Debug.LogError(dTemp.iocEvent.index);
+            Debug.LogError(dTemp.count);
+            Debug.LogError(dTemp.creator.name);
 
             // 생성
             GameMaster.script.eventManager.CreateEventObject(
@@ -134,7 +143,8 @@ public class EventManager : MonoBehaviour
                 );
 
             // 제거
-            Destroy(dTemp.transform);            
+            if (!isDeleted)
+                Destroy(dTemp.transform);            
         }
     }
 
@@ -146,10 +156,19 @@ public class EventManager : MonoBehaviour
 
 
 
-    public void Tester(int eventID)
+    public void Tester(string blockIndex_eventID)
     {
+        int blockIndex = 7;
+        int eventID = 1;
+
+        string[] str = blockIndex_eventID.Split('_');
+        int.TryParse(str[0], out blockIndex);
+        if (str.Length > 1)
+            int.TryParse(str[1], out eventID);
+
+        DynamicEvent de =
         CreateEventObject(
-            GameData.player.me.movement.location, 
+            blockIndex,
             eventID, 
             1,
             GameData.player.me
