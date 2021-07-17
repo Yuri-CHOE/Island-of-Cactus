@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turn
+public static class Turn
 {
     public enum TurnAction
     {
@@ -22,21 +22,21 @@ public class Turn
     }
 
     // 턴 진행 상태
-    public TurnAction turnAction = TurnAction.Wait;
-    public ActionProgress actionProgress = ActionProgress.Ready;
+    public static TurnAction turnAction = TurnAction.Wait;
+    public static ActionProgress actionProgress = ActionProgress.Ready;
 
 
     // 턴 원본
-    Queue<Player> _origin = new Queue<Player>();
-    public Queue<Player> origin { get { return _origin; } }
+    static List<Player> _origin = new List<Player>();
+    public static List<Player> origin { get { return _origin; } }
 
     // 턴 사본
-    public Queue<Player> queue = new Queue<Player>();
+    public static Queue<Player> queue = new Queue<Player>();
 
     // 현재 턴
-    public Player now { get { return queue.Peek(); } }
+    public static Player now { get { return queue.Peek(); } }
 
-    public Player Next()
+    public static Player Next()
     {
         // 하나 꺼내서 재입력 (순환)
         queue.Enqueue(queue.Dequeue());
@@ -44,21 +44,38 @@ public class Turn
         return now;
     }
 
-    public void Clear()
+    public static void Skip(Player skipStop)
+    {
+        // 잘못된 플레이어 입력시 중단
+        if(!queue.Contains(skipStop))
+            if (!origin.Contains(skipStop))
+            {
+                Debug.LogError("error :: 존재하지 않는 플레이어");
+                Debug.Break();
+                return;
+            }
+
+        while (now != skipStop)
+            Next();
+    }
+
+    public static void Clear()
     {
         // 초기화
+        TurnAction turnAction = TurnAction.Wait;
+        ActionProgress actionProgress = ActionProgress.Ready;
         origin.Clear();
         queue.Clear();
     }
 
-    public void Add(Player player)
+    public static void Add(Player player)
     {
         // 등록
-        origin.Enqueue(player);
+        origin.Add(player);
         queue.Enqueue(player);
     }
 
-    public void SetUp(List<Player> order)
+    public static void SetUp(List<Player> order)
     {
         // 오류 방지
         if (order == null)
@@ -68,60 +85,58 @@ public class Turn
         Clear();
 
         // p스타터 등록
-        Add(GameData.player.system.Starter);
+        Add(Player.system.Starter);
 
         // p1~4 등록
-        if (order.Count > 0)
+        List<Player> orderCopy = new List<Player>(order);
+        if (orderCopy.Count > 0)
         {
             // 정렬
-            if (order.Count >= 2)
-                while (order.Count > 0)
+            if (orderCopy.Count >= 2)
+                while (orderCopy.Count > 0)
                 {
                     int temp = 0;
-                    for (int j = 0; j < order.Count; j++)
+                    for (int j = 0; j < orderCopy.Count; j++)
                     {
-                        if (order[j].dice.value > order[temp].dice.value)
+                        if (orderCopy[j].dice.value > orderCopy[temp].dice.value)
                         {
                             temp = j;
                         }
                     }
 
                     // 등록
-                    Debug.Log(string.Format("순서 = ({0}) {1}",  order[temp].dice.value, order[temp].name));
-                    Add(order[temp]);
+                    Debug.Log(string.Format("순서 = ({0}) {1}", orderCopy[temp].dice.value, orderCopy[temp].name));
+                    Add(orderCopy[temp]);
+
+                    // 정렬
+                    order.Remove(orderCopy[temp]);
+                    order.Add(orderCopy[temp]);
 
                     //제외
-                    order.RemoveAt(temp);
+                    orderCopy.RemoveAt(temp);
                 }
         }
 
         // p미니게임 등록
-        Add(GameData.player.system.Minigame);
+        Add(Player.system.Minigame);
 
         // p미니게임 엔더 등록
-        Add(GameData.player.system.MinigameEnder);
+        Add(Player.system.MinigameEnder);
 
         // p엔더 등록
-        Add(GameData.player.system.Ender);
+        Add(Player.system.Ender);
     }
 
     /// <summary>
     /// 현재 플레이어의 플레이어 리스트 인덱스를 반환
     /// </summary>
     /// <returns></returns>
-    public int NowIndex()
-    {
-        Player temp = now;
+    public static int Index(Player current)
+    {       
+        for (int i = 0; i < origin.Count; i++)
+            if (origin[i] == current)
+                return i;
 
-        int result = -1;
-
-        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-            if (temp == GameData.player.allPlayer[i])
-            {
-                result = i;
-                break;
-            }
-
-        return result;
+        return -1;
     }
 }

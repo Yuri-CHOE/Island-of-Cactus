@@ -48,7 +48,7 @@ public class PlayerInfoUI : MonoBehaviour
 
 
             // 주인이 턴 진행중일 경우
-            if (GameData.turn.now == owner)
+            if (Turn.now == owner)
                 turnOobject.setUp(1);
             else
                 turnOobject.setUp(0);
@@ -70,10 +70,10 @@ public class PlayerInfoUI : MonoBehaviour
 
 
     // 셋팅
-    public void SetPlayer(Player player)
+    public void SetPlayer(Player _owner)
     {
         // 플레이어 지정
-        owner = player;
+        owner = _owner;
 
         // null 차단
         if (owner == null)
@@ -93,13 +93,19 @@ public class PlayerInfoUI : MonoBehaviour
         }
 
         // 인벤토리 싱크
-        if(player.inventory.Count == 0)
-            player.inventory = inventory;        
+        if(owner.inventory.Count == 0)
+            owner.inventory = inventory;
         else
         {
+            // 백업
+            List<ItemSlot> invenCopy = owner.inventory;
+
+            // 인벤토리 싱크
+            owner.inventory = inventory;
+
             // 인벤토리 계승
-            for(int i = 0; i < inventory.Count; i++)
-                inventory[i].CopyByMirror(player.inventory[i]);
+            for (int i = 0; i < inventory.Count; i++)
+                inventory[i].CopyByMirror(invenCopy[i]);
         }
     }
 

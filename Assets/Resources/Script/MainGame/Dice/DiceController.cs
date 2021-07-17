@@ -18,14 +18,14 @@ public class DiceController : MonoBehaviour
 
     // 주사위 정보
     public Dice dice = null;
-    //public Dice diceTurnPlayer { get { return GameData.turn.now.dice; } }
+    //public Dice diceTurnPlayer { get { return Turn.now.dice; } }
 
     // 주사위 주인
     public Player owner = null;
-    //public Player owner { get { return GameData.turn.now; } }
+    //public Player owner { get { return Turn.now; } }
 
     // 소유자 확인
-    public bool isMyDice { get { return owner == GameData.player.me; } }
+    public bool isMyDice { get { return owner == Player.me; } }
 
     // 최소 높이
     [SerializeField]
@@ -121,10 +121,10 @@ public class DiceController : MonoBehaviour
         Debug.Log("테스트 요청됨");
         testRun = false;
 
-        if (GameData.player.me == null)
-            GameData.player.me = new Player(Player.Type.User, 1, false, "테스트");
+        if (Player.me == null)
+            Player.me = new Player(Player.Type.User, 1, false, "테스트");
 
-        CallDice(GameData.player.me, testObject);
+        CallDice(Player.me, testObject);
 
     }
 
@@ -436,10 +436,6 @@ public class DiceController : MonoBehaviour
                 // 최동 회전 완료시 스킵
                 else
                 {
-                    // 주사위 개수 차감
-                    dice.count--;
-                    Debug.Log("주사위 개수 :: -1 =>" + dice.count);
-
                     // 보정
                     transform.rotation = lastRot;
 

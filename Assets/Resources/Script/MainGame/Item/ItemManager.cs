@@ -20,6 +20,10 @@ public class ItemManager : MonoBehaviour
     public Text infoText = null;
     public Button btnUse = null;
 
+    [Header("itemObject")]
+    // 관련 프리팹
+    public GameObject itemSlotPrefab = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -74,7 +78,7 @@ public class ItemManager : MonoBehaviour
             GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(true);
 
             // 자신 비활성
-            if (piuil[i].owner == GameData.player.me)
+            if (piuil[i].owner == Player.me)
             {
                 GameData.gameMaster.playerSelecter[i + 1].gameObject.SetActive(false);
                 continue;
@@ -123,7 +127,7 @@ public class ItemManager : MonoBehaviour
         GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
 
         // 아이템 제거
-        GameData.player.me.RemoveItem(selected);
+        Player.me.RemoveItem(selected);
 
         // 아이템 사용 요청
         Item.Effect(selected.item, targetPlayer_Or_null);
@@ -168,8 +172,8 @@ public class ItemManager : MonoBehaviour
         CreateItemObject(
             blockIndex,
             itemSlot.item.index,
-            itemSlot.count,
-            itemSlot.icon.sprite
+            itemSlot.count
+            //itemSlot.icon.sprite
             );
     }
     /// <summary>
@@ -179,7 +183,8 @@ public class ItemManager : MonoBehaviour
     /// <param name="itemIndex">초기화 값 : 아이템 인덱스</param>
     /// <param name="_count">초기화 값 : 수량</param>
     /// <param name="_icon">초기화 값 : 아이콘 리소스</param>
-    public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count, Sprite _icon)
+    //public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count, Sprite _icon)
+    public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count )
     {
         Debug.LogWarning("아이템 생성 :: " + blockIndex + " 에서 생성됨");
 
@@ -187,7 +192,8 @@ public class ItemManager : MonoBehaviour
         DynamicItem dItem = Create(blockIndex);
 
         // 아이템 셋팅
-        dItem.SetUp(itemIndex, _count, _icon);
+        //dItem.SetUp(itemIndex, _count, _icon);
+        dItem.SetUp(itemIndex, _count);
 
 
         // 목록에 추가
@@ -227,8 +233,8 @@ public class ItemManager : MonoBehaviour
             GameMaster.script.itemManager.CreateItemObject(
                 dTemp.location,
                 dTemp.item.index,
-                dTemp.count,
-                dTemp.icon
+                dTemp.count
+                //dTemp.icon
                 );
 
             Tool.ThrowParabola(dNew.transform, dNew.transform.position, 2f, 1f);
@@ -259,10 +265,34 @@ public class ItemManager : MonoBehaviour
         CreateItemObject(
             blockIndex,
             itemIndex,
-            value,
-            ItemSlot.LoadIcon(Item.table[itemIndex])
+            value
+            //ItemSlot.LoadIcon(Item.table[itemIndex])
             );
 
         Tool.ThrowParabola(di.transform, di.transform.position, 2f, 1f);
+    }
+
+
+    /// <summary>
+    /// 아이템 슬롯 생성
+    /// </summary>
+    /// <param name="itemIndex"></param>
+    /// <param name="_count"></param>
+    /// <returns></returns>
+    public ItemSlot CreateItemSlot(Item _item, int _count)
+    {
+        // 생성할 좌표
+        Vector3 pos = GameData.blockManager.startBlock.position;
+
+        // y축 보정
+        pos.y = -5f;
+
+        // 아이템 오브젝트 생성
+        ItemSlot result = Instantiate(itemSlotPrefab, pos, Quaternion.identity, GameMaster.script.transform).GetComponent<ItemSlot>();
+
+        result.item = _item;
+        result.count = _count;
+
+        return result;
     }
 }

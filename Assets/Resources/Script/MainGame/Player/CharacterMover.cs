@@ -106,16 +106,16 @@ public class CharacterMover : MonoBehaviour
         List<Player> fixTarget = new List<Player>();
 
         // 모든 플레이어 위치 체크
-        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+        for (int i = 0; i < Player.allPlayer.Count; i++)
         {
             // 본인 제외
-            //if (GameData.player.allPlayer[i].avatar == transform)
+            //if (Player.allPlayer[i].avatar == transform)
             //    continue;
 
             // 위치 중복 체크
-            if (location == GameData.player.allPlayer[i].avatar.GetComponent<CharacterMover>().location)
+            if (location == Player.allPlayer[i].avatar.GetComponent<CharacterMover>().location)
                 // 중복 플레이어 확보
-                fixTarget.Add(GameData.player.allPlayer[i]);
+                fixTarget.Add(Player.allPlayer[i]);
         }
 
         // 겹쳤다 떠나도 포메이션 그대로 =========== 큰 문제는 아님
@@ -225,7 +225,7 @@ public class CharacterMover : MonoBehaviour
             for (int p = 0; p < owner.otherPlayers.Count; p++)
             {
                 // 공격 최소 사이클 제한
-                if (GameData.cycle.now < 5)
+                if (Cycle.now < 5)
                     break;
                    
 

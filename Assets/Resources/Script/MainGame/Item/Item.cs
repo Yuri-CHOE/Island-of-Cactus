@@ -310,6 +310,44 @@ public class Item
     }
 
 
+
+
+    /// <summary>
+    /// 아이콘 로드
+    /// </summary>
+    public Sprite GetIcon()
+    {
+        // 아이콘 로드
+        Debug.Log(@"Data/Item/icon/item" + index.ToString("D4"));
+        Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + index.ToString("D4"));
+
+        // 이미지 유효 검사
+        if (temp == null)
+        {
+            // 기본 아이콘 대체 처리
+            Debug.Log(@"Data/Item/icon/item0000");
+            temp = Resources.Load<Sprite>(@"Data/Item/icon/item0000");
+        }
+
+        //// 최종 실패 처리
+        //if (temp == null)
+        //    Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        //// 아이콘 리턴
+        //else
+        //    _icon.sprite = temp;
+
+
+        // 아이콘 리턴
+        if (temp != null)
+            return temp;
+
+        // 최종 실패 처리
+        Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        return null;
+    }
+
+
+
     /// <summary>
     /// 아이템 효과
     /// </summary>

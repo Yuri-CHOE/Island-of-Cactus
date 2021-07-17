@@ -26,8 +26,8 @@ public class CSVReader
 
 
     // 데이터 위치
-    static string basicPath = Application.dataPath + @"/Resources" + @"/Data";   // 프로젝트디렉토리/Assets/Resources/Data
-    static string copyPath = Application.persistentDataPath + @"/Data";           // 기기별 데이터 폴더/Data
+    public static string basicPath = Application.dataPath + @"/Resources" + @"/Data";   // 프로젝트디렉토리/Assets/Resources/Data
+    public static string copyPath = Application.persistentDataPath + @"/Data";           // 기기별 데이터 폴더/Data
 
 
     // 생성자
@@ -154,9 +154,11 @@ public class CSVReader
     /// </summary>
     /// <param name="fileName">/세부 경로/파일명.확장자</param>
     /// <param name="_isReadOnly">저장할 필요 없다면 true</param>
-    public static void CheckFile(string _path, string subPathOrNull, string fileName, bool _isCopyFile)
+    public static bool CheckFile(string _path, string subPathOrNull, string fileName, bool _isCopyFile)
     {
         Debug.Log("파일 체크 :: " + @_path);
+
+        bool result = true;
 
         // 파일 체크 및 복사
         FileInfo fi = new FileInfo(@_path);
@@ -173,10 +175,45 @@ public class CSVReader
 
                 Debug.Log("파일 복사 요청됨 :: " + @path_basic);
                 CheckPath(string.Format("{0}/{1}", copyPath, subPathOrNull));
-                FileInfo temp = new FileInfo(@path_basic).CopyTo(@_path);
-                Debug.Log("파일 복사됨 :: \t" + @_path + "\n\t\t" + temp.FullName);
+                FileInfo temp = new FileInfo(@path_basic);
+                if (temp.Exists)
+                {
+                    Debug.Log("원본 파일 확인됨");
+                    temp.CopyTo(@_path);
+                    Debug.Log("파일 복사됨 :: \t" + @_path + "\n\t\t" + temp.FullName);
+                }
+                else
+                {
+                    result = false;
+                    Debug.LogError("원본 파일 누락됨");
+                }
             }
         }
+
+        return result;
+    }
+    /// <summary>
+    /// 파일 체크
+    /// </summary>
+    /// <param name="_path"></param>
+    /// <param name="fileName"></param>
+    public static bool CheckFile(string _path, string fileName)
+    {
+        // 경로 체크
+        CheckPath(@_path);
+
+        string fullPath = _path + '/' + fileName;
+
+        Debug.Log("파일 체크 :: " + @fullPath);
+
+        // 파일 체크 및 복사
+        FileInfo fi = new FileInfo(@fullPath);
+        bool result = fi.Exists;
+        if (result)
+            Debug.Log("파일 확인됨");
+        else
+            Debug.LogWarning("파일 누락 :: " + fullPath);
+        return result;
     }
 
 
@@ -218,14 +255,62 @@ public class CSVReader
         //// 파일 체크
         //CheckFile(path, fileName, isCopyFile);
 
+        //// 경로 설정
+        //if (isCopyFile)
+        //    path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
+        //else
+        //    path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
+
+        //// 파일 체크
+        //// 누락시 자동 원본 복사
+        //// 복사 실패시 중단
+        //if(!CheckFile(path, subPathOrNull, fileName, isCopyFile))
+        //    return;
+
+
         // 경로 설정
         if (isCopyFile)
-            path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
+            path = string.Format("{0}/{1}", copyPath, subPathOrNull);
         else
-            path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
+            path = string.Format("{0}/{1}", basicPath, subPathOrNull);
+
+        string fullPath = string.Format("{0}/{1}", path, fileName);
 
         // 파일 체크
-        CheckFile(path, subPathOrNull, fileName, isCopyFile);
+        if (!CheckFile(path, fileName))
+        {
+            // 복사본일 경우 원본 복사 시도
+            if (isCopyFile)
+            {
+                string pathBasic = string.Format("{0}/{1}", basicPath, subPathOrNull);
+                // 원본 체크
+                if (CheckFile(@pathBasic, fileName))
+                {
+                    // 원본 복사
+                    string pathBasicFile = string.Format("{0}/{1}", pathBasic, fileName);
+
+                    FileInfo temp = new FileInfo(@pathBasicFile);
+                    temp.CopyTo(@fullPath);
+                    Debug.LogWarning("파일 복사됨 :: \t" + @pathBasicFile);
+                }
+                // 원본 파일 없음
+                else
+                {
+                    Debug.LogError("error :: 파일 없음\n" + fullPath);
+                    return;
+                }
+            }
+            // 파일 없음
+            else
+            {
+                Debug.LogError("error :: 파일 없음\n" + fullPath);
+                Debug.Break();
+                return;
+            }
+        }
+
+        path = @fullPath;
+
 
         // 열기
         //FileStream fs = new FileStream(@path, FileMode.Open);

@@ -171,7 +171,7 @@ public class EventManager : MonoBehaviour
             blockIndex,
             eventID, 
             1,
-            GameData.player.me
+            Player.me
             );
     }
 }

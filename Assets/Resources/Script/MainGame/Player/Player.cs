@@ -10,8 +10,52 @@ public class Player
         AI,
     }
 
-    // 카운터
-    static int count = 0;               // 시스템 제외 Player 카운터
+    public class PlayerSystem
+    {
+        public Player Starter = new Player(Player.Type.System, 1, true, "Starter");
+        public Player Minigame = new Player(Player.Type.System, 1, true, "Minigame");
+        public Player MinigameEnder = new Player(Player.Type.System, 1, true, "MinigameEnder");
+        public Player Ender = new Player(Player.Type.System, 1, true, "Ender");
+    }
+
+    // 시스템 플레이어
+    public static PlayerSystem system = new PlayerSystem();
+
+    // 시스템 제외 모든 플레이어
+    public static List<Player> allPlayer = new List<Player>();
+
+    // 플레이어 자신
+    public static Player me = null;
+
+    // 턴 진행중 플레이어
+    public static Player isTurn { get { return Turn.now; } }
+
+    // p1~4 플레이어
+    public static Player player_1 = null;
+    public static Player player_2 = null;
+    public static Player player_3 = null;
+    public static Player player_4 = null;
+
+    // 초기화
+    public static void Clear()
+    {
+        //system = new PlayerSystem()
+        allPlayer.Clear();
+        me = null;
+        player_1 = null;
+        player_2 = null;
+        player_3 = null;
+        player_4 = null;
+    }
+
+    public static int Index(Player current)
+    {
+        for (int i = 0; i < allPlayer.Count; i++)
+            if (allPlayer[i] == current)
+                return i;
+
+        return -1;
+    }
 
 
 
@@ -105,30 +149,8 @@ public class Player
     public Player(Type __type, int characterIndex, bool __isAutoPlay, string playerName)
     {
         SetPlayer(__type, characterIndex, __isAutoPlay, playerName);
-
-        // 카운터 반영
-        if (_type != Type.System)
-            count++;
-
+        
         Debug.Log("플레이어 생성됨 :: 캐릭터 번호 = " + characterIndex);
-    }
-
-    // 소멸자
-    ~Player()
-    {
-        // 카운터 반영
-        if (_type != Type.System)
-            count--;
-    }
-
-
-
-    /// <summary>
-    /// 플레이어 인원수 반환
-    /// </summary>
-    public static int Count()
-    {
-        return count;
     }
 
 
@@ -210,24 +232,26 @@ public class Player
 
     public void LoadFace()
     {
-        // 아이콘 로드
-        Debug.Log(@"Data/Character/Face/Face" + character.index.ToString("D4"));
-        Sprite temp = Resources.Load<Sprite>(@"Data/Character/Face/Face" + character.index.ToString("D4"));
+        //// 아이콘 로드
+        //Debug.Log(@"Data/Character/Face/Face" + character.index.ToString("D4"));
+        //Sprite temp = Resources.Load<Sprite>(@"Data/Character/Face/Face" + character.index.ToString("D4"));
 
-        // 이미지 유효 검사
-        if (temp == null)
-        {
-            // 기본 아이콘 대체 처리
-            Debug.Log(@"UI/playerInfo/player");
-            temp = Resources.Load<Sprite>(@"UI/playerInfo/player");
-        }
+        //// 이미지 유효 검사
+        //if (temp == null)
+        //{
+        //    // 기본 아이콘 대체 처리
+        //    Debug.Log(@"UI/playerInfo/player");
+        //    temp = Resources.Load<Sprite>(@"UI/playerInfo/player");
+        //}
 
-        // 최종 실패 처리
-        if (temp == null)
-            Debug.Log("로드 실패 :: UI/playerInfo/player");
-        // 아이콘 변경
-        else
-            face = temp;
+        //// 최종 실패 처리
+        //if (temp == null)
+        //    Debug.Log("로드 실패 :: UI/playerInfo/player");
+        //// 아이콘 변경
+        //else
+        //    face = temp;
+
+        face = character.GetIcon();
     }
 
 

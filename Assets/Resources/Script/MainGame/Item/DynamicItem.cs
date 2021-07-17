@@ -106,7 +106,8 @@ public class DynamicItem : DynamicObject
     /// <param name="itemIndex">아이템 인덱스</param>
     /// <param name="_count"> 수량</param>
     /// <param name="_icon">아이콘</param>
-    public void SetUp(int itemIndex, int _count, Sprite _icon)
+    //public void SetUp(int itemIndex, int _count, Sprite _icon)
+    public void SetUp(int itemIndex, int _count)
     {
         // 아이템 참조 설정
         item = Item.table[itemIndex];
@@ -115,7 +116,8 @@ public class DynamicItem : DynamicObject
         count = _count;
 
         // 아이템 아이콘 설정
-        icon = _icon;
+        //icon = _icon;
+        icon = item.GetIcon();
         iconObject.sprite = icon;
 
 

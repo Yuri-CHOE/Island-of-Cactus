@@ -19,7 +19,7 @@ public class ItemShop : MonoBehaviour
     [SerializeField]
     Text npcText;
 
-    int playerMoney { get { return GameData.turn.now.coin.Value; } }
+    int playerMoney { get { return Turn.now.coin.Value; } }
     int totalSelectMoney { get { int temp = 0; for (int i = 0; i < bundle.Count; i++) { if (bundle[i].toggle.isOn) temp += bundle[i].priceValue; } return temp; } }
 
     public List<ItemShopBundle> bundle;
@@ -55,7 +55,7 @@ public class ItemShop : MonoBehaviour
          */
 
         // ±¸¸ÅÀÚ ÁöÁ¤
-        Player customer = GameData.turn.now;
+        Player customer = Turn.now;
 
         int buyCount = 0;
 
@@ -112,7 +112,7 @@ public class ItemShop : MonoBehaviour
         int spareMoney = playerMoney - totalSelectMoney;
 
         // ÀÜ¿© ½Àµæ °¡´É ¼ö·® ÆÄ¾Ç
-        int spareSlotCount = Player.inventoryMax - GameData.turn.now.inventoryCount;
+        int spareSlotCount = Player.inventoryMax - Turn.now.inventoryCount;
 
         // ¹øµé ¼ö·® ÆÄ¾Ç
         int selectCount = 0;
@@ -148,7 +148,7 @@ public class ItemShop : MonoBehaviour
     void CheckInventoryMax()
     {
         // ÀÜ¿© ½Àµæ °¡´É ¼ö·® ÆÄ¾Ç
-        int spareSlotCount = Player.inventoryMax - GameData.turn.now.inventory.Count;
+        int spareSlotCount = Player.inventoryMax - Turn.now.inventory.Count;
 
         // ¹øµé ¼ö·® ÆÄ¾Ç
         int selectCount = 0;

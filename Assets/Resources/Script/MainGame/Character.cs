@@ -145,4 +145,26 @@ public class Character
     }
 
 
+
+
+    public Sprite GetIcon()
+    {
+        // 아이콘 로드
+        Debug.Log(@"Data/Character/Face/Face" + index.ToString("D4"));
+        Sprite temp = Resources.Load<Sprite>(@"Data/Character/Face/Face" + index.ToString("D4"));
+
+        // 이미지 유효 검사
+        if (temp == null)
+        {
+            // 기본 아이콘 대체 처리
+            Debug.Log(@"UI/playerInfo/player");
+            temp = Resources.Load<Sprite>(@"UI/playerInfo/player");
+        }
+
+        // 최종 실패 처리
+        if (temp == null)
+            Debug.Log("로드 실패 :: UI/playerInfo/player");
+
+        return temp;
+    }
 }

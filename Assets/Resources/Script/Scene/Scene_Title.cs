@@ -29,7 +29,6 @@ public class Scene_Title : MonoBehaviour
         // 유저 이름 갱신
         if (UserData.userName != null)
             userName.text = UserData.userName;
-        
     }
 
     public void Refresh()
@@ -38,7 +37,7 @@ public class Scene_Title : MonoBehaviour
             if (characterList[i].GetComponent<Toggle>().isOn)
             {
                 _selected = i + 1;
-                Debug.Log("선택된 캐릭터 인덱스 : " + selected);
+                Debug.LogWarning("선택된 캐릭터 인덱스 : " + selected);
                 return;
             }
     }
@@ -58,7 +57,12 @@ public class Scene_Title : MonoBehaviour
     public void SetPlayerMe(bool isAuto)
     {
         Refresh();
-        GameData.player.me = new Player(Player.Type.User, selected, isAuto, UserData.userName);
+        Player.me = new Player(Player.Type.User, selected, isAuto, UserData.userName);
+    }
+
+    public void UseLoad(bool useLoad)
+    {
+        GameSaver.useLoad = useLoad;
     }
 
 

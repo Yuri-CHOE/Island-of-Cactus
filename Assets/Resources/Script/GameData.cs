@@ -14,6 +14,7 @@ public static class GameData
     public static DecorManager decorManager { get { if (isMainGameScene) return worldManager.decorManager; else return null; } }
     public static GameMaster gameMaster { get { if (isMainGameScene) return GameObject.FindObjectOfType<GameMaster>(); else return null; } }
     public static ItemManager itemManager { get { if (isMainGameScene) return gameMaster.itemManager; else return null; } }
+    public static EventManager eventManager { get { if (isMainGameScene) return gameMaster.eventManager; else return null; } }
 
 
 
@@ -27,16 +28,16 @@ public static class GameData
     public static string worldFileName { get { return _worldFileName; } }
 
     // 플레이어
-    static PlayerGroup _player = new PlayerGroup();
-    public static PlayerGroup player { get { return _player; } }
+    //static PlayerGroup _player = new PlayerGroup();
+    //public static PlayerGroup player { get { return _player; } }
 
     // 사이클
-    static Cycle _cycle = new Cycle();
-    public static Cycle cycle { get { return _cycle; } }
+    //static Cycle _cycle = new Cycle();
+    //public static Cycle cycle { get { return _cycle; } }
 
     // 턴
-    static Turn _turn = new Turn();
-    public static Turn turn { get { return _turn; } }
+    //static Turn _turn = new Turn();
+    //public static Turn turn { get { return _turn; } }
 
     // 게임 플로우
     public static GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
@@ -53,9 +54,12 @@ public static class GameData
     {
         _gameMode = GameMode.Mode.None;
         _worldFileName = null;
-        _player = new PlayerGroup();
-        _cycle = new Cycle();
-        _turn = new Turn();
+        //_player = new PlayerGroup();
+        Player.Clear();
+        //_cycle = new Cycle();
+        Cycle.Clear();
+        //_turn = new Turn();
+        Turn.Clear();
     }
 
     public static void SetGameMode(GameMode.Mode __gameMode)

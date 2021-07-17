@@ -28,9 +28,9 @@ public class CycleManager : MonoBehaviour
     public void Refresh()
     {
         // 현재 사이클 텍스트 갱신
-        nowText.text = GameData.cycle.now.ToString();
+        nowText.text = Cycle.now.ToString();
 
         // 목표 사이클 텍스트 갱신
-        maxText.text = GameData.cycle.goal.ToString();
+        maxText.text = Cycle.goal.ToString();
     }
 }

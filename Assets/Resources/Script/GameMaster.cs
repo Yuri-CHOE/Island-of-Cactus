@@ -96,13 +96,17 @@ public class GameMaster : MonoBehaviour
                     // 로딩 완료 대기
                     if (loadingManager.isFinish) return;
 
+                    // 세이브 파일 로드
+                    if (GameSaver.useLoad)
+                        GameSaver.LoadGameInfo();
+
                     // 세이브파일 작성
                     // 미구현================
                     // 원본에서 복사할것
 
 
                     // 중력 설정
-                    if(flowCopy == Flow.Wait)
+                    if (flowCopy == Flow.Wait)
                         Physics.gravity = Physics.gravity * 10;
 
 
@@ -114,80 +118,94 @@ public class GameMaster : MonoBehaviour
                         {
                             // 미구현 : 별도 지정 필요===========
                         }
-                        else if (GameData.player.allPlayer.Count == 0)
+                        else if (Player.allPlayer.Count == 0)
                         {
                             // 중복 방지 작업
                             List<int> picked = Tool.RandomNotCross(1, Character.table.Count, 4);
-                            if (picked.Contains(GameData.player.me.character.index))
-                                picked.Remove(GameData.player.me.character.index);
+                            if (picked.Contains(Player.me.character.index))
+                                picked.Remove(Player.me.character.index);
 
                             // 플레이어 초기화 및 리스트 구성
-                            GameData.player.player_1 = GameData.player.me;
-                            GameData.player.allPlayer.Add(GameData.player.player_1);
+                            Player.player_1 = Player.me;
+                            Player.allPlayer.Add(Player.player_1);
 
                             if (GameRule.playerCount >= 2)
                             {
-                                GameData.player.player_2 = new Player(Player.Type.AI, picked[0], true, "Player02");
-                                GameData.player.allPlayer.Add(GameData.player.player_2);
+                                Player.player_2 = new Player(Player.Type.AI, picked[0], true, "Player02");
+                                Player.allPlayer.Add(Player.player_2);
                             }
 
                             if (GameRule.playerCount >= 3)
                             {
-                                GameData.player.player_3 = new Player(Player.Type.AI, picked[1], true, "Player03");
-                                GameData.player.allPlayer.Add(GameData.player.player_3);
+                                Player.player_3 = new Player(Player.Type.AI, picked[1], true, "Player03");
+                                Player.allPlayer.Add(Player.player_3);
                             }
 
                             if (GameRule.playerCount >= 4)
                             {
-                                GameData.player.player_4 = new Player(Player.Type.AI, picked[2], true, "Player04");
-                                GameData.player.allPlayer.Add(GameData.player.player_4);
+                                Player.player_4 = new Player(Player.Type.AI, picked[2], true, "Player04");
+                                Player.allPlayer.Add(Player.player_4);
                             }
                             
 
-                            // 플레이어별 "다른 플레이어" 구성
-                            for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                            {
-                                // 퀵 지정 (등록자)
-                                Player temp = GameData.player.allPlayer[i];
+                            //// 플레이어별 "다른 플레이어" 구성
+                            //for (int i = 0; i < Player.allPlayer.Count; i++)
+                            //{
+                            //    // 퀵 지정 (등록자)
+                            //    Player temp = Player.allPlayer[i];
 
-                                // 모든 플레이어 등록
-                                for (int j = 0; j < GameData.player.allPlayer.Count; j++)
-                                    temp.otherPlayers.Add(GameData.player.allPlayer[j]);
+                            //    // 모든 플레이어 등록
+                            //    for (int j = 0; j < Player.allPlayer.Count; j++)
+                            //        temp.otherPlayers.Add(Player.allPlayer[j]);
 
-                                // 등록자 본인 제외
-                                temp.otherPlayers.Remove(temp);
-                            }
+                            //    // 등록자 본인 제외
+                            //    temp.otherPlayers.Remove(temp);
+                            //}
 
                             // 임시 큐 구성
-                            //for(int i = 0; i < GameData.player.allPlayer.Count; i++)
-                            //    GameData.turn.queue.Enqueue(GameData.player.allPlayer[i]);
+                            //for(int i = 0; i < Player.allPlayer.Count; i++)
+                            //    Turn.queue.Enqueue(Player.allPlayer[i]);
                         }
                     }
 
 
                     // 캐릭터 생성 및 캐릭터 아이콘 로드
-                    for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                        if (GameData.player.allPlayer[i].avatar == null)
+                    for (int i = 0; i < Player.allPlayer.Count; i++)
+                    {
+                        // 대상 플레이어
+                        Player current = Player.allPlayer[i];
+
+                        // 캐릭터 아이콘 로드
+                        current.LoadFace();
+
+                        // "다른 플레이어" 구성
                         {
-                            // 대상 플레이어
-                            Player current = GameData.player.allPlayer[i];
+                            // 모든 플레이어 등록
+                            for (int j = 0; j < Player.allPlayer.Count; j++)
+                                current.otherPlayers.Add(Player.allPlayer[j]);
+
+                            // 등록자 본인 제외
+                            current.otherPlayers.Remove(current);
+                        }
+
+                        // 캐릭터 생성
+                        if (Player.allPlayer[i].avatar == null)
+                        {
 
                             // 캐릭터 생성
                             current.CreateAvatar(characterParent);
                             current.avatar.name = "p" + (i + 1);
 
                             // 캐릭터 이동
-                            if(current.movement.location == -1)
+                            if (current.movement.location == -1)
                                 current.avatar.transform.position = GameData.blockManager.startBlock.position;
                             else
                                 current.avatar.transform.position = GameData.blockManager.GetBlock(current.movement.location).transform.position;
-
-                            // 캐릭터 아이콘 로드
-                            current.LoadFace();
                         }
+                    }
 
                     // 캐릭터 겹침 해소
-                    GameData.player.allPlayer[0].avatar.GetComponent<CharacterMover>().AvatarOverFix();
+                    Player.me.movement.AvatarOverFix();
 
                     
                     // PlayerInfo UI 비활성
@@ -199,7 +217,16 @@ public class GameMaster : MonoBehaviour
                     ShortcutManager.script.SetUp();
 
                     // 사이클 설정
-                    GameData.cycle.goal = GameRule.cycleMax;
+                    Cycle.goal = GameRule.cycleMax;
+
+
+                    // 세이브 파일 로드
+                    if (GameSaver.useLoad)
+                    {
+                        GameSaver.LoadPlayer();
+                        GameSaver.LoadItemObject();
+                        GameSaver.LoadEventObject();
+                    }
 
 
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
@@ -230,7 +257,7 @@ public class GameMaster : MonoBehaviour
                 // 순서주사위 굴리기
                 {
                     // 씬 재로드 제어
-                    if (flowCopy <= Flow.Ordering)
+                    if (flowCopy <= Flow.Ordering && !GameSaver.useLoad)
                     {
                         //Debug.Log("게임 플로우 :: 순서 주사위 확인중");
 
@@ -239,20 +266,20 @@ public class GameMaster : MonoBehaviour
                         {
 
                             // 플레이어별 체크
-                            for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+                            for (int i = 0; i < Player.allPlayer.Count; i++)
                             {
                                 // 이미 굴렸으면 다음 플레이어 처리
-                                if (GameData.player.allPlayer[i].dice.isRolled)
+                                if (Player.allPlayer[i].dice.isRolled)
                                     continue;
 
                                 // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
-                                if (!GameData.player.allPlayer[i].dice.isRolling)
+                                if (!Player.allPlayer[i].dice.isRolling)
                                 {
                                     Debug.Log(string.Format("게임 플로우 :: Player{0} 주사위 굴리는중", i + 1));
                                     // 주사위 기능 호출
                                     diceController.CallDice(
-                                        GameData.player.allPlayer[i],
-                                        GameData.player.allPlayer[i].avatar.transform
+                                        Player.allPlayer[i],
+                                        Player.allPlayer[i].avatar.transform
                                         );
 
                                     // 다른 플레이어 무시
@@ -266,15 +293,12 @@ public class GameMaster : MonoBehaviour
                             diceController.UseDice();
 
                         // 모두가 주사위 굴리지 않으면 중단
-                        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                            if (!GameData.player.allPlayer[i].dice.isRolled)
+                        for (int i = 0; i < Player.allPlayer.Count; i++)
+                            if (!Player.allPlayer[i].dice.isRolled)
                                 return;
 
-                        Debug.Log("게임 플로우 :: 모든 플레이어 주사위 굴림 완료 =>" + GameData.player.allPlayer.Count);
+                        Debug.Log("게임 플로우 :: 모든 플레이어 주사위 굴림 완료 =>" + Player.allPlayer.Count);
 
-                        // 모든 플레이어 주사위 굴림완료 상태 초기화
-                        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                            GameData.player.allPlayer[i].dice.isRolled = false;
                     }
                     else
                     {
@@ -285,25 +309,37 @@ public class GameMaster : MonoBehaviour
 
 
                     // 순서용 리스트 복사
-                    List<Player> pOrderList = new List<Player>(GameData.player.allPlayer);
-                    Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + GameData.player.allPlayer.Count);
+                    List<Player> pOrderList = new List<Player>(Player.allPlayer);
+                    //Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + Player.allPlayer.Count);
+
+                    // 순서큐 셋팅 및 리스트 순차 정리
+                    Turn.SetUp(pOrderList);
+
+                    // 모든 플레이어 주사위 굴림완료 상태 초기화
+                    for (int i = 0; i < Player.allPlayer.Count; i++)
+                        Player.allPlayer[i].dice.Clear();
 
                     // PlayerInfo UI 초기화
                     for (int i = 0; i < pOrderList.Count; i++)
                     {
-                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].name);
                         pOrderList[i].infoUI = playerInfoUI[i];
-                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].infoUI.transform.name);
-                        Debug.Log("게임 플로우 :: 디버그 =>" + pOrderList[i].infoUI.transform.name);
                         pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
                     }
 
                     // 미할당 PlayerInfo UI 제거
-                    for (int i = GameData.player.allPlayer.Count; i < playerInfoUI.Count; i++)
+                    for (int i = Player.allPlayer.Count; i < playerInfoUI.Count; i++)
                         playerInfoUI[i].gameObject.SetActive(false);
 
-                    // 순서큐 셋팅 및 리스트 순차 정리
-                    GameData.turn.SetUp(pOrderList);
+                    // 세이브 파일 로드
+                    if (GameSaver.useLoad)
+                    {
+                        GameSaver.LoadPlayerInventory();
+                        GameSaver.LoadTurn();
+                    }
+                    GameSaver.Clear();
+
+                    //// 순서큐 셋팅 및 리스트 순차 정리
+                    //Turn.SetUp(pOrderList);
 
                     // PlayerInfo UI 활성
                     StartCoroutine(Tool.CanvasFade(MainUI, true, 1.5f));
@@ -323,8 +359,8 @@ public class GameMaster : MonoBehaviour
 
 
                     // 턴 시작
-                    if(GameData.cycle.now == 0)
-                        GameData.cycle.now = 1;
+                    if(Cycle.now == 0)
+                        Cycle.now = 1;
 
                     GameData.gameFlow = Flow.Cycling;
                     break;
@@ -333,9 +369,9 @@ public class GameMaster : MonoBehaviour
 
             // 게임 진행
             case Flow.Cycling:
-                if (GameData.cycle.isEnd())
+                if (Cycle.isEnd())
                 {
-                    Debug.Log("게임 플로우 :: 종료 조건 달성 확인됨 => by " + GameData.turn.now.name);
+                    Debug.Log("게임 플로우 :: 종료 조건 달성 확인됨 => by " + Turn.now.name);
                     GameData.gameFlow = Flow.End;
                 }
                 else
@@ -347,9 +383,9 @@ public class GameMaster : MonoBehaviour
 
             /*
         case Flow.Turn:
-            if (GameData.turn.now == GameData.player.system.Minigame)
+            if (Turn.now == Player.system.Minigame)
                 GameData.gameFlow = Flow.MiniGameStart;
-            else if (GameData.turn.now == GameData.player.system.Ender)
+            else if (Turn.now == Player.system.Ender)
                 GameData.gameFlow = Flow.CycleEnd;
             break;
         case Flow.MiniGameStart:
@@ -362,7 +398,7 @@ public class GameMaster : MonoBehaviour
             GameData.gameFlow = Flow.Turn;      // 주의 : 다시 턴으로 돌아가서 시스템 플레이어 엔더 역할 수행됨
             break;
         case Flow.CycleEnd:
-            if(GameData.cycle.isEnd())
+            if(Cycle.isEnd())
                 GameData.gameFlow = Flow.End;
             else
                 GameData.gameFlow = Flow.CycleStart;
@@ -392,73 +428,73 @@ public class GameMaster : MonoBehaviour
     void TurnWork()
     {
         // 로그 기록
-        //Debug.Log("플레이어 호출 :: " + GameData.turn.now.name);
+        //Debug.Log("플레이어 호출 :: " + Turn.now.name);
 
         // 종료 조건 체크
 
         // 라이프 체크
-        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
+        for (int i = 0; i < Player.allPlayer.Count; i++)
         {
             // 라이프 0 또는 음수일 경우
-            if (GameData.player.allPlayer[i].life.Value < 1)
+            if (Player.allPlayer[i].life.Value < 1)
             {
                 // 이미 감옥일 경우 중단
-                if (GameData.player.allPlayer[i].isDead)
+                if (Player.allPlayer[i].isDead)
                 {
-                    //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + GameData.player.allPlayer[i].name);
+                    //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + Player.allPlayer[i].name);
                     continue;
                 }
 
-                //Debug.LogError("라이프 체크 :: 감지됨 => " + GameData.player.allPlayer[i].name);
-                GameData.player.allPlayer[i].movement.GotoJail();
+                //Debug.LogError("라이프 체크 :: 감지됨 => " + Player.allPlayer[i].name);
+                Player.allPlayer[i].movement.GotoJail();
             }
         }
 
         // 시스템 플레이어 - 스타터
-        if (GameData.turn.now == GameData.player.system.Starter)
+        if (Turn.now == Player.system.Starter)
         {
             // 시작 연출 및 각종 초기화
 
             // 모든 플레이어 주사위 초기화
-            for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-                GameData.player.allPlayer[i].dice.Clear();
+            for (int i = 0; i < Player.allPlayer.Count; i++)
+                Player.allPlayer[i].dice.Clear();
 
             // 사이클 UI 갱신
             cycleManager.Refresh();
 
             // 턴 종료 처리
-            GameData.turn.Next();
+            Turn.Next();
         }
         // 시스템 플레이어 - 미니게임
-        else if(GameData.turn.now == GameData.player.system.Minigame)
+        else if(Turn.now == Player.system.Minigame)
         {
             // 미니게임 선정
 
             // 턴 종료 처리
-            GameData.turn.Next();
+            Turn.Next();
 
             // 미니게임 로드
         }
         // 시스템 플레이어 - 미니게임 엔더
-        else if (GameData.turn.now == GameData.player.system.MinigameEnder)
+        else if (Turn.now == Player.system.MinigameEnder)
         {
             // 미니게임 정산
 
             // 턴 종료 처리
-            GameData.turn.Next();
+            Turn.Next();
         }
         // 시스템 플레이어 - 엔더
-        else if (GameData.turn.now == GameData.player.system.Ender)
+        else if (Turn.now == Player.system.Ender)
         {
             // 종료 분기 체크
 
 
 
             // 사이클 증가
-            GameData.cycle.NextCycle();
+            Cycle.NextCycle();
 
             // 턴 종료 처리
-            GameData.turn.Next();
+            Turn.Next();
             //Debug.Break();
         }
         // 실제 플레이어
@@ -472,132 +508,132 @@ public class GameMaster : MonoBehaviour
     void PlayerWork()
     {
         // 초기화
-        if (GameData.turn.turnAction == Turn.TurnAction.Wait)
+        if (Turn.turnAction == Turn.TurnAction.Wait)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
                 // 로그 기록
-                Debug.Log("턴 진행 :: " + GameData.turn.turnAction + " & " + GameData.turn.actionProgress + " :: " + GameData.turn.now.name);
+                Debug.Log("턴 진행 :: " + Turn.turnAction + " & " + Turn.actionProgress + " :: " + Turn.now.name);
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 각종 체크
 
                 // 부활 체크
-                if (GameData.turn.now.isDead)
-                    if (GameData.turn.now.stunCount <= 0)
-                        GameData.turn.now.Resurrect();
+                if (Turn.now.isDead)
+                    if (Turn.now.stunCount <= 0)
+                        Turn.now.Resurrect();
 
                 // 행동 가능 여부 체크
-                if (GameData.turn.now.isStun)
+                if (Turn.now.isStun)
                 {
                     // 남은 대기 턴 감소
-                    GameData.turn.now.stunCount--;
+                    Turn.now.stunCount--;
 
                     // 행동권 박탈
-                    GameData.turn.turnAction = Turn.TurnAction.Ending;
+                    Turn.turnAction = Turn.TurnAction.Ending;
                 }
 
                 // 모든 플레이어 대상 라이프 체크
                 CheckLife();
 
                 // 행동 불가능 체크
-                if (GameData.turn.now.isStun)
+                if (Turn.now.isStun)
                 {
                     // 턴 중단 및 종료 연출로 이동
-                    GameData.turn.turnAction = Turn.TurnAction.Ending;
-                    GameData.turn.actionProgress = ActionProgress.Ready;
+                    Turn.turnAction = Turn.TurnAction.Ending;
+                    Turn.actionProgress = ActionProgress.Ready;
                     return;
                 }
 
                 // 주사위 지급
-                GameData.turn.now.dice.count = 1;
-                Debug.Log("주사위 수량 :: " + GameData.turn.now.dice.count);
+                Turn.now.dice.count = 1;
+                Debug.Log("주사위 수량 :: " + Turn.now.dice.count);
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 메인 작업
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
 
                 // 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Opening;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Opening;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 시작 연출
-        else if (GameData.turn.turnAction == Turn.TurnAction.Opening)
+        else if (Turn.turnAction == Turn.TurnAction.Opening)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 연출 준비
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 시작 연출
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
 
 
                 // 스킵
-                GameData.turn.turnAction = Turn.TurnAction.DiceRolling;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.DiceRolling;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 주사위 굴리기
-        else if (GameData.turn.turnAction == Turn.TurnAction.DiceRolling)
+        else if (Turn.turnAction == Turn.TurnAction.DiceRolling)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 주사위를 굴리는중 중단
                 if (diceController.isBusy)
@@ -606,12 +642,12 @@ public class GameMaster : MonoBehaviour
                 // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
                 else if (diceController.isFree)
                 {
-                    Debug.Log(string.Format("게임 플로우 :: Player({0}) 주사위 굴리는중", GameData.turn.now.name));
+                    Debug.Log(string.Format("게임 플로우 :: Player({0}) 주사위 굴리는중", Turn.now.name));
 
                     // 주사위 기능 호출
                     diceController.CallDice(
-                        GameData.turn.now,
-                        GameData.turn.now.avatar.transform
+                        Turn.now,
+                        Turn.now.avatar.transform
                         );
                 }
 
@@ -622,8 +658,8 @@ public class GameMaster : MonoBehaviour
                     diceController.isTimeCountWork = false;
 
                     // 아이템 사용 단계로 워프
-                    GameData.turn.turnAction = Turn.TurnAction.Item;
-                    GameData.turn.actionProgress = ActionProgress.Ready;
+                    Turn.turnAction = Turn.TurnAction.Item;
+                    Turn.actionProgress = ActionProgress.Ready;
                 }
 
                 // 주사위 마무리
@@ -634,23 +670,23 @@ public class GameMaster : MonoBehaviour
 
                     // 주사위 더이상 없을시 스킵
                     if (diceController.owner == null)   // 주사위 0개일 경우 소유권 박탈됨
-                        GameData.turn.actionProgress = ActionProgress.Finish;
+                        Turn.actionProgress = ActionProgress.Finish;
                 }
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
 
 
                 // 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Plan;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Plan;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 아이템 사용 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Item)
+        else if (Turn.turnAction == Turn.TurnAction.Item)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
@@ -658,9 +694,9 @@ public class GameMaster : MonoBehaviour
                 // 소모처리
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 Debug.LogWarning("아이템 사용됨");
 
@@ -668,16 +704,16 @@ public class GameMaster : MonoBehaviour
                 // 연출
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 효과 적용
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 Debug.LogWarning("아이템 사용 종료");
 
@@ -688,74 +724,74 @@ public class GameMaster : MonoBehaviour
                 diceController.isTimeCountWork = true;
 
                 // 다시 주사위 마저 진행
-                GameData.turn.turnAction = Turn.TurnAction.DiceRolling;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.DiceRolling;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 액션 계획 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Plan)
+        else if (Turn.turnAction == Turn.TurnAction.Plan)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 시작 연출
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 액션 스케줄링
-                Debug.LogWarning( "액션 스케줄링 :: 총 이동력 => " +GameData.turn.now.dice.valueTotal);
-                GameData.turn.now.movement.PlanMoveBy(
-                    GameData.turn.now.dice.valueTotal
+                Debug.LogWarning( "액션 스케줄링 :: 총 이동력 => " +Turn.now.dice.valueTotal);
+                Turn.now.movement.PlanMoveBy(
+                    Turn.now.dice.valueTotal
                     );
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
                 
                 // 다음으로 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Action;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Action;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 액션 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Action)
+        else if (Turn.turnAction == Turn.TurnAction.Action)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 시작 연출
 
                 // 카메라 부착
-                GameData.worldManager.cameraManager.CamMoveTo(GameData.turn.now.avatar.transform, CameraManager.CamAngle.Top);
+                GameData.worldManager.cameraManager.CamMoveTo(Turn.now.avatar.transform, CameraManager.CamAngle.Top);
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 스크립트 퀵 등록
-                CharacterMover movement = GameData.turn.now.movement;
+                CharacterMover movement = Turn.now.movement;
 
                 // 액션 미수행 경우
                 if (movement.actNow.type == Action.ActionType.None)
@@ -771,7 +807,7 @@ public class GameMaster : MonoBehaviour
                         GameData.worldManager.cameraManager.CamFree();
 
                         // 좌표 변경
-                        movement.location = movement.location+GameData.turn.now.dice.valueTotal;
+                        movement.location = movement.location+Turn.now.dice.valueTotal;
 
                         // 겹침 정렬
                         movement.AvatarOverFix();
@@ -780,7 +816,7 @@ public class GameMaster : MonoBehaviour
                         movement.actNow = new Action();
 
                         // 스킵
-                        GameData.turn.actionProgress = ActionProgress.Finish;
+                        Turn.actionProgress = ActionProgress.Finish;
                     }
                 }
                 // 액션 수행중
@@ -811,20 +847,20 @@ public class GameMaster : MonoBehaviour
                 }
 
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
                 // 다음으로 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Block;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Block;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 블록 기능 수행 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Block)
+        else if (Turn.turnAction == Turn.TurnAction.Block)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
@@ -832,19 +868,19 @@ public class GameMaster : MonoBehaviour
                 BlockWork.Clear();
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 블록 기능 수행
                 if (!BlockWork.isWork)
-                    BlockWork.Work(GameData.turn.now);
+                    BlockWork.Work(Turn.now);
 
                 // 스킵
                 if (BlockWork.isEnd)
@@ -854,88 +890,88 @@ public class GameMaster : MonoBehaviour
                         Debug.LogError("왜 턴이 멋대로 넘어갈까?");
                         Debug.Break();
                     }
-                    GameData.turn.actionProgress = ActionProgress.Finish;
+                    Turn.actionProgress = ActionProgress.Finish;
                 }
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
 
                 // 다음으로 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Ending;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Ending;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 종료 연출 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Ending)
+        else if (Turn.turnAction == Turn.TurnAction.Ending)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 시작 연출
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
 
                 // 다음으로 스킵
-                GameData.turn.turnAction = Turn.TurnAction.Finish;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Finish;
+                Turn.actionProgress = ActionProgress.Ready;
             }
 
         }
         // 종료 단계
-        else if (GameData.turn.turnAction == Turn.TurnAction.Finish)
+        else if (Turn.turnAction == Turn.TurnAction.Finish)
         {
-            if (GameData.turn.actionProgress == ActionProgress.Ready)
+            if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // 각종 초기화
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Start;
+                Turn.actionProgress = ActionProgress.Start;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Start)
+            else if (Turn.actionProgress == ActionProgress.Start)
             {
                 // 시작 연출
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Working;
+                Turn.actionProgress = ActionProgress.Working;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Working)
+            else if (Turn.actionProgress == ActionProgress.Working)
             {
 
                 // 스킵
-                GameData.turn.actionProgress = ActionProgress.Finish;
+                Turn.actionProgress = ActionProgress.Finish;
             }
-            else if (GameData.turn.actionProgress == ActionProgress.Finish)
+            else if (Turn.actionProgress == ActionProgress.Finish)
             {
                 // 종료 연출
 
                 // 진행 초기화
-                GameData.turn.turnAction = Turn.TurnAction.Wait;
-                GameData.turn.actionProgress = ActionProgress.Ready;
+                Turn.turnAction = Turn.TurnAction.Wait;
+                Turn.actionProgress = ActionProgress.Ready;
 
 
                 // 턴 종료 처리
-                GameData.turn.Next();
+                Turn.Next();
             }
 
         }
@@ -949,9 +985,9 @@ public class GameMaster : MonoBehaviour
     public void CheckLife()
     {
         // 체크
-        for (int i = 0; i < GameData.player.allPlayer.Count; i++)
-            if (GameData.player.allPlayer[i].life.checkMin(1))
-                GotoPrison(GameData.player.allPlayer[i]);
+        for (int i = 0; i < Player.allPlayer.Count; i++)
+            if (Player.allPlayer[i].life.checkMin(1))
+                GotoPrison(Player.allPlayer[i]);
     }
 
     /// <summary>

@@ -2,18 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cycle
+public static class Cycle
 {
     // 현재 사이클
-    public int now = 0;
+    public static int now = 0;
 
     // 목표 사이클
-    public int goal = 999999;
+    public static int goal = 999999;
+
+
+
+
+    public static void Clear()
+    {
+        now = 0;
+        goal = 999999;
+    }
+
 
     /// <summary>
     /// 자연수 보정
     /// </summary>
-    public void CheckNegativet()
+    public static void CheckNegativet()
     {
         if (now < 0)
             now = 0;
@@ -26,7 +36,7 @@ public class Cycle
     /// 종료 확인
     /// </summary>
     /// <returns></returns>
-    public bool isEnd()
+    public static bool isEnd()
     {
         CheckNegativet();
 
@@ -36,9 +46,10 @@ public class Cycle
             return true;
     }
 
-    public void NextCycle()
+    public static void NextCycle()
     {
         now++;
 
     }
+
 }

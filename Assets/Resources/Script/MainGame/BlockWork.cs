@@ -163,7 +163,8 @@ public static class BlockWork
 
 
         // 오브젝트화
-        DynamicItem obj = GameData.itemManager.CreateItemObject(currentPlayer.movement.location, index, coinValue, ItemSlot.LoadIcon(Item.table[index]));
+        //DynamicItem obj = GameData.itemManager.CreateItemObject(currentPlayer.movement.location, index, coinValue, ItemSlot.LoadIcon(Item.table[index]));
+        DynamicItem obj = GameData.itemManager.CreateItemObject(currentPlayer.movement.location, index, coinValue);
 
         // 배치할 위치
         int loc = GameData.blockManager.indexLoop(currentPlayer.movement.location, -1);

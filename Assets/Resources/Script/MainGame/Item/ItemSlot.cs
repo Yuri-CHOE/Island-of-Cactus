@@ -24,6 +24,8 @@ public class ItemSlot : MonoBehaviour
 
     public void CopyByMirror(ItemSlot mirror)
     {
+        Debug.LogWarning("아이템 계승 :: " + mirror.item.name + " -> " + mirror.count);
+
         item = mirror.item;
         count = mirror.count;
     }
@@ -70,33 +72,35 @@ public class ItemSlot : MonoBehaviour
     /// </summary>
     public static Sprite LoadIcon(Item _item)
     {
-        // 아이콘 로드
-        Debug.Log(@"Data/Item/icon/item" + _item.index.ToString("D4"));
-        Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + _item.index.ToString("D4"));
+        return _item.GetIcon();
 
-        // 이미지 유효 검사
-        if (temp == null)
-        {
-            // 기본 아이콘 대체 처리
-            Debug.Log(@"Data/Item/icon/item0000");
-            temp = Resources.Load<Sprite>(@"Data/Item/icon/item0000");
-        }
+        //// 아이콘 로드
+        //Debug.Log(@"Data/Item/icon/item" + _item.index.ToString("D4"));
+        //Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + _item.index.ToString("D4"));
+
+        //// 이미지 유효 검사
+        //if (temp == null)
+        //{
+        //    // 기본 아이콘 대체 처리
+        //    Debug.Log(@"Data/Item/icon/item0000");
+        //    temp = Resources.Load<Sprite>(@"Data/Item/icon/item0000");
+        //}
+
+        ////// 최종 실패 처리
+        ////if (temp == null)
+        ////    Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        ////// 아이콘 리턴
+        ////else
+        ////    _icon.sprite = temp;
+
+
+        //// 아이콘 리턴
+        //if (temp != null)
+        //    return temp;
 
         //// 최종 실패 처리
-        //if (temp == null)
-        //    Debug.Log("로드 실패 :: Data/Item/icon/item0000");
-        //// 아이콘 리턴
-        //else
-        //    _icon.sprite = temp;
-
-
-        // 아이콘 리턴
-        if (temp != null)
-            return temp;
-
-        // 최종 실패 처리
-        Debug.Log("로드 실패 :: Data/Item/icon/item0000");
-        return null;
+        //Debug.Log("로드 실패 :: Data/Item/icon/item0000");
+        //return null;
     }
 
     /// <summary>
@@ -129,9 +133,9 @@ public class ItemSlot : MonoBehaviour
 
             PlayerInfoUI piui = transform.parent.parent.parent.parent.GetComponent<PlayerInfoUI>();
             
-            if (piui.owner == GameData.player.me) // 사용자가 아이템 소유권자일 경우
+            if (piui.owner == Player.me) // 사용자가 아이템 소유권자일 경우
             {
-                if (GameData.turn.now == GameData.player.me)    // 사용자가 턴 진행중일 경우
+                if (Turn.now == Player.me)    // 사용자가 턴 진행중일 경우
                 {
                     // 사용 버튼 활성
                     GameData.gameMaster.itemManager.btnUse.interactable = true;

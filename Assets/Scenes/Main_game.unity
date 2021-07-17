@@ -3030,8 +3030,8 @@ RectTransform:
   m_Children:
   - {fileID: 1770667507}
   - {fileID: 1657411612}
-  - {fileID: 652459301}
   - {fileID: 1080515209}
+  - {fileID: 652459301}
   m_Father: {fileID: 279825821}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3806,7 +3806,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287029, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287029, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3886,7 +3886,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287030, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_Name
-      value: player (3)
+      value: player (4)
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300988534252, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5206,8 +5206,8 @@ MonoBehaviour:
   playerInfoUI:
   - {fileID: 1770667508}
   - {fileID: 1657411613}
-  - {fileID: 652459302}
   - {fileID: 1080515210}
+  - {fileID: 652459302}
   MainUI: {fileID: 279825822}
   playerSelecter:
   - {fileID: 1100252046}
@@ -5861,7 +5861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287029, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287029, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_AnchorMax.x
@@ -5937,7 +5937,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300817287030, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_Name
-      value: player (4)
+      value: player (3)
       objectReference: {fileID: 0}
     - target: {fileID: 7278324300988534252, guid: b160f225ea761fb49a2959627462fc73, type: 3}
       propertyPath: m_AnchorMax.y
@@ -7052,6 +7052,7 @@ MonoBehaviour:
   nameText: {fileID: 1682908055}
   infoText: {fileID: 1332736493}
   btnUse: {fileID: 1116974178}
+  itemSlotPrefab: {fileID: 961392726904670124, guid: f4135beb52b737646963fd43c3072642, type: 3}
 --- !u!1 &1367356652
 GameObject:
   m_ObjectHideFlags: 0
