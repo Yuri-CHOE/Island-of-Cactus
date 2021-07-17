@@ -496,9 +496,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player1: 1
-  player2: 1
+  player2: 0
   player3: 0
   player4: 0
-  ob_delete: 0
   member_num: 0
   random: 0

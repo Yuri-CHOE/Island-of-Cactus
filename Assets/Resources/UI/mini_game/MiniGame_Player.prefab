@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 2477756546437643506}
   - component: {fileID: 7216638599155405133}
   - component: {fileID: 4791054675499440104}
-  - component: {fileID: 2989067727762597924}
+  - component: {fileID: 1407622430736095401}
   m_Layer: 5
   m_Name: MiniGame_Player
   m_TagString: Untagged
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2989067727762597924
+--- !u!114 &1407622430736095401
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,7 +166,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 455abaffa2deeee4f865dd5a33fa3317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  face: {fileID: 21300000, guid: aefb834785f0104418a68a79f2175856, type: 3}
+  score: 0
+  plusScore: 0
+  minusScore: 0
+  rank: 0
+  join: 1
+  myTurn: 0
+  deathUi: {fileID: 5255413607430924448}
+  txtScore: {fileID: 2477756547386225243}
 --- !u!1 &2477756546717796893
 GameObject:
   m_ObjectHideFlags: 0
