@@ -96,75 +96,126 @@ public class CharacterMover : MonoBehaviour
     }
 
 
+    public static void AvatarOverFixAll()
+    {
+        // 플레이어 검색 리스트
+        List<Player> fixSearch = new List<Player>(Player.allPlayer);
+
+        // 검색
+        while (fixSearch.Count > 0)
+        {
+            // 퀵등록
+            Player current = fixSearch[0];
+
+            // 작업 대상
+            List<Player> targetList = new List<Player>();
+            targetList.Add(current);
+
+            // 겹침 여부
+            bool isOver = false;
+
+            // 다른플레이어와 위치 비교
+            for (int i = 0; i < current.otherPlayers.Count; i++)
+            {
+                // 퀵등록
+                Player other = current.otherPlayers[i];
+
+                // 위치 중복 체크
+                if (current.movement.location == other.movement.location)
+                {
+                    // 중복 플레이어 검색에서 제외
+                    fixSearch.Remove(other);
+
+                    // 작업 대상 지정
+                    targetList.Add(other);
+
+                    // 겹침 처리
+                    isOver = true;
+                }
+            }
+
+            // 검색 끝난 플레이어 검색 제외
+            fixSearch.Remove(current);
+
+            // 겹쳤으면 해소 작업 호출
+            if (isOver)
+                ReLocation(targetList);
+        }
+    }
+
+    static void ReLocation(List<Player> playerList)
+    {
+        // 대상 미지정시 중단
+        if (playerList == null)
+            return;
+
+        // 겹친 좌표
+        Vector3 crossPoint = playerList[0].movement.locateBlock.position;
+
+        // 대상이 1명일 경우
+        if (playerList.Count == 1)
+        {
+            // 원점으로 이동
+            playerList[0].movement.transform.position = crossPoint;
+            return;
+        }
+
+        int count = playerList.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            // 퀵 등록
+            Player current = playerList[0];
+
+            // 임시 생성
+            GameObject obj = new GameObject("pos");
+
+            // 임시 이동
+            //playerList[0].movement.transform.RotateAround(crossPoint, Vector3.down, (360 / playerList.Count * i));
+            float angle = 180 / count + 360 / count * -i;
+            obj.transform.position = crossPoint + Vector3.forward * 2;
+            obj.transform.RotateAround(crossPoint, Vector3.down, angle);
+
+            // 좌표 추출
+            Vector3 pos = obj.transform.position;
+
+            // 거리 가공
+            //pos = Vector3.Lerp(crossPoint, pos, 0.2f);
+
+            // 임시 오브젝트 제거
+            Destroy(obj);
+
+
+            // 이동 명령
+            playerList[i].movement.MoveSet(pos, ActTurnSpeed, true);
+        }
+    }
+
     /// <summary>
-    /// 캐릭터 겹침 처리
+    /// 아바타 겹침 처리
     /// </summary>
     public void AvatarOverFix()
     {
-
         // 중복 플레이어 리스트
         List<Player> fixTarget = new List<Player>();
+        fixTarget.Add(owner);
 
         // 모든 플레이어 위치 체크
-        for (int i = 0; i < Player.allPlayer.Count; i++)
+        for (int i = 0; i < owner.otherPlayers.Count; i++)
         {
-            // 본인 제외
-            //if (Player.allPlayer[i].avatar == transform)
-            //    continue;
+            // 퀵등록
+            Player other = owner.otherPlayers[i];
 
-            // 위치 중복 체크
-            if (location == Player.allPlayer[i].avatar.GetComponent<CharacterMover>().location)
-                // 중복 플레이어 확보
-                fixTarget.Add(Player.allPlayer[i]);
+            // 위치 중복 플레이어 확보
+            if (location == other.movement.location)
+                fixTarget.Add(other);
         }
 
-        // 겹쳤다 떠나도 포메이션 그대로 =========== 큰 문제는 아님
+        // 겹쳤으면 해소 작업 호출
+        if (fixTarget.Count > 1)
+            ReLocation(fixTarget);
 
-        // 겹친 장소
-        Vector3 corssPoint = new Vector3();
-        if (location == -1)     // 스타트 블록
-            corssPoint = BlockManager.script.startBlock.transform.position;
-        else                    // 그 외
-            corssPoint = BlockManager.script.GetBlock(location).transform.position;
-
-        // 4명 중복
-        if (fixTarget.Count >= 4)
-        {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 2), ActTurnSpeed, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, 2), ActTurnSpeed, true);
-            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, -2), ActTurnSpeed, true);
-            fixTarget[3].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, -2), ActTurnSpeed, true);
-
-            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), ActTurnSpeed, true);
-            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), ActTurnSpeed, true);
-            //fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[2].avatar.transform.position + new Vector3(2, 0, -2), ActTurnSpeed, true);
-            //fixTarget[3].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[3].avatar.transform.position + new Vector3(-2, 0, -2), ActTurnSpeed, true);
-        }
-        // 3명 중복
-        else if (fixTarget.Count == 3)
-        {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 2), ActTurnSpeed, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(2, 0, 2), ActTurnSpeed, true);
-            fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(0, 0, -2), ActTurnSpeed, true);
-
-            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 2), ActTurnSpeed, true);
-            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(2, 0, 2), ActTurnSpeed, true);
-            //fixTarget[2].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[2].avatar.transform.position + new Vector3(0, 0, -2), ActTurnSpeed, true);
-        }
-        // 2명 중복
-        else if (fixTarget.Count == 2)
-        {
-            fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(-2, 0, 0), ActTurnSpeed, true);
-            fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(corssPoint + new Vector3(+2, 0, 0), ActTurnSpeed, true);
-
-            //fixTarget[0].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[0].avatar.transform.position + new Vector3(-2, 0, 0), ActTurnSpeed, true);
-            //fixTarget[1].avatar.GetComponent<CharacterMover>().MoveSet(fixTarget[1].avatar.transform.position + new Vector3(+2, 0, 0), ActTurnSpeed, true);
-        }
-        // 중복 없음
-        else if (fixTarget.Count == 1)
-        {
-
-        }
+        return;
     }
 
     /// <summary>

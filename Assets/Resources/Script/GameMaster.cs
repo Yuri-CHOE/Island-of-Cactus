@@ -146,25 +146,6 @@ public class GameMaster : MonoBehaviour
                                 Player.player_4 = new Player(Player.Type.AI, picked[2], true, "Player04");
                                 Player.allPlayer.Add(Player.player_4);
                             }
-                            
-
-                            //// 플레이어별 "다른 플레이어" 구성
-                            //for (int i = 0; i < Player.allPlayer.Count; i++)
-                            //{
-                            //    // 퀵 지정 (등록자)
-                            //    Player temp = Player.allPlayer[i];
-
-                            //    // 모든 플레이어 등록
-                            //    for (int j = 0; j < Player.allPlayer.Count; j++)
-                            //        temp.otherPlayers.Add(Player.allPlayer[j]);
-
-                            //    // 등록자 본인 제외
-                            //    temp.otherPlayers.Remove(temp);
-                            //}
-
-                            // 임시 큐 구성
-                            //for(int i = 0; i < Player.allPlayer.Count; i++)
-                            //    Turn.queue.Enqueue(Player.allPlayer[i]);
                         }
                     }
 
@@ -204,9 +185,6 @@ public class GameMaster : MonoBehaviour
                         }
                     }
 
-                    // 캐릭터 겹침 해소
-                    Player.me.movement.AvatarOverFix();
-
                     
                     // PlayerInfo UI 비활성
                     MainUI.GetComponent<CanvasGroup>().alpha = 0f;
@@ -227,6 +205,10 @@ public class GameMaster : MonoBehaviour
                         GameSaver.LoadItemObject();
                         GameSaver.LoadEventObject();
                     }
+
+                    // 캐릭터 겹침 해소
+                    //Player.me.movement.AvatarOverFix();
+                    CharacterMover.AvatarOverFixAll();
 
 
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");

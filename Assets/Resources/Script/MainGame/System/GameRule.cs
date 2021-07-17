@@ -4,6 +4,10 @@ using UnityEngine;
 
 public static class GameRule
 {
+    // 자동 저장
+    public static bool isAutoSave = true;
+
+
     // 지역
     public static int area = 1;
 

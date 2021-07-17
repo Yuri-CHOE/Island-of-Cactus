@@ -488,6 +488,8 @@ public class CSVReader
         }
         else
         {
+
+
             // 파일 초기화
             FileStream fs = new FileStream(@_file, FileMode.Create);
             fs.Close();

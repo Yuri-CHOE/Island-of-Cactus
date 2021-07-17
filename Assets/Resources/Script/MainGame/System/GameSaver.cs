@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
+using System.IO;
+using System.Security.Cryptography;
+
 public static class GameSaver
 {
     // 세이브 파일 폴더명
@@ -29,6 +32,18 @@ public static class GameSaver
     // 로딩 호출 여부
     public static bool useLoad = false;
 
+    // 암호화 사용 여부
+    static bool useEncrypt = false;
+    static string password = "This_is_Password";
+    static string vec = "GrowupGrowupGrowupGrowup";
+
+    public enum LockType
+    {
+        None,
+        Lock,
+        Unlock,
+    }
+
 
 
     public static void GameSave()
@@ -48,9 +63,25 @@ public static class GameSaver
 
         // 세이브 파일 코드
         StringBuilder code = SaveCode();
+        string codeStr = code.ToString();
 
         // 저장
-        CSVReader.SaveNew(saveFloder, fileName + extension, true, true, code.ToString());
+        FileInfo saveF0 = Save(fileName + extension, LockType.None, codeStr);
+        Debug.LogError("파일 생성됨 :: " + saveF0);
+        //CSVReader.SaveNew(saveFloder, fileName + extension, true, true, codeStr);
+
+        // 암호화 저장
+        FileInfo saveF1 = Save(fileName + "_" + extension, LockType.Lock, codeStr);
+        Debug.LogError("파일 생성됨 :: " + saveF1);
+
+        // 복호화 저장  
+        FileInfo saveF2 =
+            Save(
+                fileName + "__" + extension,
+                LockType.None,
+                Read(saveF1.Name, LockType.Unlock)
+                );
+        Debug.LogError("파일 생성됨 :: " + saveF2);
     }
 
 
@@ -91,6 +122,8 @@ public static class GameSaver
                 .Append(temp.isAutoPlay)
                 .Append(codeData)
                 .Append(temp.name)
+                .Append(codeData)
+                .Append(temp.movement.location)
                 .Append(codeData)
 
                 .Append(temp.life.Value)
@@ -183,6 +216,8 @@ public static class GameSaver
             .Append(Player.Index(Turn.now))
             .Append(codeData)
             .Append((int)GameData.gameFlow)
+            .Append(codeData)
+            .Append((int)Turn.turnAction)
 
             //.Append(codeChapter)
             ;
@@ -190,7 +225,7 @@ public static class GameSaver
 
         // 종료 문자
         sb.Append('#');
-
+        
         return sb;
     }
 
@@ -312,59 +347,30 @@ public static class GameSaver
                 temp[4]
                 );
 
+            // 위치 인덱스
+            int loc = int.Parse(temp[5]);
+            if (loc != -1)
+            current.movement.location = loc;
+            Vector3 rePos = current.movement.locateBlock.position;
+            rePos.y = current.movement.transform.position.y;
+            current.movement.transform.position = rePos;
+
+
+
             // 라이프
-            current.life.Set(int.Parse(temp[5]));
+            current.life.Set(int.Parse(temp[6]));
 
             // 코인
-            current.coin.Set(int.Parse(temp[6]));
+            current.coin.Set(int.Parse(temp[7]));
 
             // 주사위 개수
-            current.dice.count = int.Parse(temp[7]);
+            current.dice.count = int.Parse(temp[8]);
 
             // 주사위 합산값 (잔여 이동력)
-            current.dice.SetValueTotal(int.Parse(temp[8]));
+            current.dice.SetValueTotal(int.Parse(temp[9]));
 
             // 주사위 기록값
-            current.dice.valueRecord = int.Parse(temp[9]);
-
-            //current.inventory = new List<ItemSlot>();
-            //for (int j = 0; j < Player.inventoryMax; j++)
-            //{
-            //    int itemIndex = int.Parse(temp[10 + j * 2]);
-            //    if (itemIndex > 0)
-            //    {
-            //        // 임시 생성
-            //        //ItemSlot slot = new ItemSlot();
-
-            //        Item tempItem = null;
-            //        int tempCount = 0;
-
-            //        // 아이템 종류 파악
-            //        if (itemIndex > 0)
-            //        {
-            //            // 아이템 인덱스
-            //            tempItem = Item.table[itemIndex];
-
-            //            // 아이템 수량
-            //            tempCount = int.Parse(temp[11 + j * 2]);
-            //        }
-            //        else
-            //            tempItem = Item.empty;
-
-            //        // 임시 생성
-            //        ItemSlot slot = GameMaster.script.itemManager.CreateItemSlot(tempItem, tempCount);
-
-            //        // 등록
-            //        current.inventory.Add(slot);
-
-            //        // 임시 오브젝트 제거
-            //        GameObject.Destroy(slot.gameObject);
-            //    }
-
-            //}
-
-            // 적용중 효과
-            // 미구현=========================================
+            current.dice.valueRecord = int.Parse(temp[10]);
         }
     }
 
@@ -400,7 +406,7 @@ public static class GameSaver
 
             for (int j = 0; j < Player.inventoryMax; j++)
             {
-                int tempIndex = int.Parse(temp[10 + j * 2]);
+                int tempIndex = int.Parse(temp[11 + j * 2]);
 
                 // 없는 아이템 생략
                 if (tempIndex < 1)
@@ -410,7 +416,7 @@ public static class GameSaver
                 Item tempItem = Item.table[tempIndex];
 
                 // 아이템 수량
-                int tempCount = int.Parse(temp[11 + j * 2]);
+                int tempCount = int.Parse(temp[12 + j * 2]);
 
                 current.AddItem(tempItem, tempCount);
             }
@@ -511,7 +517,170 @@ public static class GameSaver
         Debug.LogError(Player.allPlayer[int.Parse(scTurn[0])].name);
         Turn.Skip(Player.allPlayer[int.Parse(scTurn[0])]);
 
-        // 플로우 셋팅
+        // 게임 플로우 셋팅
         GameMaster.flowCopy = (GameMaster.Flow)int.Parse(scTurn[1]);
+
+        // 턴 플로우 셋팅
+        Turn.turnAction = (Turn.TurnAction)int.Parse(scTurn[2]);
+    }
+
+
+
+
+    static Rfc2898DeriveBytes CreateKey(string _password)
+    {
+        //키값 생성
+        byte[] keyBytes = Encoding.Default.GetBytes(_password);
+
+        //솔트값(원본값을 알기 어렵게 하는 값)
+        byte[] saltBytes = SHA512.Create().ComputeHash(keyBytes);
+
+        //password를 암호화한 키 생성, 100000은 해시 생성의 반복 횟수
+        Rfc2898DeriveBytes result = new Rfc2898DeriveBytes(keyBytes, saltBytes, 100000);
+
+        return result;  //키값 반환
+
+        // 출처 : https://fred16157.github.io/.net/csharp-encryption/
+    }
+
+
+    public static byte[] UnLock(byte[] origin)
+    {
+        return Ccryptor(origin, LockType.Unlock);
+    }
+    public static byte[] Lock(byte[] origin)
+    {
+        return Ccryptor(origin, LockType.Lock);
+    }
+    public static byte[] Ccryptor(byte[] origin, LockType useEncryptor)
+    {
+        // 바이트로 변환
+        //byte[] origin = Encoding.Default.GetBytes(code);
+        Debug.LogError(origin.Length);
+
+        //AES 알고리즘
+        RijndaelManaged aes = new RijndaelManaged();
+
+        //키값 생성
+        Rfc2898DeriveBytes key = CreateKey(password);
+
+        //벡터 생성 
+        //Rfc2898DeriveBytes vector = CreateKey("GrowupGrowupGrowupGrowup");
+        Rfc2898DeriveBytes vector = CreateKey(vec);
+
+        aes.BlockSize = 128;            //AES의 블록 크기는 128 고정
+        aes.KeySize = 256;              //AES의 키 크기는 128, 192, 256을 지원한다.
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
+        aes.Key = key.GetBytes(32);     //AES-256을 사용하므로 키값의 길이는 32여야 한다.
+        aes.IV = vector.GetBytes(16);   //초기화 벡터는 언제나 길이가 16이어야 한다.
+
+        //Debug.LogError("key :: " + Encoding.Default.GetString(aes.Key));
+        //Debug.LogError("vector :: " + Encoding.Default.GetString(aes.IV));
+
+        //키값과 초기화 벡터를 기반으로 암호화 또는 복호화 작업을 하는 클래스 변수를 생성
+        ICryptoTransform cryptor;
+        if (useEncryptor == LockType.Lock)
+            cryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        else if (useEncryptor == LockType.Unlock)
+            cryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        else
+            return origin;
+
+        //using블록으로 변수를 사용하면 블록에서 나올때 자동으로 변수가 가비지컬렉팅 된다. 
+        using (MemoryStream ms = new MemoryStream()) //결과를 담을 스트림 
+        {
+            //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
+            using (CryptoStream cs = new CryptoStream(ms, cryptor, CryptoStreamMode.Write))
+            {
+                cs.Write(origin, 0, origin.Length);
+            }
+            //return Encoding.UTF8.GetString(ms.ToArray());    //암호화된 스트링 반환
+            return ms.ToArray();
+        }
+
+        // 출처 : https://fred16157.github.io/.net/csharp-encryption/
+    }
+
+    public static FileInfo Save(string fileName, LockType useEncryptor, string strData)
+    {
+        string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
+
+        FileInfo fi = null;
+
+        // 암호화 사용
+        if (useEncryptor == LockType.Lock)
+            fi = SaveFileCreate(
+                    @path,
+                    fileName,
+                    Lock(Encoding.Default.GetBytes(strData))
+                    );
+        // 암호화 사용 안함
+        else
+            fi = SaveFileCreate(
+                    @path,
+                    fileName,
+                    Encoding.Default.GetBytes(strData)
+                    );
+
+        return fi;
+    }
+    static FileInfo SaveFileCreate(string path, string fileName, byte[] byteData)
+    {
+        // 폴더 체크
+        CSVReader.CheckPath(@path);
+
+        // 파일 경로
+        string fullPath = string.Format("{0}/{1}", @path, @fileName);
+
+        // 파일 생성
+        System.IO.FileStream fs = new System.IO.FileStream(@fullPath, System.IO.FileMode.Create);
+
+        // 작성
+        fs.Write(byteData, 0, byteData.Length);
+
+        // 파일 닫기
+        fs.Close();
+
+        // 세이브 파일 반환
+        return new FileInfo(fullPath);
+    }
+
+    public static string Read(string fileName, LockType useDecryptor)
+    {
+        string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
+
+        byte[] result = SaveFileRead(path, fileName);
+
+        // 복호화 사용
+        if (useDecryptor == LockType.Unlock)
+            result = UnLock(result);
+
+        return Encoding.Default.GetString(result);
+    }
+    static byte[] SaveFileRead(string path, string fileName)
+    {
+        // 폴더 및 파일 체크
+        CSVReader.CheckFile(@path, @fileName);
+
+        // 파일 경로
+        string fullPath = string.Format("{0}/{1}", @path , @fileName);
+
+        // 파일 열기
+        System.IO.FileStream fs = new System.IO.FileStream(@fullPath, System.IO.FileMode.Open);
+
+        // 결과물
+        List<byte> result = new List<byte>();
+
+        // 파일 읽기
+        int data;
+        while ((data = fs.ReadByte()) != -1)
+            result.Add((byte)data);
+
+        // 파일 닫기
+        fs.Close();
+
+        // 결과 반환
+        return result.ToArray();
     }
 }
