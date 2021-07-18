@@ -22,14 +22,6 @@ public class ItemSlot : MonoBehaviour
     public Image icon = null;
 
 
-    public void CopyByMirror(ItemSlot mirror)
-    {
-        Debug.LogWarning("아이템 계승 :: " + mirror.item.name + " -> " + mirror.count);
-
-        item = mirror.item;
-        count = mirror.count;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +41,8 @@ public class ItemSlot : MonoBehaviour
 
     public void Clear()
     {
-        item = Item.table[0];
+        //item = Item.table[0];
+        item = null;
         count = 0;
 
         Refresh();
@@ -61,10 +54,21 @@ public class ItemSlot : MonoBehaviour
     public void Refresh()
     {
         // 아이콘 로드
-        icon.sprite = LoadIcon(item);
+        if (item == null)
+            icon.sprite = LoadIcon(Item.empty);
+        else
+            icon.sprite = LoadIcon(item);
 
         // 싱크
         itemMirror = item;
+    }
+
+    public void CopyByMirror(ItemSlot mirror)
+    {
+        Debug.LogWarning("아이템 계승 :: " + mirror.item.name + " -> " + mirror.count);
+
+        item = mirror.item;
+        count = mirror.count;
     }
 
     /// <summary>

@@ -334,10 +334,10 @@ public class LoadingManager : MonoBehaviour
             // ㄴ 해결법 : 로딩할때 말고 로딩 끝나고 메인게임 플로우 초기화구간에서 처리할것
             // ㄴ 해결법 : 그냥 아이템,이벤트 오브젝트 리스트 읽어서 재구성할것
             // 초기화 안됬을 경우 초기화
-            if(CharacterMover.barricade.Count == 0)
+            if(DynamicObject.objectList.Count == 0)
             {
                 for (int i = 0; i < wm.blockManager.blockCount; i++)
-                    CharacterMover.barricade.Add(new List<DynamicObject>());
+                    DynamicObject.objectList.Add(new List<DynamicObject>());
             }
             // 이미 초기화 된 경우 재생성
             else
@@ -384,7 +384,7 @@ public class LoadingManager : MonoBehaviour
 
             // 장애물 초기화
             for (int i = 0; i < wm.blockManager.blockCount; i++)
-                CharacterMover.barricade.Add(new List<DynamicObject>());
+                DynamicObject.objectList.Add(new List<DynamicObject>());
         }
         // 다시 로드
         else

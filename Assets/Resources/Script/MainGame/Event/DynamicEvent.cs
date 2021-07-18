@@ -30,6 +30,10 @@ public class DynamicEvent : DynamicObject
     //Coroutine coroutineAnimate = null;
     //bool isAnimate = false;
 
+    DynamicEvent()
+    {
+        type = Type.Event;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -75,10 +79,21 @@ public class DynamicEvent : DynamicObject
     //}
 
 
-    public void GetEvent(Player current)
+
+
+    /// <summary>
+    /// 이벤트 작동 조건
+    /// </summary>
+    /// <param name="current">작동시킨 플레이어</param>
+    public override bool CheckCondition(Player current)
+    {
+        return IocEvent.Condition(iocEvent, current, creator);
+    }
+
+    public void GetEvent(Player user)
     {
         // 작동
-        IocEvent.Effect(iocEvent, current);
+        IocEvent.Effect(iocEvent, user);
 
         // 목록 및 장애물 제외
         Remove();

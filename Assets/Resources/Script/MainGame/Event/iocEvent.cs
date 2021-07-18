@@ -234,6 +234,38 @@ public class IocEvent
 
 
     /// <summary>
+    /// 이벤트 작동 조건
+    /// </summary>
+    /// <param name="__iocEvent">작동할 이벤트</param>
+    /// <param name="current">작동시킨 플레이어</param>
+    /// <param name="creator">이벤트를 생성한 플레이어</param>
+    public static bool Condition(IocEvent __iocEvent, Player current, Player creator)
+    {
+        bool result = false ;
+
+        switch (__iocEvent.index)
+        {
+            case 0:
+                // 0번은 없음
+                break;
+
+            case 1:
+                // 효과
+                break;
+
+            case 2:
+                // 효과
+                break;
+
+                // 이하 추가 필요========================
+
+        }
+
+        return result;
+    }
+
+
+    /// <summary>
     /// 이벤트 효과
     /// </summary>
     /// <param name="__iocEvent">작동할 이벤트</param>

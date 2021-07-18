@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DynamicItem : DynamicObject
-{
+{    
     // 아이템 오브젝트
     public Transform itemObject = null;
 
@@ -29,6 +29,11 @@ public class DynamicItem : DynamicObject
     // 회전 정보
     Coroutine coroutineRot = null;
     bool isSpin = false;
+
+    DynamicItem()
+    {
+        type = Type.Item;
+    }
 
 
     // Start is called before the first frame update
@@ -75,6 +80,15 @@ public class DynamicItem : DynamicObject
     //        transform.GetComponent<BoxCollider>().isTrigger = false;
     //}
 
+
+    /// <summary>
+    /// 이벤트 작동 조건
+    /// </summary>
+    /// <param name="current">작동시킨 플레이어</param>
+    public override bool CheckCondition(Player current)
+    {
+        return current.inventoryCount < Player.inventoryMax;
+    }
 
     public void GetItem(Player current)
     {

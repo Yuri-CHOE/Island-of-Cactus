@@ -258,21 +258,6 @@ public class Player
     public void AddItem(ItemSlot itemSlot, int count)
     {
         AddItem(itemSlot.item, count);
-        //// 잔여 슬롯 부족 시 버림 === 시간 여유 된다면 소거할 아이템 선택하여 버리게 바꿀것
-        //if (inventoryCount >= Player.inventoryMax)
-        //    return;
-
-        //for (int i = 0; i < inventory.Count; i++)
-        //{
-        //    // 빈칸일경우 넣고 종료
-        //    if (inventory[i].isEmpty)
-        //    {
-        //        inventory[i].item = itemSlot.item;
-        //        inventory[i].count = count;
-        //        break;
-        //    }
-
-        //}
     }
     public void AddItem(Item _item, int count)
     {
@@ -296,7 +281,6 @@ public class Player
                 inventory[i].count = count;
                 break;
             }
-
         }
     }
 
@@ -309,7 +293,36 @@ public class Player
             if (inventory[i] == currentSlot)
                 inventory[i].Clear();
         }
+
+        // 인벤토리 재정렬
+        SortInventory();
     }
+
+    public void SortInventory()
+    {
+        // 마지막을 제외한 모든 슬롯 순회
+        for (int i = 0; i < inventory.Count - 1; i++)
+        {
+            // 빈 슬롯 검색
+            if (inventory[i].isEmpty)
+            {
+                // 당겨오기 수행
+                for (int j = i + 1; j < inventory.Count; j++)
+                {
+                    // 당겨올 슬롯에 아이템 있을 경우
+                    if (!inventory[j].isEmpty)
+                    {
+                        // 복사
+                        inventory[i].CopyByMirror(inventory[j]);
+
+                        // 당겨온 슬롯 말소
+                        inventory[j].Clear();
+                    }
+                }
+            }
+        }
+    }
+
 
     public void MirrorLoaction()
     {

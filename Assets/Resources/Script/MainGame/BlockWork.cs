@@ -181,7 +181,7 @@ public static class BlockWork
         obj.CreateBarricade();
 
         // 장애물 등록
-        //CharacterMover.barricade[loc]++;          // 생성시 자동 등록
+        //DynamicObject.objectList[loc]++;          // 생성시 자동 등록
 
         // 종료 판정 -> DynamicItem 에서 길과 충돌할때 처리
         //isEnd = true;

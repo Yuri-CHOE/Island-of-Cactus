@@ -6,7 +6,7 @@ public class CharacterMover : MonoBehaviour
 {
     // 장애물 목록
     //public static List<int> barricade = new List<int>();
-    public static List<List<DynamicObject>> barricade = new List<List<DynamicObject>>();
+    //public static List<List<DynamicObject>> barricade = new List<List<DynamicObject>>();
 
     // 플레이어
     public Player owner = null;
@@ -36,14 +36,21 @@ public class CharacterMover : MonoBehaviour
     bool attackNow = false;
 
 
-    // 아이템 습득 리스트
-    List<DynamicItem> itemList = new List<DynamicItem>();
 
-    // 아이템 습득 제어용
-    public bool isPickingUpItem = false;
-    bool itemFinish = false;
+    //// 아이템 습득 제어용
+    //List<DynamicItem> itemList = new List<DynamicItem>();
+    //public bool isPickingUpItem = false;
+    //bool itemFinish = false;
 
-    bool eventFinish = false;
+    //// 이벤트 획득 제어용
+    //List<DynamicEvent> eventList = new List<DynamicEvent>();
+    //public bool isPickingUpEvent = false;
+    //bool eventFinish = false;
+
+    // 오브젝트 습득 제어용
+    Coroutine objectPickUp = null;
+    List<DynamicObject> objectPickUpList = new List<DynamicObject>();
+    ActionProgress objectPickUpStep = ActionProgress.Ready;
 
 
 
@@ -303,7 +310,7 @@ public class CharacterMover : MonoBehaviour
             }
 
             // 장애물 체크
-            if (barricade[locNext].Count > 0)
+            if (DynamicObject.objectList[locNext].Count > 0)
             {
                 Debug.Log("장애물 탐지 : " + counter);
 
@@ -465,104 +472,241 @@ public class CharacterMover : MonoBehaviour
 
         if (act.progress == ActionProgress.Ready)
         {
-            Debug.LogWarning("아이템 오브젝트 :: 액션 위치 = " + act.count);
+            Debug.LogWarning("오브젝트 습득 :: 액션 위치 = " + act.count);
 
-            // 아이템 : 초기화
-            itemList.Clear();
-            isPickingUpItem = false;
-            itemFinish = false;
+            // 오브젝트 : 초기화
+            objectPickUpList.Clear();
+            objectPickUpStep = ActionProgress.Ready;
 
-            // 이벤트 : 초기화
-            // 이벤트 리스트 클리어 미구현==========
-            // 이벤트 작동중 bool값 미구현============
-            eventFinish = false;
+
+            //// 아이템 : 초기화
+            //itemList.Clear();
+            //isPickingUpItem = false;
+            //itemFinish = false;
+
+            //// 이벤트 : 초기화
+            //eventList.Clear();
+            //isPickingUpEvent = false;
+            //eventFinish = false;
 
             // 스킵
             act.progress = ActionProgress.Start;
         }
         else if (act.progress == ActionProgress.Start)
         {
-            // 아이템 : 리스트 작성
-            for (int i = 0; i < ItemManager.itemObjectList.Count; i++)
+            // 초기화
+            objectPickUpList.Clear();
+
+            // 위치의 오브젝트 목록 가져오기
+            List<DynamicObject> localBarricade = DynamicObject.objectList[loc];
+
+            // 오브젝트 : 리스트 작성
+            for (int i = 0; i < localBarricade.Count; i++)
             {
-                // 위치가 일치할 경우
-                if (ItemManager.itemObjectList[i].location == loc)
+                DynamicObject obj = localBarricade[i];
+
+                // 획득 조건 충족
+                if (obj.CheckCondition(owner))
                 {
-                    // 인벤토리가 남았을 경우
-                    if (owner.inventoryCount < Player.inventoryMax)
-                    {
-                        // 획득 대기열 추가
-                        itemList.Add(ItemManager.itemObjectList[i]);
+                    // 획득 대기열 추가
+                    objectPickUpList.Add(obj);
 
-                        // 획득
-                        //ItemManager.itemObjectList[i].GetItem(owner);
+                    // 로그
+                    Debug.LogWarning(string.Format("{0} 오브젝트 :: 습득 목록 추가 => ", obj.type, obj.transform.name));
 
-                        // 로그
-                        Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + ItemManager.itemObjectList[i].item.index);
-                    }
-                    else
-                        break;
+                    continue;
+                }
+                else
+                    Debug.LogWarning(string.Format("{0} 오브젝트 :: 습득 자격 미달 => ", obj.type, obj.transform.name));
+
+                // 사용안함 - 오버라이드된 조건 사용하지 않는 방식
+                {
+                    //// 아이템일 경우
+                    //if (obj.type == DynamicObject.Type.Item)
+                    //{
+                    //    DynamicItem convert = (DynamicItem)obj;
+
+                    //    // 획득 조건 충족
+                    //    if (convert.CheckCondition(owner))
+                    //    {
+                    //        // 획득 대기열 추가
+                    //        objectPickUpList.Add(convert);
+
+                    //        // 로그
+                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + convert.item.index);
+
+                    //        continue;
+                    //    }
+                    //}
+                    //// 이벤트일 경우
+                    //else if (obj.type == DynamicObject.Type.Event)
+                    //{
+                    //    DynamicEvent convert = (DynamicEvent)obj;
+
+                    //    // 작동 조건 충족
+                    //    if (convert.CheckCondition(owner))
+                    //    {
+                    //        // 획득 대기열 추가
+                    //        eventList.Add(convert);
+
+                    //        // 로그
+                    //        Debug.LogWarning("이벤트 오브젝트 :: 작동 목록 추가 => " + convert.iocEvent.index);
+
+                    //        continue;
+                    //    }
+                    //}
                 }
             }
 
-            // 이벤트 : 리스트 작성
+            // 사용 안함 - 아이템, 이벤트 목록 각각 전체순회 방식
+            {
+            //// 아이템 : 리스트 작성
+            //for (int i = 0; i < ItemManager.itemObjectList.Count; i++)
+            //{
+            //    DynamicItem currentItem = ItemManager.itemObjectList[i];
+
+            //    // 위치가 일치할 경우
+            //    if (currentItem.location == loc)
+            //    {
+            //        // 인벤토리가 남았을 경우
+            //        if (owner.inventoryCount < Player.inventoryMax)
+            //        {
+            //            // 획득 대기열 추가
+            //            itemList.Add(currentItem);
+
+            //            // 획득
+            //            //currentItem.GetItem(owner);
+
+            //            // 로그
+            //            Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + currentItem.item.index);
+            //        }
+            //        else
+            //            break;
+            //    }
+            //}
+
+            //// 이벤트 : 리스트 작성
+            //for (int i = 0; i < EventManager.eventObjectList.Count; i++)
+            //{
+            //    DynamicEvent currentEvent = EventManager.eventObjectList[i];
+
+            //    // 위치가 일치할 경우
+            //    if (currentEvent.location == loc)
+            //    {
+            //        // 작동 조건 충족
+            //        if (currentEvent.CheckCondition(owner))
+            //        {
+            //            // 획득 대기열 추가
+            //            eventList.Add(currentEvent);
+
+            //            // 로그
+            //            Debug.LogWarning("이벤트 오브젝트 :: 작동 목록 추가 => " + currentEvent.iocEvent.index);
+            //        }
+            //        else
+            //            break;
+            //    }
+            //}
+            }
 
             // 스킵
             act.progress = ActionProgress.Working;
         }
         else if (act.progress == ActionProgress.Working)
         {
-
-            // 아이템 : 습득
+            // 사용 안함 -  아이템, 이벤트 목록 각각 전체순회 방식 + 심각한 에러 있음
             {
-                if (itemList.Count > 0)
+                // 페이탈 에러 => 아이템 및 이벤트 각각 1회만 습득 가능
+
+                // 아이템 : 습득
                 {
-                    // 습득중이지 않을때
-                    if (!isPickingUpItem)
-                    {
-                        // 획득중 처리
-                        isPickingUpItem = true;
+                    //if (itemList.Count > 0)
+                    //{
+                    //    // 습득중이지 않을때
+                    //    if (!isPickingUpItem)
+                    //    {
+                    //        // 획득중 처리
+                    //        isPickingUpItem = true;
 
-                        // 습득 연출
-                        // 미구현
-                    }
-                    else
-                    {
+                    //        // 습득 연출
+                    //        // 미구현
+                    //    }
+                    //    else
+                    //    {
+                    //        // ==========연출 종료를 조건으로 하위 묶을것
 
-                        // ==========연출 종료를 조건으로 하위 묶을것
+                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + itemList[0].item.index);
 
-                        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + itemList[0].item.index);
+                    //        // 획득
+                    //        itemList[0].GetItem(owner);
 
-                        // 획득
-                        itemList[0].GetItem(owner);
+                    //        // 리스트에서 제거
+                    //        itemList.RemoveAt(0);
 
-                        // 리스트에서 제거
-                        itemList.RemoveAt(0);
-
-                        // 획득 종료 처리 
-                        isPickingUpItem = false;
-                    }
+                    //        // 획득 종료 처리 
+                    //        isPickingUpItem = false;
+                    //    }
+                    //}
+                    //// 습득 목록 비었을때
+                    //else
+                    //{
+                    //    //습득중이지 않을때
+                    //    if (!isPickingUpItem)
+                    //        itemFinish = true;
+                    //}
                 }
-                // 습득 목록 비었을때
-                else
+
+                // 이벤트 : 작동
                 {
-                    //습득중이지 않을때
-                    if (!isPickingUpItem)
-                        itemFinish = true;
+                    //if (itemList.Count > 0)
+                    //{
+                    //    // 습득중이지 않을때
+                    //    if (!isPickingUpEvent)
+                    //    {
+                    //        // 작동중 처리
+                    //        isPickingUpEvent = true;
+
+                    //        // 습득 연출
+                    //        // 미구현
+                    //    }
+                    //    else
+                    //    {
+                    //        // ==========연출 종료를 조건으로 하위 묶을것
+
+                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + eventList[0].iocEvent.index);
+
+                    //        // 획득
+                    //        eventList[0].GetEvent(owner);
+
+                    //        // 리스트에서 제거
+                    //        eventList.RemoveAt(0);
+
+                    //        // 획득 종료 처리 
+                    //        isPickingUpItem = false;
+                    //    }
+                    //}
+                    //// 습득 목록 비었을때
+                    //else
+                    //{
+                    //    //습득중이지 않을때
+                    //    if (!isPickingUpEvent)
+                    //        eventFinish = true;
+                    //}
                 }
             }
 
-            // 이벤트 : 작동
-            {
-                // 미구현=========================
-                // 임시 처리
-                eventFinish = true;
-            }
+            // 오브젝트 : 습득
+            if (objectPickUpStep == ActionProgress.Ready)
+            objectPickUp = StartCoroutine(GetObject());
+
 
             // 완료 체크
-            if (itemFinish && eventFinish)
+            //if (itemFinish && eventFinish)
+            if (objectPickUpStep == ActionProgress.Finish)
+            {
                 // 스킵
+                objectPickUpStep = ActionProgress.Ready;
                 act.progress = ActionProgress.Finish;
+            }
         }
         else if (act.progress == ActionProgress.Finish)
         {
@@ -570,6 +714,82 @@ public class CharacterMover : MonoBehaviour
             act.isFinish = true;
         }
     }
+
+    void SetObjectPickUpList()
+    {
+        // 초기화
+        objectPickUpList.Clear();
+
+
+    }
+
+    /// <summary>
+    /// 오브젝트 획득 리스트 전체 획득
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator GetObject()
+    {
+        // 습득 시작
+        objectPickUpStep = ActionProgress.Start;
+
+        // 전부 획득
+        while (objectPickUpList.Count > 0)
+        {
+            // 개별 습득 대기
+            yield return GetObject(objectPickUpList[0]);
+        }
+
+        // 습득 종료 처리
+        objectPickUpStep = ActionProgress.Finish;
+    }
+
+    /// <summary>
+    /// 오브젝트 단일 습득
+    /// </summary>
+    /// <param name="current"></param>
+    /// <returns></returns>
+    IEnumerator GetObject(DynamicObject current)
+    {
+        // 습득중 처리
+        objectPickUpStep = ActionProgress.Working;
+
+        // 아이템일 경우
+        if (current.type == DynamicObject.Type.Item)
+        {
+            DynamicItem di = (DynamicItem)current;
+
+            Debug.LogWarning("아이템 오브젝트 :: 습득 => " + di.item.index);
+
+            // 획득
+            di.GetItem(owner);
+
+            // 연출 명령
+            yield return null;
+        }
+
+        // 아이템일 경우
+        else if (current.type == DynamicObject.Type.Event)
+        {
+            DynamicEvent de = (DynamicEvent)current;
+
+            Debug.LogWarning("이벤트 오브젝트 :: 습득 => " + de.iocEvent.index);
+
+            // 획득
+            de.GetEvent(owner);
+
+            // 연출 명령
+            yield return null;
+        }
+
+        // 습득 리스트에서 제거
+        objectPickUpList.Remove(current);
+
+        // 습득중 완료 처리
+        objectPickUpStep = ActionProgress.Start;
+    }
+
+
+
 
     public void MoveByAction(ref Action act)
     {

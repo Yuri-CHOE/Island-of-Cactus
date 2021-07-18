@@ -348,7 +348,7 @@ public class BlockManager : MonoBehaviour
     //    if (blockIndex > 0 || blockIndex >= gol.Count)
     //        return;
 
-    //    CharacterMover.barricade[blockIndex].Add(dynamicObject);
+    //    DynamicObject.objectList[blockIndex].Add(dynamicObject);
     //}
 
 

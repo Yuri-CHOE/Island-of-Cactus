@@ -556,7 +556,7 @@ public static class GameSaver
     {
         // 바이트로 변환
         //byte[] origin = Encoding.Default.GetBytes(code);
-        Debug.LogError(origin.Length);
+        //Debug.LogError(origin.Length);
 
         //AES 알고리즘
         RijndaelManaged aes = new RijndaelManaged();

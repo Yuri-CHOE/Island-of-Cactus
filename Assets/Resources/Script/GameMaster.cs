@@ -316,6 +316,10 @@ public class GameMaster : MonoBehaviour
                     if (GameSaver.useLoad)
                     {
                         GameSaver.LoadPlayerInventory();
+
+                        // 스타트 플레이어 강제 호출
+                        TurnWork();
+
                         GameSaver.LoadTurn();
                     }
                     GameSaver.Clear();
