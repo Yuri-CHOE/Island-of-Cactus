@@ -36,17 +36,7 @@ public class CharacterMover : MonoBehaviour
     bool attackNow = false;
 
 
-
-    //// 아이템 습득 제어용
-    //List<DynamicItem> itemList = new List<DynamicItem>();
-    //public bool isPickingUpItem = false;
-    //bool itemFinish = false;
-
-    //// 이벤트 획득 제어용
-    //List<DynamicEvent> eventList = new List<DynamicEvent>();
-    //public bool isPickingUpEvent = false;
-    //bool eventFinish = false;
-
+    
     // 오브젝트 습득 제어용
     Coroutine objectPickUp = null;
     List<DynamicObject> objectPickUpList = new List<DynamicObject>();
@@ -100,6 +90,9 @@ public class CharacterMover : MonoBehaviour
     {
         // 고도 제한
         Tool.HeightLimit(bodyObject, posMinY - transform.position.y, posMaxY - transform.position.y);
+
+        // 액션 자동 수행
+        ActionCall();
     }
 
 
@@ -108,14 +101,17 @@ public class CharacterMover : MonoBehaviour
         // 플레이어 검색 리스트
         List<Player> fixSearch = new List<Player>(Player.allPlayer);
 
+        // 작업 대상
+        List<Player> targetList = new List<Player>();
+
         // 검색
         while (fixSearch.Count > 0)
         {
             // 퀵등록
             Player current = fixSearch[0];
 
-            // 작업 대상
-            List<Player> targetList = new List<Player>();
+            // 작업 대상 추가
+            targetList.Clear();
             targetList.Add(current);
 
             // 겹침 여부
@@ -126,9 +122,9 @@ public class CharacterMover : MonoBehaviour
             {
                 // 퀵등록
                 Player other = current.otherPlayers[i];
-
+                
                 // 위치 중복 체크
-                if (current.movement.location == other.movement.location)
+                if (current.location == other.location)
                 {
                     // 중복 플레이어 검색에서 제외
                     fixSearch.Remove(other);
@@ -139,13 +135,24 @@ public class CharacterMover : MonoBehaviour
                     // 겹침 처리
                     isOver = true;
                 }
+                //if (current.movement.location == other.movement.location)
+                //{
+                //    // 중복 플레이어 검색에서 제외
+                //    fixSearch.Remove(other);
+
+                //    // 작업 대상 지정
+                //    targetList.Add(other);
+
+                //    // 겹침 처리
+                //    isOver = true;
+                //}
             }
 
             // 검색 끝난 플레이어 검색 제외
             fixSearch.Remove(current);
 
             // 겹쳤으면 해소 작업 호출
-            if (isOver)
+            //if (isOver)
                 ReLocation(targetList);
         }
     }
@@ -153,17 +160,18 @@ public class CharacterMover : MonoBehaviour
     static void ReLocation(List<Player> playerList)
     {
         // 대상 미지정시 중단
-        if (playerList == null)
+        if (playerList == null || playerList.Count == 0)
             return;
 
         // 겹친 좌표
-        Vector3 crossPoint = playerList[0].movement.locateBlock.position;
+        //Vector3 crossPoint = playerList[0].movement.locateBlock.position;
+        Vector3 crossPoint = BlockManager.script.GetBlock(playerList[0].location).transform.position;
 
         // 대상이 1명일 경우
         if (playerList.Count == 1)
         {
             // 원점으로 이동
-            playerList[0].movement.transform.position = crossPoint;
+            playerList[0].movement.MoveSet(crossPoint, ActTurnSpeed, true);
             return;
         }
 
@@ -185,17 +193,12 @@ public class CharacterMover : MonoBehaviour
 
             // 좌표 추출
             Vector3 pos = obj.transform.position;
-
-            // 거리 가공
-            //pos = Vector3.Lerp(crossPoint, pos, 0.2f);
-
+            
             // 임시 오브젝트 제거
             Destroy(obj);
 
-
             // 이동 명령
             playerList[i].movement.MoveSet(pos, ActTurnSpeed, true);
-            
         }
     }
 
@@ -349,19 +352,22 @@ public class CharacterMover : MonoBehaviour
             }
 
             // 종료 전 체크
-            if (counter > 0 && (i + _sign == moveValue))
+            if (i + _sign == moveValue)
             {
                 Debug.Log("종료 탐지 : " + counter);
 
-                //스케줄링 추가 - counter만큼 칸수 지정
-                actionsQueue.Enqueue(new Action(Action.ActionType.Move, i+ _sign, moveSpeed));
-                actionsQueue.Enqueue(new Action(Action.ActionType.Stop, i+ _sign, moveSpeed));
-                //actionsQueue.Enqueue(new Action(Action.ActionType.Move, counter, moveSpeed));
+                // 이동 마무리
+                if (counter > 0)
+                {
+                    //스케줄링 추가 - counter만큼 칸수 지정
+                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
 
-                // 카운터 리셋
-                counter = 0;
+                    // 카운터 리셋
+                    counter = 0;
+                }
 
-                break;
+                //스케줄링 추가 - 최종 액션 : 정지 후 정면
+                actionsQueue.Enqueue(new Action(Action.ActionType.Stop, i + _sign, moveSpeed));
             }
 
             Debug.Log(counter + " , " + (i + _sign == moveValue));
@@ -369,6 +375,50 @@ public class CharacterMover : MonoBehaviour
 
         //스케줄링 추가 - 정면 보기
         //actionsQueue.Enqueue(new Action(Action.ActionType.Turn, 2, moveSpeed));
+    }
+
+
+    void ActionCall()
+    {
+        // 액션 미수행 경우
+        if (actNow.type == Action.ActionType.None)
+        {
+            // 잔여 액션 있음
+            if (actionsQueue.Count > 0)
+                GetAction();
+
+            // 모든 액션 소진
+            else
+            {
+                // 대기
+            }
+        }
+        // 액션 수행
+        else if (!actNow.isFinish)
+        {
+            // 이동 처리
+            if (actNow.type == Action.ActionType.Move)
+                MoveByAction(ref actNow);
+
+            // 장애물 처리
+            else if (actNow.type == Action.ActionType.Barricade)
+                CheckBarricade(ref actNow);
+
+            // 공격 처리
+            else if (actNow.type == Action.ActionType.Attack)
+                AttackPlayer(ref actNow);
+
+            // 정면 회전 처리
+            else if (actNow.type == Action.ActionType.Stop)
+                StopByAction(ref actNow);
+
+        }
+        // 액션 종료 처리
+        else //if (actNow.isFinish)
+        {
+            // 액션 소거
+            actNow = new Action();
+        }
     }
 
 
@@ -652,6 +702,7 @@ public class CharacterMover : MonoBehaviour
 
             // 임시 이동값 설정
             owner.TempLoaction(GameData.blockManager.indexLoop(location, act.count));
+            AvatarOverFixAll();
 
             // 스킵
             act.progress = ActionProgress.Working;
@@ -715,6 +766,9 @@ public class CharacterMover : MonoBehaviour
                 // 좌표 변경
                 location +=  owner.dice.valueTotal;
 
+                // 겹침 정렬
+                CharacterMover.AvatarOverFixAll();
+
                 // 스킵
                 act.progress = ActionProgress.Finish;
             }
@@ -740,6 +794,8 @@ public class CharacterMover : MonoBehaviour
 
         if (!isBusy)
             moveCoroutine = StartCoroutine(ActMove(movePoint, speed, isTurnAfterMove));
+        else
+            Debug.LogWarning("error :: 이미 액션 수행중 -> " + actNow.type);
     }
 
     /// <summary>
@@ -755,6 +811,8 @@ public class CharacterMover : MonoBehaviour
 
         if (!isBusy)
             moveCoroutine = StartCoroutine(ActMove(movePoint, speed, isTurnAfterMove));
+        else
+            Debug.LogWarning("error :: 이미 액션 수행중 -> " + actNow.type);
     }
 
     /// <summary>
@@ -814,7 +872,11 @@ public class CharacterMover : MonoBehaviour
         // 목표로 이동
         Tool.HeightLimit(bodyObject, posMinY - transform.position.y, posMaxY - transform.position.y);
         Vector3 posY = new Vector3(pos.x, transform.position.y, pos.z);
-        while (Vector3.Distance(transform.position, posY) > 0.1f)
+
+        // 좌표 저장
+        float dist = Vector3.Distance(transform.position, posY);
+        float distNow;
+        while ( (distNow = Vector3.Distance(transform.position, posY)) > 0.1f )
         {
             //transform.position = Vector3.Lerp(transform.position, posY, Time.deltaTime * speed);
 
@@ -827,19 +889,44 @@ public class CharacterMover : MonoBehaviour
             Vector3 limitePos = transform.position + signPos * speed / 5.00f * 0.5f;
 
 
-
-            // x축 최대치 보정
-            if (Mathf.Abs(targetPos.x - transform.position.x) > Mathf.Abs(limitePos.x - transform.position.x))
+            bool isCorner = actionsQueue.Count > 0 && actionsQueue.Peek().type == Action.ActionType.Move; //&& dist / 2 < distNow;
+            // 코너 감속 차단
+            if (isCorner)
             {
-                //Debug.Log("x축 보정됨");
+                // x축 최소치 보정
                 targetPos.x = limitePos.x;
-            }
-            // z축 최대치 보정
-            if (Mathf.Abs(targetPos.z - transform.position.z) > Mathf.Abs(limitePos.z - transform.position.z))
-            {
-                //Debug.Log("z축 보정됨");
                 targetPos.z = limitePos.z;
             }
+            else
+            {
+                // x축 최대치 보정
+                if (Mathf.Abs(targetPos.x - transform.position.x) > Mathf.Abs(limitePos.x - transform.position.x))
+                {
+                    //Debug.Log("x축 보정됨");
+                    targetPos.x = limitePos.x;
+                }
+                // z축 최대치 보정
+                if (Mathf.Abs(targetPos.z - transform.position.z) > Mathf.Abs(limitePos.z - transform.position.z))
+                {
+                    //Debug.Log("z축 보정됨");
+                    targetPos.z = limitePos.z;
+                }
+            }
+
+
+            // x축 초과 보정
+            if (Mathf.Abs(posY.x - transform.position.x) < Mathf.Abs(targetPos.x - transform.position.x))
+            {
+                //Debug.Log("x축 보정됨");
+                targetPos.x = posY.x;
+            }
+            // z축 초과 보정
+            if (Mathf.Abs(posY.z - transform.position.z) < Mathf.Abs(limitePos.z - transform.position.z))
+            {
+                //Debug.Log("z축 보정됨");
+                targetPos.z = posY.z;
+            }
+
 
             // 이동 처리
             transform.position = targetPos;

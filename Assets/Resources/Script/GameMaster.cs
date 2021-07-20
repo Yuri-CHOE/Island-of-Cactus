@@ -783,58 +783,14 @@ public class GameMaster : MonoBehaviour
                 if (movement.actNow.type == Action.ActionType.None)
                 {
                     // 잔여 액션 있음
-                    if (movement.actionsQueue.Count > 0)
-                        movement.GetAction();
-
-                    // 모든 액션 소진
-                    else
+                    if (movement.actionsQueue.Count == 0)
                     {
                         // 카메라 탈착
                         GameData.worldManager.cameraManager.CamFree();
 
-                        // 좌표 변경 :: stop 액션으로 대체됨
-                        //movement.location = movement.location + Turn.now.dice.valueTotal;
-
-                        // 겹침 정렬
-                        CharacterMover.AvatarOverFixAll();
-                        //movement.AvatarOverFix();
-
-                        // 초기화
-                        movement.actNow = new Action();
-
                         // 스킵
                         Turn.actionProgress = ActionProgress.Finish;
                     }
-                }
-                // 액션 수행중
-                else if (!movement.actNow.isFinish)
-                {
-                    //Debug.LogWarning("액션 수행중");
-
-                    // 이동 처리
-                    if (movement.actNow.type == Action.ActionType.Move)
-                        movement.MoveByAction(ref movement.actNow);
-
-                    // 장애물 처리
-                    if (movement.actNow.type == Action.ActionType.Barricade)
-                        movement.CheckBarricade(ref movement.actNow);
-
-                    // 공격 처리
-                    if (movement.actNow.type == Action.ActionType.Attack)
-                        movement.AttackPlayer(ref movement.actNow);
-
-                    // 정면 회전 처리
-                    if (movement.actNow.type == Action.ActionType.Stop)
-                        movement.StopByAction(ref movement.actNow);
-
-                }
-                // 액션 종료
-                else if (movement.actNow.isFinish)
-                {
-                    //Debug.LogWarning("액션 종료됨");
-
-                    // 액션 소거
-                    movement.actNow = new Action();
                 }
 
             }
