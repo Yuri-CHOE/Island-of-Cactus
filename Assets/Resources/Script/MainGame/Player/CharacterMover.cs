@@ -195,6 +195,7 @@ public class CharacterMover : MonoBehaviour
 
             // 이동 명령
             playerList[i].movement.MoveSet(pos, ActTurnSpeed, true);
+            
         }
     }
 
@@ -354,6 +355,7 @@ public class CharacterMover : MonoBehaviour
 
                 //스케줄링 추가 - counter만큼 칸수 지정
                 actionsQueue.Enqueue(new Action(Action.ActionType.Move, i+ _sign, moveSpeed));
+                actionsQueue.Enqueue(new Action(Action.ActionType.Stop, i+ _sign, moveSpeed));
                 //actionsQueue.Enqueue(new Action(Action.ActionType.Move, counter, moveSpeed));
 
                 // 카운터 리셋
@@ -519,93 +521,6 @@ public class CharacterMover : MonoBehaviour
                 else
                     Debug.LogWarning(string.Format("{0} 오브젝트 :: 습득 자격 미달 => ", obj.type, obj.transform.name));
 
-                // 사용안함 - 오버라이드된 조건 사용하지 않는 방식
-                {
-                    //// 아이템일 경우
-                    //if (obj.type == DynamicObject.Type.Item)
-                    //{
-                    //    DynamicItem convert = (DynamicItem)obj;
-
-                    //    // 획득 조건 충족
-                    //    if (convert.CheckCondition(owner))
-                    //    {
-                    //        // 획득 대기열 추가
-                    //        objectPickUpList.Add(convert);
-
-                    //        // 로그
-                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + convert.item.index);
-
-                    //        continue;
-                    //    }
-                    //}
-                    //// 이벤트일 경우
-                    //else if (obj.type == DynamicObject.Type.Event)
-                    //{
-                    //    DynamicEvent convert = (DynamicEvent)obj;
-
-                    //    // 작동 조건 충족
-                    //    if (convert.CheckCondition(owner))
-                    //    {
-                    //        // 획득 대기열 추가
-                    //        eventList.Add(convert);
-
-                    //        // 로그
-                    //        Debug.LogWarning("이벤트 오브젝트 :: 작동 목록 추가 => " + convert.iocEvent.index);
-
-                    //        continue;
-                    //    }
-                    //}
-                }
-            }
-
-            // 사용 안함 - 아이템, 이벤트 목록 각각 전체순회 방식
-            {
-            //// 아이템 : 리스트 작성
-            //for (int i = 0; i < ItemManager.itemObjectList.Count; i++)
-            //{
-            //    DynamicItem currentItem = ItemManager.itemObjectList[i];
-
-            //    // 위치가 일치할 경우
-            //    if (currentItem.location == loc)
-            //    {
-            //        // 인벤토리가 남았을 경우
-            //        if (owner.inventoryCount < Player.inventoryMax)
-            //        {
-            //            // 획득 대기열 추가
-            //            itemList.Add(currentItem);
-
-            //            // 획득
-            //            //currentItem.GetItem(owner);
-
-            //            // 로그
-            //            Debug.LogWarning("아이템 오브젝트 :: 습득 목록 추가 => " + currentItem.item.index);
-            //        }
-            //        else
-            //            break;
-            //    }
-            //}
-
-            //// 이벤트 : 리스트 작성
-            //for (int i = 0; i < EventManager.eventObjectList.Count; i++)
-            //{
-            //    DynamicEvent currentEvent = EventManager.eventObjectList[i];
-
-            //    // 위치가 일치할 경우
-            //    if (currentEvent.location == loc)
-            //    {
-            //        // 작동 조건 충족
-            //        if (currentEvent.CheckCondition(owner))
-            //        {
-            //            // 획득 대기열 추가
-            //            eventList.Add(currentEvent);
-
-            //            // 로그
-            //            Debug.LogWarning("이벤트 오브젝트 :: 작동 목록 추가 => " + currentEvent.iocEvent.index);
-            //        }
-            //        else
-            //            break;
-            //    }
-            //}
             }
 
             // 스킵
@@ -613,87 +528,6 @@ public class CharacterMover : MonoBehaviour
         }
         else if (act.progress == ActionProgress.Working)
         {
-            // 사용 안함 -  아이템, 이벤트 목록 각각 전체순회 방식 + 심각한 에러 있음
-            {
-                // 페이탈 에러 => 아이템 및 이벤트 각각 1회만 습득 가능
-
-                // 아이템 : 습득
-                {
-                    //if (itemList.Count > 0)
-                    //{
-                    //    // 습득중이지 않을때
-                    //    if (!isPickingUpItem)
-                    //    {
-                    //        // 획득중 처리
-                    //        isPickingUpItem = true;
-
-                    //        // 습득 연출
-                    //        // 미구현
-                    //    }
-                    //    else
-                    //    {
-                    //        // ==========연출 종료를 조건으로 하위 묶을것
-
-                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + itemList[0].item.index);
-
-                    //        // 획득
-                    //        itemList[0].GetItem(owner);
-
-                    //        // 리스트에서 제거
-                    //        itemList.RemoveAt(0);
-
-                    //        // 획득 종료 처리 
-                    //        isPickingUpItem = false;
-                    //    }
-                    //}
-                    //// 습득 목록 비었을때
-                    //else
-                    //{
-                    //    //습득중이지 않을때
-                    //    if (!isPickingUpItem)
-                    //        itemFinish = true;
-                    //}
-                }
-
-                // 이벤트 : 작동
-                {
-                    //if (itemList.Count > 0)
-                    //{
-                    //    // 습득중이지 않을때
-                    //    if (!isPickingUpEvent)
-                    //    {
-                    //        // 작동중 처리
-                    //        isPickingUpEvent = true;
-
-                    //        // 습득 연출
-                    //        // 미구현
-                    //    }
-                    //    else
-                    //    {
-                    //        // ==========연출 종료를 조건으로 하위 묶을것
-
-                    //        Debug.LogWarning("아이템 오브젝트 :: 습득 => " + eventList[0].iocEvent.index);
-
-                    //        // 획득
-                    //        eventList[0].GetEvent(owner);
-
-                    //        // 리스트에서 제거
-                    //        eventList.RemoveAt(0);
-
-                    //        // 획득 종료 처리 
-                    //        isPickingUpItem = false;
-                    //    }
-                    //}
-                    //// 습득 목록 비었을때
-                    //else
-                    //{
-                    //    //습득중이지 않을때
-                    //    if (!isPickingUpEvent)
-                    //        eventFinish = true;
-                    //}
-                }
-            }
-
             // 오브젝트 : 습득
             if (objectPickUpStep == ActionProgress.Ready)
             objectPickUp = StartCoroutine(GetObject());
@@ -775,7 +609,7 @@ public class CharacterMover : MonoBehaviour
             Debug.LogWarning("이벤트 오브젝트 :: 습득 => " + de.iocEvent.index);
 
             // 획득
-            de.GetEvent(owner);
+            de.GetEvent(owner, de.location);
 
             // 연출 명령
             yield return null;
@@ -815,6 +649,10 @@ public class CharacterMover : MonoBehaviour
                     false
                     );
 
+
+            // 임시 이동값 설정
+            owner.TempLoaction(GameData.blockManager.indexLoop(location, act.count));
+
             // 스킵
             act.progress = ActionProgress.Working;
         }
@@ -830,6 +668,52 @@ public class CharacterMover : MonoBehaviour
                 // 정면 보기
                 // 버그 발생! =============== 이동 한번 할때마다 정면 바라봄 => 정면보기 액션 플랜 독립시킬것
                 MoveSet(transform.position, ActTurnSpeed, true);
+
+                // 스킵
+                act.progress = ActionProgress.Finish;
+            }
+        }
+        else if (act.progress == ActionProgress.Finish)
+        {
+            // 종료 처리
+            act.isFinish = true;
+        }
+    }
+
+
+
+
+    public void StopByAction(ref Action act)
+    {
+        if (act.progress == ActionProgress.Ready)
+        {
+            // 각종 초기화
+
+            // 스킵
+            act.progress = ActionProgress.Start;
+        }
+        else if (act.progress == ActionProgress.Start)
+        {
+            // 이미 이동중일 경우 대기
+            if (isBusy)
+                return;
+
+            // 좌표 설정 및 이동
+                MoveSet(transform.position, ActTurnSpeed, true);
+
+            // 스킵
+            act.progress = ActionProgress.Working;
+        }
+        else if (act.progress == ActionProgress.Working)
+        {
+            // 완료 체크
+            if (!isBusy)
+            {
+                // 이동좌표 리셋
+                movePoint = Vector3.zero;
+
+                // 좌표 변경
+                location +=  owner.dice.valueTotal;
 
                 // 스킵
                 act.progress = ActionProgress.Finish;
@@ -874,6 +758,29 @@ public class CharacterMover : MonoBehaviour
     }
 
     /// <summary>
+    /// 현재 액션과 정지(마지막) 액션 사이의 모든 액션 제거
+    /// </summary>
+    public void MoveStop()
+    {
+        Debug.Log("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location);
+
+        // 스킵 대상 없을 경우
+        if (actNow.type == Action.ActionType.Stop)
+            return;
+        else
+        {
+            // 스킵 대상 없을 경우
+            while (actionsQueue.Peek().type != Action.ActionType.Stop)
+            {
+                // 제거
+                Action.ActionType aType = actionsQueue.Dequeue().type;
+
+                Debug.Log("액션 제거 :: " + aType);
+            }
+        }
+    }
+
+    /// <summary>
     /// 구조 : 목표 바라보기 -> 이동 -> 정면 바라보기(옵션)
     /// </summary>
     /// <param name="pos">목표</param>
@@ -892,44 +799,6 @@ public class CharacterMover : MonoBehaviour
         // 정면 바라보기
         if (isTurnAfterMove)
             yield return StartCoroutine(ActTurnFornt(speed));
-
-        // 구 코드 백업
-        {
-            //// 목표 바라보기
-            //Vector3 dir = transform.position;
-            //dir.y = pos.y - transform.position.y;
-            //float elapsedTime = 0.000f;
-            //while (Quaternion.LookRotation(dir.normalized).y / transform.rotation.y > 0.1f)
-            //{
-            //    elapsedTime += Time.deltaTime;
-            //    // 회전
-            //    transform.rotation = Quaternion.Lerp(
-            //        transform.rotation,
-            //        Quaternion.LookRotation(dir.normalized),
-            //        elapsedTime * speed
-            //        );
-
-            //    yield return null;
-            //}
-            //// 회전 보정
-            //transform.rotation = Quaternion.Lerp(
-            //    transform.rotation,
-            //    Quaternion.LookRotation(dir.normalized),
-            //    1f
-            //    );
-
-
-            //// 목표로 이동
-            //Vector3 posY = new Vector3(pos.x, transform.position.y, pos.z);
-            //while (Vector3.Distance(transform.position, posY) > 0.1f)
-            //{
-            //    transform.position = Vector3.Lerp(transform.position, posY, Time.deltaTime * speed);
-
-            //    yield return null;
-            //}
-            //// 값 보정
-            //transform.position = posY;
-        }
         
         isBusy = false;
     }

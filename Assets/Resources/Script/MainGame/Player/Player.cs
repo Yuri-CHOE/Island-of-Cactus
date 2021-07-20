@@ -48,6 +48,27 @@ public class Player
         player_4 = null;
     }
 
+    /// <summary>
+    /// 특정 장소에 위치한 플레이어 리턴
+    /// </summary>
+    /// <param name="blockIndex"></param>
+    /// <returns></returns>
+    public List<Player> LocatedPlayer(int blockIndex)
+    {
+        List<Player> result = new List<Player>();
+
+        for (int i = 0; i > allPlayer.Count; i++)
+            if (allPlayer[i].movement.location == blockIndex)
+                result.Add(allPlayer[i]);
+
+        return result;
+    }
+
+    /// <summary>
+    /// 특정 플레이어의 플레이어 인덱스 반환
+    /// </summary>
+    /// <param name="current"></param>
+    /// <returns></returns>
     public static int Index(Player current)
     {
         for (int i = 0; i < allPlayer.Count; i++)
@@ -100,7 +121,8 @@ public class Player
     //public GameObject locateBlock { get { if (GameData.isMainGameScene) { if (locate >= 0) return GameData.blockManager.gol[locate]; else return GameData.blockManager.startBlock.gameObject; } else return null; } }
 
     // 이동제어 스크립트
-    int location = -1;
+    int _location = -1;
+    public int location { get { return _location; } }
     //public CharacterMover movementMirror = new CharacterMover();
     //public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
     public CharacterMover movement = null;
@@ -326,7 +348,11 @@ public class Player
 
     public void MirrorLoaction()
     {
-         location = movement.location;
+         _location = movement.location;
+    }
+    public void TempLoaction(int blockIndex)
+    {
+        _location = blockIndex;
     }
 
 
@@ -375,5 +401,6 @@ public class Player
         // UI 제거
         infoUI.dead.gameObject.SetActive(false);
     }
+
 }
 

@@ -792,11 +792,12 @@ public class GameMaster : MonoBehaviour
                         // 카메라 탈착
                         GameData.worldManager.cameraManager.CamFree();
 
-                        // 좌표 변경
-                        movement.location = movement.location+Turn.now.dice.valueTotal;
+                        // 좌표 변경 :: stop 액션으로 대체됨
+                        //movement.location = movement.location + Turn.now.dice.valueTotal;
 
                         // 겹침 정렬
-                        movement.AvatarOverFix();
+                        CharacterMover.AvatarOverFixAll();
+                        //movement.AvatarOverFix();
 
                         // 초기화
                         movement.actNow = new Action();
@@ -821,6 +822,10 @@ public class GameMaster : MonoBehaviour
                     // 공격 처리
                     if (movement.actNow.type == Action.ActionType.Attack)
                         movement.AttackPlayer(ref movement.actNow);
+
+                    // 정면 회전 처리
+                    if (movement.actNow.type == Action.ActionType.Stop)
+                        movement.StopByAction(ref movement.actNow);
 
                 }
                 // 액션 종료

@@ -31,7 +31,7 @@ public class Item
             Self,
             AllPlayer,
             OthersPlayer,
-            DesignatedPlayer,
+            SelectedPlayer,
             World,
         }
 
@@ -148,6 +148,13 @@ public class Item
     int _icon = -1;
     public int icon { get { return _icon; } }
 
+    // 아이템 정보
+    string _info = null;
+    public string info { get { return _info; } }
+
+    // 효과
+    public IocEffect effect = new IocEffect();
+
     // 아이템 레어도 (드랍률)
     int _rare = -1;
     public int rare { get { return _rare; } }
@@ -159,13 +166,6 @@ public class Item
     // 럭키박스 획득여부
     bool _isLuckyBoxGet = false;
     public bool isLuckyBoxGet { get { return _isLuckyBoxGet; } }
-
-    // 아이템 정보
-    string _info = null;
-    public string info { get { return _info; } }
-
-    // 효과
-    public ItemEffect effect = new ItemEffect();
 
 
 
@@ -185,7 +185,7 @@ public class Item
     protected Item(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 13)
+        if (strList.Count != 14)
             return;
         if (loaclList.Count != 3)
             return;
@@ -198,16 +198,19 @@ public class Item
             //strList[2],
             loaclList[1],
             int.Parse(strList[3]),
-            int.Parse(strList[4]),
+
+            (IocEffect.Expiration)(int.Parse(strList[4])),
             int.Parse(strList[5]),
-            System.Convert.ToBoolean(int.Parse(strList[6])),
-            (ItemEffect.Expiration)int.Parse(strList[7]),
-            int.Parse(strList[8]),
-            (ItemEffect.Target)(int.Parse(strList[9])),
-            (ItemEffect.What)(int.Parse(strList[10])),
-            int.Parse(strList[11]),
+            (IocEffect.Target)(int.Parse(strList[6])),
+            int.Parse(strList[7]),
+            (IocEffect.What)(int.Parse(strList[8])),
+            int.Parse(strList[9]),
             //strList[12].Replace("value", strList[11])
-            loaclList[2].Replace("\\n","\n").Replace("value", strList[11])
+            loaclList[2].Replace("\\n","\n").Replace("value", strList[9]),
+
+            int.Parse(strList[11]),
+            int.Parse(strList[12]),
+            System.Convert.ToBoolean(int.Parse(strList[13]))
         );
     }
 
@@ -256,17 +259,17 @@ public class Item
     /// <param name="__what"></param>
     /// <param name="__value"></param>
     /// <param name="__info"></param>
-    void Set(int __index, Type __type, string __name, int __icon, int __rare, int __cost, bool __isLuckyBoxGet, ItemEffect.Expiration __expiration, int __count, ItemEffect.Target __target, ItemEffect.What __what, int __value, string __info)
+    void Set(int __index, Type __type, string __name, int __icon, IocEffect.Expiration __expiration, int __count, IocEffect.Target __target, int __where, IocEffect.What __what, int __value, string __info, int __rare, int __cost, bool __isLuckyBoxGet)
     {
         SetIndex(__index);
         SetType(__type);
         SetName(__name);
         SetIcon(__icon);
+        effect.Set(__expiration, __count, __target, __where, __what, __value);
+        SetInfo(__info);
         SetRare(__rare);
         SetCost(__cost);
         SetLuckyBoxGet(__isLuckyBoxGet);
-        effect.Set(__expiration, __count, __target, __what, __value);
-        SetInfo(__info);
     }
 
     void SetIndex(int __index)

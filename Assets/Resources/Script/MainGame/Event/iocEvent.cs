@@ -13,45 +13,22 @@ public class IocEvent
 
     public class iocEventEffect
     {
-        // 타겟 플레이어
-        public enum Target
-        {
-            Self,
-            AllPlayer,
-            OthersPlayer,
-            DesignatedPlayer,
-            World,
-        }
-
-        // 대상 필드
-        public enum What
-        {
-            None,
-            Character,
-            Move,
-            Block,
-            Dice,
-            Life,
-            Coin,
-            Item,
-            Minigame,
-        }
 
         // 효과 카운트(개수)
         int _count = -1;
         public int count { get { return _count; } }
 
         // 효과 타겟 플레이어
-        Target _target = Target.Self;
-        public Target target { get { return _target; } }
+        IocEffect.Target _target = IocEffect.Target.Self;
+        public IocEffect.Target target { get { return _target; } }
 
         // 효과 시작점
         int _where = -1;
         public int where { get { return _where; } }
 
         // 효과 대상
-        What _what = What.None;
-        public What what { get { return _what; } }
+        IocEffect.What _what = IocEffect.What.None;
+        public IocEffect.What what { get { return _what; } }
 
         // 효과 값
         int _value = -1;
@@ -67,7 +44,7 @@ public class IocEvent
         /// <param name="__where"></param>
         /// <param name="__what"></param>
         /// <param name="__value"></param>
-        public void Set(int __count, Target __target, int __where, What __what, int __value)
+        public void Set(int __count, IocEffect.Target __target, int __where, IocEffect.What __what, int __value)
         {
             SetCount(__count);
             SetTarget(__target);
@@ -84,7 +61,7 @@ public class IocEvent
             _count = __count;
         }
 
-        void SetTarget(Target __target)
+        void SetTarget(IocEffect.Target __target)
         {
             _target = __target;
         }
@@ -94,7 +71,7 @@ public class IocEvent
             _where = __where;
         }
 
-        void SetWhat(What __what)
+        void SetWhat(IocEffect.What __what)
         {
             _what = __what;
         }
@@ -136,8 +113,8 @@ public class IocEvent
     public string info { get { return _info; } }
 
     // 이벤트 설명
-    iocEventEffect _effect = new iocEventEffect();
-    public iocEventEffect effect { get { return _effect; } }
+    IocEffect _effect = new IocEffect();
+    public IocEffect effect { get { return _effect; } }
 
 
 
@@ -150,7 +127,7 @@ public class IocEvent
     protected IocEvent(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 10)
+        if (strList.Count != 11)
             return;
         if (loaclList.Count != 3)
             return;
@@ -162,13 +139,14 @@ public class IocEvent
             loaclList[1],
             int.Parse(strList[3]),
 
-            int.Parse(strList[4]),
-            (iocEventEffect.Target)(int.Parse(strList[5])),
-            int.Parse(strList[6]),
-            (iocEventEffect.What)(int.Parse(strList[7])),
-            int.Parse(strList[8]),
+            (IocEffect.Expiration)(int.Parse(strList[4])),
+            int.Parse(strList[5]),
+            (IocEffect.Target)(int.Parse(strList[6])),
+            int.Parse(strList[7]),
+            (IocEffect.What)(int.Parse(strList[8])),
+            int.Parse(strList[9]),
 
-            loaclList[2].Replace("\\n", "\n").Replace("value", strList[8])
+            loaclList[2].Replace("\\n", "\n").Replace("value", strList[9])
             );
     }
 
@@ -203,12 +181,12 @@ public class IocEvent
     }
     
 
-    void Set(int __index, ActiveType __activeType, string __name, int __modelIndex, int __count, iocEventEffect.Target __target, int __where, iocEventEffect.What __what, int __value, string __info)
+    void Set(int __index, ActiveType __activeType, string __name, int __modelIndex, IocEffect.Expiration __expiration, int __count, IocEffect.Target __target, int __where, IocEffect.What __what, int __value, string __info)
     {
         SetIndex(__index);
         SetActiveType(__activeType);
         SetName(__name);
-        effect.Set(__count, __target, __where, __what, __value);
+        effect.Set(__expiration, __count, __target, __where, __what, __value);
         SetInfo(__info);
     }
 
@@ -243,23 +221,11 @@ public class IocEvent
     {
         bool result = false ;
 
-        switch (__iocEvent.index)
-        {
-            case 0:
-                // 0번은 없음
-                break;
+        // 발동자 자격 체크 - 현재 DB에 발동자 자격 필드 없음
+        //if(__iocEvent.effect.target == iocEventEffect.Target.Self)
+        //    result = true;
 
-            case 1:
-                // 효과
-                break;
-
-            case 2:
-                // 효과
-                break;
-
-                // 이하 추가 필요========================
-
-        }
+        result = true;
 
         return result;
     }
@@ -270,12 +236,34 @@ public class IocEvent
     /// </summary>
     /// <param name="__iocEvent">작동할 이벤트</param>
     /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
-    public static void Effect(IocEvent __iocEvent, Player targetPlayer_Or_null)
+    //public static IEnumerator Effect(IocEvent __iocEvent, Player targetPlayer_Or_null, int __blockIndex)
+    public IEnumerator Effect(Player targetPlayer_Or_null, int __blockIndex)
     {
+        // 타겟 리스트
+        List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
+
+        // 통합 효과
+        yield return IocEffect.GeneralEffect(
+            effect.expiration,
+            pl,
+            effect.where,
+            effect.what,
+            effect.value
+            );
+
+        // 개별 특수 효과
+        yield return EachEffect(this);
+    }
+
+    public static IEnumerator EachEffect(IocEvent __iocEvent)
+    {
+        // 개별 특수 효과
         switch (__iocEvent.index)
         {
             case 0:
                 // 0번은 없음
+                Debug.LogError("error :: 존재하지 않는 이벤트(0)의 효과 호출됨");
+                Debug.Break();
                 break;
 
             case 1:
@@ -286,9 +274,21 @@ public class IocEvent
                 // 효과
                 break;
 
-                // 이하 추가 필요========================
+            case 3:
+                // 효과
+                break;
+
+            case 4:
+                // 효과
+                break;
+
+            case 5:
+                // 효과
+                break;
 
         }
+
+        yield return null;
     }
 
 }

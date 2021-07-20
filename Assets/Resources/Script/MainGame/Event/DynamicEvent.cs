@@ -90,10 +90,10 @@ public class DynamicEvent : DynamicObject
         return IocEvent.Condition(iocEvent, current, creator);
     }
 
-    public void GetEvent(Player user)
+    public IEnumerator GetEvent(Player user, int blockIndex)
     {
         // 작동
-        IocEvent.Effect(iocEvent, user);
+        yield return iocEvent.Effect(user, blockIndex);
 
         // 목록 및 장애물 제외
         Remove();
