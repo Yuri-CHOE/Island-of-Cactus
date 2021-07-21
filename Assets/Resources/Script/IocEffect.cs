@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IocEffect
+public struct IocEffect
 {
+    // 활성화 이펙트 목록
+    public static List<IocEffect> activeEffects = new List<IocEffect>();
+
+
     // 유효기간
     public enum Expiration
     {
@@ -12,6 +16,7 @@ public class IocEffect
         Cycle,
         Turn,
         Moment,
+        Invalid,
     }
 
     // 타겟 플레이어
@@ -42,27 +47,28 @@ public class IocEffect
 
 
     // 효과 유효기간
-    Expiration _expiration = Expiration.Never;
+    Expiration _expiration ;
     public Expiration expiration { get { return _expiration; } }
+    public bool isInvalid { get { return expiration == Expiration.Invalid; } }
 
     // 효과 카운트(개수)
-    int _count = -1;
+    int _count;
     public int count { get { return _count; } }
 
     // 효과 타겟 플레이어 (사용자와의 관계)
-    Target _target = Target.Self;
+    Target _target;
     public Target target { get { return _target; } }
 
     // 효과 시작점
-    int _where = -1;
+    int _where;
     public int where { get { return _where; } }
 
     // 효과 대상
-    What _what = What.None;
+    What _what;
     public What what { get { return _what; } }
 
     // 효과 값
-    int _value = -1;
+    int _value;
     public int value { get { return _value; } }
 
 
@@ -177,72 +183,181 @@ public class IocEffect
     /// </summary>
     /// <param name="filteredTarget">효과를 받을 플레이어들</param>
     /// <param name="__blockIndex">위치</param>
-    public static IEnumerator GeneralEffect(Expiration __expiration, List<Player> filteredTarget, int __where, What __what, int __value)
+    public IEnumerator GeneralEffect(Player user, List<Player> filteredTarget)
     {
-        // 대상 없음
-        if (__what == What.None)
-        {
+        // 소모 처리
+        if (_count == 1)        _count = -1;
+        else if (_count > 0)    _count--;
 
+
+        // 월드 이벤트 호출
+        if (filteredTarget == null)
+        {
+            // 미구현 ============
+            // yeild return WorldEvent();
         }
-
-        // 캐릭터 (플레이어 아바타)
-        else if (__what == What.Character)
+        else
         {
-            // 미구현 ===================================
-        }
+            // 선택형 선택 =========== 미구현
+            //if (filteredTarget.Count == 0)
+            //yield return ;
 
-        // 이동
-        else if (__what == What.Move)
-        {
+
+            Player current = null;
+            int blockIndex;
+            bool isExecute;
+
             for (int i = 0; i < filteredTarget.Count; i++)
             {
-                Player current = filteredTarget[i];
+                // 퀵등록
+                current = filteredTarget[i];
 
-                /*
-             기존 이동 중단    
-             현위치(current.movement.location)에 중단점(current.location) 대입
-             을 무브먼트에서 메소드로 처리
+                // 이동 포인트 확보
+                blockIndex = current.location;
 
-            여기서 호출
-             */
+                // 효과 적용 여부
+                isExecute = true;
+
+
+
+                // 사용자 불일치 경우
+                if (current != user)
+                {
+                    // 인벤토리 스캔
+                    for (int j = 0; j < current.inventory.Count; j++)
+                    {
+                        // 실드 체크
+                        if (current.inventory[j].item.index == 19)
+                        {
+                            // 실드 자동 사용
+                            GameMaster.script.itemManager.ItemUse(current.inventory[j]);
+
+                            // 스캔 중단
+                            break;
+                        }
+                    }
+                }
+
+
+
+                // 효과 차단
+                if (isExecute)
+                    continue;
+
+                // 대상 없음
+                if (what == What.None)
+                {
+
+                }
+
+                // 캐릭터 (플레이어 아바타)
+                else if (what == What.Character)
+                {
+                    // 미구현 ===================================
+                }
+
+                // 이동
+                else if (what == What.Move)
+                {
+                    // 중단
+                    current.movement.MoveStop();
+
+                    // 이동 포인트 가공
+                    if (value == -3)
+                    {
+                        //blockIndex *= where;
+                        current.dice.SetValue(current.dice.value * where);
+
+                        // 이동 호출
+                        current.movement.PlanMoveBy(current.dice.valueTotal);
+                    }
+                    else if (value == -2)
+                    {
+                        //blockIndex += where;
+                        current.dice.SetValue(current.dice.value + where);
+
+                        // 이동 호출
+                        current.movement.PlanMoveBy(current.dice.valueTotal);
+                    }
+                    else
+                    {
+                        //blockIndex = value;
+                        current.dice.SetValue(where);
+
+                        // 이동 호출
+                        current.movement.PlanMoveTo(blockIndex);
+                    }
+
+                }
+
+                // 블록 타입 변경
+                else if (what == What.Block)
+                {
+                    // 퀵등록
+                    DynamicBlock dBlock = BlockManager.script.GetBlock(where).GetComponent<DynamicBlock>();
+
+                    // 설정
+                    dBlock.blockTypeDetail = (BlockType.TypeDetail)value;
+                    dBlock.blockType = BlockType.GetTypeByDetail(dBlock.blockTypeDetail);
+                    dBlock.Refresh();
+                }
+
+                // 주사위 제어
+                else if (what == What.Dice)
+                {
+                    if (value != 0)
+                        // 주사위 추가
+                        current.dice.count += value;
+                    else
+                        // 주사위 변경
+                        current.dice.type = (Dice.SpecialDice)where;
+                }
+
+                // 라이프 획득
+                else if (what == What.Life)
+                {
+                    current.life.Add(value);
+                }
+
+                // 코인 획득
+                else if (what == What.Coin)
+                {
+                    current.coin.Add(value);
+                }
+
+                // 아이템 획득
+                else if (what == What.Item)
+                {
+                    if(value > 0)
+                        if (value < Item.table.Count)
+                            current.AddItem(Item.table[value], count);
+                }
+
+                // 미니게임 수행
+                else if (what == What.Minigame)
+                {
+                    // 미구현 ===================================
+                }
             }
+
         }
 
-        // 블록 타입 변경
-        else if (__what == What.Block)
+
+        // 사용된 효과 등록
+        if (expiration == Expiration.Forever || expiration == Expiration.Cycle || expiration == Expiration.Turn)
         {
-
+            // 소모처리
+            _count--;
+            
+            // 효과 등록
+            if (!activeEffects.Contains(this))
+                activeEffects.Add(this);
         }
+        // 즉시 만료
+        else
+            _expiration = Expiration.Invalid;
 
-        // 주사위 값 제어
-        else if (__what == What.Dice)
-        {
-
-        }
-
-        // 라이프 획득
-        else if (__what == What.Life)
-        {
-
-        }
-
-        // 코인 획득
-        else if (__what == What.Coin)
-        {
-
-        }
-
-        // 아이템 획득
-        else if (__what == What.Item)
-        {
-
-        }
-
-        // 미니게임 수행
-        else if (__what == What.Minigame)
-        {
-
-        }
+        Debug.Log("ioc effect :: 효과 작동됨");
 
         yield return null;
     }

@@ -8,26 +8,29 @@ public class ItemShop : MonoBehaviour
     public static ItemShop script = null;
 
     [SerializeField]
-    GameObject msgBox;
-    [SerializeField]
-    GameObject itemGrop;
+    CanvasGroup canvasGroup = null;
 
     [SerializeField]
-    GameObject npc;
+    GameObject msgBox = null;
     [SerializeField]
-    Image npcImg;
+    GameObject itemGrop = null;
+
     [SerializeField]
-    Text npcText;
+    GameObject npc = null;
+    [SerializeField]
+    Image npcImg = null;
+    [SerializeField]
+    Text npcText = null;
 
     int playerMoney { get { return Turn.now.coin.Value; } }
     int totalSelectMoney { get { int temp = 0; for (int i = 0; i < bundle.Count; i++) { if (bundle[i].toggle.isOn) temp += bundle[i].priceValue; } return temp; } }
 
-    public List<ItemShopBundle> bundle;
+    public List<ItemShopBundle> bundle = new List<ItemShopBundle>();
 
     [SerializeField]
-    Color normalPrice;
+    Color normalPrice = new Color();
     [SerializeField]
-    Color redPrice;
+    Color redPrice = new Color();
 
     private void Awake()
     {
@@ -90,6 +93,10 @@ public class ItemShop : MonoBehaviour
 
     public void OpenShop()
     {
+        // 플레이어 본인의 턴 체크 하여 제어권 지급
+        // 테스트 목적 비활성 =======================================
+        //canvasGroup.interactable = (Player.me == Turn.now);
+
         for (int i = 0; i < bundle.Count; i++)
         {
             // 아이템 테이블에서 랜덤하게 참조

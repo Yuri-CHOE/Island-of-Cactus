@@ -24,6 +24,10 @@ public class DynamicObject : MonoBehaviour
     // 수량
     public int count = 0;
 
+    // 효과
+    public IocEffect effect = new IocEffect();
+
+
     // 사용 준비
     public bool isReady = false;
 

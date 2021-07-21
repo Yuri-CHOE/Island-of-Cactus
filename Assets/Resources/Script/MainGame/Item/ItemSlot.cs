@@ -10,6 +10,9 @@ public class ItemSlot : MonoBehaviour
     // 빈 슬롯 파악
     public bool isEmpty {get { return item == null; } }
 
+    // 소유자
+    public Player owner = null;
+
     // 아이템
     public Item item = null;
     Item itemMirror = null;
@@ -17,6 +20,9 @@ public class ItemSlot : MonoBehaviour
 
     // 아이템 개수
     public int count = 0;
+
+    // 효과
+    public IocEffect effect = new IocEffect();
 
     // 아이콘
     public Image icon = null;
@@ -44,6 +50,7 @@ public class ItemSlot : MonoBehaviour
         //item = Item.table[0];
         item = null;
         count = 0;
+        effect = new IocEffect();
 
         Refresh();
     }
@@ -57,7 +64,12 @@ public class ItemSlot : MonoBehaviour
         if (item == null)
             icon.sprite = LoadIcon(Item.empty);
         else
+        {
             icon.sprite = LoadIcon(item);
+
+            // 효과 복사
+            effect = item.effect;
+        }
 
         // 싱크
         itemMirror = item;
@@ -69,6 +81,7 @@ public class ItemSlot : MonoBehaviour
 
         item = mirror.item;
         count = mirror.count;
+        effect = mirror.effect;
     }
 
     /// <summary>
@@ -119,24 +132,26 @@ public class ItemSlot : MonoBehaviour
         if (count <= 0)
             return;
 
+        // 퀵등록
+        ItemManager im = GameMaster.script.itemManager;
+
         // UI 셋팅
-        GameData.gameMaster.itemManager.selected = this;
+        im.selected = this;
         Debug.LogWarning("아이템 :: 상세보기 => " + GameData.gameMaster.itemManager.selected.item.index);
-        GameData.gameMaster.itemManager.nameText.text = item.name;
-        GameData.gameMaster.itemManager.infoText.text = item.info;
+        im.nameText.text = item.name;
+        im.infoText.text = item.info;
 
         // UI 호출
-        GameMaster.script.itemManager.CallItemUseBox();
+        im.CallItemUseBox();
 
         // 사용 버튼 비활성
-        GameData.gameMaster.itemManager.btnUse.interactable = false;
+        im.btnUse.interactable = false;
 
         // 소유권 없을 시 사용 버튼 비활성
         if (transform.parent.name == "item") // 플레이어 정보 UI 오브젝트일 경우
         {
-
             PlayerInfoUI piui = transform.parent.parent.parent.parent.GetComponent<PlayerInfoUI>();
-            
+
             if (piui.owner == Player.me) // 사용자가 아이템 소유권자일 경우
             {
                 if (Turn.now == Player.me)    // 사용자가 턴 진행중일 경우

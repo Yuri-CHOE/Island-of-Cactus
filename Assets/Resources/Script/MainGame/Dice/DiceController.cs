@@ -17,7 +17,8 @@ public class DiceController : MonoBehaviour
     CameraManager cm = null;
 
     // 주사위 정보
-    public Dice dice = null;
+    //public Dice dice = null;
+    public ref Dice dice { get { return ref owner.dice; } }
     //public Dice diceTurnPlayer { get { return Turn.now.dice; } }
 
     // 주사위 주인
@@ -486,7 +487,7 @@ public class DiceController : MonoBehaviour
     {
         // 주사위 소유권 초기화
         owner = null;
-        dice = null;
+        //dice = null;
 
         // 액션상태 초기화
         action = DiceAction.Wait;
@@ -530,7 +531,7 @@ public class DiceController : MonoBehaviour
 
         // 주사위 소유권자 지정
         owner = __owner;
-        dice = owner.dice;
+        //dice = owner.dice;
         Debug.LogWarning("주사위 :: 소유자 = " + owner.name);
 
         // 주사위 개수가 부족하면 중단

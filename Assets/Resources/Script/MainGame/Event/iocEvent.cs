@@ -234,22 +234,15 @@ public class IocEvent
     /// <summary>
     /// 이벤트 효과
     /// </summary>
-    /// <param name="__iocEvent">작동할 이벤트</param>
     /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
     //public static IEnumerator Effect(IocEvent __iocEvent, Player targetPlayer_Or_null, int __blockIndex)
-    public IEnumerator Effect(Player targetPlayer_Or_null, int __blockIndex)
+    public IEnumerator Effect(Player targetPlayer_Or_null)
     {
         // 타겟 리스트
         List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
 
         // 통합 효과
-        yield return IocEffect.GeneralEffect(
-            effect.expiration,
-            pl,
-            effect.where,
-            effect.what,
-            effect.value
-            );
+        yield return effect.GeneralEffect(targetPlayer_Or_null, pl);
 
         // 개별 특수 효과
         yield return EachEffect(this);

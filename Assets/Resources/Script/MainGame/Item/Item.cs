@@ -352,11 +352,24 @@ public class Item
 
 
     /// <summary>
-    /// 아이템 효과
+    /// 이벤트 효과
     /// </summary>
-    /// <param name="___index">작동할 아이템</param>
     /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
-    public static void Effect(Item __item, Player targetPlayer_Or_null)
+    /// <param name="__blockIndex">작동시킨 위치</param>
+    //public static void Effect(Item __item, Player targetPlayer_Or_null)
+    public IEnumerator Effect(Player targetPlayer_Or_null)
+    {
+        // 타겟 리스트
+        List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
+
+        // 통합 효과
+        yield return effect.GeneralEffect(targetPlayer_Or_null, pl);
+
+        // 개별 특수 효과
+        yield return EachEffect(this);
+    }
+
+    public static IEnumerator EachEffect(Item __item)
     {
         switch (__item.index)
         {
@@ -364,16 +377,25 @@ public class Item
                 // 0번은 없음
                 break;
 
-            case 1:
-                // 효과
+            case 19:
+                // 실제 효과는 IocEffect.GeneralEffect() 에서 호출됨
+
+                // 이펙트만 나오면 됨 ====================== 미구현
                 break;
 
-            case 2:
+            case 20:
                 // 효과
+                // 구현 필수 : 미구현===================
+                break;
+
+            case 21:
+                // 효과
+                // 구현 필수 : 미구현===================
                 break;
 
                 // 이하 추가 필요========================
-
         }
+
+        yield return null;
     }
 }

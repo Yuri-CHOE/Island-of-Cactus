@@ -103,34 +103,64 @@ public class ItemManager : MonoBehaviour
         GameData.gameMaster.playerSelecter[0].gameObject.SetActive(true);
     }
 
-    public void ItemUse()
-    {
-        // 개수 차감
-        selected.count--;
-
-        // 타겟팅 형 아이템
-        if (selected.item.type == Item.Type.Target)
-        {
-            CallPlayerSelecter();
-            return;
-        }
-        else
-            Debug.LogError("타겟팅 아님");
-
-        // 아이템 사용
-        ItemUse(null);
-    }
-
-    public void ItemUse(Player targetPlayer_Or_null)
+    /// <summary>
+    /// UI를 통해 선택된 아이템을 사용
+    /// 필요시 타겟팅 UI 호출됨
+    /// </summary>
+    public void ItemUseByUI() { ItemUseByUI(selected.owner); }
+    /// <summary>
+    /// UI를 통해 선택된 아이템을 특정 대상에게 사용
+    /// </summary>
+    /// <param name="targetPlayer_Or_null"></param>
+    public void ItemUseByUI(Player targetPlayer_Or_null)
     {
         // UI 비활성
         GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
 
+        // 아이템 사용
+        ItemUse(selected, targetPlayer_Or_null);
+    }
+
+
+    /// <summary>
+    /// 특정 아이템을 사용
+    /// 필요시 타겟팅 UI 호출됨
+    /// </summary>
+    /// <param name="_slot"></param>
+    public void ItemUse(ItemSlot _slot)
+    {
+        // 개수 차감
+        _slot.count--;
+
+        // 타겟팅 형 아이템
+        if (_slot.item.type == Item.Type.Target)
+        {
+            // 타겟팅 UI 호출
+            CallPlayerSelecter();
+            return;
+        }
+
+        // 아이템 사용
+        ItemUse(_slot, _slot.owner);
+    }
+    /// <summary>
+    /// 특정 아이템을 특정 대상에게 사용
+    /// </summary>
+    /// <param name="_slot"></param>
+    /// <param name="targetPlayer_Or_null"></param>
+    public void ItemUse(ItemSlot _slot, Player targetPlayer_Or_null)
+    {
+        Debug.Log(string.Format("item use :: 아이템 = {0}   대상 = {1}", _slot.item.index, _slot.owner));
+
+        // UI 비활성
+        //GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
+
         // 아이템 제거
-        Player.me.RemoveItem(selected);
+        Player.me.RemoveItem(_slot);
 
         // 아이템 사용 요청
-        Item.Effect(selected.item, targetPlayer_Or_null);
+        //Item.Effect(_slot.item, targetPlayer_Or_null);
+        _slot.item.Effect(targetPlayer_Or_null);
 
         // 메시지 박스 닫기
         GameMaster.script.messageBox.PopUp(MessageBox.Type.Close);

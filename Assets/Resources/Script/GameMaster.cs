@@ -250,19 +250,25 @@ public class GameMaster : MonoBehaviour
                             // 플레이어별 체크
                             for (int i = 0; i < Player.allPlayer.Count; i++)
                             {
+                                Player current = Player.allPlayer[i];
+
                                 // 이미 굴렸으면 다음 플레이어 처리
-                                if (Player.allPlayer[i].dice.isRolled)
+                                if (current.dice.isRolled)
                                     continue;
 
                                 // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
-                                if (!Player.allPlayer[i].dice.isRolling)
+                                if (!current.dice.isRolling)
                                 {
                                     Debug.Log(string.Format("게임 플로우 :: Player{0} 주사위 굴리는중", i + 1));
+
+                                    // 주사위 지급
+                                    Player.allPlayer[i].dice.count = 1;
+
                                     // 주사위 기능 호출
                                     diceController.CallDice(
-                                        Player.allPlayer[i],
-                                        Player.allPlayer[i].avatar.transform
-                                        );
+                                        current,
+                                        current.avatar.transform
+                                    );
 
                                     // 다른 플레이어 무시
                                     break;
@@ -950,5 +956,9 @@ public class GameMaster : MonoBehaviour
     public void SaveGame()
     {
         GameSaver.GameSave();
+    }
+    public void StopMove()
+    {
+        Turn.now.movement.MoveStop();
     }
 }

@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dice
+public struct Dice
 {
+    public enum SpecialDice
+    {
+        Normal,
+        Odd,
+        Even,
+        Amazing,
+        Gold,
+    }
 
     // 최소값
     public static int _min = 1;
@@ -18,23 +26,26 @@ public class Dice
     public static int maxAdded = 0;
 
 
+    // 특수 주사위
+    public SpecialDice type;
+
 
     // 값
-    int _value = 0;
+    int _value;
     public int value { get { return _value; } }
     // 핪산 값
-    int _valueTotal = 0;
+    int _valueTotal;
     public int valueTotal { get { return _valueTotal; } } 
 
     // 누적 값 기록
-    public int valueRecord = 0;
+    public int valueRecord;
 
     // 굴리는중 여부
-    public bool isRolling = false;
-    public bool isRolled = false;
+    public bool isRolling;
+    public bool isRolled;
 
     // 주사위 개수
-    public int count = 1;
+    public int count;
 
 
 
@@ -42,6 +53,24 @@ public class Dice
     public int Rolling()
     {
         _value = Random.Range(min, max+1);
+
+        // 특수 주사위 값 보정 - 홀수
+        if (type == SpecialDice.Odd)
+            _value += -1 + _value % 2;
+
+        // 특수 주사위 값 보정 - 짝수
+        else if (type == SpecialDice.Even)
+            _value -= _value % 2;
+        
+        // 특수 주사위 값 보정 - 도박
+        else if (type == SpecialDice.Amazing)
+            _value = 1 + 5 * _value % 2;
+
+        // 특수 주사위 값 보정 - 추가
+        else if (type == SpecialDice.Gold)
+            _value++;
+
+
         _valueTotal += _value;
 
         // 주사위 개수 차감
@@ -56,8 +85,9 @@ public class Dice
     /// </summary>
     public void Clear()
     {
-        // 기록 처리
-        valueRecord += valueTotal;
+        // 기록 처리 = 총 주사위값
+        // 실시간 위치 지정시 자동 연산으로 대체 = 총 전진값
+        //valueRecord += valueTotal;
 
         // 초기화
         _value = 0;

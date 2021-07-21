@@ -122,7 +122,7 @@ public class Player
 
     // 이동제어 스크립트
     int _location = -1;
-    public int location { get { return _location; } }
+    public int location { get { return _location; } set { int i = BlockManager.script.indexLoop(value,0); dice.valueRecord += i - location; _location = i; } }
     //public CharacterMover movementMirror = new CharacterMover();
     //public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
     public CharacterMover movement = null;
@@ -349,10 +349,6 @@ public class Player
     public void MirrorLoaction()
     {
          _location = movement.location;
-    }
-    public void TempLoaction(int blockIndex)
-    {
-        _location = blockIndex;
     }
 
 

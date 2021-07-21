@@ -45,7 +45,17 @@ public class DynamicItem : DynamicObject
     // Update is called once per frame
     void Update()
     {
+        // 만료시 삭제 절차
+        if(effect.isInvalid)
+        {
+            if (IocEffect.activeEffects.Contains(effect))
+                IocEffect.activeEffects.Remove(effect);
 
+            Remove();
+
+            Destroy(gameObject);
+
+        }
     }
 
 
@@ -133,6 +143,9 @@ public class DynamicItem : DynamicObject
         //icon = _icon;
         icon = item.GetIcon();
         iconObject.sprite = icon;
+
+        // 효과 복사
+        effect = item.effect;
 
 
         // 준비 완료

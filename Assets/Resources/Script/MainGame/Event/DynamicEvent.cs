@@ -44,6 +44,16 @@ public class DynamicEvent : DynamicObject
     // Update is called once per frame
     void Update()
     {
+        // 만료시 삭제 절차
+        if (effect.isInvalid)
+        {
+            if (IocEffect.activeEffects.Contains(effect))
+                IocEffect.activeEffects.Remove(effect);
+
+            Remove();
+
+            Destroy(gameObject);
+        }
 
     }
 
@@ -90,10 +100,12 @@ public class DynamicEvent : DynamicObject
         return IocEvent.Condition(iocEvent, current, creator);
     }
 
-    public IEnumerator GetEvent(Player user, int blockIndex)
+    //public IEnumerator GetEvent(Player user, int blockIndex)
+    public IEnumerator GetEvent(Player user)
     {
         // 작동
-        yield return iocEvent.Effect(user, blockIndex);
+        //yield return iocEvent.Effect(user, blockIndex);
+        yield return iocEvent.Effect(user);
 
         // 목록 및 장애물 제외
         Remove();
@@ -147,6 +159,10 @@ public class DynamicEvent : DynamicObject
             Quaternion.identity,
             transform
             ).transform;
+
+
+        // 효과 복사
+        effect = iocEvent.effect;
 
 
         // 준비 완료

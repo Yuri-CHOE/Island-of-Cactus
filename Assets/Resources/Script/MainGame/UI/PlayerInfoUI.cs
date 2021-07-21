@@ -85,7 +85,7 @@ public class PlayerInfoUI : MonoBehaviour
             if (owner.face == null)
             {
                 owner.LoadFace();
-                Debug.Log("chk");
+                Debug.Log("warning :: owner is null");
             }
 
             Debug.Log(owner.face.name);
@@ -103,9 +103,14 @@ public class PlayerInfoUI : MonoBehaviour
             // 인벤토리 싱크
             owner.inventory = inventory;
 
-            // 인벤토리 계승
             for (int i = 0; i < inventory.Count; i++)
+            {
+                // 인벤토리 계승
                 inventory[i].CopyByMirror(invenCopy[i]);
+
+                // 인벤토리 주인 지정
+                inventory[i].owner = owner;
+            }
         }
     }
 
@@ -113,7 +118,7 @@ public class PlayerInfoUI : MonoBehaviour
     public void Targeting()
     {
         // 선택된 플레이어 타겟팅
-        GameData.gameMaster.itemManager.ItemUse(owner);
+        GameData.gameMaster.itemManager.ItemUseByUI(owner);
     }
 
 }

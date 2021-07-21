@@ -252,6 +252,10 @@ public class CharacterMover : MonoBehaviour
     /// <param name="moveValue"></param>
     public void PlanMoveBy(int moveValue)
     {
+        // 이동 안할경우
+        if(moveValue == 0)
+            actionsQueue.Enqueue(new Action(Action.ActionType.Stop, owner.location, moveSpeed));
+
         // 최종 목표
         int movePoint = GameData.blockManager.indexLoop(_location, moveValue);
 
@@ -287,9 +291,9 @@ public class CharacterMover : MonoBehaviour
             for (int p = 0; p < owner.otherPlayers.Count; p++)
             {
                 // 공격 최소 사이클 제한
-                if (Cycle.now < 5)
-                    break;
-                   
+                // 계획은 상시 수행, 계획에서 조건 처리
+                //if (Cycle.now < 5)
+                //    break;
 
                 // 체크 대상
                 Player current = owner.otherPlayers[p];
@@ -303,6 +307,7 @@ public class CharacterMover : MonoBehaviour
                     actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
 
                     //스케줄링 추가 - 공격 처리
+                    if (Cycle.now > 5)  
                     actionsQueue.Enqueue(new Action(Action.ActionType.Attack, locNext, moveSpeed));
 
                     // 카운터 리셋
@@ -659,7 +664,8 @@ public class CharacterMover : MonoBehaviour
             Debug.LogWarning("이벤트 오브젝트 :: 습득 => " + de.iocEvent.index);
 
             // 획득
-            de.GetEvent(owner, de.location);
+            //de.GetEvent(owner, de.location);
+            de.GetEvent(owner);
 
             // 연출 명령
             yield return null;
@@ -677,7 +683,6 @@ public class CharacterMover : MonoBehaviour
 
     public void MoveByAction(ref Action act)
     {
-
         if (act.progress == ActionProgress.Ready)
         {
             // 각종 초기화
@@ -692,7 +697,7 @@ public class CharacterMover : MonoBehaviour
                 return;
 
             // 좌표 설정 및 이동
-            if (act.count > 0)
+            if (act.count != 0)
                 MoveSet(
                     GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(location, act.count)).transform.position,
                     act.speed,
@@ -701,7 +706,7 @@ public class CharacterMover : MonoBehaviour
 
 
             // 임시 이동값 설정
-            owner.TempLoaction(GameData.blockManager.indexLoop(location, act.count));
+            owner.location = location + act.count;
             AvatarOverFixAll();
 
             // 스킵
@@ -718,7 +723,7 @@ public class CharacterMover : MonoBehaviour
 
                 // 정면 보기
                 // 버그 발생! =============== 이동 한번 할때마다 정면 바라봄 => 정면보기 액션 플랜 독립시킬것
-                MoveSet(transform.position, ActTurnSpeed, true);
+                //MoveSet(transform.position, ActTurnSpeed, true);
 
                 // 스킵
                 act.progress = ActionProgress.Finish;
@@ -746,11 +751,14 @@ public class CharacterMover : MonoBehaviour
         else if (act.progress == ActionProgress.Start)
         {
             // 이미 이동중일 경우 대기
-            if (isBusy)
-                return;
+            //if (isBusy)
+            //    return;
 
             // 좌표 설정 및 이동
-                MoveSet(transform.position, ActTurnSpeed, true);
+            //MoveSet(transform.position, ActTurnSpeed, true);
+
+            // 정지
+            //StopCoroutine(moveCoroutine);
 
             // 스킵
             act.progress = ActionProgress.Working;
@@ -758,13 +766,14 @@ public class CharacterMover : MonoBehaviour
         else if (act.progress == ActionProgress.Working)
         {
             // 완료 체크
-            if (!isBusy)
+            //if (!isBusy)
             {
-                // 이동좌표 리셋
-                movePoint = Vector3.zero;
-
                 // 좌표 변경
-                location +=  owner.dice.valueTotal;
+                //location +=  owner.dice.valueTotal;
+                location = owner.location;
+
+                // 이동좌표 리셋
+                movePoint = locateBlock.position;
 
                 // 겹침 정렬
                 CharacterMover.AvatarOverFixAll();
@@ -817,24 +826,61 @@ public class CharacterMover : MonoBehaviour
 
     /// <summary>
     /// 현재 액션과 정지(마지막) 액션 사이의 모든 액션 제거
+    /// 주의 :: 즉시 멈추지 않음
     /// </summary>
     public void MoveStop()
     {
-        Debug.Log("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location);
+        Debug.LogError("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location);
 
         // 스킵 대상 없을 경우
         if (actNow.type == Action.ActionType.Stop)
             return;
         else
         {
-            // 스킵 대상 없을 경우
+            // 스킵 대상 없을 때 까지 제거
             while (actionsQueue.Peek().type != Action.ActionType.Stop)
             {
                 // 제거
                 Action.ActionType aType = actionsQueue.Dequeue().type;
 
-                Debug.Log("액션 제거 :: " + aType);
+                Debug.LogError("액션 제거 :: " + aType);
             }
+
+            //// 액션 전체 제거
+            //while (actionsQueue.Count > 0)
+            //{
+            //    // 제거
+            //    Action.ActionType aType = actionsQueue.Dequeue().type;
+
+            //    Debug.LogError("액션 제거 :: " + aType);
+            //}
+
+
+
+            //// 정지
+            //if (moveCoroutine != null)
+            //{
+            //    //MoveByAction(ref actNow);
+            //    Debug.LogError("액션 중단 :: " + actNow.type);
+            //    StopCoroutine(moveCoroutine);
+            //}
+
+            //// 좌표 변경
+            //location = owner.location;
+
+            //// 이동좌표 리셋
+            //movePoint = locateBlock.position;
+
+            //// 겹침 정렬
+            //CharacterMover.AvatarOverFixAll();
+
+            //// 강제 호출
+            //GetAction();
+            ////StopByAction(ref actNow);
+
+            //// 테스트용 멈춤============
+            //actNow.type = Action.ActionType.Idle;
+
         }
     }
 
