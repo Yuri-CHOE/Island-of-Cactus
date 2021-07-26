@@ -103,6 +103,18 @@ public class ItemManager : MonoBehaviour
         GameData.gameMaster.playerSelecter[0].gameObject.SetActive(true);
     }
 
+    public void BtnUse()
+    {
+        // 아이템 사용 판정
+        GameMaster.useItemOrder = true;
+
+        // UI 전체 비활성
+        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
+
+        // 메시지 박스 닫기
+        GameMaster.script.messageBox.PopUp(MessageBox.Type.Close);
+    }
+
     /// <summary>
     /// UI를 통해 선택된 아이템을 사용
     /// 필요시 타겟팅 UI 호출됨
@@ -114,8 +126,8 @@ public class ItemManager : MonoBehaviour
     /// <param name="targetPlayer_Or_null"></param>
     public void ItemUseByUI(Player targetPlayer_Or_null)
     {
-        // UI 비활성
-        GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
+        // UI 활성화
+        BtnUse();
 
         // 아이템 사용
         ItemUse(selected, targetPlayer_Or_null);
@@ -129,14 +141,15 @@ public class ItemManager : MonoBehaviour
     /// <param name="_slot"></param>
     public void ItemUse(ItemSlot _slot)
     {
-        // 개수 차감
-        _slot.count--;
-
         // 타겟팅 형 아이템
         if (_slot.item.type == Item.Type.Target)
         {
             // 타겟팅 UI 호출
             CallPlayerSelecter();
+
+            // 메인스트림 탈출
+            GameMaster.useItemOrder = false;
+
             return;
         }
 
@@ -152,18 +165,20 @@ public class ItemManager : MonoBehaviour
     {
         Debug.Log(string.Format("item use :: 아이템 = {0}   대상 = {1}", _slot.item.index, _slot.owner));
 
+        // 개수 차감
+        _slot.count--;
+
         // UI 비활성
         //GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
 
-        // 아이템 제거
-        Player.me.RemoveItem(_slot);
-
         // 아이템 사용 요청
         //Item.Effect(_slot.item, targetPlayer_Or_null);
+        // ItemUse가 버튼으로 호출되기 때문에 여기서 중단 거는 방법 찾아야할듯
+        // ㄴ 아이템 매니저에서 static 으로 bool값 만들어서 아이템 이펙트에서 제어하고 메인스트림에서 bool값으로 중단처리 해야할듯
         _slot.item.Effect(targetPlayer_Or_null);
 
-        // 메시지 박스 닫기
-        GameMaster.script.messageBox.PopUp(MessageBox.Type.Close);
+        // 아이템 제거
+        Player.me.RemoveItem(_slot);
     }
 
 

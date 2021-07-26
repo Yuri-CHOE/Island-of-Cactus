@@ -14,7 +14,9 @@ public class ItemSlot : MonoBehaviour
     public Player owner = null;
 
     // 아이템
-    public Item item = null;
+    //public Item item = null;
+    Item _item = null;
+    public Item item { get { return _item; } set { if (value == null) Clear(); else effect = value.effect; _item = value; } }
     Item itemMirror = null;
 
 
@@ -22,7 +24,7 @@ public class ItemSlot : MonoBehaviour
     public int count = 0;
 
     // 효과
-    public IocEffect effect = new IocEffect();
+    public IocEffect effect = IocEffect.New();
 
     // 아이콘
     public Image icon = null;
@@ -48,9 +50,10 @@ public class ItemSlot : MonoBehaviour
     public void Clear()
     {
         //item = Item.table[0];
-        item = null;
-        count = 0;
-        effect = new IocEffect();
+        //item = null;
+        _item = null;
+        //count = 0;
+        //effect = IocEffect.New();
 
         Refresh();
     }
@@ -62,9 +65,19 @@ public class ItemSlot : MonoBehaviour
     {
         // 아이콘 로드
         if (item == null)
+        {
+            // 아이콘 변경
             icon.sprite = LoadIcon(Item.empty);
+
+            // 개수 제거
+            count = 0;
+
+            // 효과 제거
+            effect = IocEffect.New();
+        }
         else
         {
+            // 아이콘 변경
             icon.sprite = LoadIcon(item);
 
             // 효과 복사

@@ -253,6 +253,8 @@ public class IocEvent
         // 개별 특수 효과
         switch (__iocEvent.index)
         {
+            // 필요시 추가
+
             case 0:
                 // 0번은 없음
                 Debug.LogError("error :: 존재하지 않는 이벤트(0)의 효과 호출됨");
@@ -278,7 +280,6 @@ public class IocEvent
             case 5:
                 // 효과
                 break;
-
         }
 
         yield return null;

@@ -14,7 +14,8 @@ public static class BlockWork
     static float liftY = 3f;
 
     // 노말 블록 보정치
-    static public int nomalValue = 0;
+    static public int plusBlockValue = 0;
+    static public int minusBlockValue = 0;
 
     /// <summary>
     /// 플레이어의 현재 위치를 기반으로 블록 작업 수행
@@ -118,7 +119,7 @@ public static class BlockWork
 
     static void BlockPlus(Player currentPlayer)
     {
-        int coinValue = 1 + nomalValue;
+        int coinValue = 1 + plusBlockValue;
 
         // 코인 추가
         currentPlayer.coin.Add(coinValue);
@@ -130,7 +131,7 @@ public static class BlockWork
 
     static void BlockMinus(Player currentPlayer)
     {
-        int coinValue = 2 + nomalValue;
+        int coinValue = 2 + minusBlockValue;
 
         // 코인 감소
         currentPlayer.coin.subtract(coinValue);
@@ -195,12 +196,12 @@ public static class BlockWork
 
         // 드랍테이블 셋팅
         dropTable.rare = new List<int>();
-        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + LuckyBox.table.Count);
         for (int i = 1; i < LuckyBox.table.Count; i++)
         {
             dropTable.rare.Add(LuckyBox.table[i].rare);
             Debug.Log("드랍 테이블 :: 추가됨 -> " + LuckyBox.table[i].rare);
         }
+        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
@@ -208,7 +209,7 @@ public static class BlockWork
 
 
         // 럭키박스 연출 시작
-        LuckyBoxManager lbm = LuckyBoxManager.obj;
+        LuckyBoxManager lbm = LuckyBoxManager.script;
 
         // 강제 초기화
         lbm.ClearForced();
@@ -223,7 +224,7 @@ public static class BlockWork
         if(lbm.coroutineOpen != null)
             lbm.StopCoroutine(lbm.coroutineOpen);
         // 대기, 결과 출력, 효과 적용, 종료 판정
-        lbm.coroutineOpen = lbm.StartCoroutine(lbm.WaitAndResult());
+        lbm.coroutineOpen = lbm.StartCoroutine(lbm.WaitAndResult(LuckyBox.table[select], currentPlayer));
 
         // 스트링 입력
         lbm.SetTextByIndex(select);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LuckyBoxManager : MonoBehaviour
 {
-    public static LuckyBoxManager obj = null;
+    public static LuckyBoxManager script = null;
 
     [SerializeField]
     Animator animator = null;
@@ -29,7 +29,7 @@ public class LuckyBoxManager : MonoBehaviour
     void Awake()
     {
         // 럭키박스 오브젝트 등록
-        obj = transform.GetComponent<LuckyBoxManager>();
+        script = transform.GetComponent<LuckyBoxManager>();
 
         // 초기 위치 기록
         hidingPos = transform.position;
@@ -114,7 +114,7 @@ public class LuckyBoxManager : MonoBehaviour
         animator.SetBool("doOpen", true);
     }
 
-    public IEnumerator WaitAndResult()
+    public IEnumerator WaitAndResult(LuckyBox _luckyBox, Player target)
     {
 
         // 연출 종료 대기
@@ -140,7 +140,7 @@ public class LuckyBoxManager : MonoBehaviour
         }
 
         // 효과 적용
-        // 미구현==================================
+        yield return _luckyBox.Effect(target);
 
         // 종료 판정
         BlockWork.isEnd = true;

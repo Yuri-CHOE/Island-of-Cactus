@@ -383,7 +383,7 @@ public class CharacterMover : MonoBehaviour
     }
 
 
-    void ActionCall()
+    public void ActionCall()
     {
         // 액션 미수행 경우
         if (actNow.type == Action.ActionType.None)

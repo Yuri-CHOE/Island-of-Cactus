@@ -13,109 +13,6 @@ public class Item
         WideArea,
     }
 
-    public class ItemEffect
-    {
-        // 유효기간
-        public enum Expiration
-        {
-            Never,
-            Forever,
-            Cycle,
-            Turn,
-            Moment,
-        }
-
-        // 타겟 플레이어
-        public enum Target
-        {
-            Self,
-            AllPlayer,
-            OthersPlayer,
-            SelectedPlayer,
-            World,
-        }
-
-        // 대상 필드
-        public enum What
-        {
-            None,
-            Character,
-            Move,
-            Block,
-            Dice,
-            Life,
-            Coin,
-            Item,
-            Minigame,
-        }
-
-        // 효과 유효기간
-        Expiration _expiration = Expiration.Never;
-        public Expiration expiration { get { return _expiration; } }
-
-        // 효과 카운트(개수)
-        int _count = -1;
-        public int count { get { return _count; } }
-
-        // 효과 타겟 플레이어
-        Target _target = Target.Self;
-        public Target target { get { return _target; } }
-
-        // 효과 대상
-        What _what = What.None;
-        public What what { get { return _what; } }
-
-        // 효과 값
-        int _value = -1;
-        public int value { get { return _value; } }
-
-
-
-        /// <summary>
-        /// 재설정 함수, 별도 사용하지 말것
-        /// </summary>
-        /// <param name="__expiration"></param>
-        /// <param name="__count"></param>
-        /// <param name="__target"></param>
-        /// <param name="__what"></param>
-        /// <param name="__value"></param>
-        public void Set(Expiration __expiration, int __count, Target __target, What __what, int __value)
-        {
-            SetExpiration(__expiration);
-            SetCount(__count);
-            SetTarget(__target);
-            SetWhat(__what);
-            SetValue(__value);
-        }
-
-        void SetExpiration(Expiration __expiration)
-        {
-            _expiration = __expiration;
-        }
-
-        void SetCount(int __count)
-        {
-            if (__count < 0)
-                return;
-
-            _count = __count;
-        }
-
-        void SetTarget(Target __target)
-        {
-            _target = __target;
-        }
-
-        void SetWhat(What __what)
-        {
-            _what = __what;
-        }
-
-        void SetValue(int __value)
-        {
-            _value = __value;
-        }
-    }
 
     // 아이템 테이블
     static List<Item> _table = new List<Item>();
@@ -355,7 +252,6 @@ public class Item
     /// 이벤트 효과
     /// </summary>
     /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
-    /// <param name="__blockIndex">작동시킨 위치</param>
     //public static void Effect(Item __item, Player targetPlayer_Or_null)
     public IEnumerator Effect(Player targetPlayer_Or_null)
     {
@@ -366,13 +262,18 @@ public class Item
         yield return effect.GeneralEffect(targetPlayer_Or_null, pl);
 
         // 개별 특수 효과
-        yield return EachEffect(this);
+        yield return EachEffect(this, targetPlayer_Or_null, pl);
+
+        // 메인스트림 대기 해제
+        GameMaster.useItemOrder = false;
     }
 
-    public static IEnumerator EachEffect(Item __item)
+    public static IEnumerator EachEffect(Item __item, Player user, List<Player> filteredTarget)
     {
         switch (__item.index)
         {
+            // 필요시 추가
+
             case 0:
                 // 0번은 없음
                 break;
@@ -385,15 +286,43 @@ public class Item
 
             case 20:
                 // 효과
-                // 구현 필수 : 미구현===================
+                for (int i = 0; i < filteredTarget.Count; i++)
+                {
+                    // 연출
+                    // 미구현
+
+                    // 제거
+                    filteredTarget[i].RemoveItem(filteredTarget[i].inventory[0]);
+                }
                 break;
 
             case 21:
                 // 효과
-                // 구현 필수 : 미구현===================
-                break;
 
-                // 이하 추가 필요========================
+                // 잘못된 인원수 차단
+                if (filteredTarget.Count != 0)
+                    break;
+
+                // 아이템 없으면 중단
+                if (filteredTarget[0].inventoryCount <= 0)
+                    break;
+
+                // 가져올 아이템 지정
+                ItemSlot slot = filteredTarget[0].inventory[0];
+
+                // 강탈
+                filteredTarget[0].RemoveItem(slot);
+
+                // 연출
+                // 미구현=============
+
+                // 획득
+                user.AddItem(slot, slot.count);
+
+                // 연출
+                // 미구현=============
+
+                break;
         }
 
         yield return null;

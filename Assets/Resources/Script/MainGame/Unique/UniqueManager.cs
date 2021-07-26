@@ -114,7 +114,8 @@ public class UniqueManager : MonoBehaviour
                 // 플러스 블록과 마이너스 블록의 코인 변동치를 1 증가
                 while (isWork)
                 {
-                    BlockWork.nomalValue++;
+                    BlockWork.plusBlockValue++;
+                    BlockWork.minusBlockValue++;
                     isWork = false;
 
                     yield return null;

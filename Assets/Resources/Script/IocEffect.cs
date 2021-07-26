@@ -93,7 +93,7 @@ public struct IocEffect
         SetValue(__value);
     }
 
-    void SetExpiration(Expiration __expiration)
+    public void SetExpiration(Expiration __expiration)
     {
         _expiration = __expiration;
     }
@@ -129,7 +129,7 @@ public struct IocEffect
 
 
 
-
+    public static IocEffect New() { IocEffect ef = new IocEffect(); ef.SetExpiration(IocEffect.Expiration.Invalid); return ef; }
 
 
 
@@ -167,8 +167,9 @@ public struct IocEffect
             pl.AddRange(targetPlayer_Or_null.otherPlayers);
 
         // 다른 플레이어
+        // 사용 시점에서 타겟 지정하기 때문에 궂이 타겟팅 호출 할 이유 없음
         else if (target == Target.SelectedPlayer)
-            ;
+            pl.Add(targetPlayer_Or_null);
 
         // 맵 광역
         else if (target == Target.World)
@@ -185,22 +186,20 @@ public struct IocEffect
     /// <param name="__blockIndex">위치</param>
     public IEnumerator GeneralEffect(Player user, List<Player> filteredTarget)
     {
-        // 소모 처리
-        if (_count == 1)        _count = -1;
-        else if (_count > 0)    _count--;
-
-
         // 월드 이벤트 호출
         if (filteredTarget == null)
         {
-            // 미구현 ============
-            // yeild return WorldEvent();
+            // 호출            
+            yield return WorldEffect(this);
         }
         else
         {
-            // 선택형 선택 =========== 미구현
-            //if (filteredTarget.Count == 0)
-            //yield return ;
+            // 선택형 선택
+            if (filteredTarget.Count == 0)
+            {
+                //=========== 미구현
+                //yield return ;
+            }
 
 
             Player current = null;
@@ -230,7 +229,8 @@ public struct IocEffect
                         if (current.inventory[j].item.index == 19)
                         {
                             // 실드 자동 사용
-                            GameMaster.script.itemManager.ItemUse(current.inventory[j]);
+                            //GameMaster.script.itemManager.ItemUse(current.inventory[j]);
+                            current.inventory[j].count--;
 
                             // 스캔 중단
                             break;
@@ -263,10 +263,10 @@ public struct IocEffect
                     current.movement.MoveStop();
 
                     // 이동 포인트 가공
-                    if (value == -3)
+                    if (where == -3)
                     {
                         //blockIndex *= where;
-                        current.dice.SetValue(current.dice.value * where);
+                        current.dice.SetValue(current.dice.value * value);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
@@ -274,15 +274,15 @@ public struct IocEffect
                     else if (value == -2)
                     {
                         //blockIndex += where;
-                        current.dice.SetValue(current.dice.value + where);
+                        current.dice.SetValue(current.dice.value + value);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
                     }
                     else
                     {
-                        //blockIndex = value;
-                        current.dice.SetValue(where);
+                        blockIndex = where;
+                        current.dice.SetValue(0);
 
                         // 이동 호출
                         current.movement.PlanMoveTo(blockIndex);
@@ -328,7 +328,7 @@ public struct IocEffect
                 // 아이템 획득
                 else if (what == What.Item)
                 {
-                    if(value > 0)
+                    if(value > 1)
                         if (value < Item.table.Count)
                             current.AddItem(Item.table[value], count);
                 }
@@ -337,6 +337,8 @@ public struct IocEffect
                 else if (what == What.Minigame)
                 {
                     // 미구현 ===================================
+
+                // value == 상금
                 }
             }
 
@@ -358,6 +360,59 @@ public struct IocEffect
             _expiration = Expiration.Invalid;
 
         Debug.Log("ioc effect :: 효과 작동됨");
+
+        yield return null;
+    }
+
+
+
+    public static IEnumerator WorldEffect(IocEffect __iocEffect)
+    {
+        // 개별 특수 효과
+        switch ((int)__iocEffect.what)
+        {
+            // 필요시 추가
+
+            case 0:
+                // 0번은 없음
+                Debug.LogError("error :: 존재하지 않는 월드 이벤트(0)의 효과 호출됨");
+                Debug.Break();
+                break;
+
+            case 1:
+                // 마이너스 블록 강화
+
+                // 연출
+                // 미구현=========
+
+                // 마이너스 블록 강화
+                BlockWork.minusBlockValue++;
+
+                break;
+
+            case 2:
+                // 플러스 블록 강화
+
+                // 연출
+                // 미구현=========
+
+                // 플러스 블록 강화
+                BlockWork.plusBlockValue++;
+
+                break;
+
+            case 3:
+                // 노말 블록 초기화
+
+                // 연출
+                // 미구현=========
+
+                // 노말 블록 강화 초기화
+                BlockWork.plusBlockValue = 0;
+                BlockWork.minusBlockValue = 0;
+
+                break;
+        }
 
         yield return null;
     }

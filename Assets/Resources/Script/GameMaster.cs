@@ -58,7 +58,7 @@ public class GameMaster : MonoBehaviour
 
 
     // 아이템 사용 명령
-    public bool useItemOrder = false;
+    public static bool useItemOrder = false;
 
     // 씬 재로드 제어용
     public static Flow flowCopy = Flow.Wait;
@@ -627,8 +627,20 @@ public class GameMaster : MonoBehaviour
             }
             else if (Turn.actionProgress == ActionProgress.Working)
             {
+
+                // 아이템 사용시
+                if (useItemOrder)
+                {
+                    // 시간 정지
+                    diceController.isTimeCountWork = false;
+
+                    // 아이템 사용 단계로 워프
+                    Turn.turnAction = Turn.TurnAction.Item;
+                    Turn.actionProgress = ActionProgress.Ready;
+                }
+
                 // 주사위를 굴리는중 중단
-                if (diceController.isBusy)
+                else if (diceController.isBusy)
                     return;
 
                 // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
@@ -641,17 +653,6 @@ public class GameMaster : MonoBehaviour
                         Turn.now,
                         Turn.now.avatar.transform
                         );
-                }
-
-                // 아이템 사용시
-                else if(useItemOrder)
-                {
-                    // 시간 정지
-                    diceController.isTimeCountWork = false;
-
-                    // 아이템 사용 단계로 워프
-                    Turn.turnAction = Turn.TurnAction.Item;
-                    Turn.actionProgress = ActionProgress.Ready;
                 }
 
                 // 주사위 마무리
@@ -683,8 +684,6 @@ public class GameMaster : MonoBehaviour
                 // 각종 초기화
 
 
-                // 소모처리
-
                 // 스킵
                 Turn.actionProgress = ActionProgress.Start;
             }
@@ -692,8 +691,13 @@ public class GameMaster : MonoBehaviour
             {
                 Debug.LogWarning("아이템 사용됨");
 
+                // 사용 준비 연출
 
-                // 연출
+
+
+                // 아이템 사용
+                itemManager.ItemUse(itemManager.selected);
+                //itemManager.ItemUseByUI();
 
                 // 스킵
                 Turn.actionProgress = ActionProgress.Working;
@@ -702,14 +706,24 @@ public class GameMaster : MonoBehaviour
             {
                 // 효과 적용
 
+
+
+                // 아이템 사용중 대기처리
+                if (useItemOrder)
+                    return;
+
+
                 // 스킵
+                Debug.LogWarning("아이템 사용 종료");
                 Turn.actionProgress = ActionProgress.Finish;
             }
             else if (Turn.actionProgress == ActionProgress.Finish)
             {
-                Debug.LogWarning("아이템 사용 종료");
 
                 // 사용 종료 연출
+
+
+
 
 
                 // 다시 시간 흐름
@@ -788,7 +802,7 @@ public class GameMaster : MonoBehaviour
                 // 액션 미수행 경우
                 if (movement.actNow.type == Action.ActionType.None)
                 {
-                    // 잔여 액션 있음
+                    // 잔여 액션 없음
                     if (movement.actionsQueue.Count == 0)
                     {
                         // 카메라 탈착

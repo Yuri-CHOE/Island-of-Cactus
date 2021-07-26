@@ -103,6 +103,10 @@ public static class GameSaver
             .Append(Cycle.goal)
             .Append(codeData)
             .Append(Player.allPlayer.Count)
+            .Append(codeData)
+            .Append(BlockWork.plusBlockValue)
+            .Append(codeData)
+            .Append(BlockWork.minusBlockValue)
 
             .Append(codeChapter)
             ;
@@ -309,6 +313,10 @@ public static class GameSaver
 
         // 플레이 인원수
         GameRule.playerCount = int.Parse(scInfo[4]);
+
+        // 노말 블럭 강화 단계
+        BlockWork.plusBlockValue = int.Parse(scInfo[5]);
+        BlockWork.minusBlockValue = int.Parse(scInfo[6]);
 
     }
 
