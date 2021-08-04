@@ -86,6 +86,10 @@ GameObject:
   - component: {fileID: 2477756546437643506}
   - component: {fileID: 7216638599155405133}
   - component: {fileID: 4791054675499440104}
+<<<<<<< Updated upstream
+=======
+  - component: {fileID: 932067978465872725}
+>>>>>>> Stashed changes
   m_Layer: 5
   m_Name: MiniGame_Player
   m_TagString: Untagged
@@ -153,6 +157,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+<<<<<<< Updated upstream
+=======
+--- !u!114 &932067978465872725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2477756546437643507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 455abaffa2deeee4f865dd5a33fa3317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  face: {fileID: 0}
+  score: 0
+  plusScore: 0
+  minusScore: 0
+  rank: 0
+  join: 0
+  myTurn: 0
+  deathUi: {fileID: 5255413607430924448}
+  txtScore: {fileID: 2477756547386225243}
+>>>>>>> Stashed changes
 --- !u!1 &2477756546717796893
 GameObject:
   m_ObjectHideFlags: 0

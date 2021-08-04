@@ -5,7 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class Scenes_mini : MonoBehaviour
 {
+<<<<<<< Updated upstream
     public bool player2, player3, player4;
+=======
+    public static Scenes_mini Instance;       //DontDestroy중복생성 확인
+    public int[] turn;      //플레이어 차례(메인게임) 저장
+    public bool player1, player2, player3, player4;
+>>>>>>> Stashed changes
     public int member_num;
     public int random;
 
@@ -24,8 +30,11 @@ public class Scenes_mini : MonoBehaviour
             player_set(player2);
             player_set(player3);
             player_set(player4);
+            turn = new int[member_num];
 
-            if(member_num == 1) //1인용 미니게임
+            turnSet();
+
+            if (member_num == 1) //1인용 미니게임
             {
                 // 미니게임 개발 후 범위 확장 필요
                 random = Random.Range(4, 5);
@@ -65,6 +74,15 @@ public class Scenes_mini : MonoBehaviour
         {
             // 플레이어의 캐릭터를 설정하는 코딩 필요, 추후 수정할 예정
             member_num += 1;
+        }
+    }
+
+    //test용
+    void turnSet()
+    {
+        for(int i = 0; i< member_num; i++)
+        {
+            turn[i] += i + 1;
         }
     }
 }

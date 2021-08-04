@@ -495,8 +495,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 734f77e68917cd8499972ad05e68e600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< Updated upstream
   player2: 1
   player3: 1
   player4: 0
+=======
+  turn: 02000000030000000400000001000000
+  player1: 1
+  player2: 1
+  player3: 1
+  player4: 1
+>>>>>>> Stashed changes
   member_num: 0
   random: 0

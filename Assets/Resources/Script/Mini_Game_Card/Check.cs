@@ -12,7 +12,16 @@ public class Check : MonoBehaviour
 
     void Awake()
     {
+<<<<<<< Updated upstream
         num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴
+=======
+        num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴    
+        managePlayer = GameObject.Find("Game").GetComponent<manage_Player>();
+    }
+
+    void Start()
+    {
+>>>>>>> Stashed changes
         player = num_player.member_num;
         num1 = "";
         num2 = "";
@@ -34,10 +43,14 @@ public class Check : MonoBehaviour
                 mouse_Click2.i = 4;
                 mouse_Click1.i = 4;
                 z += 1;
+<<<<<<< Updated upstream
                 if (z == 9)
                 {
                     GameObject.Find("Canvas").transform.Find("Ending").gameObject.SetActive(true);
                 }
+=======
+                managePlayer.plusScore = true;
+>>>>>>> Stashed changes
             }
             else
             {
@@ -46,6 +59,13 @@ public class Check : MonoBehaviour
             }
             turn(player, number);
             x = 1;
+        }
+
+        if (z == 9)         //카드짝이 다 맞추어짐
+        {
+            managePlayer.scoreSetChecking();
+            managePlayer.ranking = true;
+            z = 0;
         }
     }
 

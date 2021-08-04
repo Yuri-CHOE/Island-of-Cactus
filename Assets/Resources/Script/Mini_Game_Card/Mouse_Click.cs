@@ -7,7 +7,7 @@ public class Mouse_Click : MonoBehaviour, IPointerClickHandler
 {
     public Check check;
     public Card_Setting card_Setting;
-    public int i, x, y = 0;
+    public int i = 0, x = 0, y = 0;
     string name,number;
     Animator animator;
 
@@ -29,19 +29,22 @@ public class Mouse_Click : MonoBehaviour, IPointerClickHandler
     {
         if (i == 1)
         {
+            Debug.Log("IsClick" + name);
             animator.SetBool("isClick", true);
             set_num();
         }
         if(i == 2)
         {
-            animator.SetBool("isFront", true);
-            animator.SetBool("isBack", false);
+            Debug.Log("IsBack" + name);
+            animator.SetBool("isFront", false);
+            animator.SetBool("isBack", true);
         }
         if (i == 3)
         {
-            animator.SetBool("isBack", true);
+            Debug.Log("IsFront" + name);
+            animator.SetBool("isBack", false);
             animator.SetBool("isClick", false);
-            animator.SetBool("isFront", false);
+            animator.SetBool("isFront", true);
             i = 1;
             set_num();
         }
