@@ -8,13 +8,13 @@ public class Mouse_Click : MonoBehaviour, IPointerClickHandler
     public Check check;
     public Card_Setting card_Setting;
     public int i = 0, x = 0, y = 0;
-    string name,number;
+    string _name,number;
     Animator animator;
 
     void Awake()
     {
         check = GameObject.Find("Game").GetComponent<Check>();
-        name = this.gameObject.name;
+        _name = this.gameObject.name;
         card_Setting = GameObject.Find(name).GetComponent<Card_Setting>();
         animator = GetComponent<Animator>();
         animator.Play("aniTouch");
@@ -29,19 +29,19 @@ public class Mouse_Click : MonoBehaviour, IPointerClickHandler
     {
         if (i == 1)
         {
-            Debug.Log("IsClick" + name);
+            Debug.Log("IsClick" + _name);
             animator.SetBool("isClick", true);
             set_num();
         }
         if(i == 2)
         {
-            Debug.Log("IsBack" + name);
+            Debug.Log("IsBack" + _name);
             animator.SetBool("isFront", false);
             animator.SetBool("isBack", true);
         }
         if (i == 3)
         {
-            Debug.Log("IsFront" + name);
+            Debug.Log("IsFront" + _name);
             animator.SetBool("isBack", false);
             animator.SetBool("isClick", false);
             animator.SetBool("isFront", true);
@@ -78,16 +78,16 @@ public class Mouse_Click : MonoBehaviour, IPointerClickHandler
 
     public void set_num()
     {
-        if(name != check.name1)
+        if(_name != check.name1)
         {
             if (check.x == 1)
             {
-                check.num1_set(number, name);
+                check.num1_set(number, _name);
                 check.x = 2;
             }
             else
             {
-                check.num2_set(number, name);
+                check.num2_set(number, _name);
                 check.x = 3;
             }
         }

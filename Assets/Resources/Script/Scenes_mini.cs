@@ -5,13 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Scenes_mini : MonoBehaviour
 {
-<<<<<<< Updated upstream
-    public bool player2, player3, player4;
-=======
     public static Scenes_mini Instance;       //DontDestroy중복생성 확인
     public int[] turn;      //플레이어 차례(메인게임) 저장
     public bool player1, player2, player3, player4;
->>>>>>> Stashed changes
     public int member_num;
     public int random;
 

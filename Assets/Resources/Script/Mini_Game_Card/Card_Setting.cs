@@ -7,22 +7,22 @@ public class Card_Setting : MonoBehaviour
 {
     public Card_Shuffle card_shuffle;
     public Text cardText;
-    public string name, num2;
+    public string _name, num2;
     char sp;
     int num;
 
     void Start()
     {
-        name = this.gameObject.name;
+        _name = this.gameObject.name;
         sp = '_';
         card_shuffle = GameObject.Find("Game").GetComponent<Card_Shuffle>();
-        if (name == "Card")
+        if (_name == "Card")
         {
             num = 0;
         }
         else
         {
-            string[] card_num = name.Split(sp);
+            string[] card_num = _name.Split(sp);
             num = int.Parse(card_num[1]);
         }
         

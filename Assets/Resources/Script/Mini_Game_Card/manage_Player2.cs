@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class manage_Player : MonoBehaviour
+public class manage_Player2 : MonoBehaviour
 {
     public act_Score score1, score2, score3, score4;
     public Scenes_mini num_player;
