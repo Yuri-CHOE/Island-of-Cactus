@@ -68,7 +68,7 @@ public class LuckyBox
     protected LuckyBox(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 9)
+        if (strList.Count != 11)
             return;
         if (loaclList.Count != 3)
             return;
@@ -98,8 +98,7 @@ public class LuckyBox
         _info = loaclList[2].Replace("\\n", "\n").Replace("value", strList[8]);
 
         // 레어도
-        _rare = int.Parse(strList[10]);
-
+        _rare = int.Parse(strList[10]);       
     }
 
 
