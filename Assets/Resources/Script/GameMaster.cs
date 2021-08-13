@@ -549,6 +549,11 @@ public class GameMaster : MonoBehaviour
                 Debug.Log("주사위 수량 :: " + Turn.now.dice.count);
 
 
+                // 카메라 강제 포커스
+                if (Player.me == Turn.now)
+                    GameData.worldManager.cameraManager.LockBtn.isOn = true;
+
+
                 // 스킵
                 Turn.actionProgress = ActionProgress.Working;
             }

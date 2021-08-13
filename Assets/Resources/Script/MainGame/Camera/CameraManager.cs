@@ -40,12 +40,16 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+
+    // 자유모드 제어 스크립트
     public CameraController controller = null;
-    [SerializeField]
-    UnityEngine.UI.Toggle LockBtn = null;
+
+    // 자유모드 토글 버튼
+    public UnityEngine.UI.Toggle LockBtn = null;
 
     [SerializeField]
     CamPoint camPoint = new CamPoint();
+
 
     Coroutine coroutinePos = null;
     Coroutine coroutineRot = null;
@@ -60,7 +64,6 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
 
@@ -100,6 +103,9 @@ public class CameraManager : MonoBehaviour
         // 좌표 싱크
         controller.cam.position = Camera.main.transform.parent.position;
 
+        // 카메라 탈착
+        Camera.main.transform.SetParent(controller.cam);
+
         // 앵글 전환
         CamMoveTo(controller.cam, CamAngle.Top);
 
@@ -124,20 +130,38 @@ public class CameraManager : MonoBehaviour
     /// <param name="_camAngle">적용할 앵글</param>
     public void CamMoveTo(Transform obj, CamAngle _camAngle)
     {
-        // 메인 시점 움직임 가능처리
-        if (obj == controller.cam)
-            controller.isFreeMode = true;
-        // 그 외 시점 움직임 불가능 처리
-        else
-            controller.isFreeMode = false;
+        // 사용 중단
+        if (false)
+        {
+            // 메인 시점 움직임 가능처리
+            if (obj == controller.cam)
+                controller.isFreeMode = true;
+            // 그 외 시점 움직임 불가능 처리
+            else
+                controller.isFreeMode = false;
 
-        // 계층구조 변경
-        Camera.main.transform.SetParent(obj);
+            // 버튼, 자유모드 싱크
+            LockBtn.isOn = !(controller.isFreeMode);
+        }
 
         // 카메라 목표 저장
         camPoint = new CamPoint(obj, _camAngle);
 
-        //
+        // 이동 적용
+        if (LockBtn.isOn)
+        {
+            // 계층구조 변경
+            Camera.main.transform.SetParent(obj);
+
+            // 이동 명령
+            CamMove(_camAngle);
+        }
+
+    }
+
+    void CamMove(CamAngle _camAngle)
+    {
+        // 위치 및 각도 확보
         Vector3 anglePos = GetAnglePos(_camAngle);
         Vector3 angleRot = GetAngleRot(_camAngle);
 
@@ -145,7 +169,7 @@ public class CameraManager : MonoBehaviour
         //angleRot = angleRot + obj.rotation.eulerAngles;
 
         // 이전 요청 중지
-        if(coroutinePos != null)
+        if (coroutinePos != null)
             StopCoroutine(coroutinePos);
         if (coroutineRot != null)
             StopCoroutine(coroutineRot);

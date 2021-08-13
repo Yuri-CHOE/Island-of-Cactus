@@ -153,8 +153,9 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 시점 변경
-                cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Middle);
+                // 본인 턴일때 시점 변경
+                if (Player.me == Turn.now)
+                    cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Middle);
 
                 // 스킵
                 actionProgress = ActionProgress.Finish;
@@ -199,30 +200,55 @@ public class DiceController : MonoBehaviour
                     }
                 }
 
-                // 입력 가능 상태일 경우 ================= 주인 인식해서 제어권 통제해야함
-                if (!isInputBlock)
+
+                // 강제 클릭처리된 경우
+                if (doForceClick || doForceClickUp)
                 {
-                    // UI 클릭 아닐 경우
-                    // 또는 강제 클릭처리된 경우
-                    if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null || doForceClick || doForceClickUp)
+                    // 꾹 눌렀을때
+                    if (doForceClick)
                     {
-                        // 꾹 눌렀을때
-                        if (Input.GetMouseButton(0) || doForceClick)
+                        // 가속도
+                        if (rotAccel < rotAccelMax)
+                            rotAccel += 0.1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                        else if (rotAccel > rotAccelMax)
+                            rotAccel = rotAccelMax;
+                    }
+                    // 클릭 종료될 때
+                    else if (doForceClickUp)
+                    {
+                        //Debug.Break();
+                        actionProgress = ActionProgress.Finish;
+                    }
+                }
+
+                // 턴 제어자일 경우
+                else if (Player.me == Turn.now)
+                {
+                    // 입력 가능 상태일 경우
+                    if (!isInputBlock)
+                    {
+                        // UI 클릭 아닐 경우
+                        if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
                         {
-                            // 가속도
-                            if (rotAccel < rotAccelMax)
-                                rotAccel += 0.1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
-                            else if (rotAccel > rotAccelMax)
-                                rotAccel = rotAccelMax;
-                        }
-                        // 클릭 종료될 때
-                        else if (Input.GetMouseButtonUp(0) || doForceClickUp)
-                        {
-                            //Debug.Break();
-                            actionProgress = ActionProgress.Finish;
+                            // 꾹 눌렀을때
+                            if (Input.GetMouseButton(0))
+                            {
+                                // 가속도
+                                if (rotAccel < rotAccelMax)
+                                    rotAccel += 0.1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                                else if (rotAccel > rotAccelMax)
+                                    rotAccel = rotAccelMax;
+                            }
+                            // 클릭 종료될 때
+                            else if (Input.GetMouseButtonUp(0))
+                            {
+                                //Debug.Break();
+                                actionProgress = ActionProgress.Finish;
+                            }
                         }
                     }
                 }
+
 
                 // 최소, 최대 높이 보정
                 Tool.HeightLimit(transform, minHeight, maxHeight);
@@ -231,17 +257,21 @@ public class DiceController : MonoBehaviour
                 Tool.Spin(transform, rotSpeed);
 
 
-                // 시간 제한
-                if (elapsedTime > 15.0f)
+                // 사용 중단
+                if (false)
                 {
-                    actionProgress = ActionProgress.Finish;
+                    // 시간 제한
+                    if (elapsedTime > 15.0f)
+                    {
+                        actionProgress = ActionProgress.Finish;
 
-                    Debug.Log("호버링 타임 오버");
+                        Debug.Log("호버링 타임 오버");
+                    }
+
+                    // 시간 카운트
+                    if (isTimeCountWork)
+                        elapsedTime += Time.deltaTime;
                 }
-
-                // 시간 카운트
-                if(isTimeCountWork)
-                    elapsedTime += Time.deltaTime;
             }
             else if (actionProgress == ActionProgress.Finish)
             {

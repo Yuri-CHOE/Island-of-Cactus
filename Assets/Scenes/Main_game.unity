@@ -5777,7 +5777,7 @@ GameObject:
   - component: {fileID: 1040301310}
   - component: {fileID: 1040301311}
   m_Layer: 0
-  m_Name: MainCam
+  m_Name: FreeCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11041,6 +11041,10 @@ PrefabInstance:
       propertyPath: controller
       value: 
       objectReference: {fileID: 1040301311}
+    - target: {fileID: 3777823060021571821, guid: 7d3703ce5bc5e14478f6272defd7aaf7, type: 3}
+      propertyPath: turnTraceObj
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8054697670722515734, guid: 7d3703ce5bc5e14478f6272defd7aaf7, type: 3}
       propertyPath: shortcutPrice
       value: 

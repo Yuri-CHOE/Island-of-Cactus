@@ -165,7 +165,13 @@ public class CharacterMover : MonoBehaviour
 
         // 겹친 좌표
         //Vector3 crossPoint = playerList[0].movement.locateBlock.position;
-        Vector3 crossPoint = BlockManager.script.GetBlock(playerList[0].location).transform.position;
+        Vector3 crossPoint;
+
+        // 스타트 블록 우회
+        if (playerList[0].location == -1)
+            crossPoint = BlockManager.script.startBlock.position;
+        else
+            crossPoint = BlockManager.script.GetBlock(playerList[0].location).transform.position;
 
         // 대상이 1명일 경우
         if (playerList.Count == 1)
