@@ -223,7 +223,7 @@ public struct IocEffect
                 if (current != user)
                 {
                     // 인벤토리 스캔
-                    for (int j = 0; j < current.inventory.Count; j++)
+                    for (int j = 0; j < current.inventoryCount; j++)
                     {
                         // 실드 체크
                         if (current.inventory[j].item.index == 19)
@@ -231,6 +231,9 @@ public struct IocEffect
                             // 실드 자동 사용
                             //GameMaster.script.itemManager.ItemUse(current.inventory[j]);
                             current.inventory[j].count--;
+
+                            // 차단 적용
+                            isExecute = false;
 
                             // 스캔 중단
                             break;
@@ -241,7 +244,7 @@ public struct IocEffect
 
 
                 // 효과 차단
-                if (isExecute)
+                if (!isExecute)
                     continue;
 
                 // 대상 없음
@@ -266,15 +269,19 @@ public struct IocEffect
                     if (where == -3)
                     {
                         //blockIndex *= where;
-                        current.dice.SetValue(current.dice.value * value);
+                        Debug.LogError(current.dice.valueTotal);
+                        current.dice.SetValueTotal(current.dice.valueTotal * value);
+                        Debug.LogError(current.dice.valueTotal);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
                     }
-                    else if (value == -2)
+                    else if (where == -2)
                     {
                         //blockIndex += where;
-                        current.dice.SetValue(current.dice.value + value);
+                        Debug.LogError(current.dice.valueTotal);
+                        current.dice.SetValueTotal(current.dice.valueTotal + value);
+                        Debug.LogError(current.dice.valueTotal);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
@@ -282,10 +289,16 @@ public struct IocEffect
                     else
                     {
                         blockIndex = where;
-                        current.dice.SetValue(0);
+                        current.dice.SetValueTotal(0);
+                        Debug.LogError(blockIndex);
 
+
+                        // 오아시스 입장
+                        if (blockIndex == -1)
+                            current.movement.GotoJail();
                         // 이동 호출
-                        current.movement.PlanMoveTo(blockIndex);
+                        else
+                            current.movement.PlanMoveTo(blockIndex);
                     }
 
                 }

@@ -147,6 +147,8 @@ public class LuckyBox
     /// <returns></returns>
     public IEnumerator Effect(Player targetPlayer_Or_null)
     {
+        Debug.LogError("Lucky Box :: 효과 호출됨 = " + name);
+
         // 타겟 리스트
         List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
 
@@ -202,7 +204,7 @@ public class LuckyBox
 
                 break;
 
-            case 19:
+            case 17:
                 // 중립 몬스터 돌격
                 {
 
@@ -227,7 +229,7 @@ public class LuckyBox
                     // 미구현==================== 프리팹 지정할것
                     GameObject obj = null;
 
-                    // 생성 및 등록
+                    // 생성 및 등록=================프리팹 지정 안되어서 널 오류 발생
                     world.avatar = GameObject.Instantiate(
                         obj,
                         BlockManager.script.startBlock
@@ -258,7 +260,7 @@ public class LuckyBox
 
 
                     // 잔여 액션 있음 or 액션 수행중 경우
-                    while (movement.actionsQueue.Count > 0    ||    movement.actNow.type == Action.ActionType.None)
+                    while (movement.actionsQueue.Count > 0 || movement.actNow.type == Action.ActionType.None)
                     {
                         movement.ActionCall();
                     }
@@ -291,19 +293,24 @@ public class LuckyBox
 
                     // 드랍테이블 셋팅
                     dropTable.rare = new List<int>();
-                    for (int i = 1; i < LuckyBox.table.Count; i++)
+                    for (int i = 0; i < Item.tableLuckyDrop.Count; i++)
                     {
-                        dropTable.rare.Add(LuckyBox.table[i].rare);
-                        Debug.Log("드랍 테이블 :: 추가됨 -> " + LuckyBox.table[i].rare);
+                        dropTable.rare.Add(Item.tableLuckyDrop[i].rare);
+                        Debug.Log("드랍 테이블 :: 추가됨 -> " + Item.tableLuckyDrop[i].rare);
                     }
                     Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
 
                     // 드랍 테이블 작동 및 드랍대상 인덱스 확보
-                    int select = 1 + dropTable.Drop();
-                    Debug.LogWarning("럭키 아이템 :: 선택됨 -> " + Item.table[select].name);
+
+                    // 중간중간이 빈 아이템 테이블에서 빈곳이 매워진 인덱스를 가지고 아이템을 확정지어야함
+                    // 현재 빈곳 반영 안되고 다이렉트로 픽하고 있음
+                    // 가장 좋은 방법 = 아이템 테이블 럭키박스 전용으로 별도 운용할것
+
+                    int select = dropTable.Drop();
+                    Debug.LogWarning("럭키 아이템 :: 선택됨 -> " + Item.tableLuckyDrop[select].name);
 
                     // 지급
-                    user.AddItem(Item.table[select], 1);
+                    user.AddItem(Item.tableLuckyDrop[select], 1);
                 }
                 break;
 
@@ -319,7 +326,7 @@ public class LuckyBox
                         current = user.otherPlayers[i];
 
                         // 비교대상 없을 경우 즉시 지정
-                        if (best == null)
+                        if (best.Count == 0)
                             best.Add(current);
 
                         // 코인 더 많을 경우 지정
@@ -356,7 +363,7 @@ public class LuckyBox
                         current = user.otherPlayers[i];
 
                         // 비교대상 없을 경우 즉시 지정
-                        if (least == null)
+                        if (least.Count == 0)
                             least.Add(current);
 
                         // 코인 더 적을 경우 지정
@@ -378,7 +385,7 @@ public class LuckyBox
 
                     // 코인 지급
                     for (int i = 0; i < least.Count; i++)
-                        least[i].coin.subtract(__luckyBox.effect.value / least.Count);
+                        least[i].coin.Add(__luckyBox.effect.value / least.Count);
                 }
                 break;
 

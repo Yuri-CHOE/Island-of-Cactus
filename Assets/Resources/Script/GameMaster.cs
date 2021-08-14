@@ -810,8 +810,8 @@ public class GameMaster : MonoBehaviour
                     // ÀÜ¿© ¾×¼Ç ¾øÀ½
                     if (movement.actionsQueue.Count == 0)
                     {
-                        // Ä«¸Þ¶ó Å»Âø
-                        GameData.worldManager.cameraManager.CamFree();
+                        //// Ä«¸Þ¶ó Å»Âø
+                        //GameData.worldManager.cameraManager.CamFree();
 
                         // ½ºÅµ
                         Turn.actionProgress = ActionProgress.Finish;
@@ -882,6 +882,9 @@ public class GameMaster : MonoBehaviour
             if (Turn.actionProgress == ActionProgress.Ready)
             {
                 // °¢Á¾ ÃÊ±âÈ­
+
+                // Ä«¸Þ¶ó Å»Âø
+                GameData.worldManager.cameraManager.CamFree();
 
                 // ½ºÅµ
                 Turn.actionProgress = ActionProgress.Start;

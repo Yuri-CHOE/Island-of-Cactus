@@ -18,13 +18,17 @@ public class Item
     static List<Item> _table = new List<Item>();
     public static List<Item> table { get { return _table; } }
 
+    // 아이템 테이블
+    static List<Item> _tableLuckyDrop = new List<Item>();
+    public static List<Item> tableLuckyDrop { get { return _tableLuckyDrop; } }
+
     // 아이템 테이블 확인용
     static bool _isReady = false;
     public static bool isReady { get { return _isReady; } }
 
 
     // 공백 아이템
-    static string[] emptyItem = { "0", "0", "", "0", "0", "0", "0", "0", "0", "0", "0", "0", "" };
+    static string[] emptyItem = { "0", "0", "", "0", "0", "0", "0", "0", "0", "0", "", "0", "0", "0" };
     static string[] emptyItem_local = { "0", "empty", "is empty" };
     public static Item empty = new Item(new List<string>(emptyItem), new List<string>(emptyItem_local));
 
@@ -132,7 +136,12 @@ public class Item
         // 테이블로 리스트 셋팅
         for (int i = 1; i < itemReader.table.Count; i++)
         {
-            table.Add(new Item(itemReader.table[i], local.table[i]));
+            Item current = new Item(itemReader.table[i], local.table[i]);
+            table.Add(current);
+
+            // 럭키박스 등장 아이템 테이블
+            if (current.isLuckyBoxGet)
+                tableLuckyDrop.Add(current);
         }
 
         // 준비완료

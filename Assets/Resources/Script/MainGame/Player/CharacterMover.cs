@@ -274,12 +274,13 @@ public class CharacterMover : MonoBehaviour
         {
             counter += _sign;
 
-            int loc = GameData.blockManager.indexLoop(location, ((i) * _sign));
-            int locNext = GameData.blockManager.indexLoop(location,  ((i + 1) * _sign));
-
+            //int loc = GameData.blockManager.indexLoop(location, ((i) * _sign));
+            //int locNext = GameData.blockManager.indexLoop(location,  ((i + 1) * _sign));
+            int loc = GameData.blockManager.indexLoop(location, i);
+            int locNext = GameData.blockManager.indexLoop(location, i + _sign );
 
             // 스타트 블록 체크
-            if(location == -1 && i == 0)
+            if (location == -1 && i == 0)
             {
                 Debug.Log("스타트 블록 탐지 : " + counter);
 
@@ -340,11 +341,19 @@ public class CharacterMover : MonoBehaviour
                 counter = 0;
             }
 
+            //int locNow = GameData.blockManager.indexLoop(locNext, _sign);
+            int locNow = loc;
+            Debug.LogError(locNext + " , " + locNow + " = " +
+                (GameData.blockManager.GetBlock(locNext).GetComponent<DynamicBlock>().GetDirection() != GameData.blockManager.GetBlock(locNow).GetComponent<DynamicBlock>().GetDirection())
+                );
+            Debug.LogError(!(location == -1 && (loc == 0 || locNext == 0)));
             // 코너 체크
             if (
             GameData.blockManager.GetBlock(locNext).GetComponent<DynamicBlock>().GetDirection()
             !=
-            GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(locNext, - 1)).GetComponent<DynamicBlock>().GetDirection()
+            //GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(locNext, - 1)).GetComponent<DynamicBlock>().GetDirection()
+            //GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(locNext, -_sign)).GetComponent<DynamicBlock>().GetDirection()
+            GameData.blockManager.GetBlock(locNow).GetComponent<DynamicBlock>().GetDirection()
             // 스타트블록에서 시작하고 탐색점이 스타트 블록 혹은 그 다음 칸일 경우 제외 처리
             && !(location == -1 && (loc == 0 || locNext == 0))
             )
@@ -352,7 +361,11 @@ public class CharacterMover : MonoBehaviour
                 Debug.Log("코너 탐지 : " + counter);
 
                 //스케줄링 추가 - counter만큼 칸수 지정
-                actionsQueue.Enqueue(new Action(Action.ActionType.Move, i+ _sign, moveSpeed));
+                if(_sign > 0)
+                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
+                else
+                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i, moveSpeed));
+
                 //actionsQueue.Enqueue(new Action(Action.ActionType.Move, counter, moveSpeed));
 
                 //스케줄링 추가 - 회전 액션 추가
@@ -368,7 +381,7 @@ public class CharacterMover : MonoBehaviour
                 Debug.Log("종료 탐지 : " + counter);
 
                 // 이동 마무리
-                if (counter > 0)
+                if (counter != 0)
                 {
                     //스케줄링 추가 - counter만큼 칸수 지정
                     actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
@@ -838,8 +851,12 @@ public class CharacterMover : MonoBehaviour
     {
         Debug.LogError("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location);
 
+        int diceTemp = owner.location - location;
+        Debug.LogError("액션 중단 :: 잔여 주사위 = " + diceTemp);
+        owner.dice.SetValueTotal(diceTemp);
+
         // 스킵 대상 없을 경우
-        if (actNow.type == Action.ActionType.Stop)
+        if (actNow.type == Action.ActionType.Stop || actionsQueue.Count == 0)
             return;
         else
         {
@@ -847,9 +864,9 @@ public class CharacterMover : MonoBehaviour
             while (actionsQueue.Peek().type != Action.ActionType.Stop)
             {
                 // 제거
-                Action.ActionType aType = actionsQueue.Dequeue().type;
-
-                Debug.LogError("액션 제거 :: " + aType);
+                //    Action.ActionType aType = actionsQueue.Dequeue().type;
+                //    Debug.LogError("액션 제거 :: " + aType);
+                Debug.LogError("액션 제거 :: " + actionsQueue.Dequeue().type);
             }
 
             //// 액션 전체 제거
@@ -1071,6 +1088,10 @@ public class CharacterMover : MonoBehaviour
     public void GotoJail()
     {
         Debug.LogWarning("감옥으로 이동 :: " + transform.name);
+
+        // 잔여 액션 제거
+        actionsQueue.Clear();
+        actNow = new Action();
 
         // 행동제한 부여
         owner.stunCount = 3;

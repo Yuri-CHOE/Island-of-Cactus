@@ -153,9 +153,8 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 본인 턴일때 시점 변경
-                if (Player.me == Turn.now)
-                    cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Middle);
+                // 시점 변경
+                cm.CamMoveTo(owner.avatar.transform, CameraManager.CamAngle.Middle);
 
                 // 스킵
                 actionProgress = ActionProgress.Finish;

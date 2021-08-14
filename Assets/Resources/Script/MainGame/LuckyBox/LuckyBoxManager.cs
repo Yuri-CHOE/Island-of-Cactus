@@ -139,14 +139,21 @@ public class LuckyBoxManager : MonoBehaviour
             yield return null;
         }
 
+        // 숨기기
+        Hide();
+
         // 효과 적용
         yield return _luckyBox.Effect(target);
+        Debug.LogError("Lucky Box :: 효과 종료됨 = " + _luckyBox.name);
+
+        // 이동 종료 대기
+        while (target.movement.actNow.type != Action.ActionType.None || target.movement.actionsQueue.Count > 0)
+        {
+            yield return null;
+        }
 
         // 종료 판정
         BlockWork.isEnd = true;
-
-        // 숨기기
-        Hide();
 
         // 초기화 진행
         ClearForced();
