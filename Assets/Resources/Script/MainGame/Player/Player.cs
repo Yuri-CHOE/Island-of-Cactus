@@ -123,7 +123,7 @@ public class Player
 
     // 이동제어 스크립트
     int _location = -1;
-    public int location { get { return _location; } set { int i = BlockManager.script.indexLoop(value,0); dice.valueRecord += i - location; _location = i; } }
+    public int location { get { return _location; } set { if (value == -1) { _location = -1; return; } int i = BlockManager.script.indexLoop(value,0); dice.valueRecord += i - location; _location = i; } }
     //public CharacterMover movementMirror = new CharacterMover();
     //public CharacterMover movement { get { if (avatar == null) return null; else return avatar.GetComponent<CharacterMover>(); } }
     public CharacterMover movement = null;
@@ -309,12 +309,17 @@ public class Player
 
     public void RemoveItem(ItemSlot currentSlot)
     {
+        Debug.LogError("인벤토리 :: 아이템 제거 요청됨");
+
         // 인벤토리 순회 체크
         for (int i = 0; i < inventory.Count; i++)
         {
             // 일치하는 슬롯 검색
             if (inventory[i] == currentSlot)
+            {
                 inventory[i].Clear();
+                Debug.LogError("인벤토리 :: " + name + "의 " + i+ "번째 아이템 제거됨");
+            }
         }
 
         // 인벤토리 재정렬

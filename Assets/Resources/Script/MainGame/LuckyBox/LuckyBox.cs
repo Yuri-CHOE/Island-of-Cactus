@@ -181,7 +181,7 @@ public class LuckyBox
                 // 선인장 도적단
                 {
                     // 잘못된 인원수 차단
-                    if (filteredTarget.Count != 0)
+                    if (filteredTarget.Count == 0)
                         break;
 
                     // 연출
@@ -299,12 +299,6 @@ public class LuckyBox
                         Debug.Log("드랍 테이블 :: 추가됨 -> " + Item.tableLuckyDrop[i].rare);
                     }
                     Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
-
-                    // 드랍 테이블 작동 및 드랍대상 인덱스 확보
-
-                    // 중간중간이 빈 아이템 테이블에서 빈곳이 매워진 인덱스를 가지고 아이템을 확정지어야함
-                    // 현재 빈곳 반영 안되고 다이렉트로 픽하고 있음
-                    // 가장 좋은 방법 = 아이템 테이블 럭키박스 전용으로 별도 운용할것
 
                     int select = dropTable.Drop();
                     Debug.LogWarning("럭키 아이템 :: 선택됨 -> " + Item.tableLuckyDrop[select].name);

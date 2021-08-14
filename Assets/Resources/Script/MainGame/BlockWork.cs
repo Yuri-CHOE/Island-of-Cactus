@@ -207,6 +207,8 @@ public static class BlockWork
         int select = 1 + dropTable.Drop();
         Debug.LogWarning("럭키박스 :: 선택됨 -> "+ select);
 
+        // 테스트용 드랍 조작===================== 테스트 후 삭제할것
+        select = 16;
 
         // 럭키박스 연출 시작
         LuckyBoxManager lbm = LuckyBoxManager.script;

@@ -694,7 +694,7 @@ public class CharacterMover : MonoBehaviour
             // 좌표 설정 및 이동
             if (act.count != 0)
                 MoveSet(
-                    GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(location, act.count)).transform.position,
+                    BlockManager.dynamicBlockList[BlockManager.script.indexLoop(location, act.count)].transform.position,
                     act.speed,
                     false
                     );
@@ -1074,6 +1074,10 @@ public class CharacterMover : MonoBehaviour
 
         // 위치 변경
         _location = -1;
+        owner.location = -1;
+
+        // 겹침 해소
+        AvatarOverFix();
 
         // 위치 변경
         owner.isDead = true;
@@ -1098,6 +1102,8 @@ public class CharacterMover : MonoBehaviour
     /// <returns></returns>
     IEnumerator ActFly(Vector3 pos, float speed, bool isTurnAfterMove)
     {
+        isBusy = true;
+
         float height = transform.position.y;
 
         // 상승
@@ -1120,6 +1126,7 @@ public class CharacterMover : MonoBehaviour
         if (isTurnAfterMove)
             yield return StartCoroutine(ActTurnFornt(speed));
 
+        isBusy = false;
     }
 
     /// <summary>

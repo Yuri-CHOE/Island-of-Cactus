@@ -269,9 +269,7 @@ public struct IocEffect
                     if (where == -3)
                     {
                         //blockIndex *= where;
-                        Debug.LogError(current.dice.valueTotal);
                         current.dice.SetValueTotal(current.dice.valueTotal * value);
-                        Debug.LogError(current.dice.valueTotal);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
@@ -279,9 +277,7 @@ public struct IocEffect
                     else if (where == -2)
                     {
                         //blockIndex += where;
-                        Debug.LogError(current.dice.valueTotal);
                         current.dice.SetValueTotal(current.dice.valueTotal + value);
-                        Debug.LogError(current.dice.valueTotal);
 
                         // 이동 호출
                         current.movement.PlanMoveBy(current.dice.valueTotal);
