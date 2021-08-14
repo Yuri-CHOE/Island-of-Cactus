@@ -18,6 +18,10 @@ public class DynamicBlock : MonoBehaviour
 
     public List<Player> guest = new List<Player>();
 
+
+    public bool isCorner = false;
+
+
     // Start is called before the first frame update
     void Start()
     {

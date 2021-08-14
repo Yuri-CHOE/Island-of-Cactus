@@ -8,6 +8,8 @@ public class BlockManager : MonoBehaviour
 {
     public static BlockManager script = null;
 
+    public static List<DynamicBlock> dynamicBlockList = new List<DynamicBlock>();
+
     [SerializeField]
     GameObject blockPrefab;
 
@@ -221,9 +223,11 @@ public class BlockManager : MonoBehaviour
     /// </summary>
     public void RefreshAllObject()
     {
+        DynamicBlock db;
+
         for (int i = 0; i < gol.Count; i++)
         {
-            DynamicBlock db = gol[i].GetComponent<DynamicBlock>();
+            db = gol[i].GetComponent<DynamicBlock>();
 
             // 블록 타입 새로고침
             db.SetType(BlockType.GetTypeByDetail(db.blockTypeDetail));
@@ -352,5 +356,36 @@ public class BlockManager : MonoBehaviour
     //}
 
 
+    public void SetCorner()
+    {
+        // 블록 1개 이하일 경우 중단
+        if (gol.Count <= 1)
+            return;
 
+        DynamicBlock dbNow;
+        DynamicBlock dbPre;
+
+        for (int i = 0; i < gol.Count; i++)
+        {
+            // 현재칸 설정
+            dbNow = gol[i].GetComponent<DynamicBlock>();
+
+            // 다음칸 설정
+            dbPre = gol[indexLoop(i, -1)].GetComponent<DynamicBlock>();
+
+            // 값 설정
+            dbNow.isCorner = dbNow.GetDirection() != dbPre.GetDirection();
+        }
+
+    }
+
+    public void SetDynamicBlockList()
+    {
+        dynamicBlockList.Clear();
+
+        for (int i = 0; i < blockCount; i++)
+            dynamicBlockList.Add(
+                gol[i].GetComponent<DynamicBlock>()
+                );
+    }
 }

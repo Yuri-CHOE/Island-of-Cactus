@@ -369,13 +369,21 @@ public class LoadingManager : MonoBehaviour
         wm.groundManager.BuildByString(WorldManager.worldFile[2]);
         workCount++;
 
-        // 블록 빌드
+        // 블록 빌드        
         wm.blockManager.BuildByString(WorldManager.worldFile[3]);
         workCount++;
 
         // 장식물 빌드
         wm.decorManager.BuildByString(WorldManager.worldFile[4]);
         workCount++;
+
+        // 코너 셋팅
+        wm.blockManager.SetCorner();
+        workCount += wm.blockManager.blockCount;
+
+        // 블록 리스트 등록
+        wm.blockManager.SetDynamicBlockList();
+        workCount += wm.blockManager.blockCount;
 
         // 첫 로드
         if (GameMaster.flowCopy == GameMaster.Flow.Wait)

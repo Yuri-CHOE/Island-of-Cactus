@@ -341,39 +341,6 @@ public class CharacterMover : MonoBehaviour
                 counter = 0;
             }
 
-            //int locNow = GameData.blockManager.indexLoop(locNext, _sign);
-            int locNow = loc;
-            Debug.LogError(locNext + " , " + locNow + " = " +
-                (GameData.blockManager.GetBlock(locNext).GetComponent<DynamicBlock>().GetDirection() != GameData.blockManager.GetBlock(locNow).GetComponent<DynamicBlock>().GetDirection())
-                );
-            Debug.LogError(!(location == -1 && (loc == 0 || locNext == 0)));
-            // 코너 체크
-            if (
-            GameData.blockManager.GetBlock(locNext).GetComponent<DynamicBlock>().GetDirection()
-            !=
-            //GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(locNext, - 1)).GetComponent<DynamicBlock>().GetDirection()
-            //GameData.blockManager.GetBlock(GameData.blockManager.indexLoop(locNext, -_sign)).GetComponent<DynamicBlock>().GetDirection()
-            GameData.blockManager.GetBlock(locNow).GetComponent<DynamicBlock>().GetDirection()
-            // 스타트블록에서 시작하고 탐색점이 스타트 블록 혹은 그 다음 칸일 경우 제외 처리
-            && !(location == -1 && (loc == 0 || locNext == 0))
-            )
-            {
-                Debug.Log("코너 탐지 : " + counter);
-
-                //스케줄링 추가 - counter만큼 칸수 지정
-                if(_sign > 0)
-                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
-                else
-                    actionsQueue.Enqueue(new Action(Action.ActionType.Move, i, moveSpeed));
-
-                //actionsQueue.Enqueue(new Action(Action.ActionType.Move, counter, moveSpeed));
-
-                //스케줄링 추가 - 회전 액션 추가
-                //actionsQueue.Enqueue(new Action(Action.ActionType.Turn, GameData.blockManager.GetBlock(locNext).GetComponent<DynamicBlock>().GetDirection(), moveSpeed));
-
-                // 카운터 리셋
-                counter = 0;
-            }
 
             // 종료 전 체크
             if (i + _sign == moveValue)
@@ -393,8 +360,17 @@ public class CharacterMover : MonoBehaviour
                 //스케줄링 추가 - 최종 액션 : 정지 후 정면
                 actionsQueue.Enqueue(new Action(Action.ActionType.Stop, i + _sign, moveSpeed));
             }
+            // 코너 체크 - 도착점이 코너일 경우 코너탐지 필요 없음
+            else if (BlockManager.dynamicBlockList[locNext].isCorner)
+            {
+                Debug.Log("코너 탐지 : " + counter);
 
-            Debug.Log(counter + " , " + (i + _sign == moveValue));
+                //스케줄링 추가 - counter만큼 칸수 지정
+                actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
+
+                // 카운터 리셋
+                counter = 0;
+            }
         }
 
         //스케줄링 추가 - 정면 보기
