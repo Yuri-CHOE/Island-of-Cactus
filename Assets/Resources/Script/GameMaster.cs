@@ -146,6 +146,9 @@ public class GameMaster : MonoBehaviour
                                 Player.player_4 = new Player(Player.Type.AI, picked[2], true, "Player04");
                                 Player.allPlayer.Add(Player.player_4);
                             }
+
+                            // 시스템 플레이어 - 다른 플레이어 설정
+                            Player.system.Monster.otherPlayers = new List<Player>(Player.allPlayer);
                         }
                     }
 

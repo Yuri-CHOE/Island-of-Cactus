@@ -207,80 +207,107 @@ public class LuckyBox
             case 17:
                 // 중립 몬스터 돌격
                 {
+                    // 돌진 명령 - 자동화
+                    yield return MonsterManager.script.Dash(user.location, __luckyBox.effect.where);
 
-                    // 생성 위치
-                    int blockIndex = 0;
-
-                    // 플레이어 지정시 위치 확보
-                    if (user != null)
-                        blockIndex = user.location;
-
-
-
-                    // 제어자 퀵등록
-                    Player world = Player.system.World;
-
-                    // 백업
-                    GameObject backAvatar = world.avatar;
-                    Transform backAvatarBody = world.avatarBody;
-                    //CharacterMover backMovement = avatar.movement;
-
-                    // 생성할 몬스터
-                    // 미구현==================== 프리팹 지정할것
-                    GameObject obj = null;
-
-                    // 생성 및 등록=================프리팹 지정 안되어서 널 오류 발생
-                    world.avatar = GameObject.Instantiate(
-                        obj,
-                        BlockManager.script.startBlock
-                        ) as GameObject;
-                    world.avatarBody = world.avatar.transform.Find("BodyObject");
-
-                    // 이동제어 셋업
-                    CharacterMover movement = world.avatar.GetComponent<CharacterMover>();
-                    movement.owner = world;
-
-                    // 퀵등록
-                    Transform monster = world.avatar.transform;
-
-                    // 초기위치 설정
-                    if (user.location != -1)
-                        movement.location = user.location;
-
-                    // 위치 적용
-                    monster.position = user.avatar.transform.position;
-
-
-
-                    // 카메라 부착
-                    GameData.worldManager.cameraManager.CamMoveTo(monster, CameraManager.CamAngle.Top);
-
-                    // 돌진 계획
-                    movement.PlanMoveBy(__luckyBox.effect.where);
-
-
-                    // 잔여 액션 있음 or 액션 수행중 경우
-                    while (movement.actionsQueue.Count > 0 || movement.actNow.type == Action.ActionType.None)
+                    // 수동화 - 사용 안함
                     {
-                        movement.ActionCall();
+                        //// 소환
+                        //MonsterManager.script.Call(user.location);
+
+                        //// 애니메이션 작동
+                        //MonsterManager.script.Work();
+
+                        //// 카메라 포커싱
+                        //MonsterManager.script.Focus();
+
+                        //// 돌진 명령
+                        //yield return MonsterManager.script.DashOnly(__luckyBox.effect.where);
+
+                        //// 몬스터 숨김
+                        //MonsterManager.script.Hide();
                     }
 
 
+                    // 구 코드 - 폐기 예정
+                    {
+                        /*
+
+                        // 생성 위치
+                        int blockIndex = 0;
+
+                        // 플레이어 지정시 위치 확보
+                        if (user != null)
+                            blockIndex = user.location;
 
 
-                    // 복구
-                    world.avatar = backAvatar;
-                    world.avatarBody = backAvatarBody;
 
-                    // 할당 해제
-                    movement = null;
+                        // 제어자 퀵등록
+                        Player world = Player.system.World;
 
-                    // 몬스터 제거
-                    Transform.Destroy(monster);
+                        // 백업
+                        GameObject backAvatar = world.avatar;
+                        Transform backAvatarBody = world.avatarBody;
+                        //CharacterMover backMovement = avatar.movement;
+
+                        // 생성할 몬스터
+                        // 미구현==================== 프리팹 지정할것
+                        GameObject obj = null;
+
+                        // 생성 및 등록=================프리팹 지정 안되어서 널 오류 발생
+                        world.avatar = GameObject.Instantiate(
+                            obj,
+                            BlockManager.script.startBlock
+                            ) as GameObject;
+                        world.avatarBody = world.avatar.transform.Find("BodyObject");
+
+                        // 이동제어 셋업
+                        CharacterMover movement = world.avatar.GetComponent<CharacterMover>();
+                        movement.owner = world;
+
+                        // 퀵등록
+                        Transform monster = world.avatar.transform;
+
+                        // 초기위치 설정
+                        if (user.location != -1)
+                            movement.location = user.location;
+
+                        // 위치 적용
+                        monster.position = user.avatar.transform.position;
+
+
+                        // 카메라 부착
+                        GameData.worldManager.cameraManager.CamMoveTo(monster, CameraManager.CamAngle.Top);
+
+                        // 돌진 계획
+                        movement.PlanMoveBy(__luckyBox.effect.where);
+
+
+                        // 잔여 액션 있음 or 액션 수행중 경우
+                        while (movement.actionsQueue.Count > 0 || movement.actNow.type == Action.ActionType.None)
+                        {
+                            movement.ActionCall();
+                        }
+
+
+
+
+                        // 복구
+                        world.avatar = backAvatar;
+                        world.avatarBody = backAvatarBody;
+
+                        // 할당 해제
+                        movement = null;
+
+                        // 몬스터 제거
+                        Transform.Destroy(monster);
+
+                        */
+                    }
 
                     // 카메라 탈착
                     GameData.worldManager.cameraManager.CamMoveTo(Turn.now.avatar.transform, CameraManager.CamAngle.Top);
-                    GameData.worldManager.cameraManager.CamFree();
+                    //GameData.worldManager.cameraManager.CamFree();
 
                 }
                 break;

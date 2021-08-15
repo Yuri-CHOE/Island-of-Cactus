@@ -68,10 +68,9 @@ public class CharacterMover : MonoBehaviour
 
 
     // 회전용 하위 오브젝트
-    [SerializeField]
-    Transform bodyObject = null;
+    public Transform bodyObject = null;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -296,12 +295,7 @@ public class CharacterMover : MonoBehaviour
 
             // 플레이어 체크
             for (int p = 0; p < owner.otherPlayers.Count; p++)
-            {
-                // 공격 최소 사이클 제한
-                // 계획은 상시 수행, 계획에서 조건 처리
-                //if (Cycle.now < 5)
-                //    break;
-
+            {            
                 // 체크 대상
                 Player current = owner.otherPlayers[p];
 
@@ -314,7 +308,7 @@ public class CharacterMover : MonoBehaviour
                     actionsQueue.Enqueue(new Action(Action.ActionType.Move, i + _sign, moveSpeed));
 
                     //스케줄링 추가 - 공격 처리
-                    if (Cycle.now > 5)  
+                    if (Cycle.now > 5 || owner == Player.system.Monster)  
                     actionsQueue.Enqueue(new Action(Action.ActionType.Attack, locNext, moveSpeed));
 
                     // 카운터 리셋
