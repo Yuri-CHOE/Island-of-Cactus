@@ -162,7 +162,6 @@ GameObject:
   - component: {fileID: 7519199311281918537}
   - component: {fileID: 7519199311281918536}
   - component: {fileID: 7519199311281918543}
-  - component: {fileID: 4365823419932701783}
   - component: {fileID: 4211971904731818742}
   - component: {fileID: 7073722712582221608}
   m_Layer: 5
@@ -256,22 +255,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4365823419932701783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7519199311281918541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b127264d65cdd642903c85ba7cba815, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  card_shuffle: {fileID: 0}
-  cardText: {fileID: 1039256789875556902}
-  name: 
-  num2: 
 --- !u!114 &4211971904731818742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,11 +267,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d7d48bcfcdba394aa973ea8528f0324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Index: -1
+  cardNum: 0
+  numText: {fileID: 1039256789875556902}
+  animator: {fileID: 7073722712582221608}
   check: {fileID: 0}
-  card_Setting: {fileID: 0}
-  i: 0
-  x: 0
-  y: 0
 --- !u!95 &7073722712582221608
 Animator:
   serializedVersion: 3

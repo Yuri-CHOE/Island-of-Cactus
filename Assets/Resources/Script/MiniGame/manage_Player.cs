@@ -6,8 +6,22 @@ using UnityEngine.SceneManagement;
 
 public class manage_Player : MonoBehaviour
 {
-    public static List<miniGamePlayer> scoreList = new List<miniGamePlayer>();
-    public miniGamePlayer player1, player2, player3, player4;
+    // 정리중 - 신형
+    //    [Header("player")]
+    //    public List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
+
+    //    [Header("???")]
+    //    public int player, turnNum, rank, turnNumB, turnCheck;                                     //미니게임 참가 인원, 턴제어 숫자
+    //    public bool plusScore, minusScore, turn, ranking, playerSet, scoreSetCheck;
+    //    private Queue<int> queue = new Queue<int>();
+
+
+    //    int entryCount = 0;
+
+
+
+    public static List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
+    public MiniGamePlayer player1, player2, player3, player4;
     public Scenes_mini num_player;                          //미니게임에 참가할 플레이어 수를 받아오는 스크립트
     public int player, turnNum, rank, turnNumB, turnCheck;                                     //미니게임 참가 인원, 턴제어 숫자
     public bool plusScore, minusScore, turn, ranking, playerSet, scoreSetCheck;
@@ -19,6 +33,9 @@ public class manage_Player : MonoBehaviour
     }
     void Start()
     {
+
+
+
         player = num_player.member_num;
         turnNum = 0;
         turnCheck = 0;
@@ -236,7 +253,7 @@ public class manage_Player : MonoBehaviour
         }
     }
 
-    int setRanking(miniGamePlayer player)
+    int setRanking(MiniGamePlayer player)
     {
         int ranking = 1;
 
