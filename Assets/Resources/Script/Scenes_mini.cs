@@ -7,7 +7,7 @@ public class Scenes_mini : MonoBehaviour
 {
     public static Scenes_mini Instance;       //DontDestroy중복생성 확인
     public int[] turn;      //플레이어 차례(메인게임) 저장
-    public bool player1, player2, player3, player4;
+    public bool player01, player02, player03, player04;
     public int member_num;
     public int random;
 
@@ -20,12 +20,12 @@ public class Scenes_mini : MonoBehaviour
     void Update()
     {
         //space 입력시 씬 변경
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             member_num = 1; //플레이어 수 초기화
-            player_set(player2);
-            player_set(player3);
-            player_set(player4);
+            player_set(player02);
+            player_set(player03);
+            player_set(player04);
             turn = new int[member_num];
 
             turnSet();
@@ -68,7 +68,6 @@ public class Scenes_mini : MonoBehaviour
     {
         if (player)
         {
-            // 플레이어의 캐릭터를 설정하는 코딩 필요, 추후 수정할 예정
             member_num += 1;
         }
     }
@@ -76,7 +75,7 @@ public class Scenes_mini : MonoBehaviour
     //test용
     void turnSet()
     {
-        for(int i = 0; i< member_num; i++)
+        for (int i = 0; i < member_num; i++)
         {
             turn[i] += i + 1;
         }

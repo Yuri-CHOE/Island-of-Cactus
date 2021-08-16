@@ -6,9 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class manage_Player : MonoBehaviour
 {
-    public static List<player_mini> scoreList = new List<player_mini>();
-
-    public player_mini player1, player2, player3, player4;         
+    public static List<miniGamePlayer> scoreList = new List<miniGamePlayer>();
+    public miniGamePlayer player1, player2, player3, player4;
     public Scenes_mini num_player;                          //미니게임에 참가할 플레이어 수를 받아오는 스크립트
     public int player, turnNum, rank, turnNumB, turnCheck;                                     //미니게임 참가 인원, 턴제어 숫자
     public bool plusScore, minusScore, turn, ranking, playerSet, scoreSetCheck;
@@ -59,22 +58,22 @@ public class manage_Player : MonoBehaviour
 
             if (scoreSetCheck)
             {
-                if (num_player.player1 == true)
+                if (num_player.player01 == true)
                 {
                     player1.rank = setRanking(player1);
                     Debug.Log("player1 : " + player1.rank + ", " + player1.score);
                 }
-                if (num_player.player2 == true)
+                if (num_player.player02 == true)
                 {
                     player2.rank = setRanking(player2);
                     Debug.Log("player2 : " + player2.rank + ", " + player2.score);
                 }
-                if (num_player.player3 == true)
+                if (num_player.player03 == true)
                 {
                     player3.rank = setRanking(player3);
                     Debug.Log("player3 : " + player3.rank + ", " + player3.score);
                 }
-                if (num_player.player4 == true)
+                if (num_player.player04 == true)
                 {
                     player4.rank = setRanking(player4);
                     Debug.Log("player4 : " + player4.rank + ", " + player4.score);
@@ -89,7 +88,7 @@ public class manage_Player : MonoBehaviour
     {
         Debug.Log("적용됬는지 확인중1........" + num_player.turn[turnCheck - 2]);
 
-        if (num_player.turn[turnCheck-2] == 1)
+        if (num_player.turn[turnCheck - 2] == 1)
         {
             scoreSetCheck = player1.scoreSetCheck;
         }
@@ -110,16 +109,17 @@ public class manage_Player : MonoBehaviour
 
     void setPlayer()
     {
-        if(num_player.player1 == true)
+        if (num_player.player01 == true)
         {
             scoreList.Add(player1);
             player1.join = false;
-        }else
+        }
+        else
         {
             player1.join = true;
         }
 
-        if (num_player.player2 == true)
+        if (num_player.player02 == true)
         {
             scoreList.Add(player2);
         }
@@ -128,7 +128,7 @@ public class manage_Player : MonoBehaviour
             player2.join = true;
         }
 
-        if (num_player.player3 == true)
+        if (num_player.player03 == true)
         {
             scoreList.Add(player3);
         }
@@ -137,7 +137,7 @@ public class manage_Player : MonoBehaviour
             player3.join = true;
         }
 
-        if (num_player.player4 == true)
+        if (num_player.player04 == true)
         {
             scoreList.Add(player4);
         }
@@ -152,10 +152,12 @@ public class manage_Player : MonoBehaviour
         if (turnNumB == 1)
         {
             player1.plusScore = plusScore;
-        }else if(turnNumB == 2)
+        }
+        else if (turnNumB == 2)
         {
             player2.plusScore = plusScore;
-        }else if(turnNumB == 3)
+        }
+        else if (turnNumB == 3)
         {
             player3.plusScore = plusScore;
         }
@@ -176,7 +178,7 @@ public class manage_Player : MonoBehaviour
 
     void setDead()
     {
-        if(turnNumB == 1)
+        if (turnNumB == 1)
         {
             player1.myTurn = false;
         }
@@ -234,32 +236,32 @@ public class manage_Player : MonoBehaviour
         }
     }
 
-    int setRanking(player_mini player)
+    int setRanking(miniGamePlayer player)
     {
         int ranking = 1;
 
-        if(num_player.player1 == true)
+        if (num_player.player01 == true)
         {
-            if(player.score < player1.score)
+            if (player.score < player1.score)
             {
                 ranking += 1;
             }
         }
-        if(num_player.player2 == true)
+        if (num_player.player02 == true)
         {
             if (player.score < player2.score)
             {
                 ranking += 1;
             }
         }
-        if(num_player.player3 == true)
+        if (num_player.player03 == true)
         {
             if (player.score < player3.score)
             {
                 ranking += 1;
             }
         }
-        if(num_player.player4 == true)
+        if (num_player.player04 == true)
         {
             if (player.score < player4.score)
             {

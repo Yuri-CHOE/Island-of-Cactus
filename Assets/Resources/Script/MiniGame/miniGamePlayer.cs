@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class player_mini : MonoBehaviour
+public class miniGamePlayer : MonoBehaviour
 {
     // 플레이어
     public Player owner = null;
