@@ -14,6 +14,9 @@ public class CardManager : MonoBehaviour
     // 정답 처리된 페어 수
     int completePair = 0;
 
+    // 엔딩
+    [SerializeField]
+    GameObject ending = null;
 
 
 
@@ -268,7 +271,7 @@ public class CardManager : MonoBehaviour
 
     void Ending()
     {
-        GameObject.Find("Canvas").transform.Find("Ending").gameObject.SetActive(true);
+        ending.gameObject.SetActive(true);
 
         //managePlayer.scoreSetChecking();
         managePlayer.ranking = true;

@@ -1486,7 +1486,7 @@ GameObject:
   - component: {fileID: 299299257}
   - component: {fileID: 299299256}
   m_Layer: 5
-  m_Name: BG
+  m_Name: Ending
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1503,8 +1503,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
-  m_Father: {fileID: 2015768867}
-  m_RootOrder: 0
+  m_Father: {fileID: 1330656287}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3890,6 +3890,7 @@ MonoBehaviour:
   - {fileID: 12934938}
   card_1: {fileID: 0}
   card_2: {fileID: 0}
+  ending: {fileID: 299299254}
   num_player: {fileID: 0}
   managePlayer: {fileID: 883734245}
 --- !u!1001 &896520285
@@ -5802,7 +5803,7 @@ RectTransform:
   m_Children:
   - {fileID: 1914468804}
   - {fileID: 883734244}
-  - {fileID: 2015768867}
+  - {fileID: 299299255}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7401,42 +7402,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3070285854420970090, guid: 1672cf1239549d843ade98f5c3cb4eb1, type: 3}
   m_PrefabInstance: {fileID: 337977365}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2015768866
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2015768867}
-  m_Layer: 5
-  m_Name: Ending
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &2015768867
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2015768866}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 299299255}
-  m_Father: {fileID: 1330656287}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &2041094481
 PrefabInstance:
   m_ObjectHideFlags: 0
