@@ -57,7 +57,8 @@ public class Scenes_mini : MonoBehaviour
                 }
             }
 
-            SceneManager.LoadScene(random);
+            //SceneManager.LoadScene(random);
+            SceneManager.LoadScene(3);
         }
 
         //Destroy(gameObject);

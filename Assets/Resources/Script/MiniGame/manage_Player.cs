@@ -29,7 +29,7 @@ public class manage_Player : MonoBehaviour
 
     void Awake()
     {
-        num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴
+        num_player = GameObject.Find("Canvas").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴
     }
     void Start()
     {
