@@ -186,6 +186,13 @@ public class GameMaster : MonoBehaviour
                             else
                                 current.avatar.transform.position = GameData.blockManager.GetBlock(current.movement.location).transform.position;
                         }
+
+                        // 미니게임 정보 초기화
+                        if (Player.allPlayer[i].miniInfo == null)
+                        {
+                            Player.allPlayer[i].miniInfo = new MiniScore();
+                        }
+
                     }
 
                     
@@ -450,9 +457,15 @@ public class GameMaster : MonoBehaviour
         {
             // 시작 연출 및 각종 초기화
 
-            // 모든 플레이어 주사위 초기화
+            // 모든 플레이어 대상
             for (int i = 0; i < Player.allPlayer.Count; i++)
+            {
+                //주사위 초기화
                 Player.allPlayer[i].dice.Clear();
+
+                //미니게임 기록 초기화
+                Player.allPlayer[i].miniInfo.Reset();
+            }
 
             // 사이클 UI 갱신
             cycleManager.Refresh();
@@ -985,5 +998,21 @@ public class GameMaster : MonoBehaviour
     public void StopMove()
     {
         Turn.now.movement.MoveStop();
+    }
+    public void StartMiniGame(string sceneName)
+    {
+        // 현재 씬 번호 사용중
+        // 추후 미니게임 테이블 사용해서 테이블 인덱스로 변경할것
+
+        // 참가자 설정
+        // 추후 플레이어 리스트를 인자로 받을것
+        // 테스트용 전원 참가
+        for (int i = 0; i < Player.allPlayer.Count; i++)
+        {
+            Player.allPlayer[i].miniInfo.join = true;
+        }
+
+        // 로드
+        loadingManager.LoadAsync(sceneName);
     }
 }

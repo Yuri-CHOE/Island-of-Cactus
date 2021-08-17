@@ -66,6 +66,7 @@ public static class Turn
         ActionProgress actionProgress = ActionProgress.Ready;
         origin.Clear();
         queue.Clear();
+        Player.order.Clear();
     }
 
     public static void Add(Player player)
@@ -107,6 +108,9 @@ public static class Turn
                     // 등록
                     Debug.Log(string.Format("순서 = ({0}) {1}", orderCopy[temp].dice.value, orderCopy[temp].name));
                     Add(orderCopy[temp]);
+
+                    // 순서 리스트 등록
+                    Player.order.Add(orderCopy[temp]);
 
                     // 정렬
                     order.Remove(orderCopy[temp]);

@@ -25,6 +25,9 @@ public class Player
     // 시스템 제외 모든 플레이어
     public static List<Player> allPlayer = new List<Player>();
 
+    // 플레이어 순서 리스트
+    public static List<Player> order = new List<Player>();
+
     // 플레이어 자신
     public static Player me = null;
 
@@ -156,6 +159,12 @@ public class Player
     // 전투 속성
     public Battle battle = new Battle(1f, 0f);
 
+
+    // 미니게임 정보
+    public MiniScore miniInfo = null;
+
+    // 미니게임 UI
+    public MiniGamePlayer miniPlayerUI = null;
 
 
 

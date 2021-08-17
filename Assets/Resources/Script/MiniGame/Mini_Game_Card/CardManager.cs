@@ -20,19 +20,29 @@ public class CardManager : MonoBehaviour
 
 
 
-
     //public Mouse_Click mouse_Click1;
     //public Mouse_Click mouse_Click2;
-    public Scenes_mini num_player;
-    public manage_Player managePlayer;
+    //public Scenes_mini num_player;
+    //public manage_Player managePlayer;
     //public string num1, num2, name1, name2;
     //public int player, /*z = 0,*/ x, number;
 
+    public void Init()
+    {
+        // 해당 게임의 점수 배율 설정 - 필수
+        MiniGameManager.script.scoreRiseValue = 10;
+
+        // 카드 셋팅
+        CardSetUp();
+    }
+
     void Awake()
     {
+        //    // 해당 게임의 점수 배율 설정 - 필수
+        //    MiniGameManager.script.scoreRiseValue = 10;
 
-        num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴   
-        managePlayer = GameObject.Find("Game").GetComponent<manage_Player>();
+        //num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴   
+        //managePlayer = GameObject.Find("Game").GetComponent<manage_Player>();
     }
 
     void Start()
@@ -43,8 +53,8 @@ public class CardManager : MonoBehaviour
         //x = 1;
         //number = 1;
 
-        // 카드 셋팅
-        CardSetUp();
+        //// 카드 셋팅
+        //CardSetUp();
     }
 
     //// Update is called once per frame
@@ -126,7 +136,7 @@ public class CardManager : MonoBehaviour
                     Ending();
                 // 아직 아닐경우
                 else
-                    managePlayer.turn = true;
+                    MiniGameManager.script.mpm.NextTurn();
             }
         }
     }
@@ -249,7 +259,8 @@ public class CardManager : MonoBehaviour
 
             completePair++;
 
-            managePlayer.plusScore = true;
+            // 점수 추가
+            MiniGameManager.script.ScoreAdd(1);
         }
         // 불일치
         else
@@ -271,10 +282,10 @@ public class CardManager : MonoBehaviour
 
     void Ending()
     {
-        ending.gameObject.SetActive(true);
-
-        //managePlayer.scoreSetChecking();
-        managePlayer.ranking = true;
+        // 초기화
         completePair = 0;
+
+        // 공통 내용 실행
+        MiniGameManager.script.Ending(ending);
     }
 }

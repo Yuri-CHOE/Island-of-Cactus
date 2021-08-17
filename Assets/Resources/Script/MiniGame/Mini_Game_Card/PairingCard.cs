@@ -5,10 +5,6 @@ using UnityEngine.EventSystems;
 
 public class PairingCard : MonoBehaviour, IPointerClickHandler
 {
-    // 카드 관리 스크립트
-    public CardManager cm = null;
-
-
     // 카드 인덱스
     public int Index = -1;
 
@@ -88,7 +84,7 @@ public class PairingCard : MonoBehaviour, IPointerClickHandler
             // 공개 처리된 카드가 아닐 경우
             if (!isOpen)
             {
-                cm.PairSelect(this);
+                MiniGameManager.script.manager.PairSelect(this);
             }
         }
     }
