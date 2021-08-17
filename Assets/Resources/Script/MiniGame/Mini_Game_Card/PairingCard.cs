@@ -57,7 +57,6 @@ public class PairingCard : MonoBehaviour, IPointerClickHandler
     public void SetAniStateOpen()
     {
         animator.SetTrigger("isClicked");
-        Debug.LogError("작동확인");
     }
 
     /// <summary>

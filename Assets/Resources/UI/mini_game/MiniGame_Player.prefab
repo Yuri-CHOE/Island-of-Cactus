@@ -175,7 +175,7 @@ MonoBehaviour:
   join: 0
   myTurn: 0
   deathUi: {fileID: 5255413607430924448}
-  txtScore: {fileID: 0}
+  txtScore: {fileID: 2477756547386225243}
 --- !u!1 &2477756546717796893
 GameObject:
   m_ObjectHideFlags: 0
