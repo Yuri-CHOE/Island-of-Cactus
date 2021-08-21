@@ -14,9 +14,13 @@ public class CardManager : MonoBehaviour
     // 정답 처리된 페어 수
     int completePair = 0;
 
+    // 시작 플래그 미러링
+    bool isStartMirror = false;
+
+
     // 엔딩
-    [SerializeField]
-    GameObject ending = null;
+    //[SerializeField]
+    //GameObject ending = null;
 
 
 
@@ -34,6 +38,9 @@ public class CardManager : MonoBehaviour
 
         // 카드 셋팅
         CardSetUp();
+
+        // 시작 대기 - 자동
+        StartCoroutine(DelayedGameStart());
     }
 
     void Awake()
@@ -280,12 +287,45 @@ public class CardManager : MonoBehaviour
         return result;
     }
 
-    void Ending()
+    void Starting()
     {
         // 초기화
         completePair = 0;
 
         // 공통 내용 실행
-        MiniGameManager.script.Ending(ending);
+        MiniGameManager.script.Starting();
+    }
+
+    /// <summary>
+    /// 코루틴으로 호출시 게임 시작 조건 충족까지 대기 후 실행됨
+    /// 조건 : MiniGameManager.script.isGameStart
+    /// 실행 내용 : 게임 초기 셋팅
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DelayedGameStart()
+    {
+        // 게임 시작 대기
+        while (! MiniGameManager.script.isGameStart)
+            yield return null;
+
+
+        // 게임 시작
+        Debug.LogWarning("미니게임 :: 게임 시작됨");
+
+        // 모든 카드 첫 오픈
+        for (int i = 0; i < deck.Count; i++)
+            deck[i].animator.Play("aniTouch");
+    }
+
+    void Ending()
+    {
+        // 게임 시작
+        Debug.LogWarning("미니게임 :: 게임 종료됨");
+
+        // 초기화
+        completePair = 0;
+
+        // 공통 내용 실행
+        MiniGameManager.script.Ending();
     }
 }

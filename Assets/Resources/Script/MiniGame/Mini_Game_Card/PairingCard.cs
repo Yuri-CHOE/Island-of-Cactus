@@ -39,7 +39,8 @@ public class PairingCard : MonoBehaviour, IPointerClickHandler
         //nameObject = this.gameObject.name;
         //card_Setting = GameObject.Find(name).GetComponent<Card_Setting>();
         //animator = GetComponent<Animator>();
-        animator.Play("aniTouch");
+
+        //animator.Play("aniTouch");
     }
 
     void Update()

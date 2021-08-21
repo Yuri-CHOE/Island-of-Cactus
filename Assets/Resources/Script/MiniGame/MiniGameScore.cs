@@ -7,6 +7,9 @@ public class MiniScore
     //미니게임 참가 여부
     public bool join = false;
 
+    // 준비 상태
+    public bool isReady = false;
+
     //현재 자신의 차례인지 확인
     //public bool myTurn = false;
 
@@ -36,6 +39,8 @@ public class MiniScore
     public void Reset()
     {
         join = false;
+
+        isReady = false;
 
         //myTurn = false;
 

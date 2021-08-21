@@ -206,8 +206,12 @@ public static class Tool
     {
         // 음수 양수 처리
         if (isFadeIn)
+        {
+            // 클릭 차단 기능 활성화
+            canvasGroup.blocksRaycasts = true;
+
             while (canvasGroup.alpha < 1f)
-            {        
+            {
                 // 페이드 처리
                 canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, Time.deltaTime / timer); ;
 
@@ -217,7 +221,12 @@ public static class Tool
 
                 yield return null;
             }
+        }
         else
+        {
+            // 클릭 차단 기능 비활성화
+            canvasGroup.blocksRaycasts = false;
+
             while (canvasGroup.alpha > 0f)
             {
                 // 페이드 처리
@@ -229,6 +238,7 @@ public static class Tool
 
                 yield return null;
             }
+        }
     }
 
 

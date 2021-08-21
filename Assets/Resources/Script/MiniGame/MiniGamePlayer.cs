@@ -55,6 +55,10 @@ public class MiniGamePlayer : MonoBehaviour
 
     void Update()
     {
+        // 시작 전 차단
+        if (!MiniGameManager.script.isGameStart)
+            return;
+
         // 점수 처리
         if (scorePlus != 0)
         {
@@ -129,6 +133,10 @@ public class MiniGamePlayer : MonoBehaviour
         {
             // 점수 싱크
             ScoreTextSync(info.score);
+
+            // AI 플레이어 자동 준비
+            if (_owner.type == Player.Type.AI)
+                _owner.miniInfo.isReady = true;
         }
     }
 

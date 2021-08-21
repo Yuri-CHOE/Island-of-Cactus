@@ -10,6 +10,9 @@ public class LoadingManager : MonoBehaviour
     [SerializeField]
     Image guage;
 
+    // 로딩 커튼
+    CanvasGroup curtain = null;
+
     // 완료 정도
     [SerializeField]
     int workCount = 0;
@@ -35,7 +38,10 @@ public class LoadingManager : MonoBehaviour
     string nextScene = null;
 
 
-
+    private void Awake()
+    {
+        curtain = gameObject.GetComponent<CanvasGroup>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -126,7 +132,7 @@ public class LoadingManager : MonoBehaviour
         // 로딩 게이지 비활성
         guage.gameObject.SetActive(false);
 
-        gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
+        curtain.alpha = 0.0f;
         isFadeIn = true;
         isFadeActive = true;
     }
@@ -134,7 +140,7 @@ public class LoadingManager : MonoBehaviour
     public void LoadFinish()
     {
         // 페이드 아웃 처리
-        gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;
+        curtain.alpha = 1.0f;
         isFadeIn = false;
         isFadeActive = true;
     }
@@ -176,15 +182,15 @@ public class LoadingManager : MonoBehaviour
         if (isFadeIn)
         {
             // 페이드 처리
-            if (gameObject.GetComponent<CanvasGroup>().alpha < 1.0f)
+            if (curtain.alpha < 1.0f)
             {
-                gameObject.GetComponent<CanvasGroup>().alpha += Time.deltaTime * 2;
+                curtain.alpha += Time.deltaTime * 2;
             }
             // 페이드 완료
             else
             {
-                gameObject.GetComponent<CanvasGroup>().alpha = 1.0f;
-                gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                curtain.alpha = 1.0f;
+                curtain.blocksRaycasts = true;
                 isFadeActive = false;
                 _isFadeFinish = true;
                 Debug.Log("fade in done");
@@ -195,15 +201,15 @@ public class LoadingManager : MonoBehaviour
         else
         {
             // 페이드 처리
-            if (gameObject.GetComponent<CanvasGroup>().alpha > 0.0f)
+            if (curtain.alpha > 0.0f)
             {
-                gameObject.GetComponent<CanvasGroup>().alpha -= Time.deltaTime;
+                curtain.alpha -= Time.deltaTime;
             }
             // 페이드 완료
             else
             {
-                gameObject.GetComponent<CanvasGroup>().alpha = 0.0f;
-                gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
+                curtain.alpha = 0.0f;
+                curtain.blocksRaycasts = false;
                 isFadeActive = false;
                 _isFadeFinish = true;
                 Debug.Log("fade out done");

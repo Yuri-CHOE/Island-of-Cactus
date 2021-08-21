@@ -12,8 +12,11 @@ public class MiniPlayerManager : MonoBehaviour
     public List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
 
     // 턴 제어용
-    private Queue<Player> turn = new Queue<Player>(Player.order);
+    Queue<Player> turn = new Queue<Player>(Player.order);
     public Player turnNow { get { return turn.Peek(); } }
+
+    // 참여자 목록
+    public List<Player> entryPlayer = null;
 
 
     int entryCount { get { return turn.Count; } }
@@ -34,7 +37,21 @@ public class MiniPlayerManager : MonoBehaviour
 
     void Update()
     {
+        // 플레이어 준비 대기상태 체크
+        if (! MiniGameManager.script.isGameStart)
+        {
+            if(entryPlayer != null)
+            {
+                bool allReady = true;
 
+                // 한명이라도 준비 안되면 false
+                for (int i = 0; i < entryPlayer.Count; i++)
+                    allReady = allReady && entryPlayer[i].miniInfo.isReady;
+
+                // 시작 여부 반영
+                MiniGameManager.script.isGameStart = allReady;
+            }
+        }
     }
 
     public void NextTurn()
@@ -82,6 +99,9 @@ public class MiniPlayerManager : MonoBehaviour
             // 턴 표시 제거
             temp.miniPlayerUI.BlinkOff();
         }
+
+        // 참여 플레이어 목록
+        entryPlayer = new List<Player>(turn);
     }
 
     public void SetRanking()
@@ -128,6 +148,10 @@ public class MiniPlayerManager : MonoBehaviour
                 Debug.LogError(temp.Count);
                 for (int j = 0; j < temp.Count; j++)
                 {
+                    // 빈 대상 없을경우 중단
+                    if (sort.Count == 0)
+                        break;
+
                     int indexer = temp[j];
 
                     Debug.LogError(j +" = "+ indexer);
