@@ -349,12 +349,17 @@ public struct IocEffect
                     // value == 상금
 
 
-                    // 상금 설정
-                    MiniScore.reward = value;
+                    //// 상금 설정
+                    //MiniScore.reward = value;
 
-                    // 참가자 설정
-                    current.miniInfo.join = true;
+                    //// 참가자 설정
+                    //current.miniInfo.join = true;
 
+                    // 미니게임 호출
+                    GameMaster.script.loadingManager.LoadAsyncMiniGame(Minigame.RandomGame(), value, filteredTarget);
+
+                    // 반복 차단
+                    break;
                 }
             }
 

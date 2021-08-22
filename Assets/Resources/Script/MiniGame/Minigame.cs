@@ -72,11 +72,11 @@ public class Minigame
     protected Minigame(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 8)
+        if (strList.Count != 9)
             return;
         if (loaclList.Count != 3)
             return;
-
+        
         // 테이블 읽어오기
 
         // 인덱스
@@ -131,4 +131,27 @@ public class Minigame
         _isReady = true;
     }
 
+
+    public static Minigame RandomGame()
+    {
+        // 테이블 누락 방지
+        if (!isReady)
+            return null;
+
+        int indexer = 0;
+
+        // 단일 수량 예외처리
+        if (table.Count == 2)
+            indexer = 1;
+        else if (table.Count > 2)
+            return null;
+
+        // 랜덤 값
+        indexer = Random.Range(1, table.Count);
+        Debug.LogWarning("미니게임 :: 전체 수량 -> " + table.Count);
+        Debug.LogWarning("미니게임 :: 랜덤 인덱스 -> " + indexer);
+        Debug.LogWarning("미니게임 :: 랜덤 인덱스 필드 -> " + table[indexer].index);
+
+        return table[indexer];
+    }
 }

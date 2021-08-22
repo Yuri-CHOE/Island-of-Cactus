@@ -26,8 +26,7 @@ public class GameMaster : MonoBehaviour
 
     [Header("script")]
     // 로딩 매니저 스크립트
-    [SerializeField]
-    LoadingManager loadingManager = null;
+    public LoadingManager loadingManager = null;
 
     // 사이클 UI 관리 스크립트
     public CycleManager cycleManager = null;

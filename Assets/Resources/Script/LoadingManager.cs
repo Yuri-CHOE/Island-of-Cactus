@@ -224,6 +224,8 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
+        Debug.LogWarning(string.Format("미니게임 :: 호출됨 -> [{0}] {1}",minigame.index, minigame.name));
+
         // 미니게임 설정
         MiniGameManager.minigameNow = minigame;
 
