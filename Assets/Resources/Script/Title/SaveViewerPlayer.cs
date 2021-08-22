@@ -9,7 +9,7 @@ public class SaveViewerPlayer : MonoBehaviour
 
     public Image face = null;
 
-    public Text name = null;
+    public Text playerName = null;
 
     public int lifeValue = 0;
     public Text life = null;
@@ -49,11 +49,11 @@ public class SaveViewerPlayer : MonoBehaviour
 
         SetUp(characterIndex, playerName, _life, _coin, itemIndex, itemCount);
     }
-    public void SetUp(int characterIndex, string playerName, int _life, int _coin, List<int> itemIndex, List<int> itemCount)
+    public void SetUp(int characterIndex, string _playerName, int _life, int _coin, List<int> itemIndex, List<int> itemCount)
     {
         face.sprite = Character.table[characterIndex].GetIcon();
 
-        name.text = playerName;
+        playerName.text = _playerName;
 
         lifeValue = _life;
         life.text = lifeValue.ToString();

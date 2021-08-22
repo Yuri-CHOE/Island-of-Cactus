@@ -74,7 +74,7 @@ public class MiniGameManager : MonoBehaviour
         //curtain.gameObject.SetActive(true);
 
         // 커튼 페이드 아웃
-        StartCoroutine(Tool.CanvasFade(curtain, false, 2f));
+        StartCoroutine(Tool.CanvasFade(curtain, false, 1f));
     }
 
     public void Ready()
@@ -95,7 +95,7 @@ public class MiniGameManager : MonoBehaviour
         //curtain.gameObject.SetActive(true);
 
         // 커튼 페이드 인
-        StartCoroutine(Tool.CanvasFade(curtain, true, 2f));
+        StartCoroutine(Tool.CanvasFade(curtain, true, 1f));
 
         // 등수 산정
         mpm.SetRanking();

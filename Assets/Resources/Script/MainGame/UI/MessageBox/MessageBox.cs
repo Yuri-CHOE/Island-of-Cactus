@@ -92,14 +92,6 @@ public class MessageBox : MonoBehaviour
     //bool[] preEvent = new bool[btnMax];   // 이벤트 모드
 
 
-    // 테스트용 시작
-    [Header("testMode")]
-    [SerializeField]
-    bool runBtn = false;
-    [SerializeField]
-    int runID = 0;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -274,9 +266,6 @@ public class MessageBox : MonoBehaviour
             close();
             return;
         }
-
-        // 테스트 비활성
-        runBtn = false;
 
         m_box.enabled = isBoxUse;
         Innerbox.SetActive(isInnerBoxUse);

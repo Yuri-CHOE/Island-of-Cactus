@@ -14,7 +14,7 @@ public class LuckyBoxManager : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Text infoText = null;
 
-    Player owner = null;
+    //Player owner = null;
 
     Vector3 hidingPos = new Vector3();
 
@@ -67,7 +67,7 @@ public class LuckyBoxManager : MonoBehaviour
     /// </summary>
     void Clear()
     {
-        owner = null;
+        //owner = null;
 
         animator.SetBool("doOpen", false);
         animator.SetBool("isOpen", false);

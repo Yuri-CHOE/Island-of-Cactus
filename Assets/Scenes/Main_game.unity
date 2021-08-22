@@ -2005,8 +2005,6 @@ MonoBehaviour:
   ruleShortCut: {fileID: 396658150}
   ruleUniqueBlock: {fileID: 523575864}
   ruleEvent: {fileID: 1452514547}
-  runBtn: 1
-  runID: -1
 --- !u!114 &291009388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6538,7 +6536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 838027ae44a3e1c4abd8cf1e4c947960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 1089995542}
   msgBox: {fileID: 291009383}
   itemGrop: {fileID: 607588633}
   npc: {fileID: 1034425292}

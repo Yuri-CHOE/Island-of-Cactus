@@ -145,7 +145,6 @@ public class MiniPlayerManager : MonoBehaviour
                 }
 
                 // 등록
-                Debug.LogError(temp.Count);
                 for (int j = 0; j < temp.Count; j++)
                 {
                     // 빈 대상 없을경우 중단
@@ -153,8 +152,6 @@ public class MiniPlayerManager : MonoBehaviour
                         break;
 
                     int indexer = temp[j];
-
-                    Debug.LogError(j +" = "+ indexer);
 
                     // 대상
                     tempPlayer = sort[temp[j]];

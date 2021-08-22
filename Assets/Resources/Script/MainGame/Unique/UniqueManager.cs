@@ -17,7 +17,7 @@ public class UniqueManager : MonoBehaviour
 
     // 효과 이름
     [SerializeField]
-    Text name = null;
+    Text nameText = null;
 
     // 효과 정보
     [SerializeField]
@@ -74,7 +74,7 @@ public class UniqueManager : MonoBehaviour
     IEnumerator Work(Player currentPlayer, Mapcode index)
     {
         // 메시지 박스 셋팅
-        name.text = Unique.table[(int)index].name;
+        nameText.text = Unique.table[(int)index].name;
         info.text = Unique.table[(int)index].info;
 
         // 효과 설명 출력

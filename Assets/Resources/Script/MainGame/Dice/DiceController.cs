@@ -49,10 +49,10 @@ public class DiceController : MonoBehaviour
     [SerializeField]
     float rotAccel = 0.00f;
 
-    // 상승 하강 속도
-    [Header("rise")]
-    float posSpeed = 5.00f;
-    float timeLimit = 3.00f;
+    //// 상승 하강 속도
+    //[Header("rise")]
+    //float posSpeed = 5.00f;
+    //float timeLimit = 3.00f;
 
 
     // 반응 제어
@@ -256,20 +256,19 @@ public class DiceController : MonoBehaviour
                 Tool.Spin(transform, rotSpeed);
 
 
-                // 사용 중단
-                if (false)
+                // 시간 제한 - 사용 중단
                 {
-                    // 시간 제한
-                    if (elapsedTime > 15.0f)
-                    {
-                        actionProgress = ActionProgress.Finish;
+                    //// 시간 제한
+                    //if (elapsedTime > 15.0f)
+                    //{
+                    //    actionProgress = ActionProgress.Finish;
 
-                        Debug.Log("호버링 타임 오버");
-                    }
+                    //    Debug.Log("호버링 타임 오버");
+                    //}
 
-                    // 시간 카운트
-                    if (isTimeCountWork)
-                        elapsedTime += Time.deltaTime;
+                    //// 시간 카운트
+                    //if (isTimeCountWork)
+                    //    elapsedTime += Time.deltaTime;
                 }
             }
             else if (actionProgress == ActionProgress.Finish)

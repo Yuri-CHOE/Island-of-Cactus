@@ -99,11 +99,13 @@ public class PlayerInfoUI : MonoBehaviour
         {
             // 백업
             List<ItemSlot> invenCopy = owner.inventory;
+            int invenCount = owner.inventoryCount;
 
             // 인벤토리 싱크
             owner.inventory = inventory;
 
-            for (int i = 0; i < inventory.Count; i++)
+            //for (int i = 0; i < inventory.Count; i++)
+            for (int i = 0; i < invenCount; i++)
             {
                 // 인벤토리 계승
                 inventory[i].CopyByMirror(invenCopy[i]);

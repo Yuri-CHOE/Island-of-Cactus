@@ -14,8 +14,8 @@ public class CardManager : MonoBehaviour
     // 정답 처리된 페어 수
     int completePair = 0;
 
-    // 시작 플래그 미러링
-    bool isStartMirror = false;
+    //// 시작 플래그 미러링
+    //bool isStartMirror = false;
 
 
     // 엔딩

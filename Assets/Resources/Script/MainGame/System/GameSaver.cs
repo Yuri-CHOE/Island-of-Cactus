@@ -33,7 +33,7 @@ public static class GameSaver
     public static bool useLoad = false;
 
     // 암호화 사용 여부
-    static bool useEncrypt = false;
+    //static bool useEncrypt = false;
     static string password = "This_is_Password";
     static string vec = "GrowupGrowupGrowupGrowup";
 

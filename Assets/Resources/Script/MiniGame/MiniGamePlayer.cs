@@ -30,8 +30,6 @@ public class MiniGamePlayer : MonoBehaviour
 
     // 색상
     [SerializeField] Color deadColor = new Color();
-    [SerializeField] Color deadColor1 = new Color();
-    [SerializeField] Color deadColor2 = new Color();
 
     // 점수 텍스트
     public Text txtScore = null;
