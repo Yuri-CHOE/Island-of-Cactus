@@ -514,7 +514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNum: 0
   face: {fileID: 3207203749376202008}
-  name: {fileID: 4359632985661402278}
+  playerName: {fileID: 4359632985661402278}
   lifeValue: 0
   life: {fileID: 143092664388626697}
   coinValue: 0

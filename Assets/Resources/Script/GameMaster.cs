@@ -991,17 +991,28 @@ public class GameMaster : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 테스트 전용
+    /// </summary>
     public void SaveGame()
     {
         GameSaver.GameSave();
     }
+
+    /// <summary>
+    /// 테스트 전용
+    /// </summary>
     public void StopMove()
     {
         Turn.now.movement.MoveStop();
     }
+
+    /// <summary>
+    /// 테스트 전용
+    /// </summary>
+    /// <param name="sceneName"></param>
     public void StartMiniGame(string sceneName)
     {
-        // 테스트용
 
         //// 참가자 설정
         //// 추후 플레이어 리스트를 인자로 받을것
