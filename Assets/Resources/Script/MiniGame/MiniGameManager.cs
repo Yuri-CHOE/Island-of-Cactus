@@ -6,7 +6,14 @@ public class MiniGameManager : MonoBehaviour
 {
     // 퀵 등록
     public static MiniGameManager script = null;
-    
+
+    // 현재 진행중인 게임
+    public static Minigame minigameNow = null;
+
+    // 미니게임 로더
+    static AsyncOperation loader = null;
+
+
     /// <summary>
     /// 미니게임 플레이어 매니저
     /// </summary>
@@ -115,4 +122,72 @@ public class MiniGameManager : MonoBehaviour
         // 임시 구현 ========== 정산 씬 작업 완료 시 해당 씬 이름으로 바꿀것
         AsyncOperation ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Main_game");
     }
+
+
+
+    ///// <summary>
+    ///// 미니게임 호출
+    ///// </summary>
+    ///// <param name="minigameName"></param>
+    ///// <param name="entryPlayer"></param>
+    //public AsyncOperation LoadMiniGame(string minigameName, int reward, List<Player> entryPlayer)
+    //{
+    //    // 호출
+    //    try
+    //    {
+    //        MinigameName gameNameTemp = (MinigameName)System.Enum.Parse(typeof(MinigameName), minigameName);
+    //        return LoadMiniGame(gameNameTemp, reward, entryPlayer);
+    //    }
+    //    catch
+    //    {
+    //        Debug.LogError("error :: 존재하지 않는 미니게임 -> " + minigameName);
+    //        Debug.Break();
+    //        return null;
+    //    }
+    //}
+    ///// <summary>
+    ///// 미니게임 호출
+    ///// </summary>
+    ///// <param name="minigameName"></param>
+    ///// <param name="entryPlayer"></param>
+    //public AsyncOperation LoadMiniGame(MinigameName minigameName, int reward, List<Player> entryPlayer)
+    //{
+    //    // 이미 진행중일 경우 차단
+    //    if (gameName != MinigameName.None)
+    //    {
+    //        Debug.LogError("error :: 미니게임 중복 호출");
+    //        Debug.Break();
+    //        return null;
+    //    }
+    //    // 참가자 무효 차단
+    //    if (entryPlayer == null)
+    //    {
+    //        Debug.LogError("error :: 미니게임 참가자 무효");
+    //        Debug.Break();
+    //        return null;
+    //    }
+    //    // 참가자 없을 경우 차단
+    //    if (entryPlayer.Count <= 0)
+    //    {
+    //        Debug.LogError("error :: 미니게임 참가자 없음");
+    //        Debug.Break();
+    //        return null;
+    //    }
+
+    //    // 미니게임 설정
+    //    gameName = minigameName;
+
+    //    // 보수 설정
+    //    MiniScore.reward = reward;
+
+    //    // 참가자 설정
+    //    for (int i = 0; i < entryPlayer.Count; i++)
+    //    {
+    //        entryPlayer[i].miniInfo.join = true;
+    //    }
+
+    //    // 미니게임 로드
+    //    loader = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync((int)minigameName);
+    //    return loader;
+    //}
 }

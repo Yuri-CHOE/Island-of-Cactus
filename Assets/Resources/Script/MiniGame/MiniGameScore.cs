@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MiniScore
 {
+    // 총 상금
+    public static int reward = 0;
+
     //미니게임 참가 여부
     public bool join = false;
 

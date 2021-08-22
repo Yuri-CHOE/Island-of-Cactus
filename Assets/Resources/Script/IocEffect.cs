@@ -346,8 +346,15 @@ public struct IocEffect
                 else if (what == What.Minigame)
                 {
                     // 미구현 ===================================
+                    // value == 상금
 
-                // value == 상금
+
+                    // 상금 설정
+                    MiniScore.reward = value;
+
+                    // 참가자 설정
+                    current.miniInfo.join = true;
+
                 }
             }
 

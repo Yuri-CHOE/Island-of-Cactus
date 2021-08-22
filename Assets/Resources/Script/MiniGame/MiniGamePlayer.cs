@@ -117,9 +117,7 @@ public class MiniGamePlayer : MonoBehaviour
         _owner.miniPlayerUI = this;
 
         // 아이콘 사용
-        if (owner.face == null)
-            owner.LoadFace();
-        icon.sprite = owner.face;
+        icon.sprite = owner.character.GetIcon();
 
         // 참여 여부 결정
         if (!info.join)

@@ -152,6 +152,34 @@ public class LoadingManager : MonoBehaviour
     }
     public void LoadAsync(string sceneName)
     {
+        //// 로딩화면 활성화
+        //gameObject.SetActive(true);
+
+        //// 현재 씬 캔버스 우선순위 상승
+        //transform.parent.GetComponent<Canvas>().sortingOrder += 1;
+
+        //// 본 오브젝트 파괴 방지
+        //DontDestroyOnLoad(transform.root);
+
+        //// 로딩 시작
+        //ao = SceneManager.LoadSceneAsync(sceneName);
+
+        //// 로딩 완료시 자동 씬전환 비활성
+        //ao.allowSceneActivation = false;
+
+        //// 로딩 시작 연출
+        //LoadBefore();
+
+        // 로딩 시작 및 연출 처리
+        LoadAsync(SceneManager.LoadSceneAsync(sceneName));
+    }
+    /// <summary>
+    /// 외부에서 로딩한 씬을 인자로 넘겨받아 연출처리
+    /// (로딩 기능 없음)
+    /// </summary>
+    /// <param name="loadSceneAsync"></param>
+    void LoadAsync(AsyncOperation loadSceneAsync)
+    {
         // 로딩화면 활성화
         gameObject.SetActive(true);
 
@@ -162,13 +190,54 @@ public class LoadingManager : MonoBehaviour
         DontDestroyOnLoad(transform.root);
 
         // 로딩 시작
-        ao = SceneManager.LoadSceneAsync(sceneName);
+        ao = loadSceneAsync;
 
         // 로딩 완료시 자동 씬전환 비활성
         ao.allowSceneActivation = false;
 
         // 로딩 시작 연출
         LoadBefore();
+    }
+
+
+    public void LoadAsyncMiniGame(Minigame minigame, int reward, List<Player> entryPlayer)
+    {
+        // 이미 진행중일 경우 차단
+        if (MiniGameManager.minigameNow != null)
+        {
+            Debug.LogError("error :: 미니게임 중복 호출");
+            Debug.Break();
+            return;
+        }
+        // 참가자 무효 차단
+        if (entryPlayer == null)
+        {
+            Debug.LogError("error :: 미니게임 참가자 무효");
+            Debug.Break();
+            return;
+        }
+        // 참가자 없을 경우 차단
+        if (entryPlayer.Count <= 0)
+        {
+            Debug.LogError("error :: 미니게임 참가자 없음");
+            Debug.Break();
+            return;
+        }
+
+        // 미니게임 설정
+        MiniGameManager.minigameNow = minigame;
+
+        // 보수 설정
+        MiniScore.reward = reward;
+
+        // 참가자 설정
+        for (int i = 0; i < entryPlayer.Count; i++)
+        {
+            entryPlayer[i].miniInfo.join = true;
+        }
+
+        // 미니게임 로드
+        LoadAsync(SceneManager.LoadSceneAsync(minigame.sceneNum));
     }
 
     /// <summary>
@@ -303,6 +372,10 @@ public class LoadingManager : MonoBehaviour
         // 유니크 테이블
         Unique.SetUp();
         workCount += Unique.table.Count;
+
+        // 미니게임 테이블
+        Minigame.SetUp();
+        workCount += Minigame.table.Count;
     }
 
     void Work_MainGame()
