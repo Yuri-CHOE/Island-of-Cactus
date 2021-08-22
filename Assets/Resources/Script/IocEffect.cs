@@ -346,8 +346,6 @@ public struct IocEffect
                 else if (what == What.Minigame)
                 {
                     // 미구현 ===================================
-                    // value == 상금
-
 
                     //// 상금 설정
                     //MiniScore.reward = value;
@@ -356,7 +354,13 @@ public struct IocEffect
                     //current.miniInfo.join = true;
 
                     // 미니게임 호출
+                    // 임시구현======================================= 미니게임 카드는 솔로플레이 불가능이므로 수량 미기입으로 우회중
+                    // 주석처리된 스크립트로 교체할것
                     GameMaster.script.loadingManager.LoadAsyncMiniGame(Minigame.RandomGame(), value, filteredTarget);
+                    //GameMaster.script.loadingManager.LoadAsyncMiniGame(
+                    //    Minigame.RandomGame(filteredTarget.Count), 
+                    //    value, filteredTarget
+                    //    );
 
                     // 반복 차단
                     break;

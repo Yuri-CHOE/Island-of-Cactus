@@ -46,6 +46,10 @@ public class Minigame
     string _name = null;
     public string name { get { return _name; } }
 
+    // 최소 참여자 수
+    int _playerMin = -1;
+    public int playerMin { get { return _playerMin; } }
+
     // 미니게임 번호
     int _sceneNum = -1;
     public int sceneNum { get { return _sceneNum; } }    
@@ -72,7 +76,7 @@ public class Minigame
     protected Minigame(List<string> strList, List<string> loaclList)
     {
         // out of range 방지
-        if (strList.Count != 9)
+        if (strList.Count != 10)
             return;
         if (loaclList.Count != 3)
             return;
@@ -85,20 +89,23 @@ public class Minigame
         // 이름
         _name = loaclList[1];
 
+        // 최소 참여자 수
+        _playerMin = int.Parse(strList[2]);
+
         // 씬 번호
-        _sceneNum = int.Parse(strList[2]);
+        _sceneNum = int.Parse(strList[3]);
 
         // 보상 및 지분률
         reward.Set(
-            int.Parse(strList[3]),
             int.Parse(strList[4]),
             int.Parse(strList[5]),
             int.Parse(strList[6]),
-            int.Parse(strList[7])
+            int.Parse(strList[7]),
+            int.Parse(strList[8])
             );
 
         // 정보
-        _info = loaclList[2].Replace("\\n", "\n").Replace("value", strList[8]);
+        _info = loaclList[2].Replace("\\n", "\n");
     }
 
 
@@ -134,6 +141,11 @@ public class Minigame
 
     public static Minigame RandomGame()
     {
+        return RandomGame(1);
+    }
+
+    public static Minigame RandomGame(int entryCount)
+    {
         // 테이블 누락 방지
         if (!isReady)
             return null;
@@ -148,9 +160,10 @@ public class Minigame
 
         // 랜덤 값
         indexer = Random.Range(1, table.Count);
-        Debug.LogWarning("미니게임 :: 전체 수량 -> " + table.Count);
+        while (table[indexer].playerMin < entryCount)
+            indexer = Random.Range(1, table.Count);
+
         Debug.LogWarning("미니게임 :: 랜덤 인덱스 -> " + indexer);
-        Debug.LogWarning("미니게임 :: 랜덤 인덱스 필드 -> " + table[indexer].index);
 
         return table[indexer];
     }
