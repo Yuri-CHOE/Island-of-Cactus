@@ -100,7 +100,7 @@ public struct Dice
 
         // √ ±‚»≠
         type = SpecialDice.Normal;
-        multypleValue = 0;
+        multypleValue = 1;
         _value = 0;
         _valueTotal = 0;
         isRolling = false;

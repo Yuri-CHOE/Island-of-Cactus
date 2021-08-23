@@ -70,6 +70,9 @@ public class CharacterMover : MonoBehaviour
     // 회전용 하위 오브젝트
     public Transform bodyObject = null;
 
+    // 애니메이션
+    public Animator animator = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -985,30 +988,30 @@ public class CharacterMover : MonoBehaviour
     IEnumerator ActTurnPoint(Vector3 pos, float speed)
     {
         // 목표 바라보기
-        Tool.HeightLimit(bodyObject, posMinY - transform.position.y, posMaxY - transform.position.y);
-        Vector3 posY = new Vector3(pos.x, bodyObject.position.y, pos.z);
-        float elapsedTime = 0.000f;
-        //while (Mathf.Abs(Quaternion.LookRotation((posY - bodyObject.position).normalized).y) - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
-        while (Mathf.Abs(Quaternion.LookRotation((bodyObject.position- posY).normalized).y) - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
+
+        // Y값 제외된 좌표
+        Vector3 posXZ = new Vector3(pos.x, bodyObject.position.y, pos.z);
+
+        // 좌표 차이값
+        Vector3 posDifXZ = posXZ - bodyObject.position;
+
+        // 방향값
+        Quaternion look = Quaternion.LookRotation(posDifXZ.normalized);
+
+        float lookY = Mathf.Abs(look.y);
+        while (lookY - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
         {
-            elapsedTime += Time.deltaTime;
-            // 회전
             bodyObject.rotation = Quaternion.Lerp(
                 bodyObject.rotation,
-                //Quaternion.LookRotation((posY - bodyObject.position).normalized),
-                Quaternion.LookRotation((bodyObject.position - posY).normalized),
-                elapsedTime * speed
+                look,
+                Time.deltaTime * speed
                 );
 
             yield return null;
         }
+
         // 회전 보정
-        bodyObject.rotation = Quaternion.Lerp(
-            bodyObject.rotation,
-            //Quaternion.LookRotation((posY - bodyObject.position).normalized),
-            Quaternion.LookRotation((bodyObject.position- posY).normalized),
-            1f
-            );
+        bodyObject.rotation = look;
     }
 
     /// <summary>
@@ -1019,39 +1022,21 @@ public class CharacterMover : MonoBehaviour
     IEnumerator ActTurnFornt(float speed)
     {
         // 정면 보기
-        //Vector3 dir = bodyObject.position;
-        //dir.z += 1f;
-        while (Quaternion.LookRotation(Vector3.forward.normalized).y / bodyObject.rotation.y > 0.1f)
+        Quaternion reRot = Quaternion.Euler(0, 180, 0);
+        float reRotY = Mathf.Abs(reRot.y);
+        while (reRotY - Mathf.Abs(bodyObject.rotation.y) > 0.1f)
         {
             bodyObject.rotation = Quaternion.Lerp(
                 bodyObject.rotation,
-                Quaternion.LookRotation(Vector3.forward.normalized),
+                reRot,
                 Time.deltaTime * speed
                 );
 
             yield return null;
         }
-        //while (Quaternion.LookRotation((dir - bodyObject.position).normalized).y / bodyObject.rotation.y > 0.1f)
-        //{
-        //    bodyObject.rotation = Quaternion.Lerp(
-        //        bodyObject.rotation,
-        //        Quaternion.LookRotation((dir - bodyObject.position).normalized),
-        //        Time.deltaTime * speed
-        //        );
 
-        //    yield return null;
-        //}
         // 회전 보정
-        bodyObject.rotation = Quaternion.Lerp(
-            bodyObject.rotation,
-            Quaternion.LookRotation(Vector3.forward.normalized),
-            1f
-            );
-        //bodyObject.rotation = Quaternion.Lerp(
-        //    bodyObject.rotation,
-        //    Quaternion.LookRotation((dir - bodyObject.position).normalized),
-        //    1f
-        //    );
+        bodyObject.rotation = reRot;
     }
 
 
