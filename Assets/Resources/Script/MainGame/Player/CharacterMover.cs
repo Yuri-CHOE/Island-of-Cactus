@@ -1266,6 +1266,7 @@ public class CharacterMover : MonoBehaviour
 
 
         // 착지 완료 확인
+        transform.rotation = Quaternion.identity;
         transform.localScale = sclBack;
 
 
