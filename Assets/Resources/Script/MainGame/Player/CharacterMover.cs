@@ -776,6 +776,9 @@ public class CharacterMover : MonoBehaviour
         }
         else if (act.progress == ActionProgress.Finish)
         {
+            // 걷기 정지
+            animator.SetFloat("Speed", 0f);
+
             // 종료 처리
             act.isFinish = true;
         }
@@ -972,6 +975,14 @@ public class CharacterMover : MonoBehaviour
 
             // 이동 처리
             transform.position = targetPos;
+
+            // 속도 반영
+            animator.SetFloat("Speed", speed);
+            //float newSpeed = animator.GetFloat("Speed") + speed * Time.deltaTime;
+            //if (newSpeed > speed)
+            //    animator.SetFloat("Speed", speed);
+            //else
+            //    animator.SetFloat("Speed", newSpeed);
 
             yield return null;
         }
