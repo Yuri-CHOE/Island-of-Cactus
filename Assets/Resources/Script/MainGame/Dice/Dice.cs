@@ -47,6 +47,9 @@ public struct Dice
     // 주사위 개수
     public int count;
 
+    // 주사위 배율
+    public int multypleValue;
+
 
 
     // 랜덤값 호출
@@ -73,6 +76,9 @@ public struct Dice
         
         Debug.Log("주사위 :: " + type + " 보정 값 ->" + _value);
 
+        _value *= multypleValue;
+        Debug.Log("주사위 :: " + multypleValue + "배율 보정 값 ->" + _value);
+
 
         _valueTotal += _value;
 
@@ -94,6 +100,7 @@ public struct Dice
 
         // 초기화
         type = SpecialDice.Normal;
+        multypleValue = 0;
         _value = 0;
         _valueTotal = 0;
         isRolling = false;

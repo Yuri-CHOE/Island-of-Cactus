@@ -41,6 +41,7 @@ public struct IocEffect
         Coin,
         Item,
         Minigame,
+        Event,
     }
 
 
@@ -250,7 +251,8 @@ public struct IocEffect
                 // 대상 없음
                 if (what == What.None)
                 {
-
+                    Debug.Log("효과 :: 통합 효과 없음");
+                    break;
                 }
 
                 // 캐릭터 (플레이어 아바타)
@@ -353,14 +355,6 @@ public struct IocEffect
                 // 미니게임 수행
                 else if (what == What.Minigame)
                 {
-                    // 미구현 ===================================
-
-                    //// 상금 설정
-                    //MiniScore.reward = value;
-
-                    //// 참가자 설정
-                    //current.miniInfo.join = true;
-
                     // 미니게임 호출
                     // 임시구현======================================= 미니게임 카드는 솔로플레이 불가능이므로 수량 미기입으로 우회중
                     // 주석처리된 스크립트로 교체할것
@@ -372,6 +366,17 @@ public struct IocEffect
 
                     // 반복 차단
                     break;
+                }
+
+                // 미니게임 수행
+                else if (what == What.Event)
+                {
+                    // 생성 위치
+                    blockIndex = current.location + where;
+
+                    // 이벤트 생성
+                    // 캐릭터 현재위치에서 where 떨어진곳에 value번째 이벤트를 count 만큼 current가 설치한다
+                    GameMaster.script.eventManager.CreateEventObject(blockIndex, value, count, current);
                 }
             }
 

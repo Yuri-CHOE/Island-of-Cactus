@@ -90,13 +90,13 @@ public class EventManager : MonoBehaviour
     /// <param name="creator">초기화 값 : 이벤트 생성자</param>
     public DynamicEvent CreateEventObject(int blockIndex, int eventIndex, int _count, Player creator)
     {
-        Debug.LogWarning("이벤트 생성 :: " + blockIndex + " 에서 생성됨");
-
-        // 아이템 오브젝트 생성 후 스크립트 확보
+        // 이벤트 오브젝트 생성 후 스크립트 확보
         DynamicEvent dEvent = Create(blockIndex);
 
-        // 아이템 셋팅
+        // 이벤트 셋팅
         dEvent.SetUp(eventIndex, _count, creator);
+
+        Debug.LogWarning("이벤트 생성 :: [" + dEvent.iocEvent.name + "] 이벤트가 " + blockIndex + " 에서 생성됨");
 
 
         // 목록에 추가

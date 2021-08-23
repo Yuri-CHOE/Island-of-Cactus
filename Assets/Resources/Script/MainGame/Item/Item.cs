@@ -107,7 +107,7 @@ public class Item
             (IocEffect.What)(int.Parse(strList[8])),
             int.Parse(strList[9]),
             //strList[12].Replace("value", strList[11])
-            loaclList[2].Replace("\\n","\n").Replace("value", strList[9]),
+            loaclList[2].Replace("\\n","\n").Replace("value", strList[9]).Replace("where", strList[7]),
 
             int.Parse(strList[11]),
             int.Parse(strList[12]),
@@ -285,6 +285,42 @@ public class Item
 
             case 0:
                 // 0번은 없음
+                break;
+
+            case 17:
+                // 유리 구두
+
+                for(int i = 0; i < filteredTarget.Count; i++)
+                {
+                    // 이동 배율 설정
+                    filteredTarget[i].dice.multypleValue = __item.effect.where;
+
+                    // 체력 패널티 설정
+                    filteredTarget[i].life.Set(__item.effect.value);
+                }
+
+                break;
+
+            case 18:
+                // 흐르는 모래
+
+                for (int i = 0; i < filteredTarget.Count; i++)
+                {
+                    // 주사위 압수
+                    GameMaster.script.diceController.ResetDice();
+
+                    // 이동
+                    yield return filteredTarget[i].movement.Tleport(BlockManager.script.shopBlockIndex, 1f);
+
+                    // 딜레이
+                    //WaitForSeconds waiter = new WaitForSeconds(1f);
+                    //yield return waiter;
+                    
+                    // 액션 스킵
+                    Turn.turnAction = Turn.TurnAction.Block;
+                    Turn.actionProgress = ActionProgress.Ready;
+                }
+
                 break;
 
             case 19:

@@ -22,9 +22,15 @@ public class BlockManager : MonoBehaviour
     Transform blockMaster;
 
     // 스타트 블록
-    public Transform startBlock = null;    
+    public Transform startBlock = null;
     // 스타트 블록 하위 스타트 포인트 => 첫번째 블록 좌표     
     public Transform startPoint = null;
+
+
+    // 상점 블록
+    public int shopBlockIndex = -1;
+    //public DynamicBlock shopBlock = null;
+
 
 
     private void Awake()
@@ -135,7 +141,7 @@ public class BlockManager : MonoBehaviour
             yRot.Add(temp2);
             td.Add((BlockType.TypeDetail)temp3);
         }
-                
+
         // 오브젝트 생성
         BuildUP(v3.ToArray(), yRot.ToArray(), td.ToArray());
     }
@@ -212,7 +218,7 @@ public class BlockManager : MonoBehaviour
         copyObject.name = string.Format("Block ({0})", gol.Count - 1);
 
         // 로그 출력
-        Debug.Log(string.Format("create block :: {0}\n position=({1}, {2}, {3}) direction={4} blockType={5} blockTypeDetail{6}", copyObject.name, pos.x, pos.y, pos.z, direction*90, db.blockType, db.blockTypeDetail));
+        Debug.Log(string.Format("create block :: {0}\n position=({1}, {2}, {3}) direction={4} blockType={5} blockTypeDetail{6}", copyObject.name, pos.x, pos.y, pos.z, direction * 90, db.blockType, db.blockTypeDetail));
 
         return copyObject;
     }
@@ -327,9 +333,9 @@ public class BlockManager : MonoBehaviour
             result += gol.Count;
 
         // 초과 처리
-        if(result >= gol.Count)
+        if (result >= gol.Count)
             result -= gol.Count;
-        
+
         return result;
     }
 
@@ -384,8 +390,14 @@ public class BlockManager : MonoBehaviour
         dynamicBlockList.Clear();
 
         for (int i = 0; i < blockCount; i++)
-            dynamicBlockList.Add(
-                gol[i].GetComponent<DynamicBlock>()
-                );
+        {
+            DynamicBlock current = gol[i].GetComponent<DynamicBlock>();
+
+            dynamicBlockList.Add(current);
+
+            // 상점 블록 등록
+            if (current.blockTypeDetail == BlockType.TypeDetail.shop)
+                shopBlockIndex = i;
+        }
     }
 }

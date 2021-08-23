@@ -56,7 +56,7 @@ public class DiceController : MonoBehaviour
 
 
     // 반응 제어
-    public bool isInputBlock { get { return GameData.worldManager.cameraManager.controller.isFreeMode; } }
+    public bool isInputBlock { get { return GameData.worldManager.cameraManager.controller.isFreeMode || GameMaster.script.messageBox.gameObject.activeSelf; } }
 
     // 주사위 눈 별 각도값
     Quaternion eye1 = Quaternion.Euler(-90, 0, 0);

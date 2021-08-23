@@ -91,7 +91,7 @@ public class UniqueManager : MonoBehaviour
 
 
         // 연출 및 효과 시작
-        yield return StartCoroutine(Effect(currentPlayer, index));
+        yield return Effect(currentPlayer, index);
 
 
         // 작동 연출

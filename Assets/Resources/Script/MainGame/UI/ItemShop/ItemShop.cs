@@ -36,6 +36,7 @@ public class ItemShop : MonoBehaviour
     {
         // Äü µî·Ï
         script = this;
+
     }
 
 

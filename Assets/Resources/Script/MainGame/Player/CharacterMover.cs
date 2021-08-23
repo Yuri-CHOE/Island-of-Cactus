@@ -888,14 +888,14 @@ public class CharacterMover : MonoBehaviour
         isBusy = true;
 
         // 목표 바라보기
-        yield return StartCoroutine(ActTurnPoint(pos, speed));
+        yield return ActTurnPoint(pos, speed);
 
         // 목표로 이동
-        yield return StartCoroutine(ActMovePoint(pos, speed));
+        yield return ActMovePoint(pos, speed);
 
         // 정면 바라보기
         if (isTurnAfterMove)
-            yield return StartCoroutine(ActTurnFornt(speed));
+            yield return ActTurnFornt(speed);
         
         isBusy = false;
     }
@@ -1098,27 +1098,32 @@ public class CharacterMover : MonoBehaviour
     {
         isBusy = true;
 
-        float height = transform.position.y;
+        //float height = transform.position.y;
 
-        // 상승
-        yield return StartCoroutine(ActFlyPoint(transform.position + Vector3.up * 5, speed));
+        //// 상승
+        //yield return ActFlyPoint(transform.position + Vector3.up * 5, speed);
 
-        // 좌표 지정
-        Vector3 flyPoint = pos;
-        flyPoint.y = transform.position.y;
+        //// 좌표 지정
+        //Vector3 flyPoint = pos;
+        //flyPoint.y = transform.position.y;
 
-        // 이동
-        yield return StartCoroutine(ActMovePoint(flyPoint, speed * 5f));
+        //// 이동
+        //yield return ActMovePoint(flyPoint, speed * 5f);
 
-        // 좌표 지정
-        flyPoint.y = height;
+        //// 좌표 지정
+        //flyPoint.y = height;
+
+        //// 하강
+        //yield return ActFlyPoint(flyPoint, speed);
+
 
         // 하강
-        yield return StartCoroutine(ActFlyPoint(flyPoint, speed));
+        yield return ActTleport(pos, speed);
+
 
         // 정면 바라보기
         if (isTurnAfterMove)
-            yield return StartCoroutine(ActTurnFornt(speed));
+            yield return ActTurnFornt(speed);
 
         isBusy = false;
     }
@@ -1167,5 +1172,116 @@ public class CharacterMover : MonoBehaviour
         }
         // 값 보정
         transform.position = pos;
+    }
+
+
+    public IEnumerator Tleport(int blockIndex, float speed)
+    {
+        // 이동
+        yield return ActTleport(BlockManager.script.GetBlock(blockIndex).transform.position, speed);
+
+        // 이동 반영
+        location = blockIndex;
+        owner.location = blockIndex;
+
+        // 정렬
+        AvatarOverFixAll();
+    }
+
+    /// <summary>
+    /// 한바퀴 돌고 즉시 위치이동
+    /// </summary>
+    /// <param name="pos">이동 지점</param>
+    /// <param name="speed">속도</param>
+    /// <returns></returns>
+    IEnumerator ActTleport(Vector3 pos, float speed)
+    {
+        isBusy = true;
+
+        // 누적 시간
+        float elapsedTime = 0f;
+
+        // 스케일 백업
+        Vector3 sclBack = transform.localScale;
+        Vector3 scl = sclBack;
+
+        // 딜레이
+        WaitForSeconds waiter = new WaitForSeconds(0.5f);
+        yield return waiter;
+
+
+        // 준비 - 굵기 0으로 수렴
+        while (transform.localScale.x > 0f)
+        {
+            // 시간 누적
+            elapsedTime += Time.deltaTime * speed;
+
+            // 회전
+            transform.Rotate(Vector3.down * elapsedTime);
+
+            // 굵기 계산
+            scl.x -= elapsedTime;
+            scl.z -= elapsedTime;
+
+            // 굵기 반영
+            transform.localScale = scl;
+
+            yield return null;
+        }
+
+
+        // 준비 완료 확인
+        scl.x = 0f;
+        scl.z = 0f;
+        transform.localScale = scl;
+
+        // 이동
+        transform.position = pos;
+        yield return null;
+        //yield return ActFlyPoint(pos, speed);
+
+
+        // 딜레이
+        waiter = new WaitForSeconds(0.5f);
+        yield return waiter;
+
+        // 누적시간 리셋
+        elapsedTime = 0f;
+
+
+        // 착지 - 굵기 복구
+        while (transform.localScale.x < sclBack.x)
+        {
+            // 시간 누적
+            elapsedTime += Time.deltaTime * speed;
+
+            // 회전
+            transform.Rotate(Vector3.down * elapsedTime);
+
+            // 굵기 계산
+            scl.x += elapsedTime;
+            scl.z += elapsedTime;
+
+            // 굵기 반영
+            transform.localScale = scl;
+
+            yield return null;
+        }
+
+
+        // 착지 완료 확인
+        transform.localScale = sclBack;
+
+
+        // 정면 바라보기
+        //if (isTurnAfterMove)
+        //    yield return ActTurnFornt(speed));
+        yield return ActTurnFornt(speed);
+
+        // 딜레이
+        waiter = new WaitForSeconds(1f);
+        yield return waiter;
+
+        isBusy = false;
     }
 }

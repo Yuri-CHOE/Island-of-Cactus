@@ -445,6 +445,7 @@ public class LoadingManager : MonoBehaviour
 
         // 스타트 블록 설정
         wm.blockManager.SetStartBlock(WorldManager.worldFile[1]);
+        workCount++;
 
         // 지형 빌드
         wm.groundManager.BuildByString(WorldManager.worldFile[2]);
