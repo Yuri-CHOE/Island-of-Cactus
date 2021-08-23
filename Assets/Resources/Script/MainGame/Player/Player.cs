@@ -354,6 +354,9 @@ public class Player
 
                         // 당겨온 슬롯 말소
                         inventory[j].Clear();
+
+                        // 중단
+                        break;
                     }
                 }
             }

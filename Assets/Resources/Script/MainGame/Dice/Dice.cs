@@ -53,6 +53,7 @@ public struct Dice
     public int Rolling()
     {
         _value = Random.Range(min, max+1);
+        Debug.Log("주사위 :: 값 호출 ->" + _value);
 
         // 특수 주사위 값 보정 - 홀수
         if (type == SpecialDice.Odd)
@@ -64,24 +65,26 @@ public struct Dice
         
         // 특수 주사위 값 보정 - 도박
         else if (type == SpecialDice.Amazing)
-            _value = 1 + 5 * _value % 2;
+            _value = 1 + 5 * (_value % 2);
 
         // 특수 주사위 값 보정 - 추가
         else if (type == SpecialDice.Gold)
             _value++;
+        
+        Debug.Log("주사위 :: " + type + " 보정 값 ->" + _value);
 
 
         _valueTotal += _value;
 
         // 주사위 개수 차감
         count--;
-        Debug.Log("주사위 개수 :: -1 =>" + count);
+        Debug.Log("주사위 :: 1개 소모됨 : 잔여 ->" + count);
 
         return value;
     }
 
     /// <summary>
-    /// 주사위 값 및 누적값 제거
+    /// 주사위 값 및 누적값, 특수주사위 제거
     /// </summary>
     public void Clear()
     {
@@ -90,6 +93,7 @@ public struct Dice
         //valueRecord += valueTotal;
 
         // 초기화
+        type = SpecialDice.Normal;
         _value = 0;
         _valueTotal = 0;
         isRolling = false;

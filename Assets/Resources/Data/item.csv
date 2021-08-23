@@ -4,7 +4,7 @@ id,category,name,icon,expiration,count,target,where,what,value,info,rare,cost,lu
 3,3,item_local:name,3,3,0,0,1,4,0,item_local:info,25,25,1
 4,3,item_local:name,4,3,0,0,2,4,0,item_local:info,25,25,1
 5,3,item_local:name,5,3,0,0,3,4,0,item_local:info,20,30,0
-6,3,item_local:name,6,3,0,0,4,4,1,item_local:info,15,35,0
+6,3,item_local:name,6,3,0,0,4,4,0,item_local:info,15,35,0
 7,2,item_local:name,7,1,1,1,0,5,-1,item_local:info,25,25,1
 8,3,item_local:name,8,4,1,0,0,5,-1,item_local:info,10,5,1
 9,3,item_local:name,9,4,1,0,0,5,1,item_local:info,30,20,1

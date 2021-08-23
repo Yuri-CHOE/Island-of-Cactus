@@ -94,7 +94,15 @@ public class PlayerInfoUI : MonoBehaviour
 
         // 인벤토리 싱크
         if(owner.inventory.Count == 0)
+        {
             owner.inventory = inventory;
+
+            // 인벤토리 주인 지정
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                inventory[i].owner = owner;
+            }
+        }
         else
         {
             // 백업
@@ -114,6 +122,8 @@ public class PlayerInfoUI : MonoBehaviour
                 inventory[i].owner = owner;
             }
         }
+
+
     }
 
 

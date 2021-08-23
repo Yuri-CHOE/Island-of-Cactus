@@ -156,10 +156,15 @@ public class MessageBox : MonoBehaviour
     /// <summary>
     /// 열려있는 메시지 박스 비활성화
     /// </summary>
-    public void close()
+    public void Close()
     {
         // 메시지 박스 GameObject 비활성
         gameObject.SetActive(false);
+
+        // 독립형 박스 비활성
+        //if(GameMaster.script.itemManager.itemUseBox.gameObject.activeSelf)
+        //    GameMaster.script.itemManager.CloseItemUseBox();
+            GameMaster.script.itemManager.ResetItemUseBox();
     }
 
 
@@ -263,7 +268,7 @@ public class MessageBox : MonoBehaviour
         // 음수값이면 모든 메시지 박스 닫기
         if (ruleListIndex < 0)
         {
-            close();
+            Close();
             return;
         }
 
@@ -278,7 +283,7 @@ public class MessageBox : MonoBehaviour
     {
         if (mBoxPresetType == Type.Close)
         {
-            close(); return;
+            Close(); return;
         }
         int num = (int)mBoxPresetType;
 

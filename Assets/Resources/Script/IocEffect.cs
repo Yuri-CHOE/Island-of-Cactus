@@ -315,11 +315,19 @@ public struct IocEffect
                 else if (what == What.Dice)
                 {
                     if (value != 0)
+                    {
                         // 주사위 추가
                         current.dice.count += value;
+
+                        Debug.Log("주사위 :: " + value + " 개 추가 -> 총 " + current.dice.count);
+                    }
                     else
+                    {
                         // 주사위 변경
                         current.dice.type = (Dice.SpecialDice)where;
+
+                        Debug.Log("주사위 :: 타입 변경 -> " + current.dice.type);
+                    }
                 }
 
                 // 라이프 획득

@@ -52,12 +52,19 @@ public class ItemManager : MonoBehaviour
 
     public void CloseItemUseBox()
     {
-        MessageBox mb = GameData.gameMaster.messageBox;
+        //MessageBox mb = GameData.gameMaster.messageBox;
+        MessageBox mb = GameMaster.script.messageBox;
 
         // 메시지 박스 임시모드일 경우 닫기
         if (mb.pageSwitch.objectList[0].activeSelf)
             mb.PopUp(MessageBox.Type.Close);
 
+        // 비활성
+        ResetItemUseBox();
+    }
+
+    public void ResetItemUseBox()
+    {
         // 비활성
         itemUseBox.gameObject.SetActive(false);
 
@@ -147,7 +154,7 @@ public class ItemManager : MonoBehaviour
             // 타겟팅 UI 호출
             CallPlayerSelecter();
 
-            // 메인스트림 탈출
+            // 메인스트림 탈출 - 취소
             GameMaster.useItemOrder = false;
 
             return;
@@ -163,7 +170,7 @@ public class ItemManager : MonoBehaviour
     /// <param name="targetPlayer_Or_null"></param>
     public void ItemUse(ItemSlot _slot, Player targetPlayer_Or_null)
     {
-        Debug.Log(string.Format("item use :: 아이템 = {0}   대상 = {1}", _slot.item.index, _slot.owner));
+        Debug.Log(string.Format("item use :: 아이템 = {0}   대상 = {1}", _slot.item.index, _slot.owner.name));
 
         // 개수 차감
         _slot.count--;
@@ -175,7 +182,7 @@ public class ItemManager : MonoBehaviour
         //Item.Effect(_slot.item, targetPlayer_Or_null);
         // ItemUse가 버튼으로 호출되기 때문에 여기서 중단 거는 방법 찾아야할듯
         // ㄴ 아이템 매니저에서 static 으로 bool값 만들어서 아이템 이펙트에서 제어하고 메인스트림에서 bool값으로 중단처리 해야할듯
-        _slot.item.Effect(targetPlayer_Or_null);
+        StartCoroutine(_slot.item.Effect(targetPlayer_Or_null));
 
         // 아이템 제거
         Player.me.RemoveItem(_slot);

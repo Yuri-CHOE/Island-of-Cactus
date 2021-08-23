@@ -169,8 +169,11 @@ public class ItemSlot : MonoBehaviour
             {
                 if (Turn.now == Player.me)    // 사용자가 턴 진행중일 경우
                 {
-                    // 사용 버튼 활성
-                    GameData.gameMaster.itemManager.btnUse.interactable = true;
+                    if (Player.me.dice.valueTotal == 0)    // 주사위 아직 안굴렷을 경우
+                    {
+                        // 사용 버튼 활성
+                        GameData.gameMaster.itemManager.btnUse.interactable = true;
+                    }
                 }
 
             }

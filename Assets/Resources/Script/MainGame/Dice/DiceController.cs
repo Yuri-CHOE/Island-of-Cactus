@@ -175,8 +175,6 @@ public class DiceController : MonoBehaviour
                 // 회전 가속 초기화
                 rotAccel = 1.0f;
 
-                // 주사위 페이드 인 구현 예정 ===============
-
                 // 스킵
                 actionProgress = ActionProgress.Start;
             }
@@ -611,7 +609,7 @@ public class DiceController : MonoBehaviour
         doForceClickUp = false;
 
         // 주사위 남았으면 추가 진행
-        if (dice.count > 1)
+        if (dice.count > 0)
         {
             Debug.Log("주사위 굴림 :: 다시 시작");
 

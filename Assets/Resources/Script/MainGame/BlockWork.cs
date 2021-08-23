@@ -36,6 +36,9 @@ public static class BlockWork
         // 초기화
         Clear();
 
+        // 메시지 박스 강제 종료
+        GameMaster.script.messageBox.Close();
+
         // 사용중 판정 처리
         isWork = true;
 
@@ -206,9 +209,6 @@ public static class BlockWork
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
         Debug.LogWarning("럭키박스 :: 선택됨 -> "+ select);
-
-        // 테스트용 드랍 조작===================== 테스트 후 삭제할것
-        select = 19;
 
         // 럭키박스 연출 시작
         LuckyBoxManager lbm = LuckyBoxManager.script;
