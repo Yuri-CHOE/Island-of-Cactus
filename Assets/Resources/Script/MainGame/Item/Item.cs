@@ -325,6 +325,7 @@ public class Item
 
             case 19:
                 // 실제 효과는 IocEffect.GeneralEffect() 에서 호출됨
+                Debug.Log("효과 :: 실드 작동됨");
 
                 // 이펙트만 나오면 됨 ====================== 미구현
                 break;
@@ -345,27 +346,24 @@ public class Item
                 // 효과
 
                 // 잘못된 인원수 차단
-                if (filteredTarget.Count != 0)
+                if (filteredTarget == null)
                     break;
 
                 // 아이템 없으면 중단
                 if (filteredTarget[0].inventoryCount <= 0)
                     break;
 
+
                 // 가져올 아이템 지정
                 ItemSlot slot = filteredTarget[0].inventory[0];
 
-                // 강탈
-                filteredTarget[0].RemoveItem(slot);
-
-                // 연출
-                // 미구현=============
-
                 // 획득
+                // 연출 - 미구현=============
                 user.AddItem(slot, slot.count);
 
-                // 연출
-                // 미구현=============
+                // 강탈
+                // 연출 - 미구현=============
+                filteredTarget[0].RemoveItem(slot);
 
                 break;
         }

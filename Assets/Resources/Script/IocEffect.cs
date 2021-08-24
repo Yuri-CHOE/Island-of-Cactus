@@ -170,7 +170,8 @@ public struct IocEffect
         // 다른 플레이어
         // 사용 시점에서 타겟 지정하기 때문에 궂이 타겟팅 호출 할 이유 없음
         else if (target == Target.SelectedPlayer)
-            pl.Add(targetPlayer_Or_null);
+            //pl.Add(targetPlayer_Or_null);
+            pl.Add(GameMaster.script.itemManager.target);
 
         // 맵 광역
         else if (target == Target.World)
@@ -205,7 +206,8 @@ public struct IocEffect
 
             Player current = null;
             int blockIndex;
-            bool isExecute;
+            bool isExecute = true;
+
 
             for (int i = 0; i < filteredTarget.Count; i++)
             {
@@ -215,8 +217,8 @@ public struct IocEffect
                 // 이동 포인트 확보
                 blockIndex = current.location;
 
-                // 효과 적용 여부
-                isExecute = true;
+                //// 효과 적용 여부
+                //isExecute = true;
 
 
 
@@ -231,10 +233,28 @@ public struct IocEffect
                         {
                             // 실드 자동 사용
                             //GameMaster.script.itemManager.ItemUse(current.inventory[j]);
+                            yield return Item.EachEffect(current.inventory[j].item, current, null);
+
+                            // 실드 횟수 차감
                             current.inventory[j].count--;
+                            Debug.Log("효과 :: 실드 잔여 횟수 -> " + current.inventory[j].count);
+
+                            // 모두 소진시 제거
+                            if (current.inventory[j].count <= 0)
+                            {
+                                current.RemoveItem(current.inventory[j]);
+                            }
+                            
+                            //Debug.Log("효과 :: 실드 작동됨");
 
                             // 차단 적용
                             isExecute = false;
+
+                            // 효과 대상 제거
+                            filteredTarget.Remove(current);
+
+                            // 스캔 대상 되돌리기
+                            i--;
 
                             // 스캔 중단
                             break;

@@ -76,11 +76,10 @@ public struct Dice
         
         Debug.Log("주사위 :: " + type + " 보정 값 ->" + _value);
 
-        _value *= multypleValue;
-        Debug.Log("주사위 :: " + multypleValue + "배율 보정 값 ->" + _value);
-
-
-        _valueTotal += _value;
+        // 배율 보정
+        //_value *= multypleValue;
+        _valueTotal += _value * multypleValue; ;
+        Debug.Log("주사위 :: " + multypleValue + "배율 보정 값 ->" + _value * multypleValue);
 
         // 주사위 개수 차감
         count--;

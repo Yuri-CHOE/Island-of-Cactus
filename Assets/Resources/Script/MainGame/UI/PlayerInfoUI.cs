@@ -130,7 +130,9 @@ public class PlayerInfoUI : MonoBehaviour
     public void Targeting()
     {
         // 선택된 플레이어 타겟팅
-        GameData.gameMaster.itemManager.ItemUseByUI(owner);
+        GameData.gameMaster.itemManager.target = owner;
+        //GameData.gameMaster.itemManager.ItemUseByUI(owner);
+        GameData.gameMaster.itemManager.ItemUseByUI();
     }
 
 }

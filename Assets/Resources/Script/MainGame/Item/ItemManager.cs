@@ -15,6 +15,7 @@ public class ItemManager : MonoBehaviour
     // 아이템 사용 UI
     [Header("itemUseMessegeBox")]
     public ItemSlot selected = null;
+    public Player target = null;
     public Transform itemUseBox = null;
     public Text nameText = null;
     public Text infoText = null;
@@ -138,6 +139,12 @@ public class ItemManager : MonoBehaviour
 
         // 아이템 사용
         ItemUse(selected, targetPlayer_Or_null);
+
+        // 선택 초기화
+        selected = null;
+
+        // 메인스트림 탈출 - 취소
+        GameMaster.useItemOrder = false;
     }
 
 
