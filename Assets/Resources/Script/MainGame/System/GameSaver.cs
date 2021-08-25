@@ -24,8 +24,8 @@ public static class GameSaver
     // 챕터별 세이브 파일 코드
     public static string[] scInfo = null;
     public static List<string[]> scPlayers = new List<string[]>();
-    public static string[] scItem = null;
-    public static string[] scEvent = null;
+    public static List<string[]> scItem = new List<string[]>();
+    public static List<string[]> scEvent = new List<string[]>();
     public static string[] scTurn = null;
 
 
@@ -188,7 +188,7 @@ public static class GameSaver
                 .Append(obj.count)
                 ;
 
-            if (i > 0 && i != ItemManager.itemObjectList.Count - 1)
+            if (i >= 0 && i != ItemManager.itemObjectList.Count - 1)
                 sb.Append(codeLine);
         }
         sb.Append(codeChapter);
@@ -209,7 +209,7 @@ public static class GameSaver
                 .Append(Player.Index(obj.creator))
                 ;
 
-            if (i > 0 && i != EventManager.eventObjectList.Count - 1)
+            if (i >= 0 && i != EventManager.eventObjectList.Count - 1)
                 sb.Append(codeLine);
         }
         sb.Append(codeChapter);
@@ -279,9 +279,17 @@ public static class GameSaver
         for (int i = 0; i < pCode.Length; i++)
             scPlayers.Add(pCode[i].Split(codeData));
 
-        scItem = code[2].Split(codeData);
+        //scItem = code[2].Split(codeData);
 
-        scEvent = code[3].Split(codeData);
+        //scEvent = code[3].Split(codeData);
+
+        pCode = code[2].Split(codeLine);
+        for (int i = 0; i < pCode.Length; i++)
+            scItem.Add(pCode[i].Split(codeData));
+
+        pCode = code[3].Split(codeLine);
+        for (int i = 0; i < pCode.Length; i++)
+            scEvent.Add(pCode[i].Split(codeData));
 
         scTurn = code[4].Split(codeData);
     }
@@ -446,20 +454,24 @@ public static class GameSaver
             return;
         }
 
-        for (int i = 0; i < scItem.Length; i++)
+        for (int i = 0; i < scItem.Count; i++)
         {
             // Out of Range 차단
-            if (2 + i * 3 >= scItem.Length)
+            //if (2 + i * 3 >= scItem.Length)
+            if (2 > scItem[i].Length)
                 break;
 
             // 아이템 인덱스
-            int _loc = int.Parse(scItem[0 + i * 3]);
+            //int _loc = int.Parse(scItem[0 + i * 3]);
+            int _loc = int.Parse(scItem[i][0]);
 
             // 아이템 인덱스
-            int _index = int.Parse(scItem[1 + i * 3]);
+            //int _index = int.Parse(scItem[1 + i * 3]);
+            int _index = int.Parse(scItem[i][1]);
 
             // 아이템 수량
-            int _count = int.Parse(scItem[2 + i * 3]);
+            //int _count = int.Parse(scItem[2 + i * 3]);
+            int _count = int.Parse(scItem[i][2]);
 
 
             // 아이템 생성
@@ -485,23 +497,31 @@ public static class GameSaver
             return;
         }
 
-        for (int i = 0; i < scEvent.Length; i++)
+        for (int i = 0; i < scEvent.Count; i++)
         {
             // Out of Range 차단
-            if (2 + i * 4 >= scEvent.Length)
+            //if (3 + i * 4 >= scEvent.Length)
+            if (3 > scEvent[i].Length)
+            {
+                Debug.LogError("데이터 로드 :: 실패 -> scEvent - Out of Range " + scEvent[i].Length);
                 break;
+            }
 
             // 이벤트 인덱스
-            int _loc = int.Parse(scEvent[0 + i * 4]);
+            //int _loc = int.Parse(scEvent[0 + i * 4]);
+            int _loc = int.Parse(scEvent[i][0]);
 
             // 이벤트 인덱스
-            int _index = int.Parse(scEvent[1 + i * 4]);
+            //int _index = int.Parse(scEvent[1 + i * 4]);
+            int _index = int.Parse(scEvent[i][1]);
 
             // 이벤트 수량
-            int _count = int.Parse(scEvent[2 + i * 4]);
+            //int _count = int.Parse(scEvent[2 + i * 4]);
+            int _count = int.Parse(scEvent[i][2]);
 
             // 이벤트 설치자
-            int _turnIndex = int.Parse(scEvent[2 + i * 4]);
+            //int _turnIndex = int.Parse(scEvent[3 + i * 4]);
+            int _turnIndex = int.Parse(scEvent[i][3]);
 
 
             // 이벤트 생성

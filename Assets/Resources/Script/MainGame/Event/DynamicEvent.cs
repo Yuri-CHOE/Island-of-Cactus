@@ -161,6 +161,9 @@ public class DynamicEvent : DynamicObject
             ).transform;
 
 
+        // 위치 조정
+        eventObject.transform.localPosition = Vector3.up * 2;
+
         // 효과 복사
         effect = iocEvent.effect;
 

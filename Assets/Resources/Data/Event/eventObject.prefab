@@ -74,9 +74,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecbd952186c3a5042aba0dcdc305a7e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventObject: {fileID: 0}
-  modelObject: {fileID: 0}
+  type: 2
   location: -2
   count: 0
   isReady: 0
+  eventObject: {fileID: 0}
   doAnimate: 0

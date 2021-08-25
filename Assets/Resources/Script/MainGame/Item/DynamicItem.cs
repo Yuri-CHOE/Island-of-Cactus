@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DynamicItem : DynamicObject
-{    
+{
     // 아이템 오브젝트
     public Transform itemObject = null;
 
@@ -24,11 +24,18 @@ public class DynamicItem : DynamicObject
     //public bool isReady = false;      // 상속받은 클래스(DynamicObject)로 이전됨
 
 
+    //충돌 판정기
+    public Rigidbody _rigidbody = null;
+
     // 회전 동작 여부
-    public bool doSpin = false;      
+    public bool doSpin = false;
     // 회전 정보
     Coroutine coroutineRot = null;
-    bool isSpin = false;
+    bool useSpin = false;
+
+    // 충돌판정 초기화
+    bool isNew = true;
+
 
     DynamicItem()
     {
@@ -36,6 +43,10 @@ public class DynamicItem : DynamicObject
     }
 
 
+    void Awake()
+    {
+        _rigidbody = transform.GetComponent<Rigidbody>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -46,7 +57,7 @@ public class DynamicItem : DynamicObject
     void Update()
     {
         // 만료시 삭제 절차
-        if(effect.isInvalid)
+        if (effect.isInvalid)
         {
             if (IocEffect.activeEffects.Contains(effect))
                 IocEffect.activeEffects.Remove(effect);
@@ -62,23 +73,35 @@ public class DynamicItem : DynamicObject
     private void OnTriggerStay(Collider target)
     {
         // 길과 충돌할 경우
-        if (target.transform.name == "road")
-        {
-            // 충돌 거부 기능 비활성
-            //transform.GetComponent<BoxCollider>().isTrigger = false;
+        if (isNew)
+            if (target.transform.name == "road")
+            {
+                // 중복 작동 비활성
+                isNew = false;
 
-            // 관성 제거
-            transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                // 충돌 거부 기능 비활성
+                //transform.GetComponent<BoxCollider>().isTrigger = false;
 
-            // 배치 보정
-            transform.position = GameData.blockManager.GetBlock(location).transform.position;
+                // 관성 제거
+                _rigidbody.velocity = Vector3.zero;
 
-            // 종료 판정
-            BlockWork.isEnd = true;
-            
-            // 회전 시작
-            Spin(true);
-        }
+                // 중력 제거 제거
+                _rigidbody.useGravity = false;
+
+                // 배치 보정
+                //transform.position = GameData.blockManager.GetBlock(location).transform.position;
+                transform.position = new Vector3(
+                    GameData.blockManager.GetBlock(location).transform.position.x,
+                    transform.position.y,
+                    GameData.blockManager.GetBlock(location).transform.position.z
+                    );
+
+                //// 종료 판정
+                //BlockWork.isEnd = true;
+
+                // 회전 시작
+                Spin(true);
+            }
 
     }
 
@@ -202,14 +225,14 @@ public class DynamicItem : DynamicObject
         if (doSpin)
         {
             // 이미 회전중이 아닐때
-            if (!isSpin)
+            if (!useSpin)
             {
                 // 회전중 처리
-                isSpin = true;
+                useSpin = true;
 
 
                 // 회전 액션 초기화
-                if(coroutineRot != null)
+                if (coroutineRot != null)
                     StopCoroutine(coroutineRot);
 
                 // 회전 액션 시작
@@ -220,10 +243,10 @@ public class DynamicItem : DynamicObject
         else
         {
             // 이미 회전중 일때
-            if (isSpin)
+            if (useSpin)
             {
                 // 회전 안함 처리
-                isSpin = false;
+                useSpin = false;
 
                 // 회전 액션 초기화
                 StopCoroutine(coroutineRot);
@@ -244,5 +267,22 @@ public class DynamicItem : DynamicObject
         }
     }
 
+    public void DelayedBlockWorkEnd()
+    {
+        StartCoroutine(CheckBlockWork());
+    }
+
+
+    IEnumerator CheckBlockWork()
+    {
+        // 회전 작동 전까지 대기
+        while (isNew)
+        {
+            yield return null;
+        }
+
+        // 종료 판정
+        BlockWork.isEnd = true;
+    }
 
 }
