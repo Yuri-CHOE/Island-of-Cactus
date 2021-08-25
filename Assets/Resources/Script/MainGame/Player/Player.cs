@@ -141,9 +141,9 @@ public class Player
     public Dice dice = new Dice();
 
     // 플레이어 자원
-    //public GameResource life = new GameResource(5, 10, -1);
+    //public GameResource life = new GameResource(5, 10, 0);
     //public GameResource coin = new GameResource(0, 999, 0);
-    public GameResource life = new GameResource(5, 10, -1);
+    public GameResource life = new GameResource(5, 10, 0);
     public GameResource coin = new GameResource(110, 999, 0);
 
     // 아이템 슬롯
@@ -410,10 +410,13 @@ public class Player
         isDead = false;
 
         // 라이프 지급
+        //life.Set(5); 
         life.Add(5);
 
         // UI 제거
         infoUI.dead.gameObject.SetActive(false);
+
+        Debug.Log("부활 :: " + name);
     }
 
 }

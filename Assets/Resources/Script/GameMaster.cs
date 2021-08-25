@@ -434,22 +434,23 @@ public class GameMaster : MonoBehaviour
         // 종료 조건 체크
 
         // 라이프 체크
-        for (int i = 0; i < Player.allPlayer.Count; i++)
-        {
-            // 라이프 0 또는 음수일 경우
-            if (Player.allPlayer[i].life.Value < 1)
-            {
-                // 이미 감옥일 경우 중단
-                if (Player.allPlayer[i].isDead)
-                {
-                    //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + Player.allPlayer[i].name);
-                    continue;
-                }
+        CheckLife();
+        //for (int i = 0; i < Player.allPlayer.Count; i++)
+        //{
+        //    // 라이프 0 또는 음수일 경우
+        //    if (Player.allPlayer[i].life.Value < 1)
+        //    {
+        //        // 이미 감옥일 경우 중단
+        //        if (Player.allPlayer[i].isDead)
+        //        {
+        //            //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + Player.allPlayer[i].name);
+        //            continue;
+        //        }
 
-                //Debug.LogError("라이프 체크 :: 감지됨 => " + Player.allPlayer[i].name);
-                Player.allPlayer[i].movement.GotoJail();
-            }
-        }
+        //        //Debug.LogError("라이프 체크 :: 감지됨 => " + Player.allPlayer[i].name);
+        //        Player.allPlayer[i].movement.GotoJail();
+        //    }
+        //}
 
         // 시스템 플레이어 - 스타터
         if (Turn.now == Player.system.Starter)
@@ -537,22 +538,12 @@ public class GameMaster : MonoBehaviour
                     if (Turn.now.stunCount <= 0)
                         Turn.now.Resurrect();
 
-                // 행동 가능 여부 체크
+                // 행동 불가능 체크
                 if (Turn.now.isStun)
                 {
                     // 남은 대기 턴 감소
                     Turn.now.stunCount--;
 
-                    // 행동권 박탈
-                    Turn.turnAction = Turn.TurnAction.Ending;
-                }
-
-                // 모든 플레이어 대상 라이프 체크
-                CheckLife();
-
-                // 행동 불가능 체크
-                if (Turn.now.isStun)
-                {
                     // 턴 중단 및 종료 연출로 이동
                     Turn.turnAction = Turn.TurnAction.Ending;
                     Turn.actionProgress = ActionProgress.Ready;
@@ -828,6 +819,9 @@ public class GameMaster : MonoBehaviour
                         //// 카메라 탈착
                         //GameData.worldManager.cameraManager.CamFree();
 
+                        // 주사위 값 제거
+                        Turn.now.dice.SetValueTotal(0);
+
                         // 스킵
                         Turn.actionProgress = ActionProgress.Finish;
                     }
@@ -977,14 +971,15 @@ public class GameMaster : MonoBehaviour
         // 체크
         for (int i = 0; i < Player.allPlayer.Count; i++)
             if (Player.allPlayer[i].life.checkMin(1))
-                GotoPrison(Player.allPlayer[i]);
+                if (!Player.allPlayer[i].isDead)
+                    GotoJail(Player.allPlayer[i]);
     }
 
     /// <summary>
     /// 특정 플레이어를 감옥으로 보냄
     /// </summary>
     /// <param name="targetPlayer"></param>
-    public void GotoPrison(Player targetPlayer)
+    public void GotoJail(Player targetPlayer)
     {
         targetPlayer.movement.GotoJail();
     }

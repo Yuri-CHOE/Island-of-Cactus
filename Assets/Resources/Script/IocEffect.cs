@@ -184,8 +184,8 @@ public struct IocEffect
     /// <summary>
     /// 실제 효과 발동
     /// </summary>
+    /// <param name="user">작동자</param>
     /// <param name="filteredTarget">효과를 받을 플레이어들</param>
-    /// <param name="__blockIndex">위치</param>
     public IEnumerator GeneralEffect(Player user, List<Player> filteredTarget)
     {
         // 월드 이벤트 호출
@@ -367,7 +367,7 @@ public struct IocEffect
                 // 아이템 획득
                 else if (what == What.Item)
                 {
-                    if(value > 1)
+                    if (value > 1)
                         if (value < Item.table.Count)
                             current.AddItem(Item.table[value], count);
                 }
@@ -388,7 +388,7 @@ public struct IocEffect
                     break;
                 }
 
-                // 미니게임 수행
+                // 이벤트 설치
                 else if (what == What.Event)
                 {
                     // 생성 위치

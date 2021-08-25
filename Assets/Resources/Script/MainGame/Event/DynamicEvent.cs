@@ -64,7 +64,7 @@ public class DynamicEvent : DynamicObject
         // 캐릭터와 충돌할 경우
         if (target.transform.parent.name == "Character")
         {
-
+            //Debug.LogError("이벤트 :: 캐릭터와 충돌함 " + target.transform.name);
         }
     }
 

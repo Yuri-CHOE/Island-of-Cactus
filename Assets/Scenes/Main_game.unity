@@ -7139,6 +7139,7 @@ MonoBehaviour:
   posMinY: 1.9
   posMaxY: 20
   bodyObject: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1 &1233336438
 GameObject:
   m_ObjectHideFlags: 0
@@ -7627,7 +7628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b24819aa8ca2b84bbbc09084795619f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: {fileID: 95921709}
+  nameText: {fileID: 0}
   info: {fileID: 2013252949}
   isWork: 0
 --- !u!4 &1335130530
@@ -10183,7 +10184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1808710456}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}

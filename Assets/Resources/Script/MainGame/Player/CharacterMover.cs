@@ -657,7 +657,7 @@ public class CharacterMover : MonoBehaviour
 
             // 획득
             //de.GetEvent(owner, de.location);
-            de.GetEvent(owner);
+            yield return de.GetEvent(owner);
 
             // 연출 명령
             yield return null;
@@ -825,9 +825,10 @@ public class CharacterMover : MonoBehaviour
     /// </summary>
     public void MoveStop()
     {
-        Debug.LogError("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location);
+        Debug.LogError("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location + " = " + location);
 
-        int diceTemp = owner.location - location;
+        //int diceTemp = owner.location - location;
+        int diceTemp = owner.dice.valueTotal - (owner.location - location);
         Debug.LogError("액션 중단 :: 잔여 주사위 = " + diceTemp);
         owner.dice.SetValueTotal(diceTemp);
 
@@ -880,6 +881,11 @@ public class CharacterMover : MonoBehaviour
             //// 테스트용 멈춤============
             //actNow.type = Action.ActionType.Idle;
 
+            // 좌표 변경
+            location = owner.location;
+
+            // 걷기 정지
+            animator.SetFloat("Speed", 0f);
         }
     }
 
@@ -1062,6 +1068,9 @@ public class CharacterMover : MonoBehaviour
         // 행동제한 부여
         owner.stunCount = 3;
 
+        // 걷기 정지
+        animator.SetFloat("Speed", 0f);
+
         // 위치 변경
         _location = -1;
         owner.location = -1;
@@ -1081,6 +1090,13 @@ public class CharacterMover : MonoBehaviour
 
         // 이동
         moveCoroutine = StartCoroutine(ActFly(jailPos, 2f, true));
+
+        // 턴 마무리
+        if(owner == Turn.now)
+        {
+            Turn.turnAction = Turn.TurnAction.Ending;
+            Turn.actionProgress = ActionProgress.Start;
+        }
     }
 
     /// <summary>

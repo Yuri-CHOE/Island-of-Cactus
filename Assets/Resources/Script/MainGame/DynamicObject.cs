@@ -60,7 +60,7 @@ public class DynamicObject : MonoBehaviour
 
         // 장애물 등록
         objectList[loc].Add(this);
-        Debug.LogWarning(string.Format("바리케이트 :: {0} 칸에 추가됨(총 수량 => {1})", location, objectList[loc].Count));
+        Debug.LogWarning(string.Format("장애물 :: {0} 칸에 추가됨(총 수량 => {1})", location, objectList[loc].Count));
     }
 
 
@@ -90,5 +90,6 @@ public class DynamicObject : MonoBehaviour
 
         // 장애물 등록
         objectList[loc].Remove(this);
+        Debug.Log("장애물 :: " + loc + "의 장애물 제거됨,  잔여 -> "+ objectList[loc].Count);
     }
 }

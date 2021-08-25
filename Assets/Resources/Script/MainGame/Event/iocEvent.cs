@@ -11,76 +11,6 @@ public class IocEvent
         contact,    // 접촉
     }
 
-    public class iocEventEffect
-    {
-
-        // 효과 카운트(개수)
-        int _count = -1;
-        public int count { get { return _count; } }
-
-        // 효과 타겟 플레이어
-        IocEffect.Target _target = IocEffect.Target.Self;
-        public IocEffect.Target target { get { return _target; } }
-
-        // 효과 시작점
-        int _where = -1;
-        public int where { get { return _where; } }
-
-        // 효과 대상
-        IocEffect.What _what = IocEffect.What.None;
-        public IocEffect.What what { get { return _what; } }
-
-        // 효과 값
-        int _value = -1;
-        public int value { get { return _value; } }
-
-
-
-        /// <summary>
-        /// 재설정 함수, 별도 사용하지 말것
-        /// </summary>
-        /// <param name="__count"></param>
-        /// <param name="__target"></param>
-        /// <param name="__where"></param>
-        /// <param name="__what"></param>
-        /// <param name="__value"></param>
-        public void Set(int __count, IocEffect.Target __target, int __where, IocEffect.What __what, int __value)
-        {
-            SetCount(__count);
-            SetTarget(__target);
-            SetWhere(__where);
-            SetWhat(__what);
-            SetValue(__value);
-        }
-
-        void SetCount(int __count)
-        {
-            if (__count < 0)
-                return;
-
-            _count = __count;
-        }
-
-        void SetTarget(IocEffect.Target __target)
-        {
-            _target = __target;
-        }
-
-        void SetWhere(int __where)
-        {
-            _where = __where;
-        }
-
-        void SetWhat(IocEffect.What __what)
-        {
-            _what = __what;
-        }
-
-        void SetValue(int __value)
-        {
-            _value = __value;
-        }
-    }
 
     // 이벤트 테이블
     static List<IocEvent> _table = new List<IocEvent>();
@@ -113,8 +43,7 @@ public class IocEvent
     public string info { get { return _info; } }
 
     // 이벤트 설명
-    IocEffect _effect = new IocEffect();
-    public IocEffect effect { get { return _effect; } }
+    public IocEffect effect = new IocEffect();
 
 
 
@@ -131,6 +60,7 @@ public class IocEvent
             return;
         if (loaclList.Count != 3)
             return;
+
 
         // 테이블 읽어오기
         Set(
@@ -238,6 +168,8 @@ public class IocEvent
     //public static IEnumerator Effect(IocEvent __iocEvent, Player targetPlayer_Or_null, int __blockIndex)
     public IEnumerator Effect(Player targetPlayer_Or_null)
     {
+        Debug.LogError("이벤트 :: " + name + " -> " + targetPlayer_Or_null.name);
+
         // 타겟 리스트
         List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
 

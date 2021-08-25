@@ -43,10 +43,16 @@ public class GameResource
         _Value = newValue;
 
         if (checkMax())
+        {
             _Value = max;
+            waitingValue = 0;
+        }
 
         if (checkMin())
+        {
             _Value = min;
+            waitingValue = 0;
+        }
     }
 
     /// <summary>
@@ -99,31 +105,6 @@ public class GameResource
     {
         ChangeValue(__value);
     }
-
-    // 구형 갱신
-    /*
-    /// <summary>
-    /// 비동기 갱신
-    /// 사용 안함
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator Refresh()
-    {
-        while(waitingValue != 0)
-        {
-            // 갱신 단위수량
-            int i = (int)Mathf.Sign(waitingValue);
-
-            // 단위수량 만큼 제거
-            waitingValue -= i;
-
-            // 값에 반영
-            ChangeValue(i);
-
-            yield return null;
-        }
-    }
-    */
 
     public void RefreshOne()
     {

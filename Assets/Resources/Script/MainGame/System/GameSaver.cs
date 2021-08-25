@@ -461,7 +461,7 @@ public static class GameSaver
             if (2 > scItem[i].Length)
                 break;
 
-            // 아이템 인덱스
+            // 아이템 위치
             //int _loc = int.Parse(scItem[0 + i * 3]);
             int _loc = int.Parse(scItem[i][0]);
 
@@ -507,7 +507,7 @@ public static class GameSaver
                 break;
             }
 
-            // 이벤트 인덱스
+            // 이벤트 위치
             //int _loc = int.Parse(scEvent[0 + i * 4]);
             int _loc = int.Parse(scEvent[i][0]);
 

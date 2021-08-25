@@ -31,6 +31,8 @@ public static class BlockWork
             return;
         if (currentPlayer.movement == null)
             return;
+        if (currentPlayer.movement.location == -1)
+            return;
 
 
         // 초기화
@@ -208,6 +210,7 @@ public static class BlockWork
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
+        //select = 5;
         Debug.LogWarning("럭키박스 :: 선택됨 -> "+ select);
 
         // 럭키박스 연출 시작
