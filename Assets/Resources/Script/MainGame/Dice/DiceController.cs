@@ -186,16 +186,25 @@ public class DiceController : MonoBehaviour
             }
             else if (actionProgress == ActionProgress.Working)
             {
-                // 오토 플레이
-                if (owner.isAutoPlay)
-                {
-                    // AI 초도 작동
-                    if (!owner.ai.mainGame.dice.isStart)
-                    {
-                        //AI 활성화
-                        owner.ai.mainGame.dice.Work();
-                    }
-                }
+                //// 오토 플레이
+                //if (owner.isAutoPlay)
+                //{
+                //    // AI 활성화 - 아이템 사용
+                //    if (!owner.ai.mainGame.itemUse.isStart)
+                //    {
+                //        StartCoroutine(owner.ai.mainGame.itemUse.Work());
+                //    }
+                //    else if (owner.ai.mainGame.itemUse.isDone)
+                //    {
+                //        // AI 활성화 - 주사위
+                //        if (!owner.ai.mainGame.dice.isStart)
+                //        {
+                //            StartCoroutine(owner.ai.mainGame.dice.Work());
+                //        }
+                //    }
+                //    else
+                //        return;
+                //}
 
 
                 // 강제 클릭처리된 경우

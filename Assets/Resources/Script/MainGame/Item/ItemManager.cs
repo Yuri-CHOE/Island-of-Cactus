@@ -186,13 +186,11 @@ public class ItemManager : MonoBehaviour
         //GameData.gameMaster.playerSelecter[0].gameObject.SetActive(false);
 
         // 아이템 사용 요청
-        //Item.Effect(_slot.item, targetPlayer_Or_null);
-        // ItemUse가 버튼으로 호출되기 때문에 여기서 중단 거는 방법 찾아야할듯
-        // ㄴ 아이템 매니저에서 static 으로 bool값 만들어서 아이템 이펙트에서 제어하고 메인스트림에서 bool값으로 중단처리 해야할듯
         StartCoroutine(_slot.item.Effect(targetPlayer_Or_null));
 
         // 아이템 제거
-        Player.me.RemoveItem(_slot);
+        if(_slot.count <= 0)
+            Player.me.RemoveItem(_slot);
     }
 
 

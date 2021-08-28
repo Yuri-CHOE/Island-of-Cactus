@@ -370,4 +370,148 @@ public class Item
 
         yield return null;
     }
+
+    public static float Efficiency(Item __item, Player user)
+    {
+        // 효과 대상 재가공
+        switch (__item.index)
+        {
+            case 0:     // 없음 - 더미 아이템
+            case 19:    // 실드 - 사용 불가능
+                {
+                    return 0;
+                }
+
+
+            case 3:     // 싱글 큐브
+            case 4:     // 페어 큐브
+            case 5:     // 어메이징 큐브
+            case 6:     // 골든 큐브
+                {
+                    // 특수 주사위 사용중 효율 0
+                    if (user.dice.type != Dice.SpecialDice.Normal)
+                        return 0f;
+
+                    break;
+                }
+
+            case 8:     // 수상한 우유
+                {
+                    return 0.2f;
+                }
+
+            case 12:     // 맛있는 먹이
+                {
+                    // 본인 라이프 >= 데미지
+                    if (user.life.Value <= -__item.effect.value)
+                        return 0f;
+
+                    break;
+                }
+
+            case 17:    // 유리 구두
+                {
+                    // 특수 주사위 보유시 효율 1
+                    for (int i = 0; i < user.inventoryCount; i++)
+                    {
+                        if (user.inventory[i].item.index == 3 ||
+                            user.inventory[i].item.index == 4 ||
+                            user.inventory[i].item.index == 5 ||
+                            user.inventory[i].item.index == 6)
+                            return 1f;
+                    }
+
+                    // 그외 0.5
+                    return 0.5f;
+                }
+
+            case 18:     // 흐르는 모래
+                {
+                    // 코인 보유량
+                    if (user.coin.Value < 20)
+                        return 0f;
+                    else
+                        return user.coin.Value / 50;
+                }
+
+            case 20:     // 도적단 뿔피리
+                {
+                    // 타겟 리스트
+                    List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+
+                    // 타겟 수량
+                    int targetCount = 0;
+
+                    // 타겟 아이템 수량 반영
+                    for (int i = 0; i < pl.Count; i++)
+                    {
+                        if (pl[i].inventoryCount > 0)
+                            targetCount++;
+                    }
+
+                    return targetCount / pl.Count;
+                }
+
+            case 21:     // 막대사탕
+                {
+                    // 타겟 리스트
+                    List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+
+                    // 타겟 아이템 수량 반영
+                    for (int i = 0; i < pl.Count; i++)
+                    {
+                        if (pl[i].inventoryCount > 0)
+                            return 1f;
+                    }
+
+                    return 0f;
+                }
+        }
+
+        // 결과
+        return 1f;
+    }
+
+    public static Player AutoTargeting(Item __item, Player user)
+    {
+        // 효과 대상 재가공
+        switch (__item.index)
+        {
+            case 21:     // 막대사탕
+                {
+                    // 타겟 리스트
+                    List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+
+                    // 타겟 인덱스
+                    int indexer = 0;
+
+                    // 타겟 아이템 수량 반영
+                    for (int i = 0; i < pl.Count; i++)
+                    {
+                        // 1순위 - 아이템 수량 비교
+                        if (pl[i].inventoryCount > pl[indexer].inventoryCount)
+                            indexer = i;
+                        else if (pl[i].inventoryCount == pl[indexer].inventoryCount)
+                        {
+                            // 2순위 - 코인 비교
+                            if (pl[i].coin.Value > pl[indexer].coin.Value)
+                                indexer = i;
+                            else if (pl[i].coin.Value == pl[indexer].coin.Value)
+                            {
+                                // 3순위 - 라이프 비교
+                                if (pl[i].life.Value > pl[indexer].life.Value)
+                                    indexer = i;
+                            }
+
+                        }
+                    }
+
+                    // 결과
+                    return pl[indexer];
+                }
+        }
+
+        // 결과
+        return null;
+    }
 }

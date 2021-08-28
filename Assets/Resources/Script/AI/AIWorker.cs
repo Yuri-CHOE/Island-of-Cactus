@@ -17,6 +17,7 @@ public class AIWorker : MonoBehaviour
     public class MainGameAI
     {
         // 주사위 굴리기
+        public AI itemUse = new ItemAI();
         public AI dice = new DiceAI();
     }
 
@@ -26,6 +27,7 @@ public class AIWorker : MonoBehaviour
         owner = _owner;
 
         // AI 목록 등록
+        aiList.Add(mainGame.itemUse);
         aiList.Add(mainGame.dice);
 
         // AI 소유자 지정
