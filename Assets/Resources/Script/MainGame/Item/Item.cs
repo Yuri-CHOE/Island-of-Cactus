@@ -406,7 +406,18 @@ public class Item
                     if (user.life.Value <= -__item.effect.value)
                         return 0f;
 
-                    break;
+                    // 타인 라이프 체크
+                    float deadCount = 1f;
+                    float percent = 0.6f / user.otherPlayers.Count;
+                    for (int i = 0; i < user.otherPlayers.Count; i++)
+                        // 사망자 반영 - 효율 감소
+                        if(user.otherPlayers[i].life.Value <= 0)
+                            deadCount -= percent;
+
+                    if (deadCount <= 0.4f)
+                        return 0f;
+                    else
+                        return deadCount;
                 }
 
             case 17:    // 유리 구두

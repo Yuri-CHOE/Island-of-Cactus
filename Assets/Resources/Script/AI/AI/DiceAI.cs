@@ -40,6 +40,10 @@ namespace CustomAI
                 if (GameMaster.script.diceController.actionProgress != ActionProgress.Working)
                     return false;
 
+                // 아이템 AI 체크
+                if (! ((ItemAI)owner.ai.mainGame.itemUse).canDice)
+                    return false;
+
 
                 // 작동 허가
                 return true;

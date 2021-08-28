@@ -40,39 +40,40 @@ public class AIWorker : MonoBehaviour
 
     void Update()
     {
-        if (isAuto)
+        if (GameData.gameFlow > GameMaster.Flow.Start)
         {
-            // 목록 순회 체크
-            for (int i = 0; i < aiList.Count; i++)
+            if (isAuto)
             {
-                if (aiList[i].isStart)
+                // 목록 순회 체크
+                for (int i = 0; i < aiList.Count; i++)
                 {
-                    // 작동 종료 체크 및 종료처리
-                    if (aiList[i].CheckReset())
+                    if (aiList[i].isStart)
                     {
-                        aiList[i].Ready();
+                        // 작동 종료 체크 및 종료처리
+                        if (aiList[i].CheckReset())
+                        {
+                            aiList[i].Ready();
+                        }
+
+                        // 시간 경과
+                        aiList[i].Aging();
                     }
+                    // 작동 체크 및 작동
+                    else if (aiList[i].CheckStart())
+                    {
+                        // 작업 초기화
+                        aiList[i].Ready();
 
-                    // 시간 경과
-                    aiList[i].Aging();
-                }
-                // 작동 체크 및 작동
-                else if (aiList[i].CheckStart())
-                {
-                    // 작업 초기화
-                    aiList[i].Ready();
+                        // 작업 시작 처리
+                        aiList[i].isStart = true;
 
-                    // 작업 시작 처리
-                    aiList[i].isStart = true;
+                        // 작업 시작
+                        aiList[i].coroutine = StartCoroutine(aiList[i].Work());
 
-                    // 작업 시작
-                    aiList[i].coroutine = StartCoroutine(aiList[i].Work());
-
+                    }
                 }
             }
         }
     }
-
-    
 
 }

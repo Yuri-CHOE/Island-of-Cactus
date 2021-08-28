@@ -10,6 +10,9 @@ namespace CustomAI
         // AI - 주사위
         public class ItemAI : AI
         {
+            // 주사위 AI용 완료 플래그
+            public bool canDice = false;
+
             // 커트라인
             float _cutline = 0.5f;
 
@@ -32,15 +35,15 @@ namespace CustomAI
                     else
                         return false;
                 }
-                
-                // 턴 제어 체크
-                if (owner != Turn.now)
-                    return false;
 
                 // 주사위 작동 단계 체크
                 if(GameMaster.script.diceController.action != DiceController.DiceAction.Hovering)
                     return false;
                 if (GameMaster.script.diceController.actionProgress != ActionProgress.Working)
+                    return false;
+
+                // 턴 제어 체크
+                if (owner != Turn.now)
                     return false;
 
 
@@ -53,7 +56,7 @@ namespace CustomAI
                 // 작업 수행
 
                 // 스타트 딜레이
-                WaitForSeconds waiter = new WaitForSeconds(element.latency.value / 2);
+                WaitForSeconds waiter = new WaitForSeconds(element.latency.value / 4 + 0.5f);
                 yield return waiter;
 
                 // 호츌
@@ -61,6 +64,11 @@ namespace CustomAI
 
                 // 완료 처리
                 isDone = true;
+
+                // 완료 딜레이
+                waiter = new WaitForSeconds(element.latency.value / 2);
+                yield return waiter;
+                canDice = true;
             }
 
             /// <summary>
@@ -88,12 +96,14 @@ namespace CustomAI
                             userOrTarget = owner;
 
                         // 사용
-                        Debug.LogWarning("AI Run :: item [" + owner.inventory[i].item.name + "]을 사용 -> " + userOrTarget.name);
+                        Debug.LogError("AI Run :: item [" + owner.inventory[i].item.name + "]을 사용 -> " + userOrTarget.name);
                         yield return owner.inventory[i].item.Effect(userOrTarget);
 
                         // 아이템 제거
                         if (owner.inventory[i].count <= 0)
-                            Player.me.RemoveItem(owner.inventory[i]);
+                            owner.RemoveItem(owner.inventory[i]);
+                        else
+                            Debug.LogError("AI Run :: item [" + owner.inventory[i].item.name + "] 잔여 수량-> " + owner.inventory[i].count);
                     }
                 }
 
