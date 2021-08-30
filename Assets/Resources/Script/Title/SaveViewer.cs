@@ -20,6 +20,9 @@ public class SaveViewer : MonoBehaviour
     [SerializeField]
     List<SaveViewerPlayer> player = new List<SaveViewerPlayer>();
 
+    // 임시 로드한 모드
+    GameMode.Mode mode = GameMode.Mode.None;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +40,10 @@ public class SaveViewer : MonoBehaviour
 
     public void SetUp()
     {
+        // 중복 로드 방지
+        if (GameData.gameMode == mode)
+            return;
+
         GameSaver.CodeLoad();
 
         // 세이브 파일 없을 경우 스위칭
@@ -59,14 +66,12 @@ public class SaveViewer : MonoBehaviour
         cycleGoal.text = GameSaver.scInfo[3];
 
 
-
-
-
-
-
         for (int i = 0; i < player.Count; i++)
         {
             player[i].SetUp();
         }
+
+        // 로드 대상 기록
+        mode = GameData.gameMode;
     }
 }

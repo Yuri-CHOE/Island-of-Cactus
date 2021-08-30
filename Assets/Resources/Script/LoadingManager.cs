@@ -317,6 +317,15 @@ public class LoadingManager : MonoBehaviour
         // 이전 씬 삭제
         DestroyOld();
 
+        // 작업 목표량 설정
+        if (PlayerPrefs.HasKey(SceneManager.GetActiveScene().name))
+        {
+            workMax = PlayerPrefs.GetInt(SceneManager.GetActiveScene().name);
+            Debug.Log("로딩 :: 예상 작업량 -> " + workMax);
+        }
+        else
+            workMax = 10000;
+
         // 씬별 동적 로딩작업
         switch (SceneManager.GetActiveScene().buildIndex)
         {
@@ -331,110 +340,62 @@ public class LoadingManager : MonoBehaviour
                 break;
         }
 
+        // 작업량 기록
+        PlayerPrefs.SetInt(SceneManager.GetActiveScene().name, workCount);
+
         // 로딩 종료
-        Debug.Log("로딩 완료 :: "+SceneManager.GetActiveScene().name + "=> 작업 수 : " + workCount);
+        Debug.Log("로딩 완료 :: "+SceneManager.GetActiveScene().name + "의 작업 수 -> " + workCount);
         isLoadComplete = true;
         //workCount = workMax;
     }
 
     void Work_Title()
     {
-        // 작업 목표량 설정
-        workMax = 10000;
-
         gameObject.SetActive(false);
         workCount++;
 
         // 게임 플로우 리셋
         GameData.gameFlow = GameMaster.Flow.Wait;
-        
+        workCount++;
+        Turn.turnAction = Turn.TurnAction.Wait;
+        workCount++;
+        Turn.actionProgress = ActionProgress.Ready;
+        workCount++;
 
-        // 유저 데이터 로드
-        // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
-        UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
-        UserData.SetUp();
-        workCount += UserData.file.table.Count;
-        
-        // 캐릭터 테이블
-        Character.SetUp();
-        workCount+= Character.table.Count;
 
-        // 아이템 테이블
-        Item.SetUp();
-        workCount += Item.table.Count;
+        //// 유저 데이터 로드
+        //// = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
+        //UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
+        //UserData.SetUp();
+        //workCount += UserData.file.table.Count;
 
-        // 이벤트 테이블
-        IocEvent.SetUp();
-        workCount += IocEvent.table.Count;
+        //// 캐릭터 테이블
+        //Character.SetUp();
+        //workCount+= Character.table.Count;
 
-        // 럭키박스 테이블
-        LuckyBox.SetUp();
-        workCount += LuckyBox.table.Count;
+        //// 아이템 테이블
+        //Item.SetUp();
+        //workCount += Item.table.Count;
 
-        // 유니크 테이블
-        Unique.SetUp();
-        workCount += Unique.table.Count;
+        //// 이벤트 테이블
+        //IocEvent.SetUp();
+        //workCount += IocEvent.table.Count;
 
-        // 미니게임 테이블
-        Minigame.SetUp();
-        workCount += Minigame.table.Count;
+        //// 럭키박스 테이블
+        //LuckyBox.SetUp();
+        //workCount += LuckyBox.table.Count;
+
+        //// 유니크 테이블
+        //Unique.SetUp();
+        //workCount += Unique.table.Count;
+
+        //// 미니게임 테이블
+        //Minigame.SetUp();
+        //workCount += Minigame.table.Count;
     }
 
     void Work_MainGame()
     {
-        {
-            /*
-            // 작업 목표량 설정
-            workMax = 10000;
-
-            // 월드 빌드 시작
-            WorldManager wm = GameObject.Find("World").GetComponent<WorldManager>();
-            workCount++;
-
-            // 카메라 한계 설정
-            wm.cameraManager.controller.SetCameraLimit(WorldManager.worldFile[0]);
-            workCount+=6;
-
-            // 스타트 블록 설정
-            wm.blockManager.SetStartBlock(WorldManager.worldFile[1]);
-
-            // 지형 빌드
-            wm.groundManager.BuildByString(WorldManager.worldFile[2]);
-            workCount++;
-
-            // 블록 빌드
-            wm.blockManager.BuildByString(WorldManager.worldFile[3]);
-            workCount++;
-
-            // 장식물 빌드
-            wm.decorManager.BuildByString(WorldManager.worldFile[4]);
-            workCount++;
-
-            // 장애물 초기화
-            // ================ 버그 수정 필요 : 이러면 씬 새로 로딩했을때 장애물 전부 날아감
-            // ㄴ 해결법 : 로딩할때 말고 로딩 끝나고 메인게임 플로우 초기화구간에서 처리할것
-            // ㄴ 해결법 : 그냥 아이템,이벤트 오브젝트 리스트 읽어서 재구성할것
-            // 초기화 안됬을 경우 초기화
-            if(DynamicObject.objectList.Count == 0)
-            {
-                for (int i = 0; i < wm.blockManager.blockCount; i++)
-                    DynamicObject.objectList.Add(new List<DynamicObject>());
-            }
-            // 이미 초기화 된 경우 재생성
-            else
-            {
-                // 아이템 재생성
-                ItemManager.ReCreateAll();
-
-                // 이벤트 재생성
-                EventManager.ReCreateAll();
-            }
-            */
-        }
-
-        // 작업 목표량 설정
-        workMax = 10000;
-
         // 월드 빌드 시작
         WorldManager wm = GameObject.Find("World").GetComponent<WorldManager>();
         workCount++;

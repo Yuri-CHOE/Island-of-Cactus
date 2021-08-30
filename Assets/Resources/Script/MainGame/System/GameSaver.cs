@@ -239,8 +239,8 @@ public static class GameSaver
     {
         scInfo = null;
         scPlayers.Clear();
-        scItem = null;
-        scEvent = null;
+        scItem.Clear();
+        scEvent.Clear();
         scTurn = null;
 
         useLoad = false;
@@ -269,6 +269,13 @@ public static class GameSaver
             Debug.LogWarning("miss :: 세이브 파일 없음");
             return;
         }
+
+        // 초기화
+        scInfo = null;
+        scPlayers.Clear();
+        scItem.Clear();
+        scEvent.Clear();
+        scTurn = null;
 
         List<string> code = loader.table[0];
 

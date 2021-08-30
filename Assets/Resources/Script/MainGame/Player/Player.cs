@@ -182,7 +182,7 @@ public class Player
     {
         SetPlayer(__type, characterIndex, __isAutoPlay, playerName);
         
-        Debug.Log("플레이어 생성됨 :: 캐릭터 번호 = " + characterIndex);
+        Debug.Log("플레이어 생성됨 :: " + name + "의 캐릭터 번호 = " + characterIndex);
     }
 
 
@@ -197,7 +197,7 @@ public class Player
         _type = __type;
 
         // 캐릭터 셋팅
-        Debug.Log(characterIndex + " => " + Character.table.Count);
+        Debug.Log("캐릭터 :: 전체 " + Character.table.Count + " 중 선택됨 -> " + characterIndex);
         _character = Character.table[characterIndex];
 
         // 오토 셋팅

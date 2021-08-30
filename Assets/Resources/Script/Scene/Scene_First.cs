@@ -20,6 +20,7 @@ public class Scene_First : MonoBehaviour
     AsyncOperation ao;
 
     bool isLoadFinish = false;
+    bool isTableReady = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,8 @@ public class Scene_First : MonoBehaviour
         // 자동 넘어감 금지
         ao.allowSceneActivation = false;
 
-        // 테이블 로드 완료
+        // 테이블 로드
+        StartCoroutine(TableLoad());
         //Item.SetUp();
         //Character.SetUp();
         text.text = "Press Anywhere";
@@ -59,4 +61,39 @@ public class Scene_First : MonoBehaviour
 
     }
 
+    IEnumerator TableLoad()
+    {
+        // 유저 데이터 로드
+        // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
+        UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
+        UserData.SetUp();
+        yield return null;
+
+        // 캐릭터 테이블
+        Character.SetUp();
+        yield return null;
+
+        // 아이템 테이블
+        Item.SetUp();
+        yield return null;
+
+        // 이벤트 테이블
+        IocEvent.SetUp();
+        yield return null;
+
+        // 럭키박스 테이블
+        LuckyBox.SetUp();
+        yield return null;
+
+        // 유니크 테이블
+        Unique.SetUp();
+        yield return null;
+
+        // 미니게임 테이블
+        Minigame.SetUp();
+        yield return null;
+
+        // 완료 처리
+        isTableReady = true;
+    }
 }
