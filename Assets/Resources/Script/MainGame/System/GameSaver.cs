@@ -129,6 +129,8 @@ public static class GameSaver
                 .Append(codeData)
                 .Append(temp.movement.location)
                 .Append(codeData)
+                .Append(temp.stunCount)
+                .Append(codeData)
 
                 .Append(temp.life.Value)
                 .Append(codeData)
@@ -380,20 +382,23 @@ public static class GameSaver
 
 
 
+            // 이동 불가 턴수
+            current.stunCount = int.Parse(temp[6]);
+
             // 라이프
-            current.life.Set(int.Parse(temp[6]));
+            current.life.Set(int.Parse(temp[7]));
 
             // 코인
-            current.coin.Set(int.Parse(temp[7]));
+            current.coin.Set(int.Parse(temp[8]));
 
             // 주사위 개수
-            current.dice.count = int.Parse(temp[8]);
+            current.dice.count = int.Parse(temp[9]);
 
             // 주사위 합산값 (잔여 이동력)
-            current.dice.SetValueTotal(int.Parse(temp[9]));
+            current.dice.SetValueTotal(int.Parse(temp[10]));
 
             // 주사위 기록값
-            current.dice.valueRecord = int.Parse(temp[10]);
+            current.dice.valueRecord = int.Parse(temp[11]);
         }
     }
 
@@ -429,7 +434,7 @@ public static class GameSaver
 
             for (int j = 0; j < Player.inventoryMax; j++)
             {
-                int tempIndex = int.Parse(temp[11 + j * 2]);
+                int tempIndex = int.Parse(temp[12 + j * 2]);
 
                 // 없는 아이템 생략
                 if (tempIndex < 1)
@@ -439,7 +444,7 @@ public static class GameSaver
                 Item tempItem = Item.table[tempIndex];
 
                 // 아이템 수량
-                int tempCount = int.Parse(temp[12 + j * 2]);
+                int tempCount = int.Parse(temp[13 + j * 2]);
 
                 current.AddItem(tempItem, tempCount);
             }

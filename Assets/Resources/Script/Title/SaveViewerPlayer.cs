@@ -34,14 +34,14 @@ public class SaveViewerPlayer : MonoBehaviour
 
         int characterIndex = int.Parse(temp[2]);
         string playerName = temp[4];
-        int _life = int.Parse(temp[6]);
-        int _coin = int.Parse(temp[7]);
+        int _life = int.Parse(temp[7]);
+        int _coin = int.Parse(temp[8]);
         List<int> itemIndex = new List<int>();
         List<int> itemCount = new List<int>();
         for (int i = 0; i < Player.inventoryMax; i++)
         {
-            int _index = int.Parse(temp[11 + i * 2]);
-            int _count = int.Parse(temp[12 + i * 2]); 
+            int _index = int.Parse(temp[12 + i * 2]);
+            int _count = int.Parse(temp[13 + i * 2]); 
 
             itemIndex.Add(_index);
             itemCount.Add(_count);
