@@ -41,7 +41,7 @@ namespace CustomAI
                     return false;
 
                 // 아이템 AI 체크
-                if (! ((ItemAI)owner.ai.mainGame.itemUse).canDice)
+                if (! ((ItemUseAI)owner.ai.mainGame.itemUse).canDice)
                     return false;
 
 

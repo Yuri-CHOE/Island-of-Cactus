@@ -51,6 +51,11 @@ public class ItemShopBundle : MonoBehaviour
         priceValue = item.cost;
     }
 
+    public void Select()
+    {
+        toggle.isOn = true;
+    }
+
     public void Clear()
     {
         toggle.isOn = false;

@@ -7,14 +7,13 @@ public struct DropTable
     // 레어도(드랍률) 리스트
     public List<int> rare;
 
-    List<int> index;
+    
 
     public int totalRare { get { int sum = 0; for (int i = 0; i < rare.Count; i++) sum += rare[i]; return sum; } }
 
     public int Drop()
     {
-        // 리스트 입력 안되면 중단
-        if (rare.Count == 0)
+        if (rare == null)
             return -1;
 
         if (rare.Count > 0)
@@ -56,7 +55,7 @@ public struct DropTable
 
 
         // 인덱스 리스트 초기화
-        index = new List<int>();
+        List<int> index = new List<int>();
 
         // 인덱스 리스트 생성
         for (int i = 0; i < rare.Count; i++)
@@ -72,7 +71,7 @@ public struct DropTable
             result.Add(index[select]);
 
             // 제외 처리
-            rare.RemoveAt(select);
+            //rare.RemoveAt(select);
             index.RemoveAt(select);
         }
 

@@ -271,7 +271,8 @@ public static class BlockWork
 
         // UI 출력
         //GameMaster.script.messageBox.PopUp(true, true, true, MessageBox.Type.Itemshop);
-        GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);
+        //GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);
+        ItemShop.script.OpenShop();
 
 
         // 종료판정은 UI에서 버튼 클릭으로 처리됨

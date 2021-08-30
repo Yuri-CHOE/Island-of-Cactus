@@ -12,8 +12,7 @@ public class ItemShop : MonoBehaviour
 
     [SerializeField]
     GameObject msgBox = null;
-    [SerializeField]
-    GameObject itemGrop = null;
+    public GameObject itemGrop = null;
 
     [SerializeField]
     GameObject npc = null;
@@ -26,6 +25,8 @@ public class ItemShop : MonoBehaviour
     int totalSelectMoney { get { int temp = 0; for (int i = 0; i < bundle.Count; i++) { if (bundle[i].toggle.isOn) temp += bundle[i].priceValue; } return temp; } }
 
     public List<ItemShopBundle> bundle = new List<ItemShopBundle>();
+
+    public Player customer = null;
 
     [SerializeField]
     Color normalPrice = new Color();
@@ -56,10 +57,9 @@ public class ItemShop : MonoBehaviour
     {
         /*
          전체 번들 순회해서 금액 징수 후 선택된 아이템 인벤에 추가
+         버튼으로 구동됨
          */
 
-        // 구매자 지정
-        Player customer = Turn.now;
 
         int buyCount = 0;
 
@@ -71,7 +71,9 @@ public class ItemShop : MonoBehaviour
                 Pay(customer, bundle[i]);
                 buyCount++;
             }
-        
+
+        // 구매자 제거
+        customer = null;
 
         // 종료 판정
         if (buyCount > 0)
@@ -83,8 +85,13 @@ public class ItemShop : MonoBehaviour
     /// </summary>
     /// <param name="customer">구매자</param>
     /// <param name="ib">상품</param>
-    void Pay(Player customer, ItemShopBundle ib)
+    void Pay(Player _customer, ItemShopBundle ib)
     {
+        if (_customer == null)
+            Debug.LogError("디버그 null");
+        else
+            Debug.LogError("디버그 " + _customer);
+
         // 비용 지불
         customer.coin.subtract(ib.priceValue);
 
@@ -97,6 +104,9 @@ public class ItemShop : MonoBehaviour
         // 플레이어 본인의 턴 체크 하여 제어권 지급
         // 테스트 목적 비활성 =======================================
         //canvasGroup.interactable = (Player.me == Turn.now);
+
+        // 구매자 지정
+        customer = Turn.now;
 
         for (int i = 0; i < bundle.Count; i++)
         {
@@ -112,6 +122,9 @@ public class ItemShop : MonoBehaviour
 
         // 아이템 공개
         itemGrop.SetActive(true);
+
+        // 상점 오픈
+        GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);
     }
 
     void CheckMoney()

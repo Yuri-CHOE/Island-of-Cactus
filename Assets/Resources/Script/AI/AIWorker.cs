@@ -6,9 +6,20 @@ using CustomAI.MainGame;
 
 public class AIWorker : MonoBehaviour
 {
+    public enum Risk
+    {
+        None,
+        Low,
+        Middle,
+        High,
+    }
+
     // 소유자
     public Player owner = null;
     public bool isAuto { get { if (owner == null) return false; else return owner.isAutoPlay; } }
+
+    // 위험 감수 정도
+    public Risk risk = Risk.None;
 
     List<AI> aiList = new List<AI>();
 
@@ -17,8 +28,9 @@ public class AIWorker : MonoBehaviour
     public class MainGameAI
     {
         // 주사위 굴리기
-        public AI itemUse = new ItemAI();
+        public AI itemUse = new ItemUseAI();
         public AI dice = new DiceAI();
+        public AI itemBuy = new ItemBuyAI();
     }
 
     public void SetUp(Player _owner)
@@ -29,12 +41,16 @@ public class AIWorker : MonoBehaviour
         // AI 목록 등록
         aiList.Add(mainGame.itemUse);
         aiList.Add(mainGame.dice);
+        aiList.Add(mainGame.itemBuy);
 
         // AI 소유자 지정
         for (int i = 0; i < aiList.Count; i++)
         {
             aiList[i].owner = _owner;
         }
+
+        // 위험 감수 정도 지정
+        risk = (Risk)(Random.Range(1,4));
     }
 
 

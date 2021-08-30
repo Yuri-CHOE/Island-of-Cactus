@@ -8,7 +8,7 @@ namespace CustomAI
     namespace MainGame
     {
         // AI - 주사위
-        public class ItemAI : AI
+        public class ItemUseAI : AI
         {
             // 주사위 AI용 완료 플래그
             public bool canDice = false;
@@ -66,7 +66,7 @@ namespace CustomAI
                 isDone = true;
 
                 // 완료 딜레이
-                waiter = new WaitForSeconds(element.latency.value / 2);
+                //waiter = new WaitForSeconds(element.latency.value / 2);
                 yield return waiter;
                 canDice = true;
             }
