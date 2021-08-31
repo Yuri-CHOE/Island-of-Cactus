@@ -107,7 +107,7 @@ public class GameResource
         ChangeValue(__value);
     }
 
-    public void RefreshOne()
+    public int RefreshOne()
     {
         if (waitingValue != 0)
         {
@@ -119,6 +119,11 @@ public class GameResource
 
             // 값에 반영
             ChangeValue(_Value + i);
+
+            return _Value + i;
         }
+        else
+            return _Value;
+
     }
 }

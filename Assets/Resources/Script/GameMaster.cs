@@ -465,6 +465,18 @@ public class GameMaster : MonoBehaviour
 
                 //미니게임 기록 초기화
                 Player.allPlayer[i].miniInfo.Reset();
+
+                //// 부활 체크
+                //if (Player.allPlayer[i].isDead)
+                //    if (Player.allPlayer[i].stunCount <= 0)
+                //        Player.allPlayer[i].Resurrect();
+
+                // 행동 불가능 체크
+                if (Player.allPlayer[i].isStun)
+                {
+                    // 남은 대기 턴 감소
+                    Player.allPlayer[i].stunCount--;
+                }
             }
 
             // 사이클 UI 갱신
@@ -495,6 +507,47 @@ public class GameMaster : MonoBehaviour
         else if (Turn.now == Player.system.Ender)
         {
             // 종료 분기 체크
+
+            // 모든 플레이어 대상
+            for (int i = 0; i < Player.allPlayer.Count; i++)
+            {
+                // 아이템 변화 체크
+                for (int j = 0; j < Player.allPlayer[i].inventoryCount; j++)
+                {
+                    if (Player.allPlayer[i].inventory[j].item.index == 10)
+                    {
+                        // 변화 확률
+                        int percentage = 5 * Player.allPlayer[i].inventory[j].effect.value;
+                        Debug.Log("디버그 :: 변화 확률 = " + percentage);
+
+                        // 변화 여부
+                        bool isTrans = false;
+
+                        if (percentage >= 100)
+                        {
+                            // 무조건 변화
+                            isTrans = true;
+                        }
+                        else if (percentage > 0)
+                        {
+                            // 확률 적중시 변화
+                            int rand = Random.Range(0, 100);
+                            if (percentage >= rand)
+                            {
+                                Debug.Log("디버그 :: 변화 확률 = " + percentage);
+                                isTrans = true;
+                            }
+                        }
+
+                        // 변화
+                        if (isTrans)
+                        {
+                            Player.allPlayer[i].inventory[j].item = Item.table[8];
+                            Debug.Log("아이템 :: 변화 -> " + Player.allPlayer[i].inventory[j].item.name);
+                        }
+                    }
+                }
+            }
 
 
 
@@ -541,8 +594,8 @@ public class GameMaster : MonoBehaviour
                 // 행동 불가능 체크
                 if (Turn.now.isStun)
                 {
-                    // 남은 대기 턴 감소
-                    Turn.now.stunCount--;
+                    //// 남은 대기 턴 감소
+                    //Turn.now.stunCount--;
 
                     // 턴 중단 및 종료 연출로 이동
                     Turn.turnAction = Turn.TurnAction.Ending;

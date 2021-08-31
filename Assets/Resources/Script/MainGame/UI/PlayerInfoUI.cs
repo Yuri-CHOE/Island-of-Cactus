@@ -33,12 +33,14 @@ public class PlayerInfoUI : MonoBehaviour
         if (owner != null)
         {
             // 라이프 갱신
-            owner.life.RefreshOne();
-            lifeText.text = owner.life.Value.ToString();
+            //owner.life.RefreshOne();
+            //lifeText.text = owner.life.Value.ToString();            
+            lifeText.text = owner.life.RefreshOne().ToString();
 
             // 코인 갱신
-            owner.coin.RefreshOne();
-            coinText.text = owner.coin.Value.ToString();
+            //owner.coin.RefreshOne();
+            //coinText.text = owner.coin.Value.ToString();
+            coinText.text = owner.coin.RefreshOne().ToString();
 
             // 아이템 갱신
             //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
