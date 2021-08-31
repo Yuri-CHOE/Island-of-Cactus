@@ -191,6 +191,7 @@ public class GameMaster : MonoBehaviour
                         {
                             Player.allPlayer[i].miniInfo = new MiniScore();
                         }
+                        Player.system.Monster.miniInfo = new MiniScore();
 
                     }
 

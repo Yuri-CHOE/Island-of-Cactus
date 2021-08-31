@@ -62,8 +62,8 @@ public static class Turn
     public static void Clear()
     {
         // √ ±‚»≠
-        TurnAction turnAction = TurnAction.Wait;
-        ActionProgress actionProgress = ActionProgress.Ready;
+        turnAction = TurnAction.Wait;
+        actionProgress = ActionProgress.Ready;
         origin.Clear();
         queue.Clear();
         Player.order.Clear();
