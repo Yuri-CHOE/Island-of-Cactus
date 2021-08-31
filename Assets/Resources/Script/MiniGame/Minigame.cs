@@ -28,6 +28,7 @@ public class Minigame
     // 테이블
     static List<Minigame> _table = new List<Minigame>();
     public static List<Minigame> table { get { return _table; } }
+    
 
 
     // 테이블 확인용
@@ -129,9 +130,11 @@ public class Minigame
         table.Add(new Minigame());
 
         // 테이블로 리스트 셋팅
+        Minigame current = null;
         for (int i = 1; i < miniReader.table.Count; i++)
         {
-            table.Add(new Minigame(miniReader.table[i], local.table[i]));
+            current = new Minigame(miniReader.table[i], local.table[i]);
+            table.Add(current);
         }
 
         // 준비완료
@@ -150,16 +153,9 @@ public class Minigame
         if (!isReady)
             return null;
 
-        int indexer = 0;
-
-        // 단일 수량 예외처리
-        if (table.Count == 2)
-            indexer = 1;
-        else if (table.Count > 2)
-            return null;
 
         // 랜덤 값
-        indexer = Random.Range(1, table.Count);
+        int indexer = Random.Range(1, table.Count);
         while (table[indexer].playerMin < entryCount)
             indexer = Random.Range(1, table.Count);
 

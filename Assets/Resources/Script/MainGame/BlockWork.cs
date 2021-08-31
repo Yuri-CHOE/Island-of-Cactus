@@ -63,6 +63,8 @@ public static class BlockWork
         else if (blockType == BlockType.TypeDetail.minus)
             BlockMinus(currentPlayer);
 
+        else if (blockType == BlockType.TypeDetail.boss)
+            BlockBoss(currentPlayer);
         else if (blockType == BlockType.TypeDetail.trap)
             BlockTrap(currentPlayer);
         else if (blockType == BlockType.TypeDetail.lucky)
@@ -143,6 +145,28 @@ public static class BlockWork
 
         // 종료 판정
         isEnd = true;
+    }
+
+
+    static void BlockBoss(Player currentPlayer)
+    {
+        // 보상 코인
+        int reward = 100;
+
+        // 미니게임
+        // 미구현==================
+        Minigame mini = Minigame.RandomGame(2);
+
+        
+
+
+        // 참가자
+        List<Player> entry = new List<Player>();
+        entry.Add(Player.system.Monster);
+        entry.Add(currentPlayer);
+
+        // 호출
+        GameMaster.script.loadingManager.LoadAsyncMiniGame(mini, reward, entry);
     }
 
 
