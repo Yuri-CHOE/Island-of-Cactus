@@ -14,7 +14,8 @@ public class GameResource
     int _Value = 0;
     public int Value
     {
-        get { return _Value; }
+        //get { return _Value; }
+        get { return _Value + waitingValue; }
         //set { Set(value); }
     }
 
