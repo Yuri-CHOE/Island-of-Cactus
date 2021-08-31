@@ -46,9 +46,6 @@ namespace CustomAI
                 // 아이템 상점 고객 체크
                 if (ItemShop.script.customer != null  &&  ItemShop.script.customer != owner)
                     return false;
-                // 상품 설정 체크
-                if (!ItemShop.script.itemGrop.activeSelf)
-                    return false;
 
                 // 턴 제어 체크
                 if (owner != Turn.now)

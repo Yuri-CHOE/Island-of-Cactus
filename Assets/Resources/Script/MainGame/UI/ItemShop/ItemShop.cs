@@ -87,11 +87,6 @@ public class ItemShop : MonoBehaviour
     /// <param name="ib">상품</param>
     void Pay(Player _customer, ItemShopBundle ib)
     {
-        if (_customer == null)
-            Debug.LogError("디버그 null");
-        else
-            Debug.LogError("디버그 " + _customer);
-
         // 비용 지불
         customer.coin.subtract(ib.priceValue);
 
@@ -108,20 +103,20 @@ public class ItemShop : MonoBehaviour
         // 구매자 지정
         customer = Turn.now;
 
-        for (int i = 0; i < bundle.Count; i++)
-        {
-            // 아이템 테이블에서 랜덤하게 참조
-            bundle[i].item = Item.table[Random.Range(0, Item.table.Count)];
+        //for (int i = 0; i < bundle.Count; i++)
+        //{
+        //    // 아이템 테이블에서 랜덤하게 참조
+        //    bundle[i].item = Item.table[Random.Range(0, Item.table.Count)];
 
-            // 가격 텍스트 설정
-            bundle[i].Refresh();
-        }
+        //    // 가격 텍스트 설정
+        //    bundle[i].Refresh();
+        //}
 
         // 가격 텍스트 색상 초기화
         CheckMoney();
 
-        // 아이템 공개
-        itemGrop.SetActive(true);
+        //// 아이템 공개
+        //itemGrop.SetActive(true);
 
         // 상점 오픈
         GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);

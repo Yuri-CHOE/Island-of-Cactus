@@ -54,25 +54,34 @@ public struct DropTable
             return result;
 
 
-        // 인덱스 리스트 초기화
-        List<int> index = new List<int>();
+        //// 인덱스 리스트 초기화
+        //List<int> index = new List<int>();
 
-        // 인덱스 리스트 생성
-        for (int i = 0; i < rare.Count; i++)
-            index.Add(i);
+        //// 인덱스 리스트 생성
+        //for (int i = 0; i < rare.Count; i++)
+        //    index.Add(i);
 
         // 반복 추출
         for (int i = 0; i < count; i++)
         {
+            //// 가공된 인덱스
+            //int select = Drop();
+
+            //// 원본의 인덱스 확보
+            //result.Add(index[select]);
+
+            //// 제외 처리
+            //rare.RemoveAt(select);
+            //index.RemoveAt(select);
+
             // 가공된 인덱스
             int select = Drop();
 
-            // 원본의 인덱스 확보
-            result.Add(index[select]);
+            // 인덱스 확보
+            result.Add(select);
 
             // 제외 처리
-            //rare.RemoveAt(select);
-            index.RemoveAt(select);
+            rare[select] = 0;
         }
 
         return result;

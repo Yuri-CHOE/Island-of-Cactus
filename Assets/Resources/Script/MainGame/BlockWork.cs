@@ -258,12 +258,13 @@ public static class BlockWork
         List<int> select = dropTable.Drop(ItemShop.script.bundle.Count);
 
         // 아이템 상점 갱신
+        int trueIndex;
         for (int i = 0; i < ItemShop.script.bundle.Count; i++)
         {
-            int trueIndex = select[i] + first;
+            trueIndex = select[i] + first;
 
             // 드랍 테이블 작동
-            Debug.LogWarning("아이템 상점 :: 추가됨 -> " + trueIndex);
+            Debug.LogWarning("아이템 상점 :: 추가됨 -> [" + trueIndex + "] " + Item.table[trueIndex].name);
              
             // 아이템 번들 등록
             ItemShop.script.SetItemBundle(i, Item.table[trueIndex]);
