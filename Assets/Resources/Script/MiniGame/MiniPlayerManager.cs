@@ -9,6 +9,7 @@ public class MiniPlayerManager : MonoBehaviour
     //public static MiniPlayerManager script = null;
 
     [Header("Player UI")]
+    public MiniGamePlayer monster = null;
     public List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
 
     // 턴 제어용
@@ -46,7 +47,9 @@ public class MiniPlayerManager : MonoBehaviour
 
                 // 한명이라도 준비 안되면 false
                 for (int i = 0; i < entryPlayer.Count; i++)
+                {
                     allReady = allReady && entryPlayer[i].miniInfo.isReady;
+                }
 
                 // 시작 여부 반영
                 MiniGameManager.script.isGameStart = allReady;
@@ -68,7 +71,39 @@ public class MiniPlayerManager : MonoBehaviour
 
     void SetEntry()
     {
-        Player temp = null;
+        Player temp = Player.system.Monster;
+
+        // 몬스터 셋팅
+        {
+            // UI 소유자 등록
+            monster.SetOwner(temp);
+
+            // 참가
+            if (temp.miniInfo.join)
+            {
+                // 턴 등록
+                turn.Enqueue(temp);
+
+                // UI 활성
+                monster.gameObject.SetActive(true);
+
+                Debug.LogWarning("미니게임 :: 플레이어 참가 -> " + temp.name);
+            }
+            else
+            {
+
+                Debug.LogWarning("미니게임 :: 플레이어 참가 안함 -> " + temp.name);
+                //// UI 비활성
+                //scoreList[i].gameObject.SetActive(false);
+            }
+
+            // 턴 표시 제거
+            Player.system.Monster.miniPlayerUI.BlinkOff();
+
+            // AI 자동 준비
+            temp.miniInfo.isReady = true;
+        }
+        // 플레이어 셋팅
         for (int i = 0; i < Player.order.Count; i++)
         {
             // 플레이어 추출
