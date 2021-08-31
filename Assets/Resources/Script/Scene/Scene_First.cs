@@ -35,30 +35,33 @@ public class Scene_First : MonoBehaviour
         StartCoroutine(TableLoad());
         //Item.SetUp();
         //Character.SetUp();
-        text.text = "Press Anywhere";
-        isLoadFinish = true;
+        //text.text = "wait...";
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 로드 종료 체크
+        if (ao.progress >= 0.9f)
+        {
+            isLoadFinish = true;
+
+            // 테이블 셋팅 체크
+            if (isTableReady)
+            {
+                text.text = "Touch Anywhere";
+            }
+        }
 
     }
 
 
     public void Clicked()
     {
-        // 터치 차단
-        if (ao.progress < 0.9f)
-        {
-            text.text = "wait...";
-            return;
-        }
-
-        // 자동 넘어감 활성
-        else if (isLoadFinish)
-            ao.allowSceneActivation = true;
-
+        // 넘기기
+        if (isTableReady)
+            if (isLoadFinish)
+                ao.allowSceneActivation = true;
     }
 
     IEnumerator TableLoad()
