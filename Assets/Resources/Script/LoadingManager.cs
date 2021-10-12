@@ -31,7 +31,8 @@ public class LoadingManager : MonoBehaviour
 
 
     // 비동기 로딩 도구
-    AsyncOperation ao;
+    AsyncOperation ao = null;
+    public bool isLoading { get { return ao != null; } }
 
     // 로드할 씬
     [SerializeField]
@@ -240,6 +241,16 @@ public class LoadingManager : MonoBehaviour
 
         // 미니게임 로드
         LoadAsync(SceneManager.LoadSceneAsync(minigame.sceneNum));
+    }
+    public void LoadAsyncMiniGame(Minigame minigame)
+    {   
+           LoadAsyncMiniGame(minigame, minigame.reward.total, Player.allPlayer);
+    }
+    public void LoadAsyncMiniGameRandom()
+    {
+           LoadAsyncMiniGame(
+               Minigame.table[ Random.Range(1, Minigame.table.Count) ]
+               );
     }
 
     /// <summary>

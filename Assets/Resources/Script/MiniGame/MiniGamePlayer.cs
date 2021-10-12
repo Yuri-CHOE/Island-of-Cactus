@@ -54,6 +54,7 @@ public class MiniGamePlayer : MonoBehaviour
     void Update()
     {
         // 시작 전 차단
+        //if (MiniGameManager.progress != ActionProgress.Working)
         if (!MiniGameManager.script.isGameStart)
             return;
 

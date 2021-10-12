@@ -39,7 +39,8 @@ public class MiniPlayerManager : MonoBehaviour
     void Update()
     {
         // 플레이어 준비 대기상태 체크
-        if (! MiniGameManager.script.isGameStart)
+        //if (MiniGameManager.progress < ActionProgress.Working)
+        if (!MiniGameManager.script.isGameStart)
         {
             if(entryPlayer != null)
             {
@@ -53,6 +54,8 @@ public class MiniPlayerManager : MonoBehaviour
 
                 // 시작 여부 반영
                 MiniGameManager.script.isGameStart = allReady;
+                if (allReady)
+                    MiniGameManager.progress = ActionProgress.Working;
             }
         }
     }
@@ -75,6 +78,9 @@ public class MiniPlayerManager : MonoBehaviour
 
         // 몬스터 셋팅
         {
+            // 로딩 완료 표시
+            MiniGameManager.progress = ActionProgress.Start;
+
             // UI 소유자 등록
             monster.SetOwner(temp);
 

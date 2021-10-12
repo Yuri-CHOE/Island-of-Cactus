@@ -10,8 +10,11 @@ public class MiniGameManager : MonoBehaviour
     // 현재 진행중인 게임
     public static Minigame minigameNow = null;
 
-    // 미니게임 로더
-    static AsyncOperation loader = null;
+    // 진행 상태
+    public static ActionProgress progress = ActionProgress.Ready;
+
+    //// 미니게임 로더
+    //static AsyncOperation loader = null;
 
 
     /// <summary>
@@ -106,6 +109,9 @@ public class MiniGameManager : MonoBehaviour
 
         // 등수 산정
         mpm.SetRanking();
+
+        // 종료 처리
+        progress = ActionProgress.Finish;
 
         // 메인게임 로딩
         StartCoroutine(DelayedScoreScene());

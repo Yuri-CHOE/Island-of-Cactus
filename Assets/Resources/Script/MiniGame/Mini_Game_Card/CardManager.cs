@@ -305,6 +305,7 @@ public class CardManager : MonoBehaviour
     IEnumerator DelayedGameStart()
     {
         // 게임 시작 대기
+        while (MiniGameManager.progress < ActionProgress.Working)
         while (! MiniGameManager.script.isGameStart)
             yield return null;
 
