@@ -25,6 +25,9 @@ public class MessageBox : MonoBehaviour
     GameObject Innerbox;
     public GameObject npcSpace;
 
+    public Text messageTitle = null;
+    public Text messageInfo = null;
+
     [Header("button")]
     [SerializeField]
     Button btnEmpty = null;
@@ -292,6 +295,21 @@ public class MessageBox : MonoBehaviour
             ruleList[num].isInnerBoxUse, 
             ruleList[num].isNpcSpaceUse, 
             num);
+    }
+    public void PopUpText(string _title, string _info)
+    {
+        int num = 0;
+
+        messageTitle.text = _title;
+        messageInfo.text = _info;
+
+        PopUp(
+            ruleList[num].isBoxUse,
+            ruleList[num].isInnerBoxUse,
+            ruleList[num].isNpcSpaceUse,
+            num);
+
+
     }
 
 

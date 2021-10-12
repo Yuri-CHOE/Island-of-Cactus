@@ -23,6 +23,28 @@ public class Minigame
             rank_3 = _rank_3;
             rank_4 = _rank_4;
         }
+
+        //public int Share(int value)
+        //{
+        //    return total * value / (rank_1 + rank_2 + rank_3 + rank_4);
+        //}
+
+        public int GetRank(int rank)
+        {
+            switch (rank)
+            {
+                case 1:
+                    return rank_1;
+                case 2:
+                    return rank_2;
+                case 3:
+                    return rank_3;
+                case 4:
+                    return rank_4;
+                default:
+                    return 0;
+            }
+        }
     }
 
     // Å×ÀÌºí

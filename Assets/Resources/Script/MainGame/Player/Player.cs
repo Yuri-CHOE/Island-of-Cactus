@@ -167,6 +167,8 @@ public class Player
     public MiniGamePlayer miniPlayerUI = null;
 
 
+    // 트로피
+    public Trophy trophy = null;
 
        
 
@@ -257,6 +259,9 @@ public class Player
 
         // AI 소유자 지정
         ai.SetUp(this);
+
+        // 트로피 초기화
+        trophy = new Trophy();
 
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }

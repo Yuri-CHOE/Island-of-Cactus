@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MiniScore
 {
-    // 총 상금
-    public static int reward = 0;
+    // 진행중 미니게임 인덱스
+    public static int index = 0;
 
     //미니게임 참가 여부
     public bool join = false;
@@ -26,6 +26,18 @@ public class MiniScore
 
     //미니게임 등수
     public int rank = 0;
+
+    // 누적 점수
+    int _recordScore = 0;
+    public int recordScore { get { return _recordScore; } }
+
+    // 총 상금
+    public static int totalReward = 0;
+    public int reward { get { return totalReward * rewardRatio / totalRewardRatio; } }
+
+    // 보상 지분
+    public static int totalRewardRatio = 0;
+    public int rewardRatio = 0;
 
 
 
@@ -52,5 +64,21 @@ public class MiniScore
         _score = 0;
 
         rank = 0;
+
+        rewardRatio = 0;
+    }
+
+    public void Record()
+    {
+        if (rank > 0)
+        {
+            // 기록
+            _recordScore += Player.allPlayer.Count - rank;
+        }
+        else if (rank != 0)
+        {
+            Debug.LogError("error :: 잘못된 랭크 값 -> " + rank);
+            Debug.Break();
+        }
     }
 }

@@ -63,6 +63,12 @@ public class GameMaster : MonoBehaviour
     public static Flow flowCopy = Flow.Wait;
 
 
+    // 트로피 오브젝트
+    public GameObject Trophy1st = null;
+    public GameObject Trophy2nd = null;
+    public GameObject Trophy3rd = null;
+
+
     private void Awake()
     {
         // 퀵 등록
@@ -220,6 +226,9 @@ public class GameMaster : MonoBehaviour
                     //Player.me.movement.AvatarOverFix();
                     CharacterMover.AvatarOverFixAll();
 
+                    // 종료절차 진입 초기화
+                    EndManager.Reset();
+
 
                     Debug.Log("게임 플로우 :: 새 게임 호출 확인됨");
                     GameData.gameFlow = Flow.Start;
@@ -374,6 +383,10 @@ public class GameMaster : MonoBehaviour
                 if (Cycle.isEnd())
                 {
                     Debug.Log("게임 플로우 :: 종료 조건 달성 확인됨 => by " + Turn.now.name);
+
+                    // 종료 연출
+                    // 미구현=========================
+
                     GameData.gameFlow = Flow.End;
                 }
                 else
@@ -410,18 +423,67 @@ public class GameMaster : MonoBehaviour
 
             // 게임 종료됨
             case Flow.End:
-                GameData.gameFlow = Flow.Trophy;
+                {
+                    // 모든 플레이어 시작점 소환
+                    if (EndManager.endProgress == ActionProgress.Ready)
+                    {
+                        if (EndManager.coroutine == null)
+                            StartCoroutine(EndManager.CallCenter());
+
+                        return;
+                    }
+                    //bool check = false;
+                    //for (int i = 0; i < Player.allPlayer.Count; i++)
+                    //{
+                    //    // 위치 체크
+                    //    if (Player.allPlayer[i].movement.location != -1)
+                    //    {
+                    //        // 이동중이 아닐 경우 이동
+                    //        if (!Player.allPlayer[i].movement.isBusy)
+                    //            Player.allPlayer[i].movement.Tleport(-1, 1f);
+                    //    }
+                    //    else
+                    //    {
+                    //        // 이동 종료 체크
+                    //        check = check || Player.allPlayer[i].movement.isBusy;
+                    //    }
+                    //}
+
+                    //// 모든 플레이어 이동 대기
+                    //if (check)
+                    //    return;
+
+                    // 연출 종료 처리
+                    GameData.gameFlow = Flow.Trophy;
+                    Debug.LogWarning("게임 정산 :: 종료절차 수행");
+                }
                 break;
 
 
             // 트로피 지급 및 우승자 발표
             case Flow.Trophy:
-                GameData.gameFlow = Flow.Finish;
+                {
+                    // 트로피 지급 및 우승자 선정
+                    if (EndManager.endProgress == ActionProgress.Ready)
+                        return;
+                    else if (EndManager.endProgress == ActionProgress.Start)
+                    {
+                        if (EndManager.coroutine == null)
+                            StartCoroutine(EndManager.Trophy());
+
+                        return;
+                    }
+
+                    GameData.gameFlow = Flow.Finish;
+                }
                 break;
 
 
             // 게임 종료됨
             case Flow.Finish:
+                // 유저 데이터에 트로피 기록
+                // 타이틀 화면으로
+                // 미구현================
                 break;
         }
     }
@@ -490,16 +552,42 @@ public class GameMaster : MonoBehaviour
         else if(Turn.now == Player.system.Minigame)
         {
             // 미니게임 선정
+            // 미구현=============================
 
             // 턴 종료 처리
             Turn.Next();
 
             // 미니게임 로드
+            // 미구현=============================
         }
         // 시스템 플레이어 - 미니게임 엔더
         else if (Turn.now == Player.system.MinigameEnder)
         {
-            // 미니게임 정산
+            float totalReward = MiniScore.totalReward;
+
+            // 모든 플레이어 대상
+            for (int i = 0; i < Player.allPlayer.Count; i++)
+            {
+                // 미니게임 정산
+
+                // 불참자 제외
+                if (!Player.allPlayer[i].miniInfo.join)
+                    continue;
+
+                // 코인 지급
+                Player.allPlayer[i].coin.Add(Player.allPlayer[i].miniInfo.reward);
+
+                // 기록
+                Player.allPlayer[i].miniInfo.Record();
+
+                // 초기화
+                Player.allPlayer[i].miniInfo.Reset();
+            }
+
+            // 미니게임 보상 및 지분 초기화
+            MiniScore.totalReward = 0;
+            MiniScore.totalRewardRatio = 0;
+
 
             // 턴 종료 처리
             Turn.Next();
@@ -1058,8 +1146,8 @@ public class GameMaster : MonoBehaviour
     /// <summary>
     /// 테스트 전용
     /// </summary>
-    /// <param name="sceneName"></param>
-    public void StartMiniGame(string sceneName)
+    /// <param name="minigameNum"></param>
+    public void StartMiniGame(int minigameNum)
     {
 
         //// 참가자 설정
@@ -1074,6 +1162,6 @@ public class GameMaster : MonoBehaviour
         //loadingManager.LoadAsync(sceneName);
 
         // 호출
-        loadingManager.LoadAsyncMiniGame(Minigame.table[1], 100, Player.allPlayer);
+        loadingManager.LoadAsyncMiniGame(Minigame.table[minigameNum], 100, Player.allPlayer);
     }
 }

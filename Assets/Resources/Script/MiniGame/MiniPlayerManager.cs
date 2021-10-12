@@ -194,12 +194,27 @@ public class MiniPlayerManager : MonoBehaviour
                     tempPlayer.miniInfo.rank = c;
                     Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점", c, tempPlayer.name, tempPlayer.miniInfo.score));
 
-                    // 참여시 랭크 입력
+                    // 참여시
                     if (tempPlayer.miniInfo.join)
+                    {
+                        // 랭크 입력
                         tempPlayer.miniInfo.rank = c;
-                    // 불참시 랭크 박탈
+
+                        // 지분 배정
+                        tempPlayer.miniInfo.rewardRatio = Minigame.table[MiniScore.index].reward.GetRank(tempPlayer.miniInfo.rank);
+
+                        // 전체 지분량 반영
+                        MiniScore.totalRewardRatio += tempPlayer.miniInfo.rewardRatio;
+                    }
+                    // 불참시
                     else
+                    {
+                        // 랭크 박탈
                         tempPlayer.miniInfo.rank = 0;
+
+                        // 지분 박탈
+                        tempPlayer.miniInfo.rewardRatio = 0;
+                    }
 
                     // 제외
                     sort.Remove(tempPlayer);

@@ -230,7 +230,7 @@ public class LoadingManager : MonoBehaviour
         MiniGameManager.minigameNow = minigame;
 
         // 보수 설정
-        MiniScore.reward = reward;
+        MiniScore.totalReward = reward;
 
         // 참가자 설정
         for (int i = 0; i < entryPlayer.Count; i++)

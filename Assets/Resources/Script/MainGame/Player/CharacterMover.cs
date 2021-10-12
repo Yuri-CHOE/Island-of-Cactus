@@ -1190,7 +1190,10 @@ public class CharacterMover : MonoBehaviour
     public IEnumerator Tleport(int blockIndex, float speed)
     {
         // 이동
-        yield return ActTleport(BlockManager.script.GetBlock(blockIndex).transform.position, speed);
+        if (blockIndex == -1)
+            yield return ActTleport(BlockManager.script.startBlock.transform.position, speed);
+        else
+            yield return ActTleport(BlockManager.script.GetBlock(blockIndex).transform.position, speed);
 
         // 이동 반영
         location = blockIndex;
