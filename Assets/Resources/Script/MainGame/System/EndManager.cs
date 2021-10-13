@@ -284,6 +284,32 @@ public static class EndManager
                 yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
                 order[0].trophy.final = 1;
 
+                // 유저 데이터 기록
+                switch (Player.me.trophy.final)
+                {
+                    case 1:
+                        UserData.count_1st++;
+                        break;
+
+                    case 2:
+                        UserData.count_2nd++;
+                        break;
+
+                    case 3:
+                        UserData.count_3th++;
+                        break;
+
+                    default:
+                        UserData.count_4th++;
+                        break;
+                }
+                // UserData.playTime : 미구현====================
+                UserData.playCount++;
+                UserData.SaveData();
+
+                // 세이브 파기
+                GameSaver.SaveRemove();
+
                 // 알림
                 GameMaster.script.messageBox.PopUpText("Winner", "우승자는 " + order[0].movement.transform.name + " 입니다 !!");
 

@@ -46,6 +46,31 @@ public static class GameSaver
 
 
 
+    public static void SaveRemove()
+    {
+        // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
+        if (GameData.gameMode == GameMode.Mode.None)
+        {
+            Debug.LogError("game save :: 저장 실패 " + "게임 모드 -> " + GameData.gameMode);
+            return;
+        }
+
+        // 경로 지정
+        string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
+        string fullPath = string.Format("{0}/{1}{2}", @path, @fileName, extension);
+
+        // 파일 확인
+        FileInfo fi = new FileInfo(@fullPath);
+        if (fi.Exists)
+        {
+            fi.Delete();
+
+            Debug.LogError("세이브 파일 :: 제거됨 -> " + fileName);
+        }
+        else
+            Debug.LogError("세이브 파일 :: 제거 불가 -> 파일 없음");
+    }
+
     public static void GameSave()
     {
         // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
