@@ -50,7 +50,8 @@ public static class Tool
     public static GameObject Targeting()
     {
         // 클릭 체크
-        if (!Input.GetMouseButtonUp(0))
+        //if (!Input.GetMouseButtonUp(0))
+        if (!CustomInput.GetPointUP())
             return null;
 
         // UI 클릭 예외처리

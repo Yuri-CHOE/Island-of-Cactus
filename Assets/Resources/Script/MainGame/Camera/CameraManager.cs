@@ -107,10 +107,13 @@ public class CameraManager : MonoBehaviour
         Camera.main.transform.SetParent(controller.cam);
 
         // 앵글 전환
-        CamMoveTo(controller.cam, CamAngle.Top);
+        //CamMoveTo(controller.cam, CamAngle.Top);
+        CamMove(CamAngle.Top);
 
         // 목표 백업 가져오기
         camPoint = camPointTemp;
+
+        Debug.Log("카메라 :: 자유 모드");
     }
     /// <summary>
     /// 카메라 자유 모드 해제 시 복귀
@@ -177,6 +180,8 @@ public class CameraManager : MonoBehaviour
         // 이동 및 회전
         coroutinePos = StartCoroutine(ChangePos(Camera.main.transform, anglePos));
         coroutineRot = StartCoroutine(ChangeRot(Camera.main.transform, angleRot));
+
+        Debug.Log("카메라 :: 각도 변경 -> " + _camAngle);
     }
 
     /// <summary>

@@ -17,4 +17,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mini_game_CARD.unity
     guid: 506c4e1f81b2d534cb197d8b3ba983e6
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 02e17d11b67d0df439227b0d370b48ba, type: 2}

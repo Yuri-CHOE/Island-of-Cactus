@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class DiceController : MonoBehaviour
 {
@@ -237,7 +238,7 @@ public class DiceController : MonoBehaviour
                         if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == null)
                         {
                             // 꾹 눌렀을때
-                            if (Input.GetMouseButton(0))
+                            if (CustomInput.GetPoint())
                             {
                                 // 가속도
                                 if (rotAccel < rotAccelMax)
@@ -246,11 +247,26 @@ public class DiceController : MonoBehaviour
                                     rotAccel = rotAccelMax;
                             }
                             // 클릭 종료될 때
-                            else if (Input.GetMouseButtonUp(0))
+                            else if (CustomInput.GetPointUP())
                             {
                                 //Debug.Break();
                                 actionProgress = ActionProgress.Finish;
                             }
+
+                            //if (Input.GetMouseButton(0))
+                            //{
+                            //    // 가속도
+                            //    if (rotAccel < rotAccelMax)
+                            //        rotAccel += 0.1f + Time.deltaTime * 5.0f + rotAccel * Time.deltaTime * 0.5f;
+                            //    else if (rotAccel > rotAccelMax)
+                            //        rotAccel = rotAccelMax;
+                            //}
+                            //// 클릭 종료될 때
+                            //else if (Input.GetMouseButtonUp(0))
+                            //{
+                            //    //Debug.Break();
+                            //    actionProgress = ActionProgress.Finish;
+                            //}
                         }
                     }
                 }

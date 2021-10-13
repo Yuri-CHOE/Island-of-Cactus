@@ -98,7 +98,8 @@ public class CameraController : MonoBehaviour
             return;
 
         // 클릭상태 아닐 경우 처리
-        if (!Input.GetMouseButton(0))
+        //if (!Input.GetMouseButton(0))
+        if (!CustomInput.GetPoint())
         {
             mouseNow = Vector2.zero;
             mouseBefore = Vector2.zero;
@@ -106,14 +107,17 @@ public class CameraController : MonoBehaviour
         }
 
         // 마우스 왼쪽 키다운 시 원점 셋팅
-        if(Input.GetMouseButtonDown(0))
-            mouseNow = Input.mousePosition;
+        //if(Input.GetMouseButtonDown(0))
+            //mouseNow = Input.mousePosition;
+        if (CustomInput.GetPointDown())
+            mouseNow = CustomInput.GetPointPosition();
 
         // 계산 완료 좌표 확보
         mouseBefore = mouseNow;
 
         // 반영 안된 좌표 
-        mouseNow = Input.mousePosition;
+        //mouseNow = Input.mousePosition;
+        mouseNow = CustomInput.GetPointPosition();
 
         // 카메라 높이 보정값
         //float camY = cam.transform.position.y;
