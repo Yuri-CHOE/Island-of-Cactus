@@ -207,7 +207,8 @@ public class MiniPlayerManager : MonoBehaviour
                         tempPlayer.miniInfo.rank = c;
 
                         // 지분 배정
-                        tempPlayer.miniInfo.rewardRatio = Minigame.table[MiniScore.index].reward.GetRank(tempPlayer.miniInfo.rank);
+                        //tempPlayer.miniInfo.rewardRatio = Minigame.table[MiniScore.index].reward.GetRank(tempPlayer.miniInfo.rank);
+                        tempPlayer.miniInfo.rewardRatio = MiniGameManager.minigameNow.reward.GetRank(tempPlayer.miniInfo.rank);
 
                         // 전체 지분량 반영
                         MiniScore.totalRewardRatio += tempPlayer.miniInfo.rewardRatio;
