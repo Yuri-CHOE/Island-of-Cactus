@@ -129,11 +129,6 @@ public class EventManager : MonoBehaviour
             //dTemp.Remove();
             dTemp.RemoveBarricade();
 
-            Debug.LogError(dTemp.location);
-            Debug.LogError(dTemp.iocEvent.index);
-            Debug.LogError(dTemp.count);
-            Debug.LogError(dTemp.creator.name);
-
             // »ý¼º
             GameMaster.script.eventManager.CreateEventObject(
                 dTemp.location,
