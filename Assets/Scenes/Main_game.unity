@@ -1990,8 +1990,8 @@ MonoBehaviour:
   m_box: {fileID: 291009385}
   Innerbox: {fileID: 1057355072}
   npcSpace: {fileID: 1885171813}
-  messageTitle: {fileID: 0}
-  messageInfo: {fileID: 0}
+  messageTitle: {fileID: 1835459437}
+  messageInfo: {fileID: 314498486}
   btnEmpty: {fileID: 1885171814}
   btnNameChange: {fileID: 6842494634429192001}
   btnLanguage: {fileID: 194567916}

@@ -97,8 +97,8 @@ public class GameMaster : MonoBehaviour
 
         DoFlowWork();
 
-        if(GameData.gameFlow == Flow.Cycling)
-        Debug.LogError(Turn.now.name);
+        //if(GameData.gameFlow == Flow.Cycling)
+        //Debug.LogError(Turn.now.name);
     }
 
     public void DoFlowWork()

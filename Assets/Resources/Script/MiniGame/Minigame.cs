@@ -22,7 +22,6 @@ public class Minigame
             rank_2 = _rank_2;
             rank_3 = _rank_3;
             rank_4 = _rank_4;
-            Debug.LogError(_total);
         }
 
         //public int Share(int value)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public static class EndManager
 {
@@ -42,7 +43,9 @@ public static class EndManager
             GameData.worldManager.cameraManager.controller.isFreeMode = false;
 
             // 카메라 시점 변경
-            GameData.worldManager.cameraManager.CamMoveTo(BlockManager.script.startBlock, CameraManager.CamAngle.Top);
+            //GameData.worldManager.cameraManager.CamMoveTo(BlockManager.script.startBlock, CameraManager.CamAngle.Top);
+            //GameData.worldManager.cameraManager.CamMoveTo(new CameraManager.CamPoint(BlockManager.script.startBlock, CameraManager.CamAngle.Top));
+            GameData.worldManager.cameraManager.CamFreeStartPoint();
 
             // 특수 UI 제거
             GameMaster.script.MainUI.transform.Find("btn_Cam").gameObject.SetActive(false);
@@ -89,23 +92,9 @@ public static class EndManager
                 // 성적 산출
                 order.Clear();
 
-                int indexer = 0;
+                // 정렬
                 List<Player> temp = new List<Player>(Player.allPlayer);
-                while (temp.Count > 0)
-                {
-                    // 1순위 탐색
-                    for (int i = 1; i < temp.Count; i++)
-                    {
-                        if (temp[i].coin.Value > temp[indexer].coin.Value)
-                            indexer = i;
-                    }
-
-                    // 등록
-                    order.Add(temp[indexer]);
-
-                    // 제외
-                    temp.Remove(temp[indexer]);
-                }
+                order = temp.OrderBy(x => x.coin.Value).Reverse().ToList();
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Rich, order);
@@ -116,23 +105,9 @@ public static class EndManager
                 // 성적 산출
                 order.Clear();
 
-                int indexer = 0;
+                // 정렬
                 List<Player> temp = new List<Player>(Player.allPlayer);
-                while (temp.Count > 0)
-                {
-                    // 1순위 탐색
-                    for (int i = 1; i < temp.Count; i++)
-                    {
-                        if (temp[i].dice.valueRecord > temp[indexer].dice.valueRecord)
-                            indexer = i;
-                    }
-
-                    // 등록
-                    order.Add(temp[indexer]);
-
-                    // 제외
-                    temp.Remove(temp[indexer]);
-                }
+                order = temp.OrderBy(x => x.dice.valueRecord).Reverse().ToList();
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Rich, order);
@@ -143,23 +118,9 @@ public static class EndManager
                 // 성적 산출
                 order.Clear();
 
-                int indexer = 0;
+                // 정렬
                 List<Player> temp = new List<Player>(Player.allPlayer);
-                while (temp.Count > 0)
-                {
-                    // 1순위 탐색
-                    for (int i = 1; i < temp.Count; i++)
-                    {
-                        if (temp[i].miniInfo.recordScore > temp[indexer].miniInfo.recordScore)
-                            indexer = i;
-                    }
-
-                    // 등록
-                    order.Add(temp[indexer]);
-
-                    // 제외
-                    temp.Remove(temp[indexer]);
-                }
+                order = temp.OrderBy(x => x.miniInfo.recordScore).Reverse().ToList();
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Rich, order);
@@ -170,23 +131,9 @@ public static class EndManager
                 // 성적 산출
                 order.Clear();
 
-                int indexer = 0;
+                // 정렬
                 List<Player> temp = new List<Player>(Player.allPlayer);
-                while (temp.Count > 0)
-                {
-                    // 1순위 탐색
-                    for (int i = 1; i < temp.Count; i++)
-                    {
-                        if (temp[i].miniInfo.recordScore > temp[indexer].miniInfo.recordScore)
-                            indexer = i;
-                    }
-
-                    // 등록
-                    order.Add(temp[indexer]);
-
-                    // 제외
-                    temp.Remove(temp[indexer]);
-                }
+                order = temp.OrderBy(x => x.trophy.score).Reverse().ToList();
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Win, order);

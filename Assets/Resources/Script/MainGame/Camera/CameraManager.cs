@@ -115,6 +115,14 @@ public class CameraManager : MonoBehaviour
 
         Debug.Log("카메라 :: 자유 모드");
     }
+
+    public void CamFreeStartPoint()
+    {
+        CamFree();
+        controller.cam.position = BlockManager.script.startBlock.position;
+    }
+
+
     /// <summary>
     /// 카메라 자유 모드 해제 시 복귀
     /// </summary>
