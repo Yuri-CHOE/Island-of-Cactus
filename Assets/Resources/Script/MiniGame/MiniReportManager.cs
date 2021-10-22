@@ -107,7 +107,7 @@ public class MiniReportManager : MonoBehaviour
         }
 
         // 페이지 준비 완료 시
-        if (GameData.gameFlow == GameMaster.Flow.Cycling)
+        if (ao != null && ao.isDone && GameMaster.script.loadingManager.isFinish)
             // 다음씬 버튼 활성화
             endBtn.gameObject.SetActive(true);
     }
