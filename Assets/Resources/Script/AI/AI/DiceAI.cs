@@ -40,6 +40,10 @@ namespace CustomAI
                 if (GameMaster.script.diceController.actionProgress != ActionProgress.Working)
                     return false;
 
+                // 순서 주사위 예외 처리
+                if (GameData.gameFlow == GameMaster.Flow.Ordering)
+                    return true;
+
                 // 아이템 AI 체크
                 if (! ((ItemUseAI)owner.ai.mainGame.itemUse).canDice)
                     return false;

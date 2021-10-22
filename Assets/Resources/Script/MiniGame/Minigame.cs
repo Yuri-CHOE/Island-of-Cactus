@@ -34,17 +34,21 @@ public class Minigame
             switch (rank)
             {
                 case 1:
+                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_1);
                     return rank_1;
                 case 2:
+                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_2);
                     return rank_2;
                 case 3:
+                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_3);
                     return rank_3;
                 case 4:
+                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_4);
                     return rank_4;
                 default:
                     return 0;
             }
-        }
+        }        
     }
 
     // 테이블
@@ -119,7 +123,7 @@ public class Minigame
         _sceneNum = int.Parse(strList[3]);
 
         // 보상 및 지분률
-        reward.Set(
+        _reward.Set(
             int.Parse(strList[4]),
             int.Parse(strList[5]),
             int.Parse(strList[6]),
@@ -138,7 +142,7 @@ public class Minigame
     /// </summary>
     public static void SetUp()
     {
-        Debug.Log("테이블 셋팅 : 럭키박스");
+        Debug.Log("테이블 셋팅 : 미니게임");
 
         // 중복 실행 방지
         if (_isReady)

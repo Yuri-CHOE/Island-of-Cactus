@@ -198,7 +198,7 @@ public class MiniPlayerManager : MonoBehaviour
                     tempPlayer = sort[temp[j]];
 
                     tempPlayer.miniInfo.rank = c;
-                    Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점", c, tempPlayer.name, tempPlayer.miniInfo.score));
+                    Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점으로 {3}등", c, tempPlayer.name, tempPlayer.miniInfo.score, c));
 
                     // 참여시
                     if (tempPlayer.miniInfo.join)
@@ -211,6 +211,8 @@ public class MiniPlayerManager : MonoBehaviour
 
                         // 전체 지분량 반영
                         MiniScore.totalRewardRatio += tempPlayer.miniInfo.rewardRatio;
+
+                        Debug.LogWarning("미니게임 :: 보상 지분 -> " + tempPlayer.miniInfo.rewardRatio + " by 플레이어 " + tempPlayer.name);
                     }
                     // 불참시
                     else

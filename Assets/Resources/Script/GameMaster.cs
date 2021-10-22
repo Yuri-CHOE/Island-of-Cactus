@@ -89,6 +89,9 @@ public class GameMaster : MonoBehaviour
     void Update()
     {
         DoFlowWork();
+
+        if(GameData.gameFlow == Flow.Cycling)
+        Debug.LogError(Turn.now.name);
     }
 
     public void DoFlowWork()
@@ -314,23 +317,29 @@ public class GameMaster : MonoBehaviour
                         GameData.gameFlow = Flow.Cycling;
                     }
 
+                    // 순서큐 셋팅
+                    if (Turn.origin.Count == 0)
+                    {
+                        // 순서용 리스트 복사
+                        List<Player> pOrderList = new List<Player>(Player.allPlayer);
+                        //Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + Player.allPlayer.Count);
 
-                    // 순서용 리스트 복사
-                    List<Player> pOrderList = new List<Player>(Player.allPlayer);
-                    //Debug.Log("게임 플로우 :: 리스트 복사 체크 =>" + pOrderList.Count + " = " + Player.allPlayer.Count);
-
-                    // 순서큐 셋팅 및 리스트 순차 정리
-                    Turn.SetUp(pOrderList);
+                        // 순서큐 셋팅 및 리스트 순차 정리
+                        Turn.SetUp(pOrderList);
+                    }
 
                     // 모든 플레이어 주사위 굴림완료 상태 초기화
                     for (int i = 0; i < Player.allPlayer.Count; i++)
                         Player.allPlayer[i].dice.Clear();
 
                     // PlayerInfo UI 초기화
-                    for (int i = 0; i < pOrderList.Count; i++)
+                    //for (int i = 0; i < pOrderList.Count; i++)
+                    for (int i = 0; i < Player.order.Count; i++)
                     {
-                        pOrderList[i].infoUI = playerInfoUI[i];
-                        pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
+                        //pOrderList[i].infoUI = playerInfoUI[i];
+                        //pOrderList[i].infoUI.SetPlayer(pOrderList[i]);
+                        Player.order[i].infoUI = playerInfoUI[i];
+                        Player.order[i].infoUI.SetPlayer(Player.order[i]);
                     }
 
                     // 미할당 PlayerInfo UI 제거
@@ -570,6 +579,8 @@ public class GameMaster : MonoBehaviour
             // 미니게임 로딩 대기
             if (MiniGameManager.progress != ActionProgress.Finish)
                 return;
+
+            Debug.LogError(MiniGameManager.progress);
 
             // 모든 플레이어 대상
             for (int i = 0; i < Player.allPlayer.Count; i++)

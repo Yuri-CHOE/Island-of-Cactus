@@ -36,8 +36,12 @@ namespace CustomAI
                         return false;
                 }
 
+                // 게임 단계 체크
+                if(GameData.gameFlow != GameMaster.Flow.Cycling)
+                    return false;
+
                 // 주사위 작동 단계 체크
-                if(GameMaster.script.diceController.action != DiceController.DiceAction.Hovering)
+                if (GameMaster.script.diceController.action != DiceController.DiceAction.Hovering)
                     return false;
                 if (GameMaster.script.diceController.actionProgress != ActionProgress.Working)
                     return false;

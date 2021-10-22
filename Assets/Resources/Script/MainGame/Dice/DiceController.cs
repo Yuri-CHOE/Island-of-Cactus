@@ -229,7 +229,8 @@ public class DiceController : MonoBehaviour
                 }
 
                 // 턴 제어자일 경우
-                else if (Player.me == Turn.now)
+                //else if (Player.me == Turn.now)
+                else if (Player.me == owner)
                 {
                     // 입력 가능 상태일 경우
                     if (!isInputBlock)

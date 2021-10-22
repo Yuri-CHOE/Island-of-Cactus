@@ -44,7 +44,7 @@ namespace CustomAI
                 if (!ItemShop.script.gameObject.activeSelf)
                     return false;
                 // 아이템 상점 고객 체크
-                if (ItemShop.script.customer != null  &&  ItemShop.script.customer != owner)
+                if (ItemShop.script.customer == null  ||  ItemShop.script.customer != owner)
                     return false;
 
                 // 턴 제어 체크
