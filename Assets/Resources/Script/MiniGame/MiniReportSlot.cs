@@ -44,7 +44,7 @@ public class MiniReportSlot : MonoBehaviour
     public void SetUp(Player player, Color rankColor, string _rankText)
     {
         Debug.Log("미니게임 :: 정산 - 셋업 요청됨-> " + player.name);
-
+        Debug.Log(MiniScore.totalReward);
         // 소유자 입력
         owner = player;
 

@@ -617,6 +617,7 @@ public class GameMaster : MonoBehaviour
             // 미니게임 보상 및 지분 초기화
             MiniScore.totalReward = 0;
             MiniScore.totalRewardRatio = 0;
+            MiniGameManager.progress = ActionProgress.Ready;
 
 
             // 턴 종료 처리
