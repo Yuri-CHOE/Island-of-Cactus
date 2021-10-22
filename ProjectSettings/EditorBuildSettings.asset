@@ -9,13 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/First.unity
     guid: 882bc4019616edb4cb3b399b04ddc115
   - enabled: 1
-    path: Assets/Scenes/Title.unity
+    path: Assets/Scenes/TEST/Title.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Main_game.unity
     guid: 29e67bac2e6c4374aa03612b918c879e
   - enabled: 1
-    path: Assets/Scenes/Mini_game_CARD.unity
+    path: Assets/Scenes/MiniGameReporter.unity
+    guid: 73ee32f7346afc44cb9b5894889d9ac8
+  - enabled: 1
+    path: Assets/Scenes/MiniGameScenes/Mini_game_CARD.unity
     guid: 506c4e1f81b2d534cb197d8b3ba983e6
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 02e17d11b67d0df439227b0d370b48ba, type: 2}

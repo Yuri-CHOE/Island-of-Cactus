@@ -11,26 +11,15 @@ public class CustomInput : MonoBehaviour
     public static Mouse mouse = Mouse.current;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void FixedUpdate()
-    {
-
-    }
+    //public static bool isBlock = false;
 
 
     public static bool GetPoint()
     {
+        // 게임 중단 반영
+        if (GameMaster.isBlock)
+            return false;
+
         bool result = false;
 
         if (pad != null)        { result = result || false; }
@@ -42,6 +31,10 @@ public class CustomInput : MonoBehaviour
     }
     public static bool GetPointDown()
     {
+        // 게임 중단 반영
+        if (GameMaster.isBlock)
+            return false;
+
         bool result = false;
 
         if (pad != null)        { result = result || false; }
@@ -53,6 +46,10 @@ public class CustomInput : MonoBehaviour
     }
     public static bool GetPointUP()
     {
+        // 게임 중단 반영
+        if (GameMaster.isBlock)
+            return false;
+
         bool result = false;
 
         if (pad != null)        { result = result || false; }
@@ -64,6 +61,10 @@ public class CustomInput : MonoBehaviour
     }
     public static Vector2 GetPointPosition()
     {
+        // 게임 중단 반영
+        if (GameMaster.isBlock)
+            return Vector2.zero;
+
         if (screen != null && screen.press.isPressed)
             return screen.position.ReadValue();
 

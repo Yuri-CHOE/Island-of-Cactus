@@ -58,6 +58,10 @@ public class AIWorker : MonoBehaviour
     {
         if (GameData.gameFlow > GameMaster.Flow.Start)
         {
+            // 게임 중단 반영
+            if (GameMaster.isBlock)
+                return;
+
             if (isAuto)
             {
                 // 목록 순회 체크

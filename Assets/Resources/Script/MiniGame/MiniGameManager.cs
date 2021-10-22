@@ -41,6 +41,9 @@ public class MiniGameManager : MonoBehaviour
     // 게임 시작 여부
     public bool isGameStart = false;
 
+    // 정산 페이지 사전 로딩
+    AsyncOperation ao = null;
+
 
 
     private void Awake()
@@ -58,6 +61,13 @@ public class MiniGameManager : MonoBehaviour
 
         // 커튼 페이드 인
         Starting();
+
+
+        // 정산 페이지 사전 로딩
+        ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MiniGameReporter");
+
+        // 로딩 완료시 자동 씬전환 비활성
+        ao.allowSceneActivation = false;
     }
 
 
@@ -105,7 +115,7 @@ public class MiniGameManager : MonoBehaviour
         //curtain.gameObject.SetActive(true);
 
         // 커튼 페이드 인
-        StartCoroutine(Tool.CanvasFade(curtain, true, 1f));
+        StartCoroutine(Tool.CanvasFade(curtain, true, 0.5f));
 
         // 등수 산정
         mpm.SetRanking();
@@ -124,9 +134,12 @@ public class MiniGameManager : MonoBehaviour
             yield return null;
 
 
-        // 씬 이동
-        // 임시 구현 ========== 정산 씬 작업 완료 시 해당 씬 이름으로 바꿀것
-        AsyncOperation ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Main_game");
+        //// 씬 이동
+        //AsyncOperation ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Main_game");
+        //ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MiniGameReporter");
+
+        // 로딩 완료시 자동 씬전환 활성
+        ao.allowSceneActivation = true;
     }
 
 

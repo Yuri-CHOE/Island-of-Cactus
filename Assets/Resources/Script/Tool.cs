@@ -217,7 +217,7 @@ public static class Tool
                 canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 1f, Time.deltaTime / timer); ;
 
                 // 보정
-                if (canvasGroup.alpha > 0.9999f)
+                if (canvasGroup.alpha > 0.99f)
                     canvasGroup.alpha = 1f;
 
                 yield return null;
@@ -234,7 +234,7 @@ public static class Tool
                 canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, 0f, Time.deltaTime / timer); ;
 
                 // 보정
-                if (canvasGroup.alpha < 0.0001f)
+                if (canvasGroup.alpha < 0.01f)
                     canvasGroup.alpha = 0f;
 
                 yield return null;

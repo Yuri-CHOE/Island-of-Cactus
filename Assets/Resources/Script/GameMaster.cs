@@ -69,6 +69,10 @@ public class GameMaster : MonoBehaviour
     public GameObject Trophy3rd = null;
 
 
+    // 게임 정지
+    public static bool isBlock = false;
+
+
     private void Awake()
     {
         // 퀵 등록
@@ -88,6 +92,9 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isBlock)
+            return;
+
         DoFlowWork();
 
         if(GameData.gameFlow == Flow.Cycling)

@@ -17,7 +17,7 @@ public class MiniPlayerManager : MonoBehaviour
     public Player turnNow { get { return turn.Peek(); } }
 
     // 참여자 목록
-    public List<Player> entryPlayer = null;
+    public static List<Player> entryPlayer = null;
 
 
     int entryCount { get { return turn.Count; } }
@@ -28,6 +28,7 @@ public class MiniPlayerManager : MonoBehaviour
     {
         // 퀵 등록
         //script = this;
+
         // 참가자 설정
         SetEntry();
     }
