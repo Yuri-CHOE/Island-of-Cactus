@@ -51,18 +51,18 @@ public class MiniReportManager : MonoBehaviour
         // 페이드 인
         StartCoroutine(Tool.CanvasFade(curtain, false, 0.5f));
 
-        // 현재 씬 캔버스 우선순위 상승
-        transform.parent.GetComponent<Canvas>().sortingOrder += 1;
+        //// 현재 씬 캔버스 우선순위 상승
+        //transform.parent.GetComponent<Canvas>().sortingOrder += 1;
 
-        // 본 오브젝트 파괴 방지
-        DontDestroyOnLoad(transform.root);
+        //// 본 오브젝트 파괴 방지
+        //DontDestroyOnLoad(transform.root);
 
-        // 씬 로드
-        ao = SceneManager.LoadSceneAsync("Main_game");
+        //// 씬 로드
+        //ao = SceneManager.LoadSceneAsync("Main_game");
 
-        // 메인게임 조작 차단
-        //CustomInput.isBlock = true;
-        GameMaster.isBlock = true;
+        //// 메인게임 조작 차단
+        ////CustomInput.isBlock = true;
+        //GameMaster.isBlock = true;
     }
 
     // Update is called once per frame
@@ -73,9 +73,12 @@ public class MiniReportManager : MonoBehaviour
         {
             // 메인 게임 셋팅중일 경우 대기
             if (GameData.gameFlow < GameMaster.Flow.Start)
+            {
+                Debug.LogWarning(GameData.gameFlow);
                 return;
+            }
 
-            Debug.LogWarning("check");
+            Debug.LogWarning("체크");
 
             // 로딩 종료시 씬 제거
             Transform.Destroy(transform.root);
@@ -85,9 +88,22 @@ public class MiniReportManager : MonoBehaviour
             GameMaster.isBlock = false;
         }
         // 공개 완료시
-        else if (curtain.alpha == 0f)
+        else if (curtain.alpha == 0f && !isOpen)
         {
             isOpen = true;
+            
+            // 현재 씬 캔버스 우선순위 상승
+            transform.parent.GetComponent<Canvas>().sortingOrder += 1;
+
+            // 본 오브젝트 파괴 방지
+            DontDestroyOnLoad(transform.root);
+
+            // 씬 로드
+            ao = SceneManager.LoadSceneAsync("Main_game");
+
+            // 메인게임 조작 차단
+            //CustomInput.isBlock = true;
+            GameMaster.isBlock = true;
         }
 
         // 페이지 준비 완료 시

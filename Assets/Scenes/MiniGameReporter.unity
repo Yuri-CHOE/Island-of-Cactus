@@ -261,13 +261,13 @@ MonoBehaviour:
   - {fileID: 1281812019}
   curtain: {fileID: 2085194341}
   endBtn: {fileID: 1595726449}
-  rank1: {r: 1, g: 0.67668825, b: 0, a: 0}
+  rank1: {r: 1, g: 0.67668825, b: 0, a: 1}
   rank1Text: 1st
-  rank2: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
+  rank2: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
   rank2Text: 2nd
-  rank3: {r: 0.8584906, g: 0.28592184, b: 0, a: 0}
+  rank3: {r: 0.8584906, g: 0.28592184, b: 0, a: 1}
   rank3Text: 3rd
-  rank4: {r: 0.5660378, g: 0, b: 0, a: 0}
+  rank4: {r: 0.5660378, g: 0, b: 0, a: 1}
   rank4Text: 4th
   rankOut: {r: 0, g: 0, b: 0, a: 0}
   rankOutText: fail
@@ -1388,13 +1388,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1595726447}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

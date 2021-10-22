@@ -92,7 +92,7 @@ public class GameMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isBlock)
+        if (GameData.gameFlow > Flow.Start && isBlock)
             return;
 
         DoFlowWork();
