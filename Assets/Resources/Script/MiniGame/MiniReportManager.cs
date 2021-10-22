@@ -81,7 +81,7 @@ public class MiniReportManager : MonoBehaviour
             Debug.LogWarning("체크");
 
             // 로딩 종료시 씬 제거
-            Transform.Destroy(transform.root);
+            Destroy(transform.root.gameObject);
 
             // 조작 차단 해제
             //CustomInput.isBlock = false;

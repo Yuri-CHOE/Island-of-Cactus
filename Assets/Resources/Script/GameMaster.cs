@@ -585,9 +585,15 @@ public class GameMaster : MonoBehaviour
         {
             // 미니게임 로딩 대기
             if (MiniGameManager.progress != ActionProgress.Finish)
+            {
+                //Debug.LogError(MiniGameManager.progress);
                 return;
+            }
 
-            Debug.LogError(MiniGameManager.progress);
+            //// 미니게임 정산 페이지 삭제
+            //MiniReportManager report = FindObjectOfType<MiniReportManager>();
+            //Transform.Destroy(report.transform.root);
+
 
             // 모든 플레이어 대상
             for (int i = 0; i < Player.allPlayer.Count; i++)
