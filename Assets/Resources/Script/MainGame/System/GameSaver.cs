@@ -33,7 +33,7 @@ public static class GameSaver
     public static bool useLoad = false;
 
     // 암호화 사용 여부
-    //static bool useEncrypt = false;
+    static bool useEncrypt = true;
     static string password = "This_is_Password";
     static string vec = "GrowupGrowupGrowupGrowup";
 
@@ -100,23 +100,31 @@ public static class GameSaver
         StringBuilder code = SaveCode();
         string codeStr = code.ToString();
 
-        // 저장
-        FileInfo saveF0 = Save(fileName + extension, LockType.None, codeStr);
+        //// 저장
+        //FileInfo saveF0 = Save(fileName + extension, LockType.None, codeStr);
+        //Debug.LogError("파일 생성됨 :: " + saveF0);
+        ////CSVReader.SaveNew(saveFloder, fileName + extension, true, true, codeStr);
+
+        //// 암호화 저장
+        //FileInfo saveF1 = Save(fileName + "_" + extension, LockType.Lock, codeStr);
+        //Debug.LogError("파일 생성됨 :: " + saveF1);
+
+        //// 복호화 저장  
+        //FileInfo saveF2 =
+        //    Save(
+        //        fileName + "__" + extension,
+        //        LockType.None,
+        //        Read(saveF1.Name, LockType.Unlock)
+        //        );
+        //Debug.LogError("파일 생성됨 :: " + saveF2);
+
+        // 암호화 선택형 저장
+        FileInfo saveF0 = null;
+        if (useEncrypt)
+            Save(fileName + extension, LockType.Lock, codeStr);
+        else
+            Save(fileName + extension, LockType.None, codeStr);
         Debug.LogError("파일 생성됨 :: " + saveF0);
-        //CSVReader.SaveNew(saveFloder, fileName + extension, true, true, codeStr);
-
-        // 암호화 저장
-        FileInfo saveF1 = Save(fileName + "_" + extension, LockType.Lock, codeStr);
-        Debug.LogError("파일 생성됨 :: " + saveF1);
-
-        // 복호화 저장  
-        FileInfo saveF2 =
-            Save(
-                fileName + "__" + extension,
-                LockType.None,
-                Read(saveF1.Name, LockType.Unlock)
-                );
-        Debug.LogError("파일 생성됨 :: " + saveF2);
     }
 
 
@@ -272,17 +280,6 @@ public static class GameSaver
 
 
 
-    public static void Clear()
-    {
-        scInfo = null;
-        scPlayers.Clear();
-        scItem.Clear();
-        scEvent.Clear();
-        scTurn = null;
-
-        useLoad = false;
-    }
-
 
 
     public static void CodeLoad()
@@ -298,10 +295,28 @@ public static class GameSaver
         //}
 
         // 파일 읽기
-        CSVReader loader = new CSVReader(saveFloder, fName, true, false, codeChapter, codeEnder);
+        //CSVReader loader = new CSVReader(saveFloder, fName, true, false, codeChapter, codeEnder);
+        List<List<string>> loader = null;
+
+        if (useEncrypt)
+        {
+            loader = new List<List<string>>();
+            string temp = Read(fName, LockType.Unlock);
+            loader.Add(new List<string>(
+                                        temp.Split(codeEnder)[0]
+                                            .Split(codeChapter)
+                                        ));
+            Debug.LogError(temp);
+        }
+        else
+        {
+            loader = new CSVReader(saveFloder, fName, true, false, codeChapter, codeEnder).table;
+        }
+
 
         // 누락 체크
-        if (loader.table.Count == 0)
+        //if (loader.table.Count == 0)
+        if (loader.Count == 0)
         {
             Debug.LogWarning("miss :: 세이브 파일 없음");
             return;
@@ -314,7 +329,8 @@ public static class GameSaver
         scEvent.Clear();
         scTurn = null;
 
-        List<string> code = loader.table[0];
+        //List<string> code = loader.table[0];
+        List<string> code = loader[0];
 
         // 챕터별 세이브 파일 코드
         scInfo = code[0].Split(codeData);
@@ -483,9 +499,6 @@ public static class GameSaver
 
                 current.AddItem(tempItem, tempCount);
             }
-
-            // 적용중 효과
-            // 미구현=========================================
         }
     }
 
