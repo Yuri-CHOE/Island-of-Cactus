@@ -133,6 +133,7 @@ public class Player
 
     // AI 제어 스크립트
     public AIWorker ai { get { if (avatar == null) return null; else return avatar.GetComponent<AIWorker>(); } }
+    public CustomAI.MiniGame.MiniAI miniAi = null;
 
 
 
@@ -259,6 +260,7 @@ public class Player
 
         // AI 소유자 지정
         ai.SetUp(this);
+        if(miniAi == null) miniAi = new CustomAI.MiniGame.MiniAI(this);
 
         // 트로피 초기화
         trophy = new Trophy();

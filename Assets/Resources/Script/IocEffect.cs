@@ -307,8 +307,7 @@ public struct IocEffect
                     else
                     {
                         blockIndex = where;
-                        current.dice.SetValueTotal(0);
-                        Debug.LogError(blockIndex);
+                        current.dice.SetValueTotal(0);                        
 
 
                         // 오아시스 입장

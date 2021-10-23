@@ -14,10 +14,12 @@ public class MiniPlayerManager : MonoBehaviour
 
     // 턴 제어용
     Queue<Player> turn = new Queue<Player>(Player.order);
-    public Player turnNow { get { return turn.Peek(); } }
+    public Player turnNow { get { return turn.Peek(); } }    
+    public bool isFirstFrame = false;           // 턴 획득 이후 ~ 첫프레임 종료 전
 
     // 참여자 목록
     public static List<Player> entryPlayer = null;
+    public static List<Player> entryAI = new List<Player>();
 
 
     int entryCount { get { return turn.Count; } }
@@ -43,7 +45,7 @@ public class MiniPlayerManager : MonoBehaviour
         //if (MiniGameManager.progress < ActionProgress.Working)
         if (!MiniGameManager.script.isGameStart)
         {
-            if(entryPlayer != null)
+            if (entryPlayer != null)
             {
                 bool allReady = true;
 
@@ -59,6 +61,24 @@ public class MiniPlayerManager : MonoBehaviour
                     MiniGameManager.progress = ActionProgress.Working;
             }
         }
+
+        // 턴의 첫 프레임일 경우
+        if (isFirstFrame)
+        {
+            Debug.Log("미니게임 :: 턴 시작됨 -> " + turnNow.name);
+
+            // AI 플레이어 작동
+            if (turnNow.type == Player.Type.AI)
+            {
+                // AI 작동 요청
+                //if(MiniAI.workControl == null)
+                Debug.Log("미니 AI :: 작동됨 -> " + turnNow.name);
+                turnNow.miniAi.workControl = StartCoroutine(turnNow.miniAi.Work(MiniGameManager.minigameNow));
+            }
+        }
+
+        // 턴의 첫 프레임 소모
+        isFirstFrame = false;
     }
 
     public void NextTurn()
@@ -71,6 +91,9 @@ public class MiniPlayerManager : MonoBehaviour
 
         // 턴 표시 제거
         end.miniPlayerUI.BlinkOff();
+
+        // 턴의 첫 프레임 셋팅
+        isFirstFrame = true;
     }
 
     void SetEntry()
@@ -118,7 +141,7 @@ public class MiniPlayerManager : MonoBehaviour
 
             // UI 소유자 등록
             scoreList[i].SetOwner(temp);
-            
+
             // 참가
             if (temp.miniInfo.join)
             {
@@ -144,6 +167,13 @@ public class MiniPlayerManager : MonoBehaviour
 
         // 참여 플레이어 목록
         entryPlayer = new List<Player>(turn);
+
+        // AI 등록
+        for(int i = 0; i < entryPlayer.Count; i++)
+        {
+            if (entryPlayer[i].type == Player.Type.AI)
+                entryAI.Add(entryPlayer[i]);
+        }
     }
 
     public void SetRanking()
@@ -239,7 +269,7 @@ public class MiniPlayerManager : MonoBehaviour
 
 
 
-
+    // 코드 초안 - 작성자 : 최유리
     //public static List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
     //public MiniGamePlayer player1, player2, player3, player4;
     //public Scenes_mini num_player;                          //미니게임에 참가할 플레이어 수를 받아오는 스크립트
@@ -509,4 +539,5 @@ public class MiniPlayerManager : MonoBehaviour
     //    return ranking;
 
     //}
+
 }

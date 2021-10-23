@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomAI.MiniGame;
 
 public class CardManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class CardManager : MonoBehaviour
 
     // 정답 처리된 페어 수
     int completePair = 0;
+
+    // AI 채점
+    Coroutine AnswerAI = null;
+
 
     //// 시작 플래그 미러링
     //bool isStartMirror = false;
@@ -50,6 +55,10 @@ public class CardManager : MonoBehaviour
 
         //num_player = GameObject.Find("Test").GetComponent<Scenes_mini>();   //매인게임에서 미니게임을 플레이할 플레이어 수를 받아옴   
         //managePlayer = GameObject.Find("Game").GetComponent<manage_Player>();
+
+        // AI 셋팅 - 답안 형식
+        MiniGameManager.answerType = MiniAI.AnswerType.pair;
+        
     }
 
     void Start()
@@ -146,6 +155,59 @@ public class CardManager : MonoBehaviour
                     MiniGameManager.script.mpm.NextTurn();
             }
         }
+
+        // AI 처리
+        if(MiniGameManager.script.mpm.turnNow.type == Player.Type.AI)
+            // 채점 하지 않는중이면
+            if (AnswerAI == null)
+                if(MiniGameManager.isAnswerSubmit)
+                {
+                    Debug.Log("미니 AI :: 채점 시작");
+                    AnswerAI = StartCoroutine(AnswerCheckAI());
+                }
+    }
+
+    IEnumerator AnswerCheckAI()
+    {
+        WaitForSecondsRealtime wait = new WaitForSecondsRealtime(MiniGameManager.script.mpm.turnNow.miniAi.brain.latency.value);
+
+        // 시작 딜레이
+        yield return wait;
+        wait.Reset();
+
+        PairingCard temp = null;
+
+        // 첫번째 카드 선택
+        try
+        {
+            temp = MiniGameManager.answer.pieces[0].obj.GetComponent<PairingCard>();
+            PairSelect(temp);
+        }
+        catch
+        {
+            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + temp.transform.name);
+            Debug.LogError("error :: AI가 선택한 오브젝트의 스크립트 -> " + temp);
+            Debug.LogError("error :: AI가 선택한 오브젝트의 값 -> " + temp.cardNum);
+        }
+
+        // 딜레이
+        wait.waitTime = MiniGameManager.script.mpm.turnNow.miniAi.brain.latency.value;
+        yield return wait;
+
+        // 두번째 카드 선택
+        try
+        {
+            temp = MiniGameManager.answer.pieces[1].obj.GetComponent<PairingCard>();
+            PairSelect(temp);
+        }
+        catch
+        {
+            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + temp.transform.name);
+            Debug.LogError("error :: AI가 선택한 오브젝트의 스크립트 -> " + temp);
+            Debug.LogError("error :: AI가 선택한 오브젝트의 값 -> " + temp.cardNum);
+        }
+
+
     }
 
 
@@ -199,6 +261,12 @@ public class CardManager : MonoBehaviour
             // 선택된 숫자 제외
             cardNum.RemoveAt(shuffledIndex);
         }
+
+        // AI 셋팅 -  선택지
+        for (int i = 0; i < deck.Count; i++)
+        {
+            MiniAI.restPiece.Add(new MiniAI.Piece(deck[i].transform, deck[i].cardNum));
+        }
     }
 
 
@@ -226,6 +294,10 @@ public class CardManager : MonoBehaviour
         // 카드 임시 공개
         Debug.Log("카드 선택됨 :: 카드 숫자 -> " + clickedCard.cardNum);
         clickedCard.SetAniStateOpen();
+
+        //// AI 학습처리
+        //MiniAI.Piece obj = new MiniAI.Piece(clickedCard.transform, clickedCard.cardNum);
+        //MiniAI.LearnEveryAI(obj);
 
         // 페어 체크
         if (card_2 != null)
@@ -268,11 +340,19 @@ public class CardManager : MonoBehaviour
 
             // 점수 추가
             MiniGameManager.script.ScoreAdd(1);
+
+            // AI 반영
+            List<MiniAI.Piece> pl = new List<MiniAI.Piece>();
+            pl.Add(new MiniAI.Piece(card_1.transform, card_1.cardNum));
+            pl.Add(new MiniAI.Piece(card_2.transform, card_2.cardNum));
+            MiniAI.OpenAnswer(new MiniAI.Answer(pl));
         }
         // 불일치
         else
         {
-            // 별도 처리 없음
+            // AI 학습처리
+            MiniAI.LearnEveryAI(new MiniAI.Piece(card_1.transform, card_1.cardNum));
+            MiniAI.LearnEveryAI(new MiniAI.Piece(card_2.transform, card_2.cardNum));
         }
 
         Debug.Log(

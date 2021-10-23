@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomAI.MiniGame;
 
 public class MiniGameManager : MonoBehaviour
 {
@@ -43,6 +44,12 @@ public class MiniGameManager : MonoBehaviour
 
     // 정산 페이지 사전 로딩
     AsyncOperation ao = null;
+
+
+    // AI 제출용 답안지
+    public static MiniAI.AnswerType answerType = MiniAI.AnswerType.none;
+    public static MiniAI.Answer answer = MiniAI.Answer.none;
+    public static bool isAnswerSubmit = false;
 
 
 

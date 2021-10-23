@@ -13,11 +13,13 @@ public struct AIElement
         public float basic;
 
         // 오차값
+        public float rangeStatic;
         public float range;
 
 
         // 최종값
         public float value { get { return basic + (range * Random.Range(-1.00f, 1.00f)); } }
+        public float valueStatic { get { if (rangeStatic == 0.00f) { rangeStatic = range * Random.Range(-1.00f, 1.00f); } return basic + rangeStatic; } }
 
 
         /// <summary>
@@ -32,6 +34,7 @@ public struct AIElement
                 basic = 0f;
 
             range = Mathf.Abs(_errorRange);
+            rangeStatic = 0.00f;
         }
 
         // 기본값
