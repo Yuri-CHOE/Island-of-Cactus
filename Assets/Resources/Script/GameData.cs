@@ -58,6 +58,7 @@ public static class GameData
         Player.Clear();
         Cycle.Clear();
         Turn.Clear();
+        GameSaver.Clear();
 
         // 퀵등록 제거
         GameMaster.script = null;

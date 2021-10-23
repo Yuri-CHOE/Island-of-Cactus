@@ -44,6 +44,16 @@ public static class GameSaver
         Unlock,
     }
 
+    public static void Clear()
+    {
+        scInfo = null;
+        scPlayers.Clear();
+        scItem.Clear();
+        scEvent.Clear();
+        scTurn = null;
+
+        useLoad = false;
+    }
 
 
     public static void SaveRemove()

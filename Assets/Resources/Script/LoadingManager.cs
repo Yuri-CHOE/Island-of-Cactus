@@ -367,7 +367,7 @@ public class LoadingManager : MonoBehaviour
 
         // 게임 리셋
         GameData.Clear();
-        workCount += 15;
+        workCount += 16;
 
 
         //// 유저 데이터 로드
