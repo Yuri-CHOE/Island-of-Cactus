@@ -82,6 +82,7 @@ public static class GameSaver
     }
 
     public static void GameSave()
+    //public static IEnumerator GameSave()
     {
         // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
         if (GameData.gameMode == GameMode.Mode.None)

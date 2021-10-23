@@ -36,10 +36,16 @@ public static class Turn
     // 현재 턴
     public static Player now { get { return queue.Peek(); } }
 
+    // 턴 획득 이후 ~ 첫프레임 종료 전
+    public static bool isFirstFrame = false;
+
     public static Player Next()
     {
         // 하나 꺼내서 재입력 (순환)
         queue.Enqueue(queue.Dequeue());
+
+        // 첫프레임 활성화
+        isFirstFrame = true;
 
         return now;
     }
@@ -67,6 +73,7 @@ public static class Turn
         origin.Clear();
         queue.Clear();
         Player.order.Clear();
+        isFirstFrame = false;
     }
 
     public static void Add(Player player)

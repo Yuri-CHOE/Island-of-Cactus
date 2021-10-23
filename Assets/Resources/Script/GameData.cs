@@ -43,6 +43,8 @@ public static class GameData
     public static GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
 
 
+    // 자동저장 제어
+    public static Coroutine saveControl = null;
 
 
 
@@ -55,6 +57,7 @@ public static class GameData
         _gameMode = GameMode.Mode.None;
         GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
         _worldFileName = null;
+        saveControl = null;
         Player.Clear();
         Cycle.Clear();
         Turn.Clear();

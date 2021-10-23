@@ -72,6 +72,9 @@ public class GameMaster : MonoBehaviour
     // 게임 정지
     public static bool isBlock = false;
 
+    // 자동저장
+    public static bool useAutoSave = true;
+
 
     private void Awake()
     {
@@ -99,6 +102,9 @@ public class GameMaster : MonoBehaviour
 
         //if(GameData.gameFlow == Flow.Cycling)
         //Debug.LogError(Turn.now.name);
+
+        // 첫프레임 제어
+        Turn.isFirstFrame = false;
     }
 
     public void DoFlowWork()
@@ -409,6 +415,9 @@ public class GameMaster : MonoBehaviour
                 else
                 {
                     TurnWork();
+
+                    // 자동저장
+                    AutoSave(true);
                 }
                 break;
 
@@ -1170,7 +1179,7 @@ public class GameMaster : MonoBehaviour
     /// </summary>
     public void SaveGame()
     {
-        GameSaver.GameSave();
+        AutoSave(false);
     }
 
     /// <summary>
@@ -1201,5 +1210,35 @@ public class GameMaster : MonoBehaviour
 
         // 호출
         loadingManager.LoadAsyncMiniGame(Minigame.table[minigameNum], 100, Player.allPlayer);
+    }
+
+    public void AutoSave(bool isSmoothSave)
+    {
+        // 턴의 처음이면
+        if (Turn.isFirstFrame)
+            // 자동저장 활성화 일경우
+            if (useAutoSave)
+                // 부드러운 저장
+                if (isSmoothSave)
+                {
+                    // 저장
+                    if (GameData.saveControl == null)
+                        GameData.saveControl = StartCoroutine(AutoSaveForced());
+                }
+                else
+                {
+                    // 저장
+                    GameSaver.GameSave();
+                }
+
+    }
+    IEnumerator AutoSaveForced()
+    {
+        // 저장
+        GameSaver.GameSave();
+        yield return null;
+
+        // 완료 처리
+        GameData.saveControl = null;
     }
 }
