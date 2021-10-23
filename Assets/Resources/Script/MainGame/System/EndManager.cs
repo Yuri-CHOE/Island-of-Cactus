@@ -21,6 +21,16 @@ public static class EndManager
 
     public static Coroutine coroutine = null;
 
+
+    // 사이즈
+    static Vector3 size = new Vector3(0.7f, 1, 0.7f);
+    static Vector3 sizeUp = size * 1.5f;
+
+    // 보관소
+    static Vector3 hidePoint = new Vector3(0, -10, 0);
+
+
+
     /// <summary>
     /// 엔딩 절차 초기화
     /// </summary>
@@ -53,7 +63,12 @@ public static class EndManager
             // 모든 플레이어 시작점 소환
             for (int i = 0; i < Player.allPlayer.Count; i++)
             {
-                Player.allPlayer[i].movement.Tleport(-1, 1f);
+                // 시작블록 위치 플레이어 스킵
+                if (Player.allPlayer[i].location == -1)
+                    continue;
+
+                yield return Player.allPlayer[i].movement.Tleport(-1, 1f);
+                Debug.LogWarning("게임 정산 :: 중앙 소환 -> " + Player.allPlayer[i].name);
             }
 
             // 소환 완료 대기
@@ -65,10 +80,17 @@ public static class EndManager
 
                 // 모든 플레이어 체크
                 for (int i = 0; i < Player.allPlayer.Count; i++)
+                {
                     check = check || Player.allPlayer[i].movement.isBusy;
+                    check = check || Player.allPlayer[i].location != -1;
+                    Debug.LogWarning(string.Format("게임 정산 :: 소환 상태 -> {0} = 블록 {1} (이동중 = {2})" , Player.allPlayer[i].name, Player.allPlayer[i].location, Player.allPlayer[i].movement.isBusy));
+                }
 
                 yield return null;
             }
+
+            // 겹침 재정렬
+            CharacterMover.AvatarOverFixAll();
 
             // 작동 상태 변경
             coroutine = null;
@@ -78,6 +100,7 @@ public static class EndManager
 
     public static IEnumerator Trophy()
     {
+        Debug.LogWarning("정산체크");
         // 작동 상태 체크
         if (endProgress != ActionProgress.Start)
         {
@@ -86,6 +109,7 @@ public static class EndManager
         else
         {
             List<Player> order = new List<Player>();
+            WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f);
 
             // 트로피 지급 - 코인
             {
@@ -98,6 +122,13 @@ public static class EndManager
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Rich, order);
+
+                // 전체 회수
+                Hide();
+
+                // 대기
+                yield return wait;
+                wait.Reset();
             }
 
             // 트로피 지급 - 이동량
@@ -110,7 +141,14 @@ public static class EndManager
                 order = temp.OrderBy(x => x.dice.valueRecord).Reverse().ToList();
 
                 // 트로피 지급
-                yield return Trophy(TrophyType.Rich, order);
+                yield return Trophy(TrophyType.Runner, order);
+
+                // 전체 회수
+                Hide();
+
+                // 대기
+                yield return wait;
+                wait.Reset();
             }
 
             // 트로피 지급 - 미니게임 성적
@@ -123,7 +161,14 @@ public static class EndManager
                 order = temp.OrderBy(x => x.miniInfo.recordScore).Reverse().ToList();
 
                 // 트로피 지급
-                yield return Trophy(TrophyType.Rich, order);
+                yield return Trophy(TrophyType.Mini, order);
+
+                // 전체 회수
+                Hide();
+
+                // 대기
+                yield return wait;
+                wait.Reset();
             }
 
             // 트로피 지급 - 최종
@@ -137,6 +182,9 @@ public static class EndManager
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Win, order);
+
+                // 전체 회수
+                //Hide();
             }
 
             // 작동 상태 변경
@@ -153,83 +201,130 @@ public static class EndManager
             if (trophyType == TrophyType.Rich)
             {
                 // 알림
+                Debug.Log("트로피 : 코인 보유량");
                 GameMaster.script.messageBox.PopUpText("Trophy", "판정 : 코인 보유량");
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
 
                 // 트로피 지급 - 3등
-                yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
-                order[2].trophy.rich = 3;
+                if(Player.allPlayer.Count >= 3)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[2].trophy.rich = 3;
+                }
 
                 // 트로피 지급 - 2등
-                yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
-                order[1].trophy.rich = 2;
+                if (Player.allPlayer.Count >= 2)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
+                    order[1].trophy.rich = 2;
+                }
 
                 // 트로피 지급 - 1등
-                yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
-                order[0].trophy.rich = 1;
+                if (Player.allPlayer.Count >= 1)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
+                    order[0].trophy.rich = 1;
+                }
             }
             // 트로피 지급 - 이동량
             else if (trophyType == TrophyType.Runner)
             {
                 // 알림
+                Debug.Log("트로피 : 이동 거리");
                 GameMaster.script.messageBox.PopUpText("Trophy", "판정 : 이동 거리");
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
 
                 // 트로피 지급 - 3등
-                yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
-                order[2].trophy.runner = 3;
+                if (Player.allPlayer.Count >= 3)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[2].trophy.runner = 3;
+                }
 
                 // 트로피 지급 - 2등
-                yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
-                order[1].trophy.runner = 2;
+                if (Player.allPlayer.Count >= 2)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
+                    order[1].trophy.runner = 2;
+                }
 
                 // 트로피 지급 - 1등
-                yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
-                order[0].trophy.runner = 1;
+                if (Player.allPlayer.Count >= 1)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
+                    order[0].trophy.runner = 1;
+                }
             }
             // 트로피 지급 - 미니게임 성적
             else if (trophyType == TrophyType.Mini)
             {
                 // 알림
+                Debug.Log("트로피 : 미니게임 성적");
                 GameMaster.script.messageBox.PopUpText("Trophy", "판정 : 미니게임 성적");
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
 
                 // 트로피 지급 - 3등
-                yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
-                order[2].trophy.mini = 3;
+                if (Player.allPlayer.Count >= 3)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[2].trophy.mini = 3;
+                }
 
                 // 트로피 지급 - 2등
-                yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
-                order[1].trophy.mini = 2;
+                if (Player.allPlayer.Count >= 2)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
+                    order[1].trophy.mini = 2;
+                }
 
                 // 트로피 지급 - 1등
-                yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
-                order[0].trophy.mini = 1;
+                if (Player.allPlayer.Count >= 1)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
+                    order[0].trophy.mini = 1;
+                }
             }
 
             // 트로피 지급 - 최종
-            else if (trophyType == TrophyType.Mini)
+            else if (trophyType == TrophyType.Win)
             {
                 // 알림
+                Debug.Log("트로피 : 최종 우승자");
                 GameMaster.script.messageBox.PopUpText("Winner", "최종 우승자 확인중...");
 
+                // 알림 확인 대기
+                while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
+
+                // 대기
+                WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f);
+                yield return wait;
+
                 // 트로피 지급 - 3등
-                //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
-                order[2].trophy.final = 3;
+                if (Player.allPlayer.Count >= 3)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[2].trophy.final = 3;
+                }
 
                 // 트로피 지급 - 2등
-                //yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
-                order[1].trophy.final = 2;
+                if (Player.allPlayer.Count >= 2)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy2nd.transform, order[1]);
+                    order[1].trophy.final = 2;
+                }
 
                 // 트로피 지급 - 1등
-                yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
-                order[0].trophy.final = 1;
+                if (Player.allPlayer.Count >= 1)
+                {
+                    yield return TrophyGive(GameMaster.script.Trophy1st.transform, order[0]);
+                    order[0].trophy.final = 1;
+                }
 
                 // 유저 데이터 기록
                 switch (Player.me.trophy.final)
@@ -258,10 +353,20 @@ public static class EndManager
                 GameSaver.SaveRemove();
 
                 // 알림
-                GameMaster.script.messageBox.PopUpText("Winner", "우승자는 " + order[0].movement.transform.name + " 입니다 !!");
+                GameMaster.script.messageBox.PopUpText("Winner", "우승자는 " + order[0].name + " 입니다 !!");
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
+
+                // 클리어 연출 대기
+                wait.Reset();
+                yield return wait;
+
+                
+                // 작동 상태 변경
+                coroutine = null;
+                endProgress = ActionProgress.Finish;
+                GameData.gameFlow = GameMaster.Flow.Finish;
             }
 
         }
@@ -275,37 +380,44 @@ public static class EndManager
     /// <returns></returns>
     static IEnumerator TrophyGive(Transform trophy, Player target)
     {
-        // 지정
-        trophy = GameMaster.script.Trophy3rd.transform;
-
+        Debug.Log("트로피 :: 수여됨 -> " + target.name + " 에게 " + trophy.name);
+        
         // 축소
         trophy.localScale = Vector3.zero;
 
         // 소환
-        trophy.position = target.movement.transform.position + Vector3.up * 2;
+        trophy.position = target.movement.transform.position + Vector3.up * 8;
 
         // 사이즈 제어
         int flow = 0;
-        Vector3 size = new Vector3(0.7f, 1, 0.7f);
+        float speed = 5.0f;
 
         // 사이즈 업
         while (flow == 0)
         {
-            trophy.localScale = Vector3.Lerp(trophy.localScale, size * 2, Time.deltaTime);
-            if (trophy.localScale.y >= size.y * 2 * 0.999)
+            trophy.localScale = Vector3.Lerp(trophy.localScale, sizeUp, Time.deltaTime * speed * 1.5f);
+            if (trophy.localScale.y >= sizeUp.y * 0.999)
                 flow++;
             yield return null;
         }
-        trophy.localScale = size * 2;
+        trophy.localScale = sizeUp;
 
         // 사이즈 다운
         while (flow == 1)
         {
-            trophy.localScale = Vector3.Lerp(trophy.localScale, size, Time.deltaTime);
+            trophy.localScale = Vector3.Lerp(trophy.localScale, size, Time.deltaTime * speed);
             if (trophy.localScale.y <= size.y * 1.001)
                 flow++;
             yield return null;
         }
         trophy.localScale = size;
+    }
+
+    static void Hide()
+    {
+        // 전체 회수
+        GameMaster.script.Trophy1st.transform.position = hidePoint;
+        GameMaster.script.Trophy2nd.transform.position = hidePoint;
+        GameMaster.script.Trophy3rd.transform.position = hidePoint;
     }
 }

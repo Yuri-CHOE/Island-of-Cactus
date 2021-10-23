@@ -910,6 +910,9 @@ public class CharacterMover : MonoBehaviour
             yield return ActTurnFornt(speed);
         
         isBusy = false;
+
+        // °È±â Á¤Áö
+        animator.SetFloat("Speed", 0f);
     }
 
     /// <summary>

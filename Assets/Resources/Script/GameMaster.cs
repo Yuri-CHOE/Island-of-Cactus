@@ -403,6 +403,7 @@ public class GameMaster : MonoBehaviour
                     // 종료 연출
                     // 미구현=========================
 
+                    cycleManager.Refresh();
                     GameData.gameFlow = Flow.End;
                 }
                 else
@@ -444,7 +445,7 @@ public class GameMaster : MonoBehaviour
                     if (EndManager.endProgress == ActionProgress.Ready)
                     {
                         if (EndManager.coroutine == null)
-                            StartCoroutine(EndManager.CallCenter());
+                            EndManager.coroutine = StartCoroutine(EndManager.CallCenter());
 
                         return;
                     }
@@ -484,8 +485,10 @@ public class GameMaster : MonoBehaviour
                         return;
                     else if (EndManager.endProgress == ActionProgress.Start)
                     {
+
+                        // 트로피 지급 및 유저 데이터 기록, 세이브 제거
                         if (EndManager.coroutine == null)
-                            StartCoroutine(EndManager.Trophy());
+                            EndManager.coroutine = StartCoroutine(EndManager.Trophy());
 
                         return;
                     }
@@ -497,9 +500,12 @@ public class GameMaster : MonoBehaviour
 
             // 게임 종료됨
             case Flow.Finish:
-                // 유저 데이터에 트로피 기록
                 // 타이틀 화면으로
                 // 미구현================
+
+                // 타이틀 씬 로딩
+                if(!loadingManager.isLoading)
+                    loadingManager.LoadAsync("Title");
                 break;
         }
     }

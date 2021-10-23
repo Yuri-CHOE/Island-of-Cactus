@@ -365,13 +365,9 @@ public class LoadingManager : MonoBehaviour
         gameObject.SetActive(false);
         workCount++;
 
-        // 게임 플로우 리셋
-        GameData.gameFlow = GameMaster.Flow.Wait;
-        workCount++;
-        Turn.turnAction = Turn.TurnAction.Wait;
-        workCount++;
-        Turn.actionProgress = ActionProgress.Ready;
-        workCount++;
+        // 게임 리셋
+        GameData.Clear();
+        workCount += 15;
 
 
         //// 유저 데이터 로드

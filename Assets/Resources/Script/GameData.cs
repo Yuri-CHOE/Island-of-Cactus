@@ -53,13 +53,22 @@ public static class GameData
     public static void Clear()
     {
         _gameMode = GameMode.Mode.None;
+        GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
         _worldFileName = null;
-        //_player = new PlayerGroup();
         Player.Clear();
-        //_cycle = new Cycle();
         Cycle.Clear();
-        //_turn = new Turn();
         Turn.Clear();
+
+        // Äüµî·Ï Á¦°Å
+        GameMaster.script = null;
+        BlockManager.script = null;
+        MiniGameManager.script = null;        
+        ItemShop.script = null;
+        LuckyBoxManager.script = null;
+        MonsterManager.script = null;
+        UniqueManager.script = null;
+        ShortcutManager.script = null;
+        GameRuleManager.script = null;
     }
 
     public static void SetGameMode(GameMode.Mode __gameMode)
