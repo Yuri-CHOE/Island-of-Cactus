@@ -121,16 +121,23 @@ namespace CustomAI
             /// <param name="answer">정답</param>
             void Learn(Answer answer)
             {
+                Debug.Log("미니 AI :: 정답 추가 요청됨");
+
                 if (answer.pieces == null || answer.pieces.Count == 0)
                 {
                     Debug.LogError("error :: 미니게임 답안 추가 불가능 -> 입력된 단서 없음");
+                    Debug.LogError(answer.pieces);
+                    Debug.LogError(answer.pieces.Count);
                     Debug.Break();
                     return;
                 }
 
                 // 중복 방지
                 if (remember.answer.Contains(answer))
+                {
+                    Debug.LogWarning("미니 AI :: 중복 정답으로 거부됨");
                     return;
+                }
 
                 // 단서 제외처리
                 for (int i = 0; i < answer.pieces.Count; i++)
@@ -153,8 +160,13 @@ namespace CustomAI
             /// <param name="piece"></param>
             void Consume(Piece piece)
             {
+                Debug.Log("미니 AI :: 단서 제외 요청됨 -> " + owner.name);
+
                 if (remember.piece.Contains(piece))
+                {
                     remember.piece.Remove(piece);
+                    Debug.Log("미니 AI :: 정답 제외 시도 -> 성공=" + !remember.piece.Contains(piece));
+                }
             }
             /// <summary>
             /// 정답 제거
@@ -162,9 +174,14 @@ namespace CustomAI
             /// <param name="answer"></param>
             public void Consume(Answer answer)
             {
+                Debug.Log("미니 AI :: 정답 제외 요청됨 -> " + owner.name);
+
                 // 정답 제외처리
-                if(remember.answer.Contains(answer))
+                if (remember.answer.Contains(answer))
+                {
                     remember.answer.Remove(answer);
+                    Debug.Log("미니 AI :: 정답 제외 시도 -> 성공=" + !remember.answer.Contains(answer));
+                }
 
                 // 단서 제외처리
                 for (int i = 0; i < answer.pieces.Count; i++)
@@ -172,6 +189,8 @@ namespace CustomAI
             }
             public static void ConsumeEveryAI(Answer answer)
             {
+                Debug.Log("미니 AI :: 정답 공개처리 요청됨");
+
                 for (int i = 0; i < MiniPlayerManager.entryAI.Count; i++)
                     MiniPlayerManager.entryAI[i].miniAi.Consume(answer);
 
@@ -292,10 +311,12 @@ namespace CustomAI
                                         // 같은값의 다른 오브젝트일 경우
                                         if (IsSameValueEach(temp, remember.piece[j]))
                                         {
+                                            Debug.Log(string.Format("미니 AI :: 정답 추론 성공 -> {0} ({1},{2} = {3},{4})", owner.name, temp.obj.name, temp.value, remember.piece[j].obj.name, remember.piece[j].value));
+
                                             // 정답으로 판단
                                             pl.Add(temp);
-                                            pl.Add(temp);
-                                            newAnswer.Add(new Answer(pl));
+                                            pl.Add(remember.piece[j]);
+                                            newAnswer.Add(new Answer(new List<Piece>(pl)));
                                         }
                                     }
                                     pl.Clear();
@@ -304,7 +325,13 @@ namespace CustomAI
 
                                 // step 2 - 정답으로 승격
                                 while (newAnswer.Count > 0)
+                                {
+                                    // 정답 학습
                                     Learn(newAnswer[0]);
+
+                                    // 목록 제거
+                                    newAnswer.RemoveAt(0);
+                                }
 
                             }
 
@@ -317,11 +344,14 @@ namespace CustomAI
                             // 정답을 보유중이고 요구 지능 이상일경우
                             if ((remember.answer.Count > 0) && (brain.intelligence.valueStatic >= intelCut))
                             {
+                                if (brain.intelligence.valueStatic < intelCut)
+                                    Debug.Log("미니 AI :: 정답 회피됨");
+
                                 // 선택
                                 selectTemp = remember.answer[   Random.Range(0, remember.answer.Count)  ];
                             }
 
-                            // step 4 - 답안 작성
+                            // step 4 - 랜덤 작성
                             else
                             {
                                 // 랜덤 선택
@@ -329,10 +359,23 @@ namespace CustomAI
                                 int rand = Random.Range(0, restPiece.Count);
                                 pl.Add(restPiece[rand]);
 
-                                //인접 선택
-                                pl.Add(restPiece[(rand + 1) % restPiece.Count]);
+                                // 단서 재확인
+                                for (int i = 0; i < remember.piece.Count; i++)
+                                {
+                                    // 같은값의 다른 오브젝트일 경우
+                                    if (IsSameValueEach(remember.piece[i], restPiece[rand]))
+                                    {
+                                        // 정답으로 판단
+                                        pl.Add(remember.piece[i]);
+                                        break;
+                                    }
+                                }
 
-                                selectTemp = new Answer(pl);
+                                // 실패시 인접 선택
+                                if(pl.Count == 1)
+                                    pl.Add(restPiece[(rand + 1) % restPiece.Count]);
+
+                                selectTemp = new Answer(new List<Piece>(pl));
                             }
 
                             // step 5 - 제출

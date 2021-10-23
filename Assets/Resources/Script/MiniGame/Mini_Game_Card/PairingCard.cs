@@ -80,6 +80,10 @@ public class PairingCard : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 본인턴 아니면 중단
+        if (MiniGameManager.script.mpm.turnNow != Player.me)
+            return;
+
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             // 공개 처리된 카드가 아닐 경우

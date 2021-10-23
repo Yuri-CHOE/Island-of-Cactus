@@ -15,7 +15,7 @@ public class MiniPlayerManager : MonoBehaviour
     // 턴 제어용
     Queue<Player> turn = new Queue<Player>(Player.order);
     public Player turnNow { get { return turn.Peek(); } }    
-    public bool isFirstFrame = false;           // 턴 획득 이후 ~ 첫프레임 종료 전
+    public bool isFirstFrame = true;           // 턴 획득 이후 ~ 첫프레임 종료 전
 
     // 참여자 목록
     public static List<Player> entryPlayer = null;
@@ -71,9 +71,11 @@ public class MiniPlayerManager : MonoBehaviour
             if (turnNow.type == Player.Type.AI)
             {
                 // AI 작동 요청
-                //if(MiniAI.workControl == null)
-                Debug.Log("미니 AI :: 작동됨 -> " + turnNow.name);
-                turnNow.miniAi.workControl = StartCoroutine(turnNow.miniAi.Work(MiniGameManager.minigameNow));
+                if (turnNow.miniAi.workControl == null)
+                {
+                    Debug.Log("미니 AI :: 작동됨 -> " + turnNow.name);
+                    turnNow.miniAi.workControl = StartCoroutine(turnNow.miniAi.Work(MiniGameManager.minigameNow));
+                }
             }
         }
 
@@ -94,6 +96,10 @@ public class MiniPlayerManager : MonoBehaviour
 
         // 턴의 첫 프레임 셋팅
         isFirstFrame = true;
+
+        // AI 답안 리셋
+        MiniGameManager.answer = CustomAI.MiniGame.MiniAI.Answer.none;
+        MiniGameManager.isAnswerSubmit = false;
     }
 
     void SetEntry()

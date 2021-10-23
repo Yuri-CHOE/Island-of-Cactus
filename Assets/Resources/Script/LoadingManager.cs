@@ -248,8 +248,11 @@ public class LoadingManager : MonoBehaviour
     }
     public void LoadAsyncMiniGameRandom()
     {
+        int rand = Random.Range(1, Minigame.table.Count);
+
+        Debug.Log("미니게임 :: 선택됨 -> " + rand);
            LoadAsyncMiniGame(
-               Minigame.table[ Random.Range(1, Minigame.table.Count) ]
+               Minigame.table[rand]
                );
     }
 

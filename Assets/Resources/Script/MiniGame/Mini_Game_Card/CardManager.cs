@@ -162,7 +162,7 @@ public class CardManager : MonoBehaviour
             if (AnswerAI == null)
                 if(MiniGameManager.isAnswerSubmit)
                 {
-                    Debug.Log("미니 AI :: 채점 시작");
+                    Debug.Log("미니 AI :: 채점 시작 -> " + MiniGameManager.script.mpm.turnNow.name);
                     AnswerAI = StartCoroutine(AnswerCheckAI());
                 }
     }
@@ -185,13 +185,13 @@ public class CardManager : MonoBehaviour
         }
         catch
         {
-            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + temp.transform.name);
             Debug.LogError("error :: AI가 선택한 오브젝트의 스크립트 -> " + temp);
+            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + MiniGameManager.answer.pieces[0].obj.name);
             Debug.LogError("error :: AI가 선택한 오브젝트의 값 -> " + temp.cardNum);
         }
 
         // 딜레이
-        wait.waitTime = MiniGameManager.script.mpm.turnNow.miniAi.brain.latency.value;
+        wait.waitTime = MiniGameManager.script.mpm.turnNow.miniAi.brain.latency.value / 2;
         yield return wait;
 
         // 두번째 카드 선택
@@ -202,12 +202,17 @@ public class CardManager : MonoBehaviour
         }
         catch
         {
-            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + temp.transform.name);
             Debug.LogError("error :: AI가 선택한 오브젝트의 스크립트 -> " + temp);
+            Debug.LogError("error :: AI가 선택한 오브젝트 -> " + MiniGameManager.answer.pieces[1].obj.name);
             Debug.LogError("error :: AI가 선택한 오브젝트의 값 -> " + temp.cardNum);
         }
 
+        // AI 답안 리셋
+        MiniGameManager.answer = CustomAI.MiniGame.MiniAI.Answer.none;
+        MiniGameManager.isAnswerSubmit = false;
 
+        // 종료 처리
+        AnswerAI = null;
     }
 
 
@@ -396,6 +401,9 @@ public class CardManager : MonoBehaviour
         // 모든 카드 첫 오픈
         for (int i = 0; i < deck.Count; i++)
             deck[i].animator.Play("aniTouch");
+
+        // 첫프레임 활성화
+        MiniGameManager.script.mpm.isFirstFrame = true;
     }
 
     void Ending()
