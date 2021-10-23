@@ -171,7 +171,7 @@ public class MiniPlayerManager : MonoBehaviour
                 temp.Add(0);
 
                 // 최고 점수자 확보
-                for (int j = 0; j < sort.Count; j++)
+                for (int j = 1; j < sort.Count; j++)
                 {
                     // 클 경우 초기화 후 확보
                     if (sort[j].miniInfo.score > sort[temp[0]].miniInfo.score)
@@ -198,14 +198,15 @@ public class MiniPlayerManager : MonoBehaviour
                     // 대상
                     tempPlayer = sort[temp[j]];
 
-                    tempPlayer.miniInfo.rank = c;
-                    Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점으로 {3}등", c, tempPlayer.name, tempPlayer.miniInfo.score, c));
+                    //tempPlayer.miniInfo.rank = c;
+                    //Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점으로 {3}등", c, tempPlayer.name, tempPlayer.miniInfo.score, c));
 
                     // 참여시
                     if (tempPlayer.miniInfo.join)
                     {
                         // 랭크 입력
                         tempPlayer.miniInfo.rank = c;
+                        Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점으로 {3}등", c, tempPlayer.name, tempPlayer.miniInfo.score, c));
 
                         // 지분 배정
                         //tempPlayer.miniInfo.rewardRatio = Minigame.table[MiniScore.index].reward.GetRank(tempPlayer.miniInfo.rank);
