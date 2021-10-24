@@ -20,6 +20,9 @@ namespace CustomAI
                     obj = _obj;
                     value = _value;
                 }
+
+                public static bool operator ==(Piece p1, Piece p2) => (p1.obj == p2.obj && p1.value == p2.value);
+                public static bool operator !=(Piece p1, Piece p2) => (p1.obj == p2.obj && p1.value == p2.value) ? false : true;
             }
             public struct Answer
             {
@@ -36,8 +39,37 @@ namespace CustomAI
                         pieces = listOrNull;
                 }
 
+                public bool Contains(Piece piece)
+                {
+                    if(pieces != null)
+                        for (int i = 0; i < pieces.Count; i++)
+                            if (pieces[i] == piece)
+                                return true;
+
+                    return false;
+                }
+
+                bool Same(Answer answer)
+                {
+                    return Same(answer.pieces);
+                }
+                bool Same(List<Piece> pieceList)
+                {
+                    if (pieces != null && pieceList != null)
+                        if (pieces.Count == pieceList.Count)
+                            for (int i = 0; i < pieces.Count; i++)
+                                for (int j = 0; j < pieceList.Count; j++)
+                                    if (pieces[i] == pieceList[j])
+                                        return true;
+
+                    return false;
+                }
+
                 // 기본값
                 public static Answer none = new Answer();
+
+                public static bool operator ==(Answer a1, Answer a2) => a1.Same(a2);
+                public static bool operator !=(Answer a1, Answer a2) => !a1.Same(a2);
             }
             public enum AnswerType
             {
@@ -93,6 +125,7 @@ namespace CustomAI
                 remember.piece.Clear();
                 remember.answer.Clear();
             }
+            
 
 
             // 학습
@@ -103,10 +136,53 @@ namespace CustomAI
             public void Learn(Piece piece)
             {
                 Debug.Log("미니 AI :: 학습 대상 -> " + piece.obj.name + " by " + owner.name);
-                // 중복 방지
-                if (remember.piece.Contains(piece))
-                    return;
 
+                // 중복 방지
+                bool check = false;
+                for (int i = 0; i < remember.piece.Count; i++)
+                {
+                    if (remember.piece[i] == piece)
+                        return;
+                }
+
+                // 정답 하위 단서 중복 방지
+                for (int i = 0; i < remember.answer.Count; i++)
+                {
+                    if (remember.answer[i].Contains(piece))
+                        return;
+
+                    //for (int j = 0; j < remember.answer[i].pieces.Count; j++)
+                    //    if (remember.answer[i].pieces[j] == piece)
+                    //        return;
+                }
+
+                // 공개된 답안 하위 단서 중복 방지
+                for (int i = 0; i < opendAnswer.Count; i++)
+                {
+                    if (opendAnswer[i].Contains(piece))
+                        return;
+
+                    //for (int j = 0; j < opendAnswer[i].pieces.Count; j++)
+                    //    if (opendAnswer[i].pieces[j] == piece)
+                    //        return;
+                }
+
+                //// 디버그
+                //string deb = string.Format("\n디버그 :: 단서 목록 조회");
+                //for (int i = 0; i < remember.piece.Count; i++)
+                //{
+                //    deb = string.Format(deb + "\n단서{0} -> {1} = {2} -> 중복여부({3})", 
+                //        i, 
+                //        remember.piece[i].obj.name, 
+                //        remember.piece[i].value, 
+                //        remember.piece[i] == piece);
+                //}
+                //deb = string.Format(deb + "\n추가 단서 -> {0} = {1}", 
+                //    piece.obj.name, 
+                //    piece.value);
+                //Debug.LogWarning(deb);
+
+                // 단서 등록
                 remember.piece.Add(piece);
             }
             public static void LearnEveryAI(Piece piece)
@@ -133,16 +209,49 @@ namespace CustomAI
                 }
 
                 // 중복 방지
-                if (remember.answer.Contains(answer))
-                {
-                    Debug.LogWarning("미니 AI :: 중복 정답으로 거부됨");
-                    return;
-                }
+                for (int i = 0; i < remember.answer.Count; i++)
+                    if (remember.answer[i] == answer)
+                    {
+                        Debug.LogWarning("미니 AI :: 중복 정답으로 거부됨");
+                        return;
+                    }
 
                 // 단서 제외처리
                 for (int i = 0; i < answer.pieces.Count; i++)
                     Consume(answer.pieces[i]);
 
+                //// 디버그
+                //Debug.LogWarning(answer.pieces.Count);
+                //string deb = string.Format("\n디버그 :: 정답 목록 조회");
+                //for (int i = 0; i < remember.answer.Count; i++)
+                //{
+                //    deb = string.Format(deb + "\n정답{0} -> {1} = {2}  + {2} = {3} -> 중복여부({4})", 
+                //        i, 
+                //        remember.answer[i].pieces[0].obj.name, 
+                //        remember.answer[i].pieces[0].value,
+                //        remember.answer[i].pieces[1].obj.name,
+                //        remember.answer[i].pieces[1].value,
+                //        remember.answer[i] == answer);
+                //}
+                //deb = string.Format(deb + "\n디버그 :: 추가 정답 -> {0} = {1} + {2} = {3}", 
+                //    answer.pieces[0].obj.name, 
+                //    answer.pieces[0].value, 
+                //    answer.pieces[1].obj.name, 
+                //    answer.pieces[1].value);
+                //for (int i = 0; i < opendAnswer.Count; i++)
+                //{
+                //    deb = string.Format(deb + "\n공개된 정답{0} -> {1} = {2}  + {2} = {3} -> 중복여부({4})",
+                //        i,
+                //        opendAnswer[i].pieces[0].obj.name,
+                //        opendAnswer[i].pieces[0].value,
+                //        opendAnswer[i].pieces[1].obj.name,
+                //        opendAnswer[i].pieces[1].value,
+                //        (opendAnswer[i] == answer));
+                //}
+                //Debug.LogWarning(deb);
+
+
+                // 정답 등록
                 remember.answer.Add(answer);
             }
             public static void LearnEveryAI(Answer answer)
@@ -161,12 +270,15 @@ namespace CustomAI
             void Consume(Piece piece)
             {
                 Debug.Log("미니 AI :: 단서 제외 요청됨 -> " + owner.name);
-
-                if (remember.piece.Contains(piece))
-                {
-                    remember.piece.Remove(piece);
-                    Debug.Log("미니 AI :: 정답 제외 시도 -> 성공=" + !remember.piece.Contains(piece));
-                }
+                
+                for (int i = 0; i < remember.piece.Count; i++)
+                    if (remember.piece[i] == piece)
+                    {
+                        Debug.Log("미니 AI :: 단서 제외 시도 -> 성공=" + (remember.piece[i] == piece));
+                        //remember.piece.Remove(piece);
+                        remember.piece.RemoveAt(i);
+                        break;
+                    }
             }
             /// <summary>
             /// 정답 제거
@@ -177,11 +289,14 @@ namespace CustomAI
                 Debug.Log("미니 AI :: 정답 제외 요청됨 -> " + owner.name);
 
                 // 정답 제외처리
-                if (remember.answer.Contains(answer))
-                {
-                    remember.answer.Remove(answer);
-                    Debug.Log("미니 AI :: 정답 제외 시도 -> 성공=" + !remember.answer.Contains(answer));
-                }
+                for (int i = 0; i < remember.answer.Count; i++)
+                    if (remember.answer[i] == answer)
+                    {
+                        Debug.Log("미니 AI :: 정답 제외 시도 -> 성공=" + (remember.answer[i] == answer));
+                        //remember.answer.Remove(answer);
+                        remember.answer.RemoveAt(i);
+                        break;
+                    }
 
                 // 단서 제외처리
                 for (int i = 0; i < answer.pieces.Count; i++)
@@ -339,11 +454,13 @@ namespace CustomAI
 
                             // step 3 - 답안 작성
 
-                            float intelCut = Random.Range(0.00f, 1.00f);
+                            float intelCut = Random.Range(0.00f, 0.50f);
 
                             // 정답을 보유중이고 요구 지능 이상일경우
                             if ((remember.answer.Count > 0) && (brain.intelligence.valueStatic >= intelCut))
                             {
+                                Debug.Log("미니 AI :: 보유 정답 = " + remember.answer.Count + "세트 -> " + owner.name);
+
                                 if (brain.intelligence.valueStatic < intelCut)
                                     Debug.Log("미니 AI :: 정답 회피됨");
 
@@ -380,6 +497,14 @@ namespace CustomAI
 
                             // step 5 - 제출
                             SelectedAnswer(selectTemp);
+
+                            Debug.LogWarning(
+                            string.Format("미니 AI :: {0}의 정답 제출됨-> {1} = {2} + {3} = {4}",
+                    owner.name,
+                    selectTemp.pieces[0].obj.name,
+                    selectTemp.pieces[0].value,
+                    selectTemp.pieces[1].obj.name,
+                    selectTemp.pieces[1].value));
                         }
                         break;
                 }

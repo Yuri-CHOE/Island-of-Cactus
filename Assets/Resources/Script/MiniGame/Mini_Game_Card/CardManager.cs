@@ -270,7 +270,8 @@ public class CardManager : MonoBehaviour
         // AI 셋팅 -  선택지
         for (int i = 0; i < deck.Count; i++)
         {
-            MiniAI.restPiece.Add(new MiniAI.Piece(deck[i].transform, deck[i].cardNum));
+            MiniAI.Piece tempPiece = new MiniAI.Piece(deck[i].transform, deck[i].cardNum);
+            MiniAI.restPiece.Add(tempPiece);
         }
     }
 
