@@ -148,7 +148,8 @@ public class Player
     public GameResource coin = new GameResource(110, 999, 0);
 
     // 아이템 슬롯
-    public List<ItemSlot> inventory = new List<ItemSlot>();
+    //public List<ItemSlot> inventory = new List<ItemSlot>();
+    public List<ItemUnit> inventory = new List<ItemUnit>();
     public int inventoryCount { get { int c = 0; for (int i = 0; i < inventory.Count; i++) { if (!inventory[i].isEmpty) c++; } return c; } }
     public static int inventoryMax = 3;
 
@@ -162,7 +163,7 @@ public class Player
 
 
     // 미니게임 정보
-    public MiniScore miniInfo = null;
+    public MiniScore miniInfo = new MiniScore();
 
     // 미니게임 UI
     public MiniGamePlayer miniPlayerUI = null;
@@ -186,6 +187,12 @@ public class Player
         SetPlayer(__type, characterIndex, __isAutoPlay, playerName);
         
         Debug.Log("플레이어 생성됨 :: " + name + "의 캐릭터 번호 = " + characterIndex);
+
+        if(__type != Type.System)
+            while (inventory.Count < 3)
+            {
+                inventory.Add(new ItemUnit());
+            }
     }
 
 
@@ -323,51 +330,25 @@ public class Player
         }
     }
 
-    public void RemoveItem(ItemSlot currentSlot)
+    public void RemoveItem(ItemSlot currentSlot) { }
+    public void RemoveItem(ItemUnit itemUnit)
     {
-        Debug.LogError("인벤토리 :: 아이템 제거 요청됨");
+        Debug.Log("인벤토리 :: 아이템 제거 요청됨 -> " + itemUnit.item.name);
 
-        // 인벤토리 순회 체크
-        for (int i = 0; i < inventory.Count; i++)
+        // 일치하는 슬롯 검색
+        ItemSlot slot = infoUI.FindSlot(itemUnit);
+        if (slot != null)
         {
-            // 일치하는 슬롯 검색
-            if (inventory[i] == currentSlot)
-            {
-                inventory[i].Clear();
-                Debug.LogError("인벤토리 :: " + name + "의 " + i+ "번째 아이템 제거됨");
-            }
+            Debug.Log("인벤토리 :: " + name + "의 아이템(" + slot.item.name + ") 제거됨");
+
+            // 제거
+            slot.item = null;
+
+            // 인벤토리 재정렬
+            infoUI.SortInventory();
         }
-
-        // 인벤토리 재정렬
-        SortInventory();
-    }
-
-    public void SortInventory()
-    {
-        // 마지막을 제외한 모든 슬롯 순회
-        for (int i = 0; i < inventory.Count - 1; i++)
-        {
-            // 빈 슬롯 검색
-            if (inventory[i].isEmpty)
-            {
-                // 당겨오기 수행
-                for (int j = i + 1; j < inventory.Count; j++)
-                {
-                    // 당겨올 슬롯에 아이템 있을 경우
-                    if (!inventory[j].isEmpty)
-                    {
-                        // 복사
-                        inventory[i].CopyByMirror(inventory[j]);
-
-                        // 당겨온 슬롯 말소
-                        inventory[j].Clear();
-
-                        // 중단
-                        break;
-                    }
-                }
-            }
-        }
+        else
+            Debug.LogWarning("인벤토리 :: " + name + "의 아이템 제거 실패 -> 아이템 없음");
     }
 
 

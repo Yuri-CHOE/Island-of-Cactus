@@ -62,7 +62,8 @@ public class Scene_Title : MonoBehaviour
 
     public void UseLoad(bool useLoad)
     {
-        GameSaver.useLoad = useLoad;
+        //GameSaver.useLoad = useLoad;
+        GameSaveStream.useLoad = useLoad;
     }
 
 

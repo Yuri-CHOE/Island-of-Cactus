@@ -8,7 +8,7 @@ public static class Cycle
     public static int now = 0;
 
     // 목표 사이클
-    public static int goal = 999999;
+    public static int goal { get { return GameRule.cycleMax; } }
 
 
 
@@ -16,7 +16,6 @@ public static class Cycle
     public static void Clear()
     {
         now = 0;
-        goal = 999999;
     }
 
 
@@ -27,9 +26,6 @@ public static class Cycle
     {
         if (now < 0)
             now = 0;
-
-        if (goal < 0)
-            goal = 999999;
     }
 
     /// <summary>

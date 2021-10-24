@@ -355,7 +355,7 @@ public class Item
 
 
                 // 가져올 아이템 지정
-                ItemSlot slot = filteredTarget[0].inventory[0];
+                ItemSlot slot = filteredTarget[0].infoUI.inventory[0];
 
                 // 획득
                 // 연출 - 미구현=============

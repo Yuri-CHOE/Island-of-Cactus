@@ -350,7 +350,7 @@ public static class EndManager
                 UserData.SaveData();
 
                 // 세이브 파기
-                GameSaver.SaveRemove();
+                GameSaveStream.SaveRemove();
 
                 // 알림
                 GameMaster.script.messageBox.PopUpText("Winner", "우승자는 " + order[0].name + " 입니다 !!");

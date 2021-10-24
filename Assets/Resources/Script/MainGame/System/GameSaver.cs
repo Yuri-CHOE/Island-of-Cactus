@@ -6,7 +6,7 @@ using UnityEngine;
 using System.IO;
 using System.Security.Cryptography;
 
-public static class GameSaver
+public static class GameSaver11
 {
     // 세이브 파일 폴더명
     static string saveFloder = "Save";
@@ -378,7 +378,7 @@ public static class GameSaver
 
         // 사이클 설정 - 목표
         GameRule.cycleMax = int.Parse(scInfo[3]);
-        Cycle.goal = GameRule.cycleMax;
+        //Cycle.goal = GameRule.cycleMax;
 
         // 플레이 인원수
         GameRule.playerCount = int.Parse(scInfo[4]);
@@ -402,7 +402,7 @@ public static class GameSaver
         }
         if (Player.allPlayer.Count == 0)
         {
-            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver.LoadPlayer() 수행");
+            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver1.LoadPlayer() 수행");
             Debug.Break();
             return;
         }
@@ -467,7 +467,7 @@ public static class GameSaver
         }
         if (Player.allPlayer.Count == 0)
         {
-            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver.LoadPlayer() 수행");
+            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver1.LoadPlayer() 수행");
             Debug.Break();
             return;
         }
@@ -479,7 +479,7 @@ public static class GameSaver
 
             if (current.infoUI == null)
             {
-                Debug.LogError("fatal error :: Player.infoUI가 지정되기 전 GameSaver.LoadPlayerInventory() 수행");
+                Debug.LogError("fatal error :: Player.infoUI가 지정되기 전 GameSaver1.LoadPlayerInventory() 수행");
                 Debug.Break();
                 return;
             }
@@ -553,7 +553,7 @@ public static class GameSaver
         }
         if (Player.allPlayer.Count == 0)
         {
-            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver.LoadEventObject() 수행");
+            Debug.LogError("fatal error :: Player.allPlayer가 구성되기 전 GameSaver1.LoadEventObject() 수행");
             Debug.Break();
             return;
         }

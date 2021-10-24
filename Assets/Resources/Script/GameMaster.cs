@@ -118,8 +118,8 @@ public class GameMaster : MonoBehaviour
                     if (loadingManager.isFinish) return;
 
                     // 세이브 파일 로드
-                    if (GameSaver.useLoad)
-                        GameSaver.LoadGameInfo();
+                    if (GameSaveStream.useLoad)
+                        GameSaveStream.saveForm.LoadGameInfo();
 
                     // 세이브파일 작성
                     // 미구현================
@@ -208,12 +208,12 @@ public class GameMaster : MonoBehaviour
                                 current.avatar.transform.position = GameData.blockManager.GetBlock(current.movement.location).transform.position;
                         }
 
-                        // 미니게임 정보 초기화
-                        if (Player.allPlayer[i].miniInfo == null)
-                        {
-                            Player.allPlayer[i].miniInfo = new MiniScore();
-                        }
-                        Player.system.Monster.miniInfo = new MiniScore();
+                        //// 미니게임 정보 초기화
+                        //if (Player.allPlayer[i].miniInfo == null)
+                        //{
+                        //    Player.allPlayer[i].miniInfo = new MiniScore();
+                        //}
+                        //Player.system.Monster.miniInfo = new MiniScore();
 
                     }
 
@@ -227,15 +227,15 @@ public class GameMaster : MonoBehaviour
                     ShortcutManager.script.SetUp();
 
                     // 사이클 설정
-                    Cycle.goal = GameRule.cycleMax;
+                    //Cycle.goal = GameRule.cycleMax;
 
 
                     // 세이브 파일 로드
-                    if (GameSaver.useLoad)
+                    if (GameSaveStream.useLoad)
                     {
-                        GameSaver.LoadPlayer();
-                        GameSaver.LoadItemObject();
-                        GameSaver.LoadEventObject();
+                        GameSaveStream.saveForm.LoadPlayer();
+                        GameSaveStream.saveForm.LoadItemObject();
+                        GameSaveStream.saveForm.LoadEventObject();
                     }
 
                     // 캐릭터 겹침 해소
@@ -274,7 +274,7 @@ public class GameMaster : MonoBehaviour
                 // 순서주사위 굴리기
                 {
                     // 씬 재로드 제어
-                    if (flowCopy <= Flow.Ordering && !GameSaver.useLoad)
+                    if (flowCopy <= Flow.Ordering && !GameSaveStream.useLoad)
                     {
                         //Debug.Log("게임 플로우 :: 순서 주사위 확인중");
 
@@ -360,16 +360,16 @@ public class GameMaster : MonoBehaviour
                         playerInfoUI[i].gameObject.SetActive(false);
 
                     // 세이브 파일 로드
-                    if (GameSaver.useLoad)
+                    if (GameSaveStream.useLoad)
                     {
-                        GameSaver.LoadPlayerInventory();
+                        //GameSaveStream.LoadPlayerInventory();
 
                         // 스타트 플레이어 강제 호출
                         TurnWork();
 
-                        GameSaver.LoadTurn();
+                        GameSaveStream.saveForm.LoadTurn();
                     }
-                    GameSaver.Clear();
+                    GameSaveStream.Clear();
 
                     //// 순서큐 셋팅 및 리스트 순차 정리
                     //Turn.SetUp(pOrderList);
@@ -417,7 +417,7 @@ public class GameMaster : MonoBehaviour
                     TurnWork();
 
                     // 자동저장
-                    AutoSave(true);
+                    //AutoSave();
                 }
                 break;
 
@@ -1179,7 +1179,7 @@ public class GameMaster : MonoBehaviour
     /// </summary>
     public void SaveGame()
     {
-        AutoSave(false);
+        GameSaveStream.GameSave();
     }
 
     /// <summary>
@@ -1212,33 +1212,13 @@ public class GameMaster : MonoBehaviour
         loadingManager.LoadAsyncMiniGame(Minigame.table[minigameNum], 100, Player.allPlayer);
     }
 
-    public void AutoSave(bool isSmoothSave)
+    public void AutoSave()
     {
         // 턴의 처음이면
         if (Turn.isFirstFrame)
             // 자동저장 활성화 일경우
             if (useAutoSave)
-                // 부드러운 저장
-                if (isSmoothSave)
-                {
-                    // 저장
-                    if (GameData.saveControl == null)
-                        GameData.saveControl = StartCoroutine(AutoSaveForced());
-                }
-                else
-                {
-                    // 저장
-                    GameSaver.GameSave();
-                }
+                GameSaveStream.GameSave();
 
-    }
-    IEnumerator AutoSaveForced()
-    {
-        // 저장
-        GameSaver.GameSave();
-        yield return null;
-
-        // 완료 처리
-        GameData.saveControl = null;
     }
 }

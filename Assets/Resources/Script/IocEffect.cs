@@ -99,7 +99,7 @@ public struct IocEffect
         _expiration = __expiration;
     }
 
-    void SetCount(int __count)
+    public void SetCount(int __count)
     {
         if (__count < 0)
             return;

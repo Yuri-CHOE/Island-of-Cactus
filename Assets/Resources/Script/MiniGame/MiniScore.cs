@@ -2,33 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MiniScore
+[System.Serializable]
+public struct MiniScore
 {
     // 진행중 미니게임 인덱스
     public static int index = 0;
 
     //미니게임 참가 여부
-    public bool join = false;
+    public bool join;
 
     // 준비 상태
-    public bool isReady = false;
+    public bool isReady;
 
     //현재 자신의 차례인지 확인
     //public bool myTurn = false;
 
     //미니게임 라이프 확인
-    public bool isDead = false;
+    public bool isDead;
 
     //미니게임 점수
-    int _score = 0;
+    int _score;
     public int score { get { return _score; } }
 
 
     //미니게임 등수
-    public int rank = 0;
+    public int rank;
 
     // 누적 점수
-    int _recordScore = 0;
+    int _recordScore;
     public int recordScore { get { return _recordScore; } }
 
     // 총 상금
@@ -37,7 +38,7 @@ public class MiniScore
 
     // 보상 지분
     public static int totalRewardRatio = 0;
-    public int rewardRatio = 0;
+    public int rewardRatio;
 
 
 

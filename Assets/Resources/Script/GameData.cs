@@ -61,7 +61,8 @@ public static class GameData
         Player.Clear();
         Cycle.Clear();
         Turn.Clear();
-        GameSaver.Clear();
+        //GameSaver.Clear();
+        GameSaveStream.Clear();
 
         // Äüµî·Ï Á¦°Å
         GameMaster.script = null;

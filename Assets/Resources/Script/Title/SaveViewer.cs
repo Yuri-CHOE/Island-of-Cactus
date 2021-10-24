@@ -44,11 +44,10 @@ public class SaveViewer : MonoBehaviour
         if (GameData.gameMode == mode)
             return;
 
-        GameSaver.CodeLoad();
-
-        // 세이브 파일 없을 경우 스위칭
-        if (GameSaver.scInfo == null  ||  GameSaver.scPlayers.Count < 1)
+        // 게임 로드
+        if (!GameSaveStream.GameRead())
         {
+            // 로드 실패
             Debug.LogWarning("세이브 뷰어 :: 세이브 파일 없음");
             btnContinue.interactable = false;
             selector.setUp(0);
@@ -57,21 +56,48 @@ public class SaveViewer : MonoBehaviour
         }
         else
         {
+            // 로드 성공
             Debug.LogWarning("세이브 뷰어 :: 세이브 파일 발견");
             btnContinue.interactable = true;
             selector.setUp(1);
         }
 
-        cycleNow.text =  GameSaver.scInfo[2];
-        cycleGoal.text = GameSaver.scInfo[3];
-
+        cycleNow.text = GameSaveStream.saveForm.cycleNow.ToString();
+        cycleGoal.text = GameSaveStream.saveForm.cycleGoal.ToString();
 
         for (int i = 0; i < player.Count; i++)
         {
             player[i].SetUp();
         }
 
+        //GameSaver.CodeLoad();
+
+        //// 세이브 파일 없을 경우 스위칭
+        //if (GameSaver.scInfo == null  ||  GameSaver.scPlayers.Count < 1)
+        //{
+        //    Debug.LogWarning("세이브 뷰어 :: 세이브 파일 없음");
+        //    btnContinue.interactable = false;
+        //    selector.setUp(0);
+
+        //    return;
+        //}
+        //else
+        //{
+        //    Debug.LogWarning("세이브 뷰어 :: 세이브 파일 발견");
+        //    btnContinue.interactable = true;
+        //    selector.setUp(1);
+        //}
+
+        //cycleNow.text =  GameSaver.scInfo[2];
+        //cycleGoal.text = GameSaver.scInfo[3];
+
+        //for (int i = 0; i < player.Count; i++)
+        //{
+        //    player[i].SetUp();
+        //}
+
         // 로드 대상 기록
         mode = GameData.gameMode;
+
     }
 }

@@ -4,8 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+public class ItemUnit
+{
+    // 아이템
+    Item _item = null;
+    public Item item { get { return _item; } set { if (value == null) Clear(); else effect = value.effect; _item = value; } }
+
+    // 효과
+    public IocEffect effect = IocEffect.New();
+    
+    // 아이템 개수
+    //public int count = 0;
+    public int count { get { return effect.count; } set { effect.SetCount(value); } }
+
+    public bool isEmpty { get { return item == null; } }
+
+
+    void Change(Item newItemOrNull)
+    {
+        if (newItemOrNull == null || newItemOrNull.index == 0) Clear();
+        else { _item = newItemOrNull; effect = newItemOrNull.effect; }
+    }
+
+    void Clear()
+    {
+        _item = null;
+        effect = IocEffect.New();
+    }
+}
+
 public class ItemSlot : MonoBehaviour
 {
+    //public static operator ==(ItemSlot s1, ItemSlot s2) => ();
+    //public static operator !=(ItemSlot s1, ItemSlot s2) => ();
 
     // 빈 슬롯 파악
     public bool isEmpty {get { return item == null; } }
@@ -14,20 +45,33 @@ public class ItemSlot : MonoBehaviour
     public Player owner = null;
 
     // 아이템
-    //public Item item = null;
-    Item _item = null;
-    public Item item { get { return _item; } set { if (value == null) Clear(); else effect = value.effect; _item = value; } }
-    Item itemMirror = null;
+    ItemUnit itemUnit = null;
+    public Item item {
+        get {
+            if (itemUnit == null)
+                return null;
+            else
+                return itemUnit.item;
+        }
+        set
+        {
+            // 다른 아이템일 경우
+            if (value == null || itemUnit.item != value)
+            {
+                // 아이템 교체
+                itemUnit.item = value;
 
-
-    // 아이템 개수
-    public int count = 0;
-
-    // 효과
-    public IocEffect effect = IocEffect.New();
+                // 아이콘 새로고침
+                icon.sprite = item.GetIcon();
+            }
+        }
+    }
 
     // 아이콘
     public Image icon = null;
+
+    // 수량
+    public int count { get { return itemUnit.count; } set { itemUnit.count = value; } }
 
 
     // Start is called before the first frame update
@@ -39,98 +83,71 @@ public class ItemSlot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 아이템 변경시 자동 새로고침
-        if (item != itemMirror)
-        {
-
-            Refresh();
-        }
-    }
-
-    public void Clear()
-    {
-        //item = Item.table[0];
-        //item = null;
-        _item = null;
-        //count = 0;
-        //effect = IocEffect.New();
-
-        Refresh();
-    }
-
-    /// <summary>
-    ///  아이템에 맞게 갱신
-    /// </summary>
-    public void Refresh()
-    {
-        // 아이콘 로드
-        if (item == null)
-        {
-            // 아이콘 변경
-            icon.sprite = LoadIcon(Item.empty);
-
-            // 개수 제거
-            count = 0;
-
-            // 효과 제거
-            effect = IocEffect.New();
-        }
-        else
-        {
-            // 아이콘 변경
-            icon.sprite = LoadIcon(item);
-
-            // 효과 복사
-            effect = item.effect;
-        }
-
-        // 싱크
-        itemMirror = item;
-    }
-
-    public void CopyByMirror(ItemSlot mirror)
-    {
-        Debug.LogWarning("아이템 계승 :: " + mirror.item.name + " -> " + mirror.count);
-
-        item = mirror.item;
-        count = mirror.count;
-        effect = mirror.effect;
-    }
-
-    /// <summary>
-    /// 아이콘 로드
-    /// </summary>
-    public static Sprite LoadIcon(Item _item)
-    {
-        return _item.GetIcon();
-
-        //// 아이콘 로드
-        //Debug.Log(@"Data/Item/icon/item" + _item.index.ToString("D4"));
-        //Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + _item.index.ToString("D4"));
-
-        //// 이미지 유효 검사
-        //if (temp == null)
+        //// 아이템 변경시 자동 새로고침
+        //if (item != itemMirror)
         //{
-        //    // 기본 아이콘 대체 처리
-        //    Debug.Log(@"Data/Item/icon/item0000");
-        //    temp = Resources.Load<Sprite>(@"Data/Item/icon/item0000");
+
+        //    Refresh();
         //}
+    }
 
-        ////// 최종 실패 처리
-        ////if (temp == null)
-        ////    Debug.Log("로드 실패 :: Data/Item/icon/item0000");
-        ////// 아이콘 리턴
-        ////else
-        ////    _icon.sprite = temp;
+    //public void Clear()
+    //{
+    //    //item = Item.table[0];
+    //    //item = null;
+    //    _item = null;
+    //    //count = 0;
+    //    //effect = IocEffect.New();
 
+    //    Refresh();
+    //}
 
-        //// 아이콘 리턴
-        //if (temp != null)
-        //    return temp;
+    ///// <summary>
+    /////  아이템에 맞게 갱신
+    ///// </summary>
+    //public void Refresh()
+    //{
+    //    // 아이콘 로드
+    //    if (item == null)
+    //    {
+    //        // 아이콘 변경
+    //        icon.sprite = LoadIcon(Item.empty);
 
-        //// 최종 실패 처리
-        //Debug.Log("로드 실패 :: Data/Item/icon/item0000");
-        //return null;
+    //        // 개수 제거
+    //        count = 0;
+
+    //        // 효과 제거
+    //        effect = IocEffect.New();
+    //    }
+    //    else
+    //    {
+    //        // 아이콘 변경
+    //        icon.sprite = item.GetIcon();
+
+    //        // 효과 복사
+    //        effect = item.effect;
+    //    }
+
+    //    // 싱크
+    //    itemMirror = item;
+    //}
+
+    //public void CopyByMirror(ItemSlot mirror)
+    //{
+    //    Debug.LogWarning("아이템 계승 :: " + mirror.item.name + " -> " + mirror.count);
+
+    //    item = mirror.item;
+    //    count = mirror.count;
+    //    effect = mirror.effect;
+    //}
+
+    public void SetUp(Player _owner, ItemUnit _itemUnit)
+    {
+        owner = _owner;
+        itemUnit = _itemUnit;
+
+        // 아이콘 새로고침
+        //icon.sprite = item.GetIcon();
     }
 
     /// <summary>
@@ -145,20 +162,17 @@ public class ItemSlot : MonoBehaviour
         if (count <= 0)
             return;
 
-        // 퀵등록
-        ItemManager im = GameMaster.script.itemManager;
-
         // UI 셋팅
-        im.selected = this;
+        GameMaster.script.itemManager.selected = this;
         Debug.LogWarning("아이템 :: 상세보기 => " + GameData.gameMaster.itemManager.selected.item.index);
-        im.nameText.text = item.name;
-        im.infoText.text = item.info;
+        GameMaster.script.itemManager.nameText.text = item.name;
+        GameMaster.script.itemManager.infoText.text = item.info;
 
         // UI 호출
-        im.CallItemUseBox();
+        GameMaster.script.itemManager.CallItemUseBox();
 
         // 사용 버튼 비활성
-        im.btnUse.interactable = false;
+        GameMaster.script.itemManager.btnUse.interactable = false;
 
         // 소유권 없을 시 사용 버튼 비활성
         if (transform.parent.name == "item") // 플레이어 정보 UI 오브젝트일 경우
@@ -180,6 +194,19 @@ public class ItemSlot : MonoBehaviour
 
 
         }
+    }
+
+    public bool CheckUnit(ItemUnit _itemUnit)
+    {
+        return (itemUnit == _itemUnit);
+    }
+
+    public void Take(ItemSlot target)
+    {
+        Debug.LogWarning("아이템 계승 :: " + target.item.name + " -> " + target.count);
+
+        item = target.item;
+        target.item = null;
     }
 
 }

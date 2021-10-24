@@ -16,7 +16,7 @@ public class MiniGamePlayer : MonoBehaviour
     Image icon = null;
 
     // 미니게임 성과
-    MiniScore info = null;
+    ref MiniScore info { get { return ref owner.miniInfo; } }
 
     // 미니게임 점수 추가갑
     public int scorePlus = 0;

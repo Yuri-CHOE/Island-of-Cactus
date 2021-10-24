@@ -33,13 +33,9 @@ public class PlayerInfoUI : MonoBehaviour
         if (owner != null)
         {
             // 라이프 갱신
-            //owner.life.RefreshOne();
-            //lifeText.text = owner.life.Value.ToString();            
             lifeText.text = owner.life.RefreshOne().ToString();
 
             // 코인 갱신
-            //owner.coin.RefreshOne();
-            //coinText.text = owner.coin.Value.ToString();
             coinText.text = owner.coin.RefreshOne().ToString();
 
             // 아이템 갱신
@@ -94,38 +90,14 @@ public class PlayerInfoUI : MonoBehaviour
             face.sprite = owner.face;
         }
 
-        // 인벤토리 싱크
-        if(owner.inventory.Count == 0)
+        // 인벤토리 주인 지정
+        for (int i = 0; i < inventory.Count; i++)
         {
-            owner.inventory = inventory;
-
-            // 인벤토리 주인 지정
-            for (int i = 0; i < inventory.Count; i++)
-            {
-                inventory[i].owner = owner;
-            }
-        }
-        else
-        {
-            // 백업
-            List<ItemSlot> invenCopy = owner.inventory;
-            int invenCount = owner.inventoryCount;
+            inventory[i].owner = owner;
 
             // 인벤토리 싱크
-            owner.inventory = inventory;
-
-            //for (int i = 0; i < inventory.Count; i++)
-            for (int i = 0; i < invenCount; i++)
-            {
-                // 인벤토리 계승
-                inventory[i].CopyByMirror(invenCopy[i]);
-
-                // 인벤토리 주인 지정
-                inventory[i].owner = owner;
-            }
+            inventory[i].SetUp(owner, owner.inventory[i]);
         }
-
-
     }
 
 
@@ -137,4 +109,40 @@ public class PlayerInfoUI : MonoBehaviour
         GameData.gameMaster.itemManager.ItemUseByUI();
     }
 
+    public ItemSlot FindSlot(ItemUnit itemUnit)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].CheckUnit(itemUnit))
+                return inventory[i];
+        }
+
+        return null;
+    }
+
+
+    public void SortInventory()
+    {
+        // 마지막을 제외한 모든 슬롯 순회
+        for (int i = 0; i < inventory.Count - 1; i++)
+        {
+            // 빈 슬롯 검색
+            if (inventory[i].isEmpty)
+            {
+                // 당겨오기 수행
+                for (int j = i + 1; j < inventory.Count; j++)
+                {
+                    // 당겨올 슬롯에 아이템 있을 경우
+                    if (!inventory[j].isEmpty)
+                    {
+                        // 당겨오기
+                        inventory[i].Take(inventory[j]);
+
+                        // 중단
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }

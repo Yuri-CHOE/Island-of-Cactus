@@ -24,32 +24,50 @@ public class SaveViewerPlayer : MonoBehaviour
     public void SetUp()
     {
         // 플레이어 존재하지 않을 경우
-        if (GameSaver.scPlayers.Count < playerNum)
+        if (GameSaveStream.saveForm.playerCount < playerNum)
         {
             gameObject.SetActive(false);
             return;
         }
 
-        string[] temp = GameSaver.scPlayers[playerNum - 1];
+        ref GameSaveStream.SaveForm.SaveFormPlayer sfp = ref GameSaveStream.saveForm.player[playerNum - 1];
+        SetUp(
+            sfp.characterIndex,
+            sfp.name,
+            sfp.life.Value,
+            sfp.coin.Value,
+            sfp.inven
+            );
 
-        int characterIndex = int.Parse(temp[2]);
-        string playerName = temp[4];
-        int _life = int.Parse(temp[7]);
-        int _coin = int.Parse(temp[8]);
-        List<int> itemIndex = new List<int>();
-        List<int> itemCount = new List<int>();
-        for (int i = 0; i < Player.inventoryMax; i++)
-        {
-            int _index = int.Parse(temp[12 + i * 2]);
-            int _count = int.Parse(temp[13 + i * 2]); 
+        //// 플레이어 존재하지 않을 경우
+        //if (GameSaveStream.saveForm.scPlayers.Count < playerNum)
+        //{
+        //    gameObject.SetActive(false);
+        //    return;
+        //}
 
-            itemIndex.Add(_index);
-            itemCount.Add(_count);
-        }
+        //string[] temp = GameSaveStream.scPlayers[playerNum - 1];
 
-        SetUp(characterIndex, playerName, _life, _coin, itemIndex, itemCount);
+        //int characterIndex = int.Parse(temp[2]);
+        //string playerName = temp[4];
+        //int _life = int.Parse(temp[7]);
+        //int _coin = int.Parse(temp[8]);
+        //List<int> itemIndex = new List<int>();
+        //List<int> itemCount = new List<int>();
+        //for (int i = 0; i < Player.inventoryMax; i++)
+        //{
+        //    int _index = int.Parse(temp[12 + i * 2]);
+        //    int _count = int.Parse(temp[13 + i * 2]); 
+
+        //    itemIndex.Add(_index);
+        //    itemCount.Add(_count);
+        //}
+
+        //SetUp(characterIndex, playerName, _life, _coin, itemIndex, itemCount);
     }
-    public void SetUp(int characterIndex, string _playerName, int _life, int _coin, List<int> itemIndex, List<int> itemCount)
+
+    //public void SetUp(int characterIndex, string _playerName, int _life, int _coin, List<int> itemIndex, List<int> itemCount)
+    public void SetUp(int characterIndex, string _playerName, int _life, int _coin, GameSaveStream.SaveForm.SaveFormObjectStack[] _inven)
     {
         face.sprite = Character.table[characterIndex].GetIcon();
 
@@ -63,17 +81,23 @@ public class SaveViewerPlayer : MonoBehaviour
 
         for (int i = 0; i < slot.Count; i++)
         {
-            if (itemIndex.Count < i)
-                break;
-            if (itemCount.Count < i)
-                break;
+            //if (itemIndex.Count < i)
+            //    break;
+            //if (itemCount.Count < i)
+            //    break;
 
-            if (itemIndex[i] > 0)
-            {
-                slot[i].item = Item.table[itemIndex[i]];
-                slot[i].count = itemCount[i];
-                slot[i].Refresh();
-            }
+            //if (itemIndex[i] > 0)
+            //{
+            //    slot[i].item = Item.table[itemIndex[i]];
+            //    slot[i].count = itemCount[i];
+            //}
+
+
+            ItemUnit iu = new ItemUnit();
+            iu.item = Item.table[_inven[i].index];
+            iu.count = _inven[i].count;
+
+            slot[i].SetUp(null, iu);
         }
     }
 }

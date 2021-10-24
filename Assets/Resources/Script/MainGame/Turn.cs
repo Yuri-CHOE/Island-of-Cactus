@@ -47,6 +47,9 @@ public static class Turn
         // 첫프레임 활성화
         isFirstFrame = true;
 
+        // 자동저장
+        GameMaster.script.AutoSave();
+
         return now;
     }
 

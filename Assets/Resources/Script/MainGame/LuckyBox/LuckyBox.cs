@@ -195,7 +195,7 @@ public class LuckyBox
                             break;
 
                         // 가져올 아이템 지정
-                        slot = filteredTarget[i].inventory[0];
+                        slot = filteredTarget[i].infoUI.inventory[0];
 
                         // 강탈
                         filteredTarget[i].RemoveItem(slot);
