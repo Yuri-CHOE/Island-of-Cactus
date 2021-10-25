@@ -344,7 +344,7 @@ public static class GameSaveStream
         {
             if (Turn.queue == null || Turn.queue.Count == 0)
             {
-                Debug.LogError("세이브 :: Turn 스크립트 정의 안됨");
+                Debug.LogError("error :: 세이브 로드 -> Turn 스크립트 정의 안됨");
                 Debug.Break();
                 return;
             }
@@ -453,9 +453,9 @@ public static class GameSaveStream
         }
 
         // 제거
-        Debug.LogError("세이브 파일 :: 제거 요청됨 -> " + saveFileInfo.FullName);
+        Debug.Log("세이브 파일 :: 제거 요청됨 -> " + saveFileInfo.FullName);
         saveFileInfo.Delete();
-        Debug.LogError("세이브 파일 :: 제거 성공여부 -> " + saveFileInfo.Exists);
+        Debug.Log("세이브 파일 :: 제거 성공여부 -> " + saveFileInfo.Exists);
     }
 
     /// <summary>
@@ -479,7 +479,7 @@ public static class GameSaveStream
                 result = Save(LockType.Lock, codeStr);
             else
                 result = Save(LockType.None, codeStr);
-            Debug.LogError("파일 생성됨 :: " + saveFileInfo.FullName);
+            Debug.Log("파일 생성됨 :: " + saveFileInfo.FullName);
 
             return result;
         }
@@ -985,11 +985,7 @@ public static class GameSaveStream
                 Debug.Log("세이브 :: 복호화 필요함");
                 using (CryptoStream cs = new CryptoStream(ms, GetCcryptor(useDecryptor), CryptoStreamMode.Write))
                 {
-                    Debug.LogError(origin.Length);
-                    Debug.LogError(ms.Length);
-                    Debug.LogError(cs.Length);
                     cs.Write(origin, 0, origin.Length);
-                    Debug.LogError(cs.Length);
                 }
             }
             Debug.Log("세이브 :: 파일 데이터화 시작");

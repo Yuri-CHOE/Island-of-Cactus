@@ -80,14 +80,12 @@ namespace CustomAI
             /// </summary>
             IEnumerator CheckBundle(int buyCount)
             {
-                Debug.LogError("디버그 " + buyCount);
                 // 스타트 딜레이
                 WaitForSeconds waiter = new WaitForSeconds(element.latency.value / 4 + 0.25f);
                 yield return waiter;
 
                 // 가상 잔고
                 int _coin = owner.coin.Value;
-                Debug.LogError("디버그 " + _coin);
 
                 // 위험 감수 - 저
                 if (owner.ai.risk == AIWorker.Risk.Low)
@@ -96,7 +94,7 @@ namespace CustomAI
                     while (buyCount > 0)
                     {
                         int bill = SelectRare(_coin / buyCount);
-                        Debug.LogError("AI :: 아이템 구매 -> 선택 가격 = " + bill);
+                        Debug.Log("AI :: 아이템 구매 -> 선택 가격 = " + bill);
 
                         if (bill == 0)
                             buyCount = 0;
@@ -115,7 +113,7 @@ namespace CustomAI
                     // 최고가 1회
                     {
                         int bill = SelectRare(_coin / buyCount);
-                        Debug.LogError("AI :: 아이템 구매 -> 선택 가격 = " + bill);
+                        Debug.Log("AI :: 아이템 구매 -> 선택 가격 = " + bill);
 
                         if (bill == 0)
                             buyCount = 0;
@@ -131,7 +129,7 @@ namespace CustomAI
                     while (buyCount > 0)
                     {
                         int bill = SelectRare(_coin / buyCount);
-                        Debug.LogError("AI :: 아이템 구매 -> 선택 가격 = " + bill);
+                        Debug.Log("AI :: 아이템 구매 -> 선택 가격 = " + bill);
 
                         if (bill == 0)
                             buyCount = 0;
@@ -151,7 +149,7 @@ namespace CustomAI
                     while(buyCount > 0)
                     {
                         int bill = SelectRare(_coin);
-                        Debug.LogError("AI :: 아이템 구매 -> 선택 가격 " + bill);
+                        Debug.Log("AI :: 아이템 구매 -> 선택 가격 " + bill);
 
                         if (bill == 0)
                             buyCount = 0;
@@ -168,7 +166,7 @@ namespace CustomAI
 
             int SelectRare(int _coin)
             {
-                Debug.LogError("AI :: 아이템 구매 -> 단일품목 예산 = " + _coin);
+                Debug.Log("AI :: 아이템 구매 -> 단일품목 예산 = " + _coin);
 
                 int indexer = -1;
 

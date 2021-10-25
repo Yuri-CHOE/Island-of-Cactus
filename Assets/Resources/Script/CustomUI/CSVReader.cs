@@ -422,7 +422,7 @@ public class CSVReader
                 else
                     sb.Append(lineSeparator);
             else
-                Debug.LogError("개행 종료");
+                Debug.Log("개행 종료");
         }
 
         // 파일 초기화

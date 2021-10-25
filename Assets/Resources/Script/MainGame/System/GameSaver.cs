@@ -125,7 +125,7 @@ public static class GameSaver11
             Save(fileName + extension, LockType.Lock, codeStr);
         else
             Save(fileName + extension, LockType.None, codeStr);
-        Debug.LogError("파일 생성됨 :: " + saveF0);
+        Debug.Log("파일 생성됨 :: " + saveF0);
     }
 
 
@@ -307,7 +307,7 @@ public static class GameSaver11
                                         temp.Split(codeEnder)[0]
                                             .Split(codeChapter)
                                         ));
-            Debug.LogError(temp);
+            Debug.Log(temp);
         }
         else
         {
@@ -603,7 +603,7 @@ public static class GameSaver11
         }
 
         // 현재 턴 셋팅
-        Debug.LogError(Player.allPlayer[int.Parse(scTurn[0])].name);
+        Debug.Log(Player.allPlayer[int.Parse(scTurn[0])].name);
         Turn.Skip(Player.allPlayer[int.Parse(scTurn[0])]);
 
         // 게임 플로우 셋팅

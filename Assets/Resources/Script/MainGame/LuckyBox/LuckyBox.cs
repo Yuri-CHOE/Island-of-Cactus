@@ -147,7 +147,7 @@ public class LuckyBox
     /// <returns></returns>
     public IEnumerator Effect(Player targetPlayer_Or_null)
     {
-        Debug.LogError("Lucky Box :: 효과 호출됨 = " + name);
+        Debug.Log("Lucky Box :: 효과 호출됨 = " + name);
 
         // 타겟 리스트
         List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);

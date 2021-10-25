@@ -106,14 +106,14 @@ namespace CustomAI
                             userOrTarget = owner;
 
                         // 사용
-                        Debug.LogError("AI Run :: item [" + owner.inventory[i].item.name + "]을 사용 -> " + userOrTarget.name);
+                        Debug.Log("AI Run :: item [" + owner.inventory[i].item.name + "]을 사용 -> " + userOrTarget.name);
                         yield return owner.inventory[i].item.Effect(userOrTarget);
 
                         // 아이템 제거
                         if (owner.inventory[i].count <= 0)
                             owner.RemoveItem(owner.inventory[i]);
                         else
-                            Debug.LogError("AI Run :: item [" + owner.inventory[i].item.name + "] 잔여 수량-> " + owner.inventory[i].count);
+                            Debug.Log("AI Run :: item [" + owner.inventory[i].item.name + "] 잔여 수량-> " + owner.inventory[i].count);
                     }
                 }
 

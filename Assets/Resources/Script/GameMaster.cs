@@ -1097,7 +1097,7 @@ public class GameMaster : MonoBehaviour
                 {
                     if (messageBox.gameObject.activeSelf)
                     {
-                        Debug.LogError("왜 턴이 멋대로 넘어갈까?");
+                        Debug.LogError("error :: 턴 스킵 감지됨 -> 의도되지 않음 ");
                         Debug.Break();
                     }
                     Turn.actionProgress = ActionProgress.Finish;
