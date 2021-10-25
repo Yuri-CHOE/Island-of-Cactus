@@ -86,7 +86,7 @@ public class PlayerInfoUI : MonoBehaviour
                 Debug.Log("warning :: owner is null");
             }
 
-            Debug.Log(owner.face.name);
+            Debug.Log("아이콘 :: 플레이어 초상화 -> "+owner.face.name);
             face.sprite = owner.face;
         }
 

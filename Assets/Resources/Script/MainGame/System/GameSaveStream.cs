@@ -144,7 +144,7 @@ public static class GameSaveStream
             for (int i = 0; i < eventObjects.Length; i++) { eventObjects[i] = new SaveFormObjectStack(EventManager.eventObjectList[i]); }
 
 
-            turnNow             = Player.Index(Turn.now)    ;
+            turnNow             = Turn.Index(Turn.now)    ;
             gameFlow            = GameData.gameFlow         ;
             turnAction          = Turn.turnAction           ;
         }
@@ -250,26 +250,27 @@ public static class GameSaveStream
                 // 인벤토리
                 for (int j = 0; j < current.inventory.Count; j++)
                 {
-                    Debug.LogError(string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
-                        current.name,
-                        current.inventory.Count,
-                        j,
-                        current.inventory[j].item
-                        ) + string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
-                        player[i].name,
-                        player[i].inven.Length,
-                        j,
-                        player[i].inven[j].index
-                        ) + string.Format("로드 :: 플레이어 {0} 는 {1}중 {2}번쨰 이다 ",
-                        player[i].name,
-                        player.Length,
-                        i
-                        ));
+                    //Debug.LogError(string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
+                    //    current.name,
+                    //    current.inventory.Count,
+                    //    j,
+                    //    current.inventory[j].item
+                    //    ) + string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
+                    //    player[i].name,
+                    //    player[i].inven.Length,
+                    //    j,
+                    //    player[i].inven[j].index
+                    //    ) + string.Format("로드 :: 플레이어 {0} 는 {1}중 {2}번쨰 이다 ",
+                    //    player[i].name,
+                    //    player.Length,
+                    //    i
+                    //    ));
 
                     if (player[i].inven[j].index > 0)
                     {
-                    current.inventory[j].item = Item.table[player[i].inven[j].index];
-                    current.inventory[j].count = player[i].inven[j].count;
+                        current.inventory[j].item = Item.table[player[i].inven[j].index];
+                        current.inventory[j].count = player[i].inven[j].count;
+                        Debug.Log(string.Format("로드 :: 플레이어 {0}의 인벤토리 {1}번 설정됨 -> 아이템({2}) = {3}개", current.name, j, current.inventory[j].item.name, current.inventory[j].count));
                     }
                 }
             }
@@ -349,8 +350,22 @@ public static class GameSaveStream
             }
 
             // 현재 턴 셋팅
-            Turn.Skip(Player.allPlayer[turnNow]);
-            Debug.Log("세이브 :: 현재 턴 설정 -> " + Turn.now);
+            //if(turnNow > 0)
+            //{
+            //    // 유저 턴일 경우
+            //    Turn.Skip(Player.allPlayer[turnNow]);
+            //}
+            //else
+            //{
+            //    // 시스템 턴일 경우
+            //    Turn.Skip(Player.allPlayer[turnNow]);
+            //}
+
+            Debug.LogError("세이브 :: 디버그 " + turnNow);
+            Debug.LogError("세이브 :: 디버그 " + Turn.origin[turnNow].name);
+            Turn.Skip(Turn.origin[turnNow]);
+
+            Debug.Log("로드 :: 현재 턴 설정 -> " + Turn.now.name);
 
             // 게임 플로우 셋팅
             GameMaster.flowCopy = gameFlow;

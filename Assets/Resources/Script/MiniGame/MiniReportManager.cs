@@ -45,6 +45,9 @@ public class MiniReportManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 미니게임 정산 진입
+        Turn.Next();
+
         // 설정
         SetUp();
 

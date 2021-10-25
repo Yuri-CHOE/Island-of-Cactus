@@ -53,6 +53,19 @@ public static class Turn
         return now;
     }
 
+    public static void Skip(string playerName)
+    {
+        for (int i = 0; i < origin.Count; i++)
+        {
+            // 값 일치 체크
+            if (origin[i].name.Equals(playerName))
+            {
+                // 스킵 작동
+                Skip(origin[i]);
+                return;
+            }
+        }
+    }
     public static void Skip(Player skipStop)
     {
         // 잘못된 플레이어 입력시 중단
@@ -65,7 +78,10 @@ public static class Turn
             }
 
         while (now != skipStop)
-            Next();
+            // 하나 꺼내서 재입력 (순환)
+            queue.Enqueue(queue.Dequeue());
+
+        Debug.Log("턴 제어 :: 플레이어의 턴으로 변경됨 -> " + skipStop.name);
     }
 
     public static void Clear()

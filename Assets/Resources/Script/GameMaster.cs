@@ -614,16 +614,17 @@ public class GameMaster : MonoBehaviour
         else if(Turn.now == Player.system.Minigame)
         {
             // 미니게임 선정
-            if (MiniGameManager.progress == ActionProgress.Ready)
-            {
-                // 미니게임 알림 연출
-                // 미구현=============================
-                
-                // 미니게임 로드
-                loadingManager.LoadAsyncMiniGameRandom();
+            if (MiniGameManager.minigameNow == null)
+                if (MiniGameManager.progress == ActionProgress.Ready)
+                {
+                    // 미니게임 알림 연출
+                    // 미구현=============================
 
-                Turn.Next();
-            }
+                    // 미니게임 로드
+                    loadingManager.LoadAsyncMiniGameRandom();
+
+                    // Turn.Next();
+                }
 
         }
         // 시스템 플레이어 - 미니게임 엔더
