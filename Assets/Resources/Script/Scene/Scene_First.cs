@@ -25,6 +25,9 @@ public class Scene_First : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 환경설정 로드
+        Preferences.Load();
+
         // 즉시 로딩 시작
         ao = SceneManager.LoadSceneAsync(nextScene);
 
