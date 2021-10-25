@@ -505,7 +505,7 @@ public class CSVReader
             // 닫기
             sw.Close();
 
-            Debug.LogWarning("저장 성공 :: " + @_file);
+            Debug.Log("저장 성공 :: " + @_file);
         }
     }
 

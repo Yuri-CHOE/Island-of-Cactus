@@ -34,16 +34,16 @@ public class Minigame
             switch (rank)
             {
                 case 1:
-                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_1);
+                    Debug.Log("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_1);
                     return rank_1;
                 case 2:
-                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_2);
+                    Debug.Log("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_2);
                     return rank_2;
                 case 3:
-                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_3);
+                    Debug.Log("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_3);
                     return rank_3;
                 case 4:
-                    Debug.LogWarning("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_4);
+                    Debug.Log("미니게임 :: 보상 지분 -> " + rank + "등 = 포인트 " + rank_4);
                     return rank_4;
                 default:
                     return 0;
@@ -185,7 +185,7 @@ public class Minigame
         while (table[indexer].playerMin < entryCount)
             indexer = Random.Range(1, table.Count);
 
-        Debug.LogWarning("미니게임 :: 랜덤 인덱스 -> " + indexer);
+        Debug.Log("미니게임 :: 랜덤 인덱스 -> " + indexer);
 
         return table[indexer];
     }

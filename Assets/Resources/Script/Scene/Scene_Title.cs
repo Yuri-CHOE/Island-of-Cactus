@@ -37,7 +37,7 @@ public class Scene_Title : MonoBehaviour
             if (characterList[i].GetComponent<Toggle>().isOn)
             {
                 _selected = i + 1;
-                Debug.LogWarning("선택된 캐릭터 인덱스 : " + selected);
+                Debug.Log("선택된 캐릭터 인덱스 : " + selected);
                 return;
             }
     }

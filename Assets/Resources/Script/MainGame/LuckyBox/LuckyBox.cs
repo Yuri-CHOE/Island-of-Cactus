@@ -248,10 +248,10 @@ public class LuckyBox
                         dropTable.rare.Add(Item.tableLuckyDrop[i].rare);
                         Debug.Log("드랍 테이블 :: 추가됨 -> " + Item.tableLuckyDrop[i].rare);
                     }
-                    Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
+                    Debug.Log("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
 
                     int select = dropTable.Drop();
-                    Debug.LogWarning("럭키 아이템 :: 선택됨 -> " + Item.tableLuckyDrop[select].name);
+                    Debug.Log("럭키 아이템 :: 선택됨 -> " + Item.tableLuckyDrop[select].name);
 
                     // 지급
                     user.AddItem(Item.tableLuckyDrop[select], 1);

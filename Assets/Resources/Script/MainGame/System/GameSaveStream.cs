@@ -181,7 +181,7 @@ public static class GameSaveStream
             BlockWork.minusBlockValue = minusBlockValue;
             Debug.Log("로드 :: 게임 정보 -> BlockWork.minusBlockValue = " + BlockWork.minusBlockValue);
 
-            Debug.LogWarning("로드 :: 게임 정보 -> 완료됨");
+            Debug.Log("로드 :: 게임 정보 -> 완료됨");
         }
 
         /// <summary>
@@ -361,17 +361,16 @@ public static class GameSaveStream
             //    Turn.Skip(Player.allPlayer[turnNow]);
             //}
 
-            Debug.LogError("세이브 :: 디버그 " + turnNow);
-            Debug.LogError("세이브 :: 디버그 " + Turn.origin[turnNow].name);
             Turn.Skip(Turn.origin[turnNow]);
-
             Debug.Log("로드 :: 현재 턴 설정 -> " + Turn.now.name);
 
             // 게임 플로우 셋팅
             GameMaster.flowCopy = gameFlow;
+            Debug.Log("로드 :: 현재 게임 플로우 -> " + GameMaster.flowCopy.ToString());
 
             // 턴 플로우 셋팅
             Turn.turnAction = turnAction;
+            Debug.Log("로드 :: 현재 턴 플로우 -> " + Turn.turnAction.ToString());
         }
     }
 
@@ -914,14 +913,14 @@ public static class GameSaveStream
         //using (FileStream fs = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.Write))
         using (FileStream fs = new FileStream(@fullPath, FileMode.Create, FileAccess.Write))
         {
-            Debug.LogError("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
+            Debug.Log("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
 
             BinaryFormatter bf = new BinaryFormatter();
 
             if (useEncryptor == LockType.None)
             {
                 bf.Serialize(fs, new SaveForm(0));
-                Debug.LogError("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
+                Debug.Log("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
             }
             else
             {
@@ -930,13 +929,13 @@ public static class GameSaveStream
                 {
                     bf.Serialize(cs, new SaveForm(0));
                 }
-                Debug.LogError("세이브 :: 암호화 사용 " + fs.CanWrite);
+                Debug.Log("세이브 :: 암호화 사용 " + fs.CanWrite);
             }
         }
 
         // 파일 지정
         saveFileInfo = new FileInfo(@fullPath);
-        Debug.LogError("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
+        Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
 
     }
     public static bool GameRead()

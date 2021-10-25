@@ -293,7 +293,7 @@ public class CardManager : MonoBehaviour
         // 세번째 선택 (너무 빠른 선택)
         else
         {
-            Debug.LogWarning("warning :: 이전 처리 대기중");
+            Debug.LogWarning("카드 선택됨 :: 이전 처리 대기중");
             return;
         }
 
@@ -397,7 +397,7 @@ public class CardManager : MonoBehaviour
 
 
         // 게임 시작
-        Debug.LogWarning("미니게임 :: 게임 시작됨");
+        Debug.Log("미니게임 :: 게임 시작됨");
 
         // 모든 카드 첫 오픈
         for (int i = 0; i < deck.Count; i++)
@@ -410,7 +410,7 @@ public class CardManager : MonoBehaviour
     void Ending()
     {
         // 게임 시작
-        Debug.LogWarning("미니게임 :: 게임 종료됨");
+        Debug.Log("미니게임 :: 게임 종료됨");
 
         // 초기화
         completePair = 0;

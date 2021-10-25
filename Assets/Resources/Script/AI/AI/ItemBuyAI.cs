@@ -59,7 +59,7 @@ namespace CustomAI
             public override IEnumerator Work()
             {
                 // 작업 수행
-                Debug.LogWarning("AI Run :: ItemBuy");
+                Debug.Log("AI Run :: ItemBuy");
 
                 // 스타트 딜레이
                 WaitForSeconds waiter = new WaitForSeconds(element.latency.value / 4 + 0.5f);

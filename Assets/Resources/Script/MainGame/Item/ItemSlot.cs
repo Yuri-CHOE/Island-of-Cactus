@@ -164,7 +164,7 @@ public class ItemSlot : MonoBehaviour
 
         // UI 셋팅
         GameMaster.script.itemManager.selected = this;
-        Debug.LogWarning("아이템 :: 상세보기 => " + GameData.gameMaster.itemManager.selected.item.index);
+        Debug.Log("아이템 :: 상세보기 => " + GameData.gameMaster.itemManager.selected.item.index);
         GameMaster.script.itemManager.nameText.text = item.name;
         GameMaster.script.itemManager.infoText.text = item.info;
 
@@ -203,7 +203,7 @@ public class ItemSlot : MonoBehaviour
 
     public void Take(ItemSlot target)
     {
-        Debug.LogWarning("아이템 계승 :: " + target.item.name + " -> " + target.count);
+        Debug.Log("아이템 계승 :: " + target.item.name + " -> " + target.count);
 
         item = target.item;
         target.item = null;

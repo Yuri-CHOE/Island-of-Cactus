@@ -243,7 +243,7 @@ public class ItemManager : MonoBehaviour
     //public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count, Sprite _icon)
     public DynamicItem CreateItemObject(int blockIndex, int itemIndex, int _count )
     {
-        Debug.LogWarning("아이템 생성 :: " + blockIndex + " 에서 생성됨");
+        Debug.Log("아이템 생성 :: " + blockIndex + " 에서 생성됨");
 
         // 아이템 오브젝트 생성 후 스크립트 확보
         DynamicItem dItem = Create(blockIndex);
@@ -268,7 +268,7 @@ public class ItemManager : MonoBehaviour
     public static void ReCreateAll() { ReCreateAll(false); }
     public static void ReCreateAll(bool isDeleted)
     {
-        Debug.LogError("아이템 오브젝트 :: 재생성 요청됨 => 총 "+itemObjectList.Count);
+        Debug.Log("아이템 오브젝트 :: 재생성 요청됨 => 총 "+itemObjectList.Count);
 
         // 백업
         List<DynamicItem> temp = itemObjectList;

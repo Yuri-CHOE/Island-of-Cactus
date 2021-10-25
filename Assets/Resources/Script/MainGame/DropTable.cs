@@ -21,7 +21,7 @@ public struct DropTable
             // 랜덤 값 가져오기
             int randomValue = Random.Range(0, totalRare);
 
-            Debug.LogWarning("드랍 테이블(총 "+ rare.Count + ") :: 0 ~ " + totalRare + " 중 선택됨 -> " + randomValue);
+            Debug.Log("드랍 테이블(총 "+ rare.Count + ") :: 0 ~ " + totalRare + " 중 선택됨 -> " + randomValue);
 
             int result = 0;
             for (int i = 0; i < rare.Count; i++)

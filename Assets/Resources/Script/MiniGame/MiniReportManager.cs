@@ -46,7 +46,8 @@ public class MiniReportManager : MonoBehaviour
     void Start()
     {
         // 미니게임 정산 진입
-        Turn.Next();
+        if(Turn.now == Player.system.Minigame)
+            Turn.Next();
 
         // 설정
         SetUp();
@@ -80,8 +81,6 @@ public class MiniReportManager : MonoBehaviour
                 Debug.LogWarning(GameData.gameFlow);
                 return;
             }
-
-            Debug.LogWarning("체크");
 
             // 로딩 종료시 씬 제거
             Destroy(transform.root.gameObject);

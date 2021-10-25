@@ -512,7 +512,7 @@ public class GameMaster : MonoBehaviour
 
                     // 연출 종료 처리
                     GameData.gameFlow = Flow.Trophy;
-                    Debug.LogWarning("게임 정산 :: 종료절차 수행");
+                    Debug.Log("게임 정산 :: 종료절차 수행");
                 }
                 break;
 
@@ -633,8 +633,16 @@ public class GameMaster : MonoBehaviour
             // 미니게임 로딩 대기
             if (MiniGameManager.progress != ActionProgress.Finish)
             {
-                //Debug.LogError(MiniGameManager.progress);
-                return;
+                // 타이틀 -> 로딩에서 진입 예외처리
+                if (MiniGameManager.progress == ActionProgress.Ready)
+                {
+                    Debug.LogWarning("미니게임 정산 :: 새로운 시작 감지됨");
+                }
+                else
+                {
+                    //Debug.LogError(MiniGameManager.progress);
+                    return;
+                }
             }
 
             //// 미니게임 정산 페이지 삭제
@@ -921,7 +929,7 @@ public class GameMaster : MonoBehaviour
             }
             else if (Turn.actionProgress == ActionProgress.Start)
             {
-                Debug.LogWarning("아이템 사용됨");
+                Debug.Log("아이템 사용됨");
 
                 // 사용 준비 연출
 
@@ -946,7 +954,7 @@ public class GameMaster : MonoBehaviour
 
 
                 // 스킵
-                Debug.LogWarning("아이템 사용 종료");
+                Debug.Log("아이템 사용 종료");
                 Turn.actionProgress = ActionProgress.Finish;
             }
             else if (Turn.actionProgress == ActionProgress.Finish)
@@ -987,7 +995,7 @@ public class GameMaster : MonoBehaviour
             else if (Turn.actionProgress == ActionProgress.Working)
             {
                 // 액션 스케줄링
-                Debug.LogWarning( "액션 스케줄링 :: 총 이동력 => " +Turn.now.dice.valueTotal);
+                Debug.Log( "액션 스케줄링 :: 총 이동력 => " +Turn.now.dice.valueTotal);
                 Turn.now.movement.PlanMoveBy(
                     Turn.now.dice.valueTotal
                     );

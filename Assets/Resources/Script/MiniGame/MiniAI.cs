@@ -498,7 +498,7 @@ namespace CustomAI
                             // step 5 - 제출
                             SelectedAnswer(selectTemp);
 
-                            Debug.LogWarning(
+                            Debug.Log(
                             string.Format("미니 AI :: {0}의 정답 제출됨-> {1} = {2} + {3} = {4}",
                     owner.name,
                     selectTemp.pieces[0].obj.name,

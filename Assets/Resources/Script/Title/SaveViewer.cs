@@ -57,7 +57,7 @@ public class SaveViewer : MonoBehaviour
         else
         {
             // 로드 성공
-            Debug.LogWarning("세이브 뷰어 :: 세이브 파일 발견");
+            Debug.Log("세이브 뷰어 :: 세이브 파일 발견");
             btnContinue.interactable = true;
             selector.setUp(1);
         }

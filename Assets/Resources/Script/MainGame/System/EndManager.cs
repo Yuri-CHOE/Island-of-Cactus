@@ -68,7 +68,7 @@ public static class EndManager
                     continue;
 
                 yield return Player.allPlayer[i].movement.Tleport(-1, 1f);
-                Debug.LogWarning("게임 정산 :: 중앙 소환 -> " + Player.allPlayer[i].name);
+                Debug.Log("게임 정산 :: 중앙 소환 -> " + Player.allPlayer[i].name);
             }
 
             // 소환 완료 대기
@@ -83,7 +83,7 @@ public static class EndManager
                 {
                     check = check || Player.allPlayer[i].movement.isBusy;
                     check = check || Player.allPlayer[i].location != -1;
-                    Debug.LogWarning(string.Format("게임 정산 :: 소환 상태 -> {0} = 블록 {1} (이동중 = {2})" , Player.allPlayer[i].name, Player.allPlayer[i].location, Player.allPlayer[i].movement.isBusy));
+                    Debug.Log(string.Format("게임 정산 :: 소환 상태 -> {0} = 블록 {1} (이동중 = {2})" , Player.allPlayer[i].name, Player.allPlayer[i].location, Player.allPlayer[i].movement.isBusy));
                 }
 
                 yield return null;
@@ -100,7 +100,6 @@ public static class EndManager
 
     public static IEnumerator Trophy()
     {
-        Debug.LogWarning("정산체크");
         // 작동 상태 체크
         if (endProgress != ActionProgress.Start)
         {

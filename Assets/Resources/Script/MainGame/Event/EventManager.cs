@@ -96,7 +96,7 @@ public class EventManager : MonoBehaviour
         // 이벤트 셋팅
         dEvent.SetUp(eventIndex, _count, creator);
 
-        Debug.LogWarning("이벤트 생성 :: [" + dEvent.iocEvent.name + "] 이벤트가 " + blockIndex + " 에서 생성됨");
+        Debug.Log("이벤트 생성 :: [" + dEvent.iocEvent.name + "] 이벤트가 " + blockIndex + " 에서 생성됨");
 
 
         // 목록에 추가
@@ -112,7 +112,7 @@ public class EventManager : MonoBehaviour
     public static void ReCreateAll() { ReCreateAll(false); }
     public static void ReCreateAll(bool isDeleted)
     {
-        Debug.LogError("이벤트 오브젝트 :: 재생성 요청됨 => 총 " + eventObjectList.Count);
+        Debug.Log("이벤트 오브젝트 :: 재생성 요청됨 => 총 " + eventObjectList.Count);
 
         // 백업
         List<DynamicEvent> temp = eventObjectList;

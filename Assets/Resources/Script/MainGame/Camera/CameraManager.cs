@@ -70,8 +70,8 @@ public class CameraManager : MonoBehaviour
 
     public void CamToPlayer(Transform obj)
     {
-        Debug.LogWarning(obj.GetComponent<PlayerInfoUI>().owner.avatar.transform.name);
-        Debug.LogWarning(obj.GetComponent<PlayerInfoUI>().owner.avatar.transform.position);
+        Debug.Log(obj.GetComponent<PlayerInfoUI>().owner.avatar.transform.name);
+        Debug.Log(obj.GetComponent<PlayerInfoUI>().owner.avatar.transform.position);
 
         // 자유 모드 아닐경우 중단
         if (!controller.isFreeMode)
@@ -82,7 +82,7 @@ public class CameraManager : MonoBehaviour
 
         // 좌표 싱크
         controller.cam.position = obj.GetComponent<PlayerInfoUI>().owner.avatar.transform.position;
-        Debug.LogWarning(controller.cam.position);
+        Debug.Log(controller.cam.position);
 
         // 앵글 전환
         CamMoveTo(controller.cam, CamAngle.Top);
@@ -300,7 +300,7 @@ public class CameraManager : MonoBehaviour
         // 자유 모드 아닐경우
         if (LockBtn.isOn)
         {
-            Debug.LogWarning(LockBtn.isOn);
+            Debug.Log("카메라 :: 자유모드 -> " + LockBtn.isOn);
 
             // 앵글 변환
             CamReturn();
@@ -311,7 +311,7 @@ public class CameraManager : MonoBehaviour
         // 자유 모드
         else
         {
-            Debug.LogWarning(LockBtn.isOn);
+            Debug.Log("카메라 :: 자유모드 -> " + LockBtn.isOn);
 
             // 앵글 변환
             CamFree();

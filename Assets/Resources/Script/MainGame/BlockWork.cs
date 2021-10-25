@@ -51,7 +51,7 @@ public static class BlockWork
         // 블록 종류 파악
         BlockType.TypeDetail blockType = GetBlockType(location);
 
-        Debug.LogWarning("블록 기능 :: " + currentPlayer.name  +" 에 의해 작동됨 => "+ blockType );
+        Debug.Log("블록 기능 :: " + currentPlayer.name  +" 에 의해 작동됨 => "+ blockType );
         //Debug.Break();
 
         // 블록 별 기능
@@ -198,7 +198,7 @@ public static class BlockWork
 
         // 배치할 위치
         int loc = GameData.blockManager.indexLoop(currentPlayer.movement.location, -1);
-        Debug.LogWarning("트랩 블록 : 날릴 위치 => " + loc);
+        Debug.Log("트랩 블록 : 날릴 위치 => " + loc);
         Vector3 pos = GameData.blockManager.GetBlock(loc).transform.position;
 
 
@@ -230,12 +230,12 @@ public static class BlockWork
             dropTable.rare.Add(LuckyBox.table[i].rare);
             Debug.Log("드랍 테이블 :: 추가됨 -> " + LuckyBox.table[i].rare);
         }
-        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
+        Debug.Log("드랍 테이블 :: 목록 총량 ->" + dropTable.rare.Count);
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
         //select = 5;
-        Debug.LogWarning("럭키박스 :: 선택됨 -> "+ select);
+        Debug.Log("럭키박스 :: 선택됨 -> "+ select);
 
         // 럭키박스 연출 시작
         LuckyBoxManager lbm = LuckyBoxManager.script;
@@ -270,7 +270,7 @@ public static class BlockWork
 
         // 드랍테이블 셋팅
         dropTable.rare = new List<int>();
-        Debug.LogWarning("드랍 테이블 :: 목록 총량 ->" + Item.table.Count);
+        Debug.Log("드랍 테이블 :: 목록 총량 ->" + Item.table.Count);
         for (int i = first; i < Item.table.Count; i++)
         {
             dropTable.rare.Add(Item.table[i].rare);
@@ -288,7 +288,7 @@ public static class BlockWork
             trueIndex = select[i] + first;
 
             // 드랍 테이블 작동
-            Debug.LogWarning("아이템 상점 :: 추가됨 -> [" + trueIndex + "] " + Item.table[trueIndex].name);
+            Debug.Log("아이템 상점 :: 추가됨 -> [" + trueIndex + "] " + Item.table[trueIndex].name);
              
             // 아이템 번들 등록
             ItemShop.script.SetItemBundle(i, Item.table[trueIndex]);

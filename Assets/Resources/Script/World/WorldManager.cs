@@ -56,7 +56,7 @@ public class WorldManager : MonoBehaviour
 
         // 월드명 등록
         GameData.SetWorldFileName(fName);
-        Debug.LogWarning("맵 파일 :: " + fName);
+        Debug.Log("맵 파일 :: " + fName);
 
         // 파일 읽기
         CSVReader worldFileReader = new CSVReader(subRoot, fName, false, true, tableSplit, endSplit);

@@ -225,7 +225,7 @@ public class LoadingManager : MonoBehaviour
             return;
         }
 
-        Debug.LogWarning(string.Format("미니게임 :: 호출됨 -> [{0}] {1}",minigame.index, minigame.name));
+        Debug.Log(string.Format("미니게임 :: 호출됨 -> [{0}] {1}",minigame.index, minigame.name));
 
         // 미니게임 설정
         MiniGameManager.minigameNow = minigame;
@@ -452,7 +452,7 @@ public class LoadingManager : MonoBehaviour
         {
             // 장애물 재생성
             {
-                Debug.LogWarning(string.Format(
+                Debug.Log(string.Format(
                     "로딩 :: 오브젝트 재생성 요청됨\n합산 : {0}\n아이템 : {1}\n이벤트 : {2}",
                     ItemManager.itemObjectList.Count + EventManager.eventObjectList.Count, 
                     ItemManager.itemObjectList.Count, 

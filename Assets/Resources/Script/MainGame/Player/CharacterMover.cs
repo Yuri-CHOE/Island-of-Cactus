@@ -267,7 +267,7 @@ public class CharacterMover : MonoBehaviour
         // 최종 목표
         int movePoint = GameData.blockManager.indexLoop(_location, moveValue);
 
-        Debug.LogWarning("이동 예상 :: "+moveValue + " 칸 이동하여 도착지점 = " + movePoint);
+        Debug.Log("이동 예상 :: "+moveValue + " 칸 이동하여 도착지점 = " + movePoint);
 
         // 총 이동 거리(moveValue) 이내에 장애물 계산
         int counter = 0;
@@ -423,7 +423,7 @@ public class CharacterMover : MonoBehaviour
     {
         actNow = actionsQueue.Dequeue();
 
-        Debug.LogWarning("액션 :: " + actNow.type.ToString());
+        Debug.Log("액션 :: " + actNow.type.ToString());
 
         return ref actNow;
     }
@@ -450,7 +450,7 @@ public class CharacterMover : MonoBehaviour
         }
         else if (act.progress == ActionProgress.Start)
         {
-            Debug.LogWarning("공격 목록 작성");
+            Debug.Log("액션 :: 플래닝 -> 공격 목록 작성");
 
             // 공격 대상 스캔
             for (int i = 0; i < owner.otherPlayers.Count; i++)
@@ -461,7 +461,7 @@ public class CharacterMover : MonoBehaviour
                     attackTarget.Add(owner.otherPlayers[i]);
 
                     // 로그
-                    Debug.LogWarning("공격 목록 추가 :: " + owner.otherPlayers[i].name + "가 추가됨");
+                    Debug.Log("액션 :: 플래닝 -> 공격 목록 추가 :: " + owner.otherPlayers[i].name + "가 추가됨");
                 }
                 //else Debug.LogWarning("공격 대상 아님 :: " + owner.otherPlayers[i].name);
 
@@ -486,7 +486,7 @@ public class CharacterMover : MonoBehaviour
                         owner.Attack(attackTarget[i]);
 
                         // 로그
-                        Debug.LogWarning("공격 시도 :: " + owner.name + "가 " + attackTarget[i].name + "를 공격");
+                        Debug.Log("액션 :: 공격 시도 -> " + owner.name + "가 " + attackTarget[i].name + "를 공격");
                     }
                     // 임시 : 아래의 종료판정으로 옮길것
                     attackTarget.Clear();
@@ -521,7 +521,7 @@ public class CharacterMover : MonoBehaviour
 
         if (act.progress == ActionProgress.Ready)
         {
-            Debug.LogWarning("오브젝트 습득 :: 액션 위치 = " + act.count);
+            Debug.Log("액션 :: 오브젝트 습득 -> 위치 = " + act.count);
 
             // 오브젝트 : 초기화
             objectPickUpList.Clear();
@@ -561,12 +561,12 @@ public class CharacterMover : MonoBehaviour
                     objectPickUpList.Add(obj);
 
                     // 로그
-                    Debug.LogWarning(string.Format("{0} 오브젝트 :: 습득 목록 추가 => ", obj.type, obj.transform.name));
+                    Debug.Log(string.Format("액션 :: {0} 오브젝트 -> {1}의 습득 목록 추가", obj.type, obj.transform.name));
 
                     continue;
                 }
                 else
-                    Debug.LogWarning(string.Format("{0} 오브젝트 :: 습득 자격 미달 => ", obj.type, obj.transform.name));
+                    Debug.Log(string.Format("액션 :: {0} 오브젝트 -> {1}의 습득 자격 미달", obj.type, obj.transform.name));
 
             }
 
@@ -639,7 +639,7 @@ public class CharacterMover : MonoBehaviour
         {
             DynamicItem di = (DynamicItem)current;
 
-            Debug.LogWarning("아이템 오브젝트 :: 습득 => " + di.item.index);
+            Debug.Log("액션 :: 아이템 오브젝트 습득 => " + di.item.index);
 
             // 획득
             di.GetItem(owner);
@@ -653,7 +653,7 @@ public class CharacterMover : MonoBehaviour
         {
             DynamicEvent de = (DynamicEvent)current;
 
-            Debug.LogWarning("이벤트 오브젝트 :: 습득 => " + de.iocEvent.index);
+            Debug.Log("액션 :: 이벤트 오브젝트 습득 => " + de.iocEvent.index);
 
             // 획득
             //de.GetEvent(owner, de.location);
@@ -825,11 +825,11 @@ public class CharacterMover : MonoBehaviour
     /// </summary>
     public void MoveStop()
     {
-        Debug.LogError("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location + " = " + location);
+        Debug.Log("액션 중단 :: (" + transform.name + ") 에서 요청됨 -> " + owner.location + " = " + location);
 
         //int diceTemp = owner.location - location;
         int diceTemp = owner.dice.valueTotal - (owner.location - location);
-        Debug.LogError("액션 중단 :: 잔여 주사위 = " + diceTemp);
+        Debug.Log("액션 중단 :: 잔여 주사위 = " + diceTemp);
         owner.dice.SetValueTotal(diceTemp);
 
         // 스킵 대상 없을 경우
@@ -843,7 +843,7 @@ public class CharacterMover : MonoBehaviour
                 // 제거
                 //    Action.ActionType aType = actionsQueue.Dequeue().type;
                 //    Debug.LogError("액션 제거 :: " + aType);
-                Debug.LogError("액션 제거 :: " + actionsQueue.Dequeue().type);
+                Debug.Log("액션 제거 :: " + actionsQueue.Dequeue().type);
             }
 
             //// 액션 전체 제거
@@ -1062,7 +1062,7 @@ public class CharacterMover : MonoBehaviour
 
     public void GotoJail()
     {
-        Debug.LogWarning("감옥으로 이동 :: " + transform.name);
+        Debug.Log("액션 :: 감옥으로 이동 -> " + transform.name);
 
         // 잔여 액션 제거
         actionsQueue.Clear();

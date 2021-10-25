@@ -67,7 +67,7 @@ public class ItemShop : MonoBehaviour
         for (int i = 0; i < bundle.Count; i++)
             if (bundle[i].toggle.isOn)
             {
-                Debug.LogWarning("아이템 구매 :: 슬롯" + i);
+                Debug.Log("아이템 구매 :: 슬롯" + i);
                 Pay(customer, bundle[i]);
                 buyCount++;
             }

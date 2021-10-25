@@ -60,7 +60,7 @@ public class DynamicObject : MonoBehaviour
 
         // Àå¾Ö¹° µî·Ï
         objectList[loc].Add(this);
-        Debug.LogWarning(string.Format("Àå¾Ö¹° :: {0} Ä­¿¡ Ãß°¡µÊ(ÃÑ ¼ö·® => {1})", location, objectList[loc].Count));
+        Debug.Log(string.Format("Àå¾Ö¹° :: {0} Ä­¿¡ Ãß°¡µÊ(ÃÑ ¼ö·® => {1})", location, objectList[loc].Count));
     }
 
 

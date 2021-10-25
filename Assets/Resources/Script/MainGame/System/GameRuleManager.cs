@@ -126,7 +126,7 @@ public class GameRuleManager : MonoBehaviour
     {
         GameRule.cycleMax = Limiter(value, (int)cycleMaxSlider.minValue, (int)cycleMaxSlider.maxValue);
 
-        Debug.LogWarning("game rule :: cycle °ª º¯°æµÊ => " +GameRule.cycleMax );
+        Debug.Log("game rule :: cycle °ª º¯°æµÊ => " +GameRule.cycleMax );
 
         cycleMaxInput.text = GameRule.cycleMax.ToString();
     }
@@ -135,7 +135,7 @@ public class GameRuleManager : MonoBehaviour
     {
         GameRule.playerCount = Limiter(value, (int)playerCountSlider.minValue, (int)playerCountSlider.maxValue);
 
-        Debug.LogWarning("game rule :: player °ª º¯°æµÊ => " + GameRule.playerCount);
+        Debug.Log("game rule :: player °ª º¯°æµÊ => " + GameRule.playerCount);
 
         playerCountInput.text = GameRule.playerCount.ToString();
     }

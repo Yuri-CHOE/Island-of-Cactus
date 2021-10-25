@@ -79,7 +79,7 @@ namespace CustomAI
 
             IEnumerator ClickBySec(float DownSec, float UpSec)
             {
-                Debug.LogWarning("AI Run :: dice -> " + DownSec + " after " + UpSec);
+                Debug.Log("AI Run :: dice -> " + DownSec + " after " + UpSec);
 
                 // 에이징 리셋
                 element.AgeSet(0f);

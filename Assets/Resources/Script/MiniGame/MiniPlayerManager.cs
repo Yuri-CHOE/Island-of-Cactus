@@ -123,12 +123,12 @@ public class MiniPlayerManager : MonoBehaviour
                 // UI 활성
                 monster.gameObject.SetActive(true);
 
-                Debug.LogWarning("미니게임 :: 플레이어 참가 -> " + temp.name);
+                Debug.Log("미니게임 :: 플레이어 참가 -> " + temp.name);
             }
             else
             {
 
-                Debug.LogWarning("미니게임 :: 플레이어 참가 안함 -> " + temp.name);
+                Debug.Log("미니게임 :: 플레이어 참가 안함 -> " + temp.name);
                 //// UI 비활성
                 //scoreList[i].gameObject.SetActive(false);
             }
@@ -157,12 +157,12 @@ public class MiniPlayerManager : MonoBehaviour
                 // UI 활성
                 scoreList[i].gameObject.SetActive(true);
 
-                Debug.LogWarning("미니게임 :: 플레이어 참가 -> " + temp.name);
+                Debug.Log("미니게임 :: 플레이어 참가 -> " + temp.name);
             }
             else
             {
 
-                Debug.LogWarning("미니게임 :: 플레이어 참가 안함 -> " + temp.name);
+                Debug.Log("미니게임 :: 플레이어 참가 안함 -> " + temp.name);
                 //// UI 비활성
                 //scoreList[i].gameObject.SetActive(false);
             }
@@ -251,7 +251,7 @@ public class MiniPlayerManager : MonoBehaviour
                         // 전체 지분량 반영
                         MiniScore.totalRewardRatio += tempPlayer.miniInfo.rewardRatio;
 
-                        Debug.LogWarning("미니게임 :: 보상 지분 -> " + tempPlayer.miniInfo.rewardRatio + " by 플레이어 " + tempPlayer.name);
+                        Debug.Log("미니게임 :: 보상 지분 -> " + tempPlayer.miniInfo.rewardRatio + " by 플레이어 " + tempPlayer.name);
                     }
                     // 불참시
                     else
