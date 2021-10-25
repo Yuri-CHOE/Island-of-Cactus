@@ -64,6 +64,9 @@ namespace CustomAI
                     //    StopCoroutine(coroutine);
                 }
 
+                // 아이템 사용 가능 여부 리셋
+                ((ItemUseAI)owner.ai.mainGame.itemUse).canDice = false;
+
                 // 작업 수행
                 yield return ClickBySec(
                          element.intelligence.value,

@@ -178,8 +178,7 @@ public static class Tool
                 min,
                 target.position.z
                 );
-            Debug.Log("최소값 보정");
-            Debug.Log(target.position.ToString());
+            Debug.Log("최소값 보정 :: " + target.position.ToString());
         }
 
         // 최대값 제한

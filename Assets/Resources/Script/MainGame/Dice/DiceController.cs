@@ -86,15 +86,6 @@ public class DiceController : MonoBehaviour
     public bool isFinish { get { return action == DiceAction.Finish && actionProgress == ActionProgress.Finish; } }
 
 
-
-    [Header("TestTool")]
-    [SerializeField]
-    bool testRun = false;
-    [SerializeField]
-    Transform testObject;
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -105,7 +96,6 @@ public class DiceController : MonoBehaviour
     void Update()
     {
         ActUpdate();
-        test();
 
         if(owner != null)
         {
@@ -113,21 +103,6 @@ public class DiceController : MonoBehaviour
             if (isTimeCountWork && !owner.isAutoPlay)
                 isTimeCountWork = false;
         }
-    }
-
-    void test()
-    {
-        if (!testRun)
-            return;
-
-        Debug.Log("테스트 요청됨");
-        testRun = false;
-
-        if (Player.me == null)
-            Player.me = new Player(Player.Type.User, 1, false, "테스트");
-
-        CallDice(Player.me, testObject);
-
     }
 
     void ActUpdate()

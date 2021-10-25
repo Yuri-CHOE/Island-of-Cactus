@@ -281,59 +281,75 @@ public class GameMaster : MonoBehaviour
                     {
                         //Debug.Log("게임 플로우 :: 순서 주사위 확인중");
 
-                        // 주사위를 아무도 굴리지 않을때
-                        if (diceController.isFree)
-                        {
-
-                            // 플레이어별 체크
-                            Player current;
-                            for (int i = 0; i < Player.allPlayer.Count; i++)
-                            {
-                                current = Player.allPlayer[i];
-
-                                // 이미 굴렸으면 다음 플레이어 처리
-                                if (current.dice.isRolled)
-                                    continue;
-
-                                // 해당 플레이어가 굴리고 있지 않으면 주사위 호출
-                                if (!current.dice.isRolling)
-                                {
-                                    Debug.Log(string.Format("게임 플로우 :: Player{0} 주사위 굴리는중", i + 1));
-
-                                    // 주사위 지급
-                                    Player.allPlayer[i].dice.count = 1;
-
-                                    // 주사위 기능 호출
-                                    diceController.CallDice(
-                                        current,
-                                        current.avatar.transform
-                                    );
-
-                                    // 다른 플레이어 무시
-                                    break;
-                                }
-                            }
-                        }
-
-                        // 주사위 마무리
-                        if (diceController.isFinish)
-                            diceController.UseDice();
-
-                        // 모두가 주사위 굴리지 않으면 중단
+                        // 플레이어별 체크
+                        Player current;
                         for (int i = 0; i < Player.allPlayer.Count; i++)
                         {
-                            // 순서 주사위 값 설정
-                            Player.allPlayer[i].dice.orderDiceValue = Player.allPlayer[i].dice.value;
+                            current = Player.allPlayer[i];
 
-                            // 주사위 값 초기화
-                            Player.allPlayer[i].dice.Clear();
+                            // 이미 굴렸으면 다음 플레이어 처리
+                            if (current.dice.orderDiceValue > 0)
+                                continue;
 
-                            // 완료 체크
-                            if (Player.allPlayer[i].dice.orderDiceValue <= 0)
+
+                            // 주사위를 아무도 굴리지 않을때
+                            if (diceController.isFree)
+                            //{ }
+
+                            //// 해당 플레이어가 굴리고 있지 않으면 주사위 호출
+                            //if (!current.dice.isRolling)
+                            {
+                                Debug.Log("순서 :: 주사위 호출 -> " + current.name);
+
+                                // 주사위 지급
+                                Player.allPlayer[i].dice.count = 1;
+
+                                // 주사위 기능 호출
+                                diceController.CallDice(
+                                    current,
+                                    current.avatar.transform
+                                );
+
+                                // 다른 플레이어 무시
+                                //break;
                                 return;
-                            
-                            Debug.Log("순서 :: 플레이어 " + Player.allPlayer[i].name + "의 순서주사위 -> " + Player.allPlayer[i].dice.orderDiceValue);
+                            }
+
+                            // 주사위 마무리
+                            else if (diceController.isFinish)
+                            {
+                                // 주사위 확정
+                                diceController.UseDice();
+
+                                // 순서 주사위 값 설정
+                                current.dice.orderDiceValue = current.dice.value;
+
+                                // 주사위 값 초기화
+                                current.dice.Clear();
+
+                                Debug.Log("순서 :: 플레이어 " + Player.allPlayer[i].name + "의 순서주사위 -> " + Player.allPlayer[i].dice.orderDiceValue);
+                            }
+                            // 재스캔
+                            else
+                                return;
+
                         }
+
+
+                        //// 모두가 주사위 굴리지 않으면 중단
+                        //for (int i = 0; i < Player.allPlayer.Count; i++)
+                        //{
+                        //    // 순서 주사위 값 설정
+                        //    Player.allPlayer[i].dice.orderDiceValue = Player.allPlayer[i].dice.value;
+
+                        //    // 주사위 값 초기화
+                        //    Player.allPlayer[i].dice.Clear();
+
+                        //    // 완료 체크
+                        //    if (Player.allPlayer[i].dice.orderDiceValue <= 0)
+                        //        return;
+
+                        //}
 
                         Debug.Log("게임 플로우 :: 모든 플레이어 주사위 굴림 완료 =>" + Player.allPlayer.Count);
 

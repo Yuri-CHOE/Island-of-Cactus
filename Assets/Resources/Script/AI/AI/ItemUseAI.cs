@@ -52,7 +52,10 @@ namespace CustomAI
                 
                 // 아이템 수량 체크
                 if (owner.inventoryCount <= 0)
+                {
+                    canDice = true;
                     return false;
+                }
 
                 // 작동 허가
                 return true;
