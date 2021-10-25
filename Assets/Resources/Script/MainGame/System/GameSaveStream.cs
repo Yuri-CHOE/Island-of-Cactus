@@ -374,7 +374,6 @@ public static class GameSaveStream
         }
     }
 
-
     // 세이브 파일 폴더명
     static string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
     static string saveFloder = "Save";
@@ -387,33 +386,19 @@ public static class GameSaveStream
     // 세이브 내용
     public static SaveForm saveForm;
 
-    // 세이브 파일 구분 문자
-    static char codeEnder = '#';
-    static char codeChapter = '$';
-    static char codeLine = '|';
-    static char codeData = ',';
-
-    // 챕터별 세이브 파일 코드
-    public static string[] scInfo = null;
-    public static List<string[]> scPlayers = new List<string[]>();
-    public static List<string[]> scItem = new List<string[]>();
-    public static List<string[]> scEvent = new List<string[]>();
-    public static string[] scTurn = null;
-
 
     // 로딩 호출 여부
     public static bool useLoad = false;
 
     // 암호화 사용 여부
-    //static bool useEncrypt = true;
-    static bool useEncrypt = false;
+    static bool useEncrypt = true;
+    //static bool useEncrypt = false;
     static string password = "This_is_Password";
     static string vec = "GrowupGrowupGrowupGrowup";
 
     // 세이브 파일 관리
     public static bool isFileOpen { get { return saveFileInfo != null; } }
     static FileInfo saveFileInfo = null;
-    static StringBuilder saveCodeBuilder = new StringBuilder();
 
     public enum LockType
     {
@@ -425,20 +410,14 @@ public static class GameSaveStream
     public static void Clear()
     {
         saveFileInfo = null;
-        saveCodeBuilder.Clear();
-
-        scInfo = null;
-        scPlayers.Clear();
-        scItem.Clear();
-        scEvent.Clear();
-        scTurn = null;
-
         useLoad = false;
     }
 
 
     public static void SaveRemove()
     {
+        Debug.Log("세이브 :: 파일 제거 요청됨");
+
         // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
         if (GameData.gameMode == GameMode.Mode.None)
         {
@@ -453,264 +432,9 @@ public static class GameSaveStream
         }
 
         // 제거
-        Debug.Log("세이브 파일 :: 제거 요청됨 -> " + saveFileInfo.FullName);
         saveFileInfo.Delete();
-        Debug.Log("세이브 파일 :: 제거 성공여부 -> " + saveFileInfo.Exists);
+        Debug.Log("세이브 :: 파일 제거 성공여부 -> " + saveFileInfo.Exists);
     }
-
-    /// <summary>
-    /// 게임 저장
-    /// </summary>
-    /// <returns>성공 여부</returns>
-    public static bool GameSave1()
-    //public static IEnumerator GameSave()
-    {
-        try
-        {
-            // 데이터 -> 세이브 코드 변환
-            SaveCode();
-            string codeStr = saveCodeBuilder.ToString();
-
-            // 성공여부
-            bool result = false;
-
-            // 암호화 선택형 저장
-            if (useEncrypt)
-                result = Save(LockType.Lock, codeStr);
-            else
-                result = Save(LockType.None, codeStr);
-            Debug.Log("파일 생성됨 :: " + saveFileInfo.FullName);
-
-            return result;
-        }
-        catch
-        {
-            // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
-            if (GameData.gameMode == GameMode.Mode.None)
-            {
-                Debug.LogError("game save :: 저장 실패 " + "게임 모드 -> " + GameData.gameMode);
-                return false;
-            }
-            // 저장 시점 아니면 중단
-            if (GameData.gameFlow <= GameMaster.Flow.Ordering || GameData.gameFlow >= GameMaster.Flow.End)
-            {
-                Debug.LogError("game save :: 저장 실패 " + "게임 플로우 -> " + GameData.gameMode);
-                return false;
-            }
-        }
-        return false;
-    }
-
-
-    /// <summary>
-    /// 데이터 -> 세이브 코드 변환
-    /// </summary>
-    //static StringBuilder SaveCode()
-    static void SaveCode()
-    {
-        saveCodeBuilder.Clear();
-
-        // 게임 정보
-        saveCodeBuilder
-            .Append(GameRule.area)
-            .Append(codeData)
-            .Append(GameRule.section)
-            .Append(codeData)
-            .Append(Cycle.now)
-            .Append(codeData)
-            .Append(Cycle.goal)
-            .Append(codeData)
-            .Append(Player.allPlayer.Count)
-            .Append(codeData)
-            .Append(BlockWork.plusBlockValue)
-            .Append(codeData)
-            .Append(BlockWork.minusBlockValue)
-
-            .Append(codeChapter)
-            ;
-
-        // 플레이어 정보
-        for (int i = 0; i < Player.allPlayer.Count; i++)
-        {
-            Player temp = Player.allPlayer[i];
-
-            saveCodeBuilder
-                .Append(Turn.Index(temp))
-                .Append(codeData)
-                .Append((int)(temp.type))
-                .Append(codeData)
-                .Append(temp.character.index)
-                .Append(codeData)
-                .Append(temp.isAutoPlay)
-                .Append(codeData)
-                .Append(temp.name)
-                .Append(codeData)
-                .Append(temp.movement.location)
-                .Append(codeData)
-                .Append(temp.stunCount)
-                .Append(codeData)
-
-                .Append(temp.life.Value)
-                .Append(codeData)
-                .Append(temp.coin.Value)
-                .Append(codeData)
-
-                .Append(temp.dice.count)
-                .Append(codeData)
-                .Append(temp.dice.valueTotal)
-                .Append(codeData)
-                .Append(temp.dice.valueRecord)
-                .Append(codeData)
-                ;
-
-            for (int j = 0; j < Player.inventoryMax; j++)
-            {
-                if (temp.inventory[j].count > 0)
-                {
-                    // 유효한 아이템
-                    saveCodeBuilder
-                        .Append(temp.inventory[j].item.index)
-                        .Append(codeData)
-                        .Append(temp.inventory[j].count)
-                        ;
-                }
-                else
-                {
-                    // 아이템 없음
-                    saveCodeBuilder
-                        .Append(-1)
-                        .Append(codeData)
-                        .Append(0)
-                        ;
-                }
-
-
-                if (j < Player.inventoryMax - 1)
-                    saveCodeBuilder.Append(codeData);
-            }
-
-            if (Player.allPlayer.Count > 1 && i != Player.allPlayer.Count - 1)
-                saveCodeBuilder.Append(codeLine);
-        }
-        saveCodeBuilder.Append(codeChapter);
-
-
-        // 아이템 오브젝트 배치
-        for (int i = 0; i < ItemManager.itemObjectList.Count; i++)
-        {
-            DynamicItem obj = ItemManager.itemObjectList[i];
-
-            saveCodeBuilder
-                .Append(obj.location)
-                .Append(codeData)
-                .Append(obj.item.index)
-                .Append(codeData)
-                .Append(obj.count)
-                ;
-
-            if (i >= 0 && i != ItemManager.itemObjectList.Count - 1)
-                saveCodeBuilder.Append(codeLine);
-        }
-        saveCodeBuilder.Append(codeChapter);
-
-
-        // 이벤트 오브젝트 배치
-        for (int i = 0; i < EventManager.eventObjectList.Count; i++)
-        {
-            DynamicEvent obj = EventManager.eventObjectList[i];
-
-            saveCodeBuilder
-                .Append(obj.location)
-                .Append(codeData)
-                .Append(obj.iocEvent.index)
-                .Append(codeData)
-                .Append(obj.count)
-                .Append(codeData)
-                .Append(Player.Index(obj.creator))
-                ;
-
-            if (i >= 0 && i != EventManager.eventObjectList.Count - 1)
-                saveCodeBuilder.Append(codeLine);
-        }
-        saveCodeBuilder.Append(codeChapter);
-
-
-        // 상황 설정
-        saveCodeBuilder
-            .Append(Player.Index(Turn.now))
-            .Append(codeData)
-            .Append((int)GameData.gameFlow)
-            .Append(codeData)
-            .Append((int)Turn.turnAction)
-
-            //.Append(codeChapter)
-            ;
-
-
-        // 종료 문자
-        saveCodeBuilder.Append('#');
-
-        //return saveCodeBuilder;
-    }
-
-    //public static void CodeLoad()
-    //{
-    //    // 파일명
-    //    string fName = GameData.gameMode.ToString() + extension;
-
-    //    // 파일 읽기
-    //    List<List<string>> loader = new List<List<string>>();
-    //    string temp = Read(LockType.Unlock);
-    //    loader.Add(new List<string>(
-    //                                temp.Split(codeEnder)[0]
-    //                                    .Split(codeChapter)
-    //                                ));
-    //    Debug.LogError(temp);
-
-
-    //    // 누락 체크
-    //    //if (loader.table.Count == 0)
-    //    if (loader.Count == 0)
-    //    {
-    //        Debug.LogWarning("miss :: 세이브 파일 없음");
-    //        return;
-    //    }
-
-    //    // 초기화
-    //    scInfo = null;
-    //    scPlayers.Clear();
-    //    scItem.Clear();
-    //    scEvent.Clear();
-    //    scTurn = null;
-
-    //    //List<string> code = loader.table[0];
-    //    List<string> code = loader[0];
-
-    //    // 챕터별 세이브 파일 코드
-    //    scInfo = code[0].Split(codeData);
-
-    //    string[] pCode = code[1].Split(codeLine);
-    //    for (int i = 0; i < pCode.Length; i++)
-    //        scPlayers.Add(pCode[i].Split(codeData));
-
-    //    //scItem = code[2].Split(codeData);
-
-    //    //scEvent = code[3].Split(codeData);
-
-    //    pCode = code[2].Split(codeLine);
-    //    for (int i = 0; i < pCode.Length; i++)
-    //        scItem.Add(pCode[i].Split(codeData));
-
-    //    pCode = code[3].Split(codeLine);
-    //    for (int i = 0; i < pCode.Length; i++)
-    //        scEvent.Add(pCode[i].Split(codeData));
-
-    //    scTurn = code[4].Split(codeData);
-    //}
-
-
-
-
 
     static Rfc2898DeriveBytes CreateKey(string _password)
     {
@@ -727,8 +451,6 @@ public static class GameSaveStream
 
         // 출처 : https://fred16157.github.io/.net/csharp-encryption/
     }
-
-
     public static byte[] UnLock(byte[] origin)
     {
         return Ccryptor(origin, LockType.Unlock);
@@ -736,6 +458,42 @@ public static class GameSaveStream
     public static byte[] Lock(byte[] origin)
     {
         return Ccryptor(origin, LockType.Lock);
+    }
+    public static ICryptoTransform GetCcryptor(LockType useEncryptor)
+    {
+
+        //AES 알고리즘
+        RijndaelManaged aes = new RijndaelManaged();
+
+        //키값 생성
+        Rfc2898DeriveBytes key = CreateKey(password);
+
+        //벡터 생성 
+        Rfc2898DeriveBytes vector = CreateKey(vec);
+
+        aes.BlockSize = 128;            //AES의 블록 크기는 128 고정
+        aes.KeySize = 256;              //AES의 키 크기는 128, 192, 256을 지원한다.
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
+        aes.Key = key.GetBytes(32);     //AES-256을 사용하므로 키값의 길이는 32여야 한다.
+        aes.IV = vector.GetBytes(16);   //초기화 벡터는 언제나 길이가 16이어야 한다.
+
+        //Debug.LogError("key :: " + Encoding.Default.GetString(aes.Key));
+        //Debug.LogError("vector :: " + Encoding.Default.GetString(aes.IV));
+
+        bool isSkip = false;
+
+        //키값과 초기화 벡터를 기반으로 암호화 또는 복호화 작업을 하는 클래스 변수를 생성
+        ICryptoTransform cryptor;
+        if (useEncryptor == LockType.Lock)
+            cryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+        else if (useEncryptor == LockType.Unlock)
+            cryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        else return null;
+
+        return cryptor;
+
+        // 원본 출처 : https://fred16157.github.io/.net/csharp-encryption/
     }
     public static byte[] Ccryptor(byte[] origin, LockType useEncryptor)
     {
@@ -788,118 +546,6 @@ public static class GameSaveStream
     }
 
 
-    /// <summary>
-    /// 세이브파일 생성
-    /// </summary>
-    /// <param name="fileName">경로가 제외된 파일명과 확장자</param>
-    /// <param name="useEncryptor">일반읽기, 암호화, 복호화</param>
-    /// <param name="strData">파일 내용</param>
-    /// <returns></returns>
-    public static bool Save(LockType useEncryptor, string strData)
-    {
-        // 암호화 사용
-        if (useEncryptor == LockType.Lock)
-            return SaveFileCreate(
-                    Lock(Encoding.Default.GetBytes(strData))
-                    );
-        // 암호화 사용 안함
-        else
-            return SaveFileCreate(
-                    Encoding.Default.GetBytes(strData)
-                    );
-    }
-    static bool SaveFileCreate(byte[] byteData)
-    {
-        // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
-        if (GameData.gameMode == GameMode.Mode.None)
-        {
-            Debug.LogError("game save :: 세이브파일 생성 실패 " + "게임 모드 -> " + GameData.gameMode);
-            return false;
-        }
-
-        // 파일 생성
-        using (FileStream fs = new FileStream(@fullPath, FileMode.Create))
-        {
-            // 작성
-            fs.Write(byteData, 0, byteData.Length);
-        }
-
-
-        saveFileInfo = new FileInfo(@fullPath);
-
-        return saveFileInfo.Exists;
-    }
-
-    //public static string Read(LockType useDecryptor)
-    //{
-    //    byte[] result = SaveFileRead();
-
-    //    // 복호화 사용
-    //    if (useDecryptor == LockType.Unlock)
-    //        result = UnLock(result);
-
-    //    return Encoding.Default.GetString(result);
-    //}
-    //static byte[] SaveFileRead()
-    //{
-    //    // 잘못된 접근 제어
-    //    if (saveFileStream == null)
-    //    {
-    //        Debug.LogWarning("세이브 :: 파일 닫혀있음 -> 파일 열기 시도");
-    //        SaveFileOpen();
-    //    }
-    //    if (saveFileStream == null)
-    //    {
-    //        Debug.LogError("세이브 :: 파일 읽기 실패");
-    //        Debug.Break();
-    //        //return ;
-    //        return null;
-    //    }
-
-    //    // 결과물
-    //    List<byte> result = new List<byte>();
-
-    //    // 파일 첫 위치로
-    //    saveFileStream.Seek(0, SeekOrigin.Begin);
-
-    //    // 파일 읽기
-    //    int data;
-    //    while ((data = saveFileStream.ReadByte()) != -1)
-    //        result.Add((byte)data);
-
-    //    // 결과 반환
-    //    return result.ToArray();
-    //}
-
-    //static void SaveFileOpen()
-    //{
-    //    // 파일 불량 중단
-    //    if (saveFileInfo == null || !saveFileInfo.Exists)
-    //    {
-    //        Debug.LogError("세이브 :: 파일 열수 없음 -> 파일 확인 불가");
-    //        Debug.Break();
-    //        return;
-    //    }
-
-    //    Debug.Log("세이브 :: 파일 열기 -> " + saveFileInfo.FullName);
-    //    if(saveFileStream == null)
-    //        saveFileStream = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.ReadWrite);
-    //    else
-    //    {
-    //        saveFileStream.Close();
-    //        saveFileStream = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.ReadWrite);
-    //    }
-    //}
-
-    //public static void SaveFileClose()
-    //{
-    //    saveFileStream.Close();
-    //}
-
-
-
-
-
     public static void GameSave()
     { 
         if(useEncrypt)
@@ -938,6 +584,7 @@ public static class GameSaveStream
         Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
 
     }
+
     public static bool GameRead()
     {
         if (useEncrypt)
@@ -1009,40 +656,4 @@ public static class GameSaveStream
         }
     }
 
-    public static ICryptoTransform GetCcryptor(LockType useEncryptor)
-    {
-
-        //AES 알고리즘
-        RijndaelManaged aes = new RijndaelManaged();
-
-        //키값 생성
-        Rfc2898DeriveBytes key = CreateKey(password);
-
-        //벡터 생성 
-        Rfc2898DeriveBytes vector = CreateKey(vec);
-
-        aes.BlockSize = 128;            //AES의 블록 크기는 128 고정
-        aes.KeySize = 256;              //AES의 키 크기는 128, 192, 256을 지원한다.
-        aes.Mode = CipherMode.CBC;
-        aes.Padding = PaddingMode.PKCS7;
-        aes.Key = key.GetBytes(32);     //AES-256을 사용하므로 키값의 길이는 32여야 한다.
-        aes.IV = vector.GetBytes(16);   //초기화 벡터는 언제나 길이가 16이어야 한다.
-
-        //Debug.LogError("key :: " + Encoding.Default.GetString(aes.Key));
-        //Debug.LogError("vector :: " + Encoding.Default.GetString(aes.IV));
-
-        bool isSkip = false;
-
-        //키값과 초기화 벡터를 기반으로 암호화 또는 복호화 작업을 하는 클래스 변수를 생성
-        ICryptoTransform cryptor;
-        if (useEncryptor == LockType.Lock)
-            cryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-        else if (useEncryptor == LockType.Unlock)
-            cryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-        else return null;
-
-        return cryptor;
-
-        // 원본 출처 : https://fred16157.github.io/.net/csharp-encryption/
-    }
 }
