@@ -617,25 +617,41 @@ public static class GameSaveStream
         {
             // 파일 바이트화
             byte[] origin = File.ReadAllBytes(@saveFileInfo.FullName);
-            Debug.Log("세이브 :: 파일 열기 성공");
+            Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
+
+
+            // 복호화
+            if (useDecryptor == LockType.Unlock)
+            {
+                Debug.Log("세이브 :: 복호화 필요함");
+                origin = Ccryptor(origin, useDecryptor);
+            }
+            else
 
             // 복호화 생략
             if (useDecryptor == LockType.None)
             {
                 Debug.Log("세이브 :: 복호화 필요 없음");
-                //ms.Read(origin, 0, origin.Length);
-                ms.Write(origin, 0, origin.Length);
             }
-            // 복호화
-            else if (useDecryptor == LockType.Unlock)
-            {
-                Debug.Log("세이브 :: 복호화 필요함");
-                using (CryptoStream cs = new CryptoStream(ms, GetCcryptor(useDecryptor), CryptoStreamMode.Write))
-                {
-                    cs.Write(origin, 0, origin.Length);
-                }
-            }
+
+            //// 복호화 생략
+            //if (useDecryptor == LockType.None)
+            //{
+            //    Debug.Log("세이브 :: 복호화 필요 없음");
+            //    //ms.Read(origin, 0, origin.Length);
+            //    ms.Write(origin, 0, origin.Length);
+            //}
+            //// 복호화
+            //else if (useDecryptor == LockType.Unlock)
+            //{
+            //    Debug.Log("세이브 :: 복호화 필요함");
+            //    using (CryptoStream cs = new CryptoStream(ms, GetCcryptor(useDecryptor), CryptoStreamMode.Write))
+            //    {
+            //        cs.Write(origin, 0, origin.Length);
+            //    }
+            //}
             Debug.Log("세이브 :: 파일 데이터화 시작");
+            ms.Write(origin, 0, origin.Length);
 
             // 읽기
             BinaryFormatter bf = new BinaryFormatter();
