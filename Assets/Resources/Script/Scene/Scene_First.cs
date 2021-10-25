@@ -22,6 +22,12 @@ public class Scene_First : MonoBehaviour
     bool isLoadFinish = false;
     bool isTableReady = false;
 
+    void Awake()
+    {
+        CSVReader.basicPath = Application.dataPath + "/Resources/Data";
+        CSVReader.copyPath = Application.persistentDataPath + "/Data";
+    }
+
     // Start is called before the first frame update
     void Start()
     {

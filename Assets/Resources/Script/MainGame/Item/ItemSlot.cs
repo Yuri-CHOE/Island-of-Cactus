@@ -56,13 +56,15 @@ public class ItemSlot : MonoBehaviour
         set
         {
             // 다른 아이템일 경우
+            //if (value == null || itemUnit.item != value)
             if (value == null || itemUnit.item != value)
             {
                 // 아이템 교체
                 itemUnit.item = value;
 
                 // 아이콘 새로고침
-                icon.sprite = item.GetIcon();
+                if (value != null)
+                    icon.sprite = item.GetIcon();
             }
         }
     }

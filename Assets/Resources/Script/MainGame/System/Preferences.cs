@@ -14,7 +14,7 @@ public static class Preferences
         }
 
         // ¼³Á¤µÈ º¼·ı
-        public float value = 1.00f;
+        public float value = 0.50f;
 
         // ÃÖÁ¾ º¼·ı
         public float volume { get { if (isMute) return 0.00f; else return value; } }

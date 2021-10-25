@@ -15,7 +15,8 @@ public class PreferencesManager : MonoBehaviour
     public static float ToMixerValue(float value0to1)
     {
         // 최소 음량과 최대 음량 보간
-        return (-80.00f + 80.00f * value0to1);
+        //return (-80.00f + 80.00f * value0to1);
+        return (-80.00f + 80.00f * (value0to1 * (2 - value0to1)));
     }
 
 

@@ -4867,5 +4867,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: System
       objectReference: {fileID: 0}
+    - target: {fileID: 9025327616672073585, guid: 368d989eacb0dfe438ed62f7381433e6, type: 3}
+      propertyPath: m_Name
+      value: BGM
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 368d989eacb0dfe438ed62f7381433e6, type: 3}
