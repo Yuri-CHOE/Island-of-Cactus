@@ -51,6 +51,7 @@ MonoBehaviour:
   posMaxY: 20
   bodyObject: {fileID: 2536118380184568193}
   animator: {fileID: 8489908644756872187}
+  avatarColor: {fileID: 7454777834346663091}
 --- !u!114 &2188365840639103127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fe42dbfc70af846842f4797601ea31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  risk: 0
 --- !u!54 &607570943225970853
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -195,5 +197,10 @@ Transform:
 --- !u!95 &8489908644756872187 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
+  m_PrefabInstance: {fileID: 2646044309261969002}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7454777834346663091 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4885301371922852569, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
   m_PrefabInstance: {fileID: 2646044309261969002}
   m_PrefabAsset: {fileID: 0}

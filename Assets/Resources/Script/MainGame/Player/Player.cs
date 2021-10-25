@@ -265,6 +265,18 @@ public class Player
         if (location != -1)
             movement.location = location;
 
+        // 임시 색상 변경
+        try
+        {
+            if (movement.avatarColor.materials.Length >= 2)
+                if (AvatarManager.script.avatarMaterials.Count > character.index)
+                {
+                    movement.avatarColor.materials[1].color = AvatarManager.script.avatarMaterials[character.index].color;
+                    Debug.Log("캐릭터 :: 아바타 색상 변경 성공");
+                }
+        }
+        catch { Debug.LogWarning("캐릭터 :: 아바타 색상 변경 실패"); }
+
         // AI 소유자 지정
         ai.SetUp(this);
         if(miniAi == null) miniAi = new CustomAI.MiniGame.MiniAI(this);

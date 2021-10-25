@@ -73,6 +73,9 @@ public class CharacterMover : MonoBehaviour
     // 애니메이션
     public Animator animator = null;
 
+    // 임시용 택스쳐
+    public SkinnedMeshRenderer avatarColor = null;
+
 
     // Start is called before the first frame update
     void Start()

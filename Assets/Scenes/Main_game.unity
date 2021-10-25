@@ -10896,6 +10896,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1808710456}
+  - component: {fileID: 1808710457}
   m_Layer: 10
   m_Name: Character
   m_TagString: Untagged
@@ -10917,6 +10918,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1808710457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1808710455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5809764ebe6084e41974a7cc20a46168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarMaterials:
+  - {fileID: 2100000, guid: af5107d6c92e29740a3e193664bc5159, type: 2}
+  - {fileID: 2100000, guid: 368bd3633d91be9419d7ca0e7a23ac04, type: 2}
+  - {fileID: 2100000, guid: f0103dad5d1bff14b8749f7dac1145c8, type: 2}
+  - {fileID: 2100000, guid: e8898e2482ef4a946a7bd7e89cc30cd9, type: 2}
+  - {fileID: 2100000, guid: a824d250386726e458c79ee8c5e75fed, type: 2}
+  - {fileID: 2100000, guid: 9427f81c71988c344b19ea86dc456a81, type: 2}
+  - {fileID: 2100000, guid: e79795d31c04a774eb3162ddd37e9995, type: 2}
+  - {fileID: 2100000, guid: f6a6e2dcfaec22142bfa4ad9ac95bce5, type: 2}
 --- !u!1 &1813035122
 GameObject:
   m_ObjectHideFlags: 0

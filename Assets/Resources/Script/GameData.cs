@@ -74,6 +74,7 @@ public static class GameData
         UniqueManager.script = null;
         ShortcutManager.script = null;
         GameRuleManager.script = null;
+        AvatarManager.script = null;
     }
 
     public static void SetGameMode(GameMode.Mode __gameMode)
