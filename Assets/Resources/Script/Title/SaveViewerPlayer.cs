@@ -92,9 +92,9 @@ public class SaveViewerPlayer : MonoBehaviour
             //    slot[i].count = itemCount[i];
             //}
 
-
             ItemUnit iu = new ItemUnit();
-            iu.item = Item.table[_inven[i].index];
+            if(_inven[i].index > 0)
+                iu.item = Item.table[_inven[i].index];
             iu.count = _inven[i].count;
 
             slot[i].SetUp(null, iu);

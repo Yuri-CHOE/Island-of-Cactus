@@ -61,7 +61,12 @@ public class Scene_First : MonoBehaviour
         // 넘기기
         if (isTableReady)
             if (isLoadFinish)
+            {
                 ao.allowSceneActivation = true;
+
+                // 중력 설정
+                Physics.gravity = Physics.gravity * 10;
+            }
     }
 
     IEnumerator TableLoad()

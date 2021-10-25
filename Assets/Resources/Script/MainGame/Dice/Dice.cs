@@ -30,6 +30,8 @@ public struct Dice
     // 특수 주사위
     public SpecialDice type;
 
+    // 순서주사위 값
+    public int orderDiceValue;
 
     // 값
     int _value;

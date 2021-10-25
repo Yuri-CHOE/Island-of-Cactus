@@ -109,14 +109,14 @@ public static class Turn
                     int temp = 0;
                     for (int j = 0; j < orderCopy.Count; j++)
                     {
-                        if (orderCopy[j].dice.value > orderCopy[temp].dice.value)
+                        if (orderCopy[j].dice.orderDiceValue > orderCopy[temp].dice.orderDiceValue)
                         {
                             temp = j;
                         }
                     }
 
                     // 등록
-                    Debug.Log(string.Format("순서 = ({0}) {1}", orderCopy[temp].dice.value, orderCopy[temp].name));
+                    Debug.Log(string.Format("순서 = ({0}) {1}", orderCopy[temp].dice.orderDiceValue, orderCopy[temp].name));
                     Add(orderCopy[temp]);
 
                     // 순서 리스트 등록

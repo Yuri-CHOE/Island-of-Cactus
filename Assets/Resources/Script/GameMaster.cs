@@ -120,15 +120,18 @@ public class GameMaster : MonoBehaviour
                     // 세이브 파일 로드
                     if (GameSaveStream.useLoad)
                         GameSaveStream.saveForm.LoadGameInfo();
-
                     // 세이브파일 작성
-                    // 미구현================
-                    // 원본에서 복사할것
+                    else
+                    {
+                        // 미구현================
+                        // 원본에서 복사할것
+                    }
 
 
-                    // 중력 설정
-                    if (flowCopy == Flow.Wait)
-                        Physics.gravity = Physics.gravity * 10;
+                    //// 중력 설정
+                    //// 게임 시작할때마다 10배가 되므로 게임 켰을때만 되도록 Scene_First.cs 의 Start()로 이동됨
+                    //if (flowCopy == Flow.Wait)
+                    //    Physics.gravity = Physics.gravity * 10;
 
 
                     // 플레이어 구성 초기화
@@ -283,9 +286,10 @@ public class GameMaster : MonoBehaviour
                         {
 
                             // 플레이어별 체크
+                            Player current;
                             for (int i = 0; i < Player.allPlayer.Count; i++)
                             {
-                                Player current = Player.allPlayer[i];
+                                current = Player.allPlayer[i];
 
                                 // 이미 굴렸으면 다음 플레이어 처리
                                 if (current.dice.isRolled)
@@ -317,8 +321,19 @@ public class GameMaster : MonoBehaviour
 
                         // 모두가 주사위 굴리지 않으면 중단
                         for (int i = 0; i < Player.allPlayer.Count; i++)
-                            if (!Player.allPlayer[i].dice.isRolled)
+                        {
+                            // 순서 주사위 값 설정
+                            Player.allPlayer[i].dice.orderDiceValue = Player.allPlayer[i].dice.value;
+
+                            // 주사위 값 초기화
+                            Player.allPlayer[i].dice.Clear();
+
+                            // 완료 체크
+                            if (Player.allPlayer[i].dice.orderDiceValue <= 0)
                                 return;
+                            
+                            Debug.Log("순서 :: 플레이어 " + Player.allPlayer[i].name + "의 순서주사위 -> " + Player.allPlayer[i].dice.orderDiceValue);
+                        }
 
                         Debug.Log("게임 플로우 :: 모든 플레이어 주사위 굴림 완료 =>" + Player.allPlayer.Count);
 

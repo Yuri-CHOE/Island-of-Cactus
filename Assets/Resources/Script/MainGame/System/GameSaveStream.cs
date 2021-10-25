@@ -157,22 +157,31 @@ public static class GameSaveStream
         {
             // 지역 설정
             GameRule.area = area;
+            Debug.Log("로드 :: 게임 정보 -> GameRule.area = " + GameRule.area);
 
             // 구역 설정
             GameRule.section = section;
+            Debug.Log("로드 :: 게임 정보 -> GameRule.section = " + GameRule.section);
 
             // 사이클 설정 - 현재
             Cycle.now = cycleNow;
+            Debug.Log("로드 :: 게임 정보 -> Cycle.now = " + Cycle.now);
 
             // 사이클 설정 - 목표
             GameRule.cycleMax = cycleGoal;
+            Debug.Log("로드 :: 게임 정보 -> GameRule.cycleMax = " + GameRule.cycleMax);
 
             // 플레이 인원수
             GameRule.playerCount = playerCount;
+            Debug.Log("로드 :: 게임 정보 -> GameRule.playerCount = " + GameRule.playerCount);
 
             // 노말 블럭 강화 단계
-            BlockWork.plusBlockValue =  plusBlockValue    ;
-            BlockWork.minusBlockValue = minusBlockValue   ;
+            BlockWork.plusBlockValue =  plusBlockValue;
+            Debug.Log("로드 :: 게임 정보 -> BlockWork.plusBlockValue = " + BlockWork.plusBlockValue);
+            BlockWork.minusBlockValue = minusBlockValue;
+            Debug.Log("로드 :: 게임 정보 -> BlockWork.minusBlockValue = " + BlockWork.minusBlockValue);
+
+            Debug.LogWarning("로드 :: 게임 정보 -> 완료됨");
         }
 
         /// <summary>
@@ -191,10 +200,12 @@ public static class GameSaveStream
             for (int i = 0; i < Player.allPlayer.Count; i++)
             {
                 current = Player.allPlayer[i];
+                Debug.Log("로드 :: 플레이어 " + current.name);
 
-                // 턴 인덱스
-                current.dice.SetValue(100 - player[i].turnIndex);
-                current.dice.isRolled = true;
+                //// 턴 인덱스
+                //current.dice.SetValue(100 - player[i].turnIndex);
+                //current.dice.isRolled = true;
+                //Debug.Log("로드 :: 플레이어 -> 턴 주사위" + current.name);
 
                 // 플레이어 타입, 캐릭터 인덱스, 오토플레이, 플레이어 이름
                 current.SetPlayer(
@@ -203,6 +214,7 @@ public static class GameSaveStream
                     player[i].isAutoPlay,
                     player[i].name
                     );
+                Debug.Log(string.Format("로드 :: 플레이어 정보 변경 -> {0}타입의 {1}의 {2}은 자동플레이={3} 상태", current.type, current.name, current.character.index, current.isAutoPlay));
 
                 // 위치 인덱스
                 int loc = player[i].location;
@@ -212,44 +224,53 @@ public static class GameSaveStream
                 rePos.y = current.movement.transform.position.y;
                 current.movement.transform.position = rePos;
 
+                Debug.Log("로드 :: 플레이어 " + current.name+"의 위치 -> " + current.location);
 
 
                 // 이동 불가 턴수
                 current.stunCount = player[i].stunCount;
+                Debug.Log("로드 :: 플레이어 " + current.name + "의 스턴 -> " + current.stunCount);
 
                 // 라이프
                 current.life = player[i].life;
+                Debug.Log("로드 :: 플레이어 " + current.name + "의 라이프 -> " + current.life.Value);
 
                 // 코인
                 current.coin = player[i].coin;
+                Debug.Log("로드 :: 플레이어 " + current.name + "의 코인 -> " + current.coin.Value);
 
                 // 주사위 개수
                 current.dice = player[i].dice;
+                Debug.Log("로드 :: 플레이어 " + current.name + "의 주사위 -> " + (current.dice.value + current.dice.valueTotal));
 
                 // 미니게임 점수
                 current.miniInfo = player[i].miniScore;
+                Debug.Log("로드 :: 플레이어 " + current.name + "의 미니게임 -> " + current.miniInfo.score + " 로 등수 -> " + current.miniInfo.rank);
 
                 // 인벤토리
                 for (int j = 0; j < current.inventory.Count; j++)
                 {
-                    Debug.LogError(string.Format("{0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
+                    Debug.LogError(string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
                         current.name,
                         current.inventory.Count,
                         j,
                         current.inventory[j].item
-                        ) + string.Format("{0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
+                        ) + string.Format("로드 :: 플레이어 {0} 의 인벤은 {1} 칸이고 {2}번째 칸에는 {3}\n",
                         player[i].name,
                         player[i].inven.Length,
                         j,
                         player[i].inven[j].index
-                        ) + string.Format("{0} 는 {1}중 {2}번쨰 이다 ",
+                        ) + string.Format("로드 :: 플레이어 {0} 는 {1}중 {2}번쨰 이다 ",
                         player[i].name,
                         player.Length,
                         i
                         ));
 
+                    if (player[i].inven[j].index > 0)
+                    {
                     current.inventory[j].item = Item.table[player[i].inven[j].index];
                     current.inventory[j].count = player[i].inven[j].count;
+                    }
                 }
             }
         }

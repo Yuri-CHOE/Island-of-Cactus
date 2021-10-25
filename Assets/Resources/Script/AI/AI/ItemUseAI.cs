@@ -49,7 +49,10 @@ namespace CustomAI
                 // 턴 제어 체크
                 if (owner != Turn.now)
                     return false;
-
+                
+                // 아이템 수량 체크
+                if (owner.inventoryCount <= 0)
+                    return false;
 
                 // 작동 허가
                 return true;
