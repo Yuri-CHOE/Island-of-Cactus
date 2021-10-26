@@ -322,6 +322,29 @@ MonoBehaviour:
   nextScene: Title
   text: {fileID: 2086244648}
   colorSwitch: 0
+  iconTable:
+  - {fileID: 21300000, guid: a48addd444e94f64295ad3f0d4a64f25, type: 3}
+  - {fileID: 21300000, guid: 434ff4de26bbccf4ea25d69ed155f538, type: 3}
+  - {fileID: 21300000, guid: 650bb78b79e10744fa87f184b8043797, type: 3}
+  - {fileID: 21300000, guid: dd2d20f345fcac347b0ed8411750b67d, type: 3}
+  - {fileID: 21300000, guid: 161c383229aa8c14e887c8bc5bccc368, type: 3}
+  - {fileID: 21300000, guid: db612242081bd644a96bf9f076a71e78, type: 3}
+  - {fileID: 21300000, guid: 72797d291dc44064a94e48941800a81c, type: 3}
+  - {fileID: 21300000, guid: ab90825dbd010244382b63672d8e3392, type: 3}
+  - {fileID: 21300000, guid: da5d71a792de4f54992f28c67a2fb1db, type: 3}
+  - {fileID: 21300000, guid: 27c53c80784dd2e4c87f0ec358052a69, type: 3}
+  - {fileID: 21300000, guid: c50c786edb59f2c4c90bd05f40ab407c, type: 3}
+  - {fileID: 21300000, guid: 5ec9652ac0f383e43b28f848c99d9af7, type: 3}
+  - {fileID: 21300000, guid: 65ecf5f1f6f305b4bb7fa45ba83cff0f, type: 3}
+  - {fileID: 21300000, guid: f8e43e85574ef4f49a0ea8c7de7bcd08, type: 3}
+  - {fileID: 21300000, guid: 731c203e97f77bb41bccd26e79a548b1, type: 3}
+  - {fileID: 21300000, guid: 11247b1d5d0a78d4fbe7e52052c51110, type: 3}
+  - {fileID: 21300000, guid: 0bc7fc8c95954b1429fa30cb1b53970b, type: 3}
+  - {fileID: 21300000, guid: 7a91808418d19e34c820c91d3dc8c0a1, type: 3}
+  - {fileID: 21300000, guid: 8163513c77235f94f9c489b72bec09ce, type: 3}
+  - {fileID: 21300000, guid: cc782b34699bcd446a06594b02004c6d, type: 3}
+  - {fileID: 21300000, guid: c127fd8a761bf224db94fd2f44dbcf13, type: 3}
+  - {fileID: 21300000, guid: 3e44e81c9441fc545bf90aa9e8b3641e, type: 3}
 --- !u!1 &1502371095
 GameObject:
   m_ObjectHideFlags: 0

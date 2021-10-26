@@ -17,6 +17,7 @@ public class Item
     // 아이템 테이블
     static List<Item> _table = new List<Item>();
     public static List<Item> table { get { return _table; } }
+    public static List<Sprite> iconTable = null;
 
     // 아이템 테이블
     static List<Item> _tableLuckyDrop = new List<Item>();
@@ -226,6 +227,18 @@ public class Item
     /// </summary>
     public Sprite GetIcon()
     {
+        // 지정된 아이콘 우선 반환
+        try
+        {
+            Debug.Log("아이템 :: 사전정의 아이콘 호출 -> " + iconTable[index].name);
+            return iconTable[index];
+        }
+        catch
+        {
+            Debug.LogWarning("아이템 :: 아이콘 사전정의 되지 않음 -> " + name);
+        }
+                
+
         // 아이콘 로드
         Debug.Log(@"Data/Item/icon/item" + index.ToString("D4"));
         Sprite temp = Resources.Load<Sprite>(@"Data/Item/icon/item" + index.ToString("D4"));

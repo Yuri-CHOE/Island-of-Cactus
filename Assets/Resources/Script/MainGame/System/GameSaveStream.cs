@@ -157,31 +157,31 @@ public static class GameSaveStream
         {
             // 지역 설정
             GameRule.area = area;
-            Debug.Log("로드 :: 게임 정보 -> GameRule.area = " + GameRule.area);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.area = " + GameRule.area);
 
             // 구역 설정
             GameRule.section = section;
-            Debug.Log("로드 :: 게임 정보 -> GameRule.section = " + GameRule.section);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.section = " + GameRule.section);
 
             // 사이클 설정 - 현재
             Cycle.now = cycleNow;
-            Debug.Log("로드 :: 게임 정보 -> Cycle.now = " + Cycle.now);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> Cycle.now = " + Cycle.now);
 
             // 사이클 설정 - 목표
             GameRule.cycleMax = cycleGoal;
-            Debug.Log("로드 :: 게임 정보 -> GameRule.cycleMax = " + GameRule.cycleMax);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.cycleMax = " + GameRule.cycleMax);
 
             // 플레이 인원수
             GameRule.playerCount = playerCount;
-            Debug.Log("로드 :: 게임 정보 -> GameRule.playerCount = " + GameRule.playerCount);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.playerCount = " + GameRule.playerCount);
 
             // 노말 블럭 강화 단계
             BlockWork.plusBlockValue =  plusBlockValue;
-            Debug.Log("로드 :: 게임 정보 -> BlockWork.plusBlockValue = " + BlockWork.plusBlockValue);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> BlockWork.plusBlockValue = " + BlockWork.plusBlockValue);
             BlockWork.minusBlockValue = minusBlockValue;
-            Debug.Log("로드 :: 게임 정보 -> BlockWork.minusBlockValue = " + BlockWork.minusBlockValue);
+            //최적화 Debug.Log("로드 :: 게임 정보 -> BlockWork.minusBlockValue = " + BlockWork.minusBlockValue);
 
-            Debug.Log("로드 :: 게임 정보 -> 완료됨");
+            //최적화 Debug.Log("로드 :: 게임 정보 -> 완료됨");
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ public static class GameSaveStream
             for (int i = 0; i < Player.allPlayer.Count; i++)
             {
                 current = Player.allPlayer[i];
-                Debug.Log("로드 :: 플레이어 " + current.name);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name);
 
                 //// 턴 인덱스
                 //current.dice.SetValue(100 - player[i].turnIndex);
@@ -214,7 +214,7 @@ public static class GameSaveStream
                     player[i].isAutoPlay,
                     player[i].name
                     );
-                Debug.Log(string.Format("로드 :: 플레이어 정보 변경 -> {0}타입의 {1}의 {2}은 자동플레이={3} 상태", current.type, current.name, current.character.index, current.isAutoPlay));
+                //최적화 Debug.Log(string.Format("로드 :: 플레이어 정보 변경 -> {0}타입의 {1}의 {2}은 자동플레이={3} 상태", current.type, current.name, current.character.index, current.isAutoPlay));
 
                 // 위치 인덱스
                 int loc = player[i].location;
@@ -224,28 +224,28 @@ public static class GameSaveStream
                 rePos.y = current.movement.transform.position.y;
                 current.movement.transform.position = rePos;
 
-                Debug.Log("로드 :: 플레이어 " + current.name+"의 위치 -> " + current.location);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name+"의 위치 -> " + current.location);
 
 
                 // 이동 불가 턴수
                 current.stunCount = player[i].stunCount;
-                Debug.Log("로드 :: 플레이어 " + current.name + "의 스턴 -> " + current.stunCount);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 스턴 -> " + current.stunCount);
 
                 // 라이프
                 current.life = player[i].life;
-                Debug.Log("로드 :: 플레이어 " + current.name + "의 라이프 -> " + current.life.Value);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 라이프 -> " + current.life.Value);
 
                 // 코인
                 current.coin = player[i].coin;
-                Debug.Log("로드 :: 플레이어 " + current.name + "의 코인 -> " + current.coin.Value);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 코인 -> " + current.coin.Value);
 
                 // 주사위 개수
                 current.dice = player[i].dice;
-                Debug.Log("로드 :: 플레이어 " + current.name + "의 주사위 -> " + (current.dice.value + current.dice.valueTotal));
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 주사위 -> " + (current.dice.value + current.dice.valueTotal));
 
                 // 미니게임 점수
                 current.miniInfo = player[i].miniScore;
-                Debug.Log("로드 :: 플레이어 " + current.name + "의 미니게임 -> " + current.miniInfo.score + " 로 등수 -> " + current.miniInfo.rank);
+                //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 미니게임 -> " + current.miniInfo.score + " 로 등수 -> " + current.miniInfo.rank);
 
                 // 인벤토리
                 for (int j = 0; j < current.inventory.Count; j++)
@@ -270,7 +270,7 @@ public static class GameSaveStream
                     {
                         current.inventory[j].item = Item.table[player[i].inven[j].index];
                         current.inventory[j].count = player[i].inven[j].count;
-                        Debug.Log(string.Format("로드 :: 플레이어 {0}의 인벤토리 {1}번 설정됨 -> 아이템({2}) = {3}개", current.name, j, current.inventory[j].item.name, current.inventory[j].count));
+                        //최적화 Debug.Log(string.Format("로드 :: 플레이어 {0}의 인벤토리 {1}번 설정됨 -> 아이템({2}) = {3}개", current.name, j, current.inventory[j].item.name, current.inventory[j].count));
                     }
                 }
             }
@@ -362,26 +362,26 @@ public static class GameSaveStream
             //}
 
             Turn.Skip(Turn.origin[turnNow]);
-            Debug.Log("로드 :: 현재 턴 설정 -> " + Turn.now.name);
+            //최적화 Debug.Log("로드 :: 현재 턴 설정 -> " + Turn.now.name);
 
             // 게임 플로우 셋팅
             GameMaster.flowCopy = gameFlow;
-            Debug.Log("로드 :: 현재 게임 플로우 -> " + GameMaster.flowCopy.ToString());
+            //최적화 Debug.Log("로드 :: 현재 게임 플로우 -> " + GameMaster.flowCopy.ToString());
 
             // 턴 플로우 셋팅
             Turn.turnAction = turnAction;
-            Debug.Log("로드 :: 현재 턴 플로우 -> " + Turn.turnAction.ToString());
+            //최적화 Debug.Log("로드 :: 현재 턴 플로우 -> " + Turn.turnAction.ToString());
         }
     }
 
     // 세이브 파일 폴더명
     static string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
-    static string saveFloder = "Save";
+    const string saveFloder = "Save";
     static string fullPath { get { return string.Format("{0}/{1}/{2}{3}", CSVReader.copyPath, saveFloder, fileName, extension); } }
 
     // 세이브 파일 파일명
     static string fileName { get { return GameData.gameMode.ToString(); } }
-    static string extension = ".iocs";
+    const string extension = ".iocs";
 
     // 세이브 내용
     public static SaveForm saveForm;
@@ -393,8 +393,8 @@ public static class GameSaveStream
     // 암호화 사용 여부
     static bool useEncrypt = true;
     //static bool useEncrypt = false;
-    static string password = "This_is_Password";
-    static string vec = "GrowupGrowupGrowupGrowup";
+    const string password = "This_is_Password";
+    const string vec = "GrowupGrowupGrowupGrowup";
 
     // 세이브 파일 관리
     public static bool isFileOpen { get { return saveFileInfo != null; } }
@@ -416,7 +416,7 @@ public static class GameSaveStream
 
     public static void SaveRemove()
     {
-        Debug.Log("세이브 :: 파일 제거 요청됨");
+        //최적화 Debug.Log("세이브 :: 파일 제거 요청됨");
 
         // 게임 모드 누락시 저장 중단 - 필수 :: 게임모드로 파일명 설정
         if (GameData.gameMode == GameMode.Mode.None)
@@ -433,7 +433,7 @@ public static class GameSaveStream
 
         // 제거
         saveFileInfo.Delete();
-        Debug.Log("세이브 :: 파일 제거 성공여부 -> " + saveFileInfo.Exists);
+        //최적화 Debug.Log("세이브 :: 파일 제거 성공여부 -> " + saveFileInfo.Exists);
     }
 
     static Rfc2898DeriveBytes CreateKey(string _password)
@@ -559,14 +559,14 @@ public static class GameSaveStream
         //using (FileStream fs = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.Write))
         using (FileStream fs = new FileStream(@fullPath, FileMode.Create, FileAccess.Write))
         {
-            Debug.Log("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
+            //최적화 Debug.Log("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
 
             BinaryFormatter bf = new BinaryFormatter();
 
             if (useEncryptor == LockType.None)
             {
                 bf.Serialize(fs, new SaveForm(0));
-                Debug.Log("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
+                //최적화 Debug.Log("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
             }
             else
             {
@@ -575,13 +575,13 @@ public static class GameSaveStream
                 {
                     bf.Serialize(cs, new SaveForm(0));
                 }
-                Debug.Log("세이브 :: 암호화 사용 " + fs.CanWrite);
+                //최적화 Debug.Log("세이브 :: 암호화 사용 " + fs.CanWrite);
             }
         }
 
         // 파일 지정
         saveFileInfo = new FileInfo(@fullPath);
-        Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
+        //최적화 Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
 
     }
 
@@ -609,7 +609,9 @@ public static class GameSaveStream
                 return false;
             }
             else
-                Debug.Log("세이브 :: 세이브 파일 지정 성공");
+            {
+                //최적화 Debug.Log("세이브 :: 세이브 파일 지정 성공");
+            }
         }
 
         // 파일 오픈
@@ -617,13 +619,13 @@ public static class GameSaveStream
         {
             // 파일 바이트화
             byte[] origin = File.ReadAllBytes(@saveFileInfo.FullName);
-            Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
+            //최적화 Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
 
 
             // 복호화
             if (useDecryptor == LockType.Unlock)
             {
-                Debug.Log("세이브 :: 복호화 필요함");
+                //최적화 Debug.Log("세이브 :: 복호화 필요함");
                 origin = Ccryptor(origin, useDecryptor);
             }
             else
@@ -631,38 +633,38 @@ public static class GameSaveStream
             // 복호화 생략
             if (useDecryptor == LockType.None)
             {
-                Debug.Log("세이브 :: 복호화 필요 없음");
+                //최적화 Debug.Log("세이브 :: 복호화 필요 없음");
             }
 
             //// 복호화 생략
             //if (useDecryptor == LockType.None)
             //{
-            //    Debug.Log("세이브 :: 복호화 필요 없음");
+            //    //최적화 Debug.Log("세이브 :: 복호화 필요 없음");
             //    //ms.Read(origin, 0, origin.Length);
             //    ms.Write(origin, 0, origin.Length);
             //}
             //// 복호화
             //else if (useDecryptor == LockType.Unlock)
             //{
-            //    Debug.Log("세이브 :: 복호화 필요함");
+            //    //최적화 Debug.Log("세이브 :: 복호화 필요함");
             //    using (CryptoStream cs = new CryptoStream(ms, GetCcryptor(useDecryptor), CryptoStreamMode.Write))
             //    {
             //        cs.Write(origin, 0, origin.Length);
             //    }
             //}
-            Debug.Log("세이브 :: 파일 데이터화 시작");
+            //최적화 Debug.Log("세이브 :: 파일 데이터화 시작");
             ms.Write(origin, 0, origin.Length);
 
             // 읽기
             BinaryFormatter bf = new BinaryFormatter();
             ms.Position = 0;
             saveForm = (SaveForm)bf.Deserialize(ms);
-            Debug.Log("세이브 :: 파일 데이터화 성공");
+            //최적화 Debug.Log("세이브 :: 파일 데이터화 성공");
         }
         try
         {
 
-            Debug.Log("세이브 :: 파일 읽기 성공");
+            //최적화 Debug.Log("세이브 :: 파일 읽기 성공");
             return true;
         }
         catch

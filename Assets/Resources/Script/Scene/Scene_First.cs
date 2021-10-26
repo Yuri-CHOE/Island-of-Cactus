@@ -21,11 +21,16 @@ public class Scene_First : MonoBehaviour
 
     bool isLoadFinish = false;
     bool isTableReady = false;
+    
+    [SerializeField]
+    List<Sprite> iconTable = new List<Sprite>();
 
     void Awake()
     {
         CSVReader.basicPath = Application.dataPath + "/Resources/Data";
         CSVReader.copyPath = Application.persistentDataPath + "/Data";
+
+        Item.iconTable = iconTable;
     }
 
     // Start is called before the first frame update
