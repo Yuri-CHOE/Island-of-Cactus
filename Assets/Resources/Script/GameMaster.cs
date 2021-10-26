@@ -29,6 +29,9 @@ public class GameMaster : MonoBehaviour
     public LoadingManager loadingManager = null;
 
     // 사이클 UI 관리 스크립트
+    public AudioManager audioManager = null;
+
+    // 사이클 UI 관리 스크립트
     public CycleManager cycleManager = null;
 
     // 메시지 박스 스크립트
@@ -84,6 +87,10 @@ public class GameMaster : MonoBehaviour
         // 재로드 제어용 백업 및 리셋
         flowCopy = GameData.gameFlow;
         GameData.gameFlow = Flow.Wait;
+
+        // 조작 차단중이지 않을때만 메인게임 bgm 수동 재생
+        if (!GameMaster.isBlock)
+            audioManager.bgmPlayer.Play();
     }
 
     // Start is called before the first frame update

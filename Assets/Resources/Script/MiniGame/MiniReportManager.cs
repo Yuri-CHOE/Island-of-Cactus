@@ -88,6 +88,9 @@ public class MiniReportManager : MonoBehaviour
             // 조작 차단 해제
             //CustomInput.isBlock = false;
             GameMaster.isBlock = false;
+
+            // BGM 재생
+            GameMaster.script.audioManager.bgmPlayer.Play();
         }
         // 공개 완료시
         else if (curtain.alpha == 0f && !isOpen)
@@ -100,12 +103,12 @@ public class MiniReportManager : MonoBehaviour
             // 본 오브젝트 파괴 방지
             DontDestroyOnLoad(transform.root);
 
-            // 씬 로드
-            ao = SceneManager.LoadSceneAsync("Main_game");
-
             // 메인게임 조작 차단
             //CustomInput.isBlock = true;
             GameMaster.isBlock = true;
+
+            // 씬 로드
+            ao = SceneManager.LoadSceneAsync("Main_game");
         }
 
         // 페이지 준비 완료 시
