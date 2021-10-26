@@ -97,6 +97,10 @@ public class PlayerInfoUI : MonoBehaviour
 
             // 인벤토리 싱크
             inventory[i].SetUp(owner, owner.inventory[i]);
+
+            // 아이콘 셋팅
+            if (inventory[i].item != null)
+                inventory[i].icon.sprite = inventory[i].item.GetIcon();
         }
     }
 

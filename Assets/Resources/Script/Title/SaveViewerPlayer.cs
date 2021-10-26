@@ -98,6 +98,10 @@ public class SaveViewerPlayer : MonoBehaviour
             iu.count = _inven[i].count;
 
             slot[i].SetUp(null, iu);
+
+            // 아이콘 셋팅
+            if (slot[i].item != null)
+                slot[i].icon.sprite = slot[i].item.GetIcon();
         }
     }
 }

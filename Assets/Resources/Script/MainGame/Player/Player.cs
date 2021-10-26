@@ -328,17 +328,26 @@ public class Player
 
         // 잔여 슬롯 부족 시 버림 === 시간 여유 된다면 소거할 아이템 선택하여 버리게 바꿀것
         if (inventoryCount >= Player.inventoryMax)
+        {
+            Debug.LogWarning("인벤토리 :: 아이템 습득 실패 -> 가득참");
             return;
+        }
 
         for (int i = 0; i < inventory.Count; i++)
         {
             // 빈칸일경우 넣고 종료
             if (inventory[i].isEmpty)
             {
-                inventory[i].item = _item;
-                inventory[i].count = count;
+                //inventory[i].item = _item;
+                //inventory[i].count = count;
+
+                infoUI.inventory[i].item = _item;
+                infoUI.inventory[i].count = count;
+
+                Debug.Log("인벤토리 :: 아이템 습득 성공 -> " + i + "칸 = " + inventory[i].item.name);
                 break;
             }
+            Debug.Log("인벤토리 :: " + i + "칸 가득참");
         }
     }
 

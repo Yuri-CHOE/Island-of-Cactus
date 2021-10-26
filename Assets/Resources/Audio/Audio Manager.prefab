@@ -152,7 +152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5870855179653749540}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5870855180150614946}
@@ -174,8 +174,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgmPlayer: {fileID: 5870855180150614945}
   sfxPlayer: {fileID: 5870855178978915914}
-  bgmClips: []
-  sfxClips: []
+  bgmFirst: {fileID: 0}
+  bgmTitle: {fileID: 8300000, guid: a15a1c2b5c4f5fb4693bf2c6361e0730, type: 3}
+  bgmMaingame: {fileID: 8300000, guid: 0c515f73e95d164459791dccc37d1695, type: 3}
+  bgmMini: {fileID: 8300000, guid: fba599e83d3db404e9509fda2f6f967e, type: 3}
+  bgmMiniReport: {fileID: 8300000, guid: 2265753964b738a4080454e18df1cfcb, type: 3}
+  sfxError: {fileID: 8300000, guid: 51f167233a429e041a1bb77a848211e6, type: 3}
+  sfxButton: {fileID: 8300000, guid: 134c83d6b10fe6945bba6b0cc14be6c1, type: 3}
+  sfxSelect: {fileID: 8300000, guid: 6ad3f2ddcf1854b70979eb63be7c65d5, type: 3}
+  sfxCreat: {fileID: 8300000, guid: 2e071f5b8b8467d45a5e6e24c23c6ad4, type: 3}
+  sfxApply: {fileID: 8300000, guid: 04aaa9b70ee7dce42a52ec18a5229d57, type: 3}
+  sfxCoin: {fileID: 8300000, guid: 3c9e6bc48ff4440b4ba9d7c9e4474e9f, type: 3}
+  sfxHit: {fileID: 8300000, guid: 34b439bf70b80a6409eadecc6be92d68, type: 3}
 --- !u!1 &5870855180150614947
 GameObject:
   m_ObjectHideFlags: 0

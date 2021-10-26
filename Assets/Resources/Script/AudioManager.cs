@@ -11,22 +11,45 @@ public class AudioManager : MonoBehaviour
     public AudioSource bgmPlayer = null;
     public AudioSource sfxPlayer = null;
 
-    [Header("soundFile")]
-    public List<AudioClip> bgmClips = new List<AudioClip>();
-    public List<AudioClip> sfxClips = new List<AudioClip>();
+    // BGM
+    //[System.Serializable]
+    public enum BGMtype
+    {
+        None,
+        First,
+        Title,
+        Maingame,
+        Mini,
+        MiniReport,
+    }
+    [Header("BGM File")]
+    public AudioClip bgmFirst = null;
+    public AudioClip bgmTitle = null;
+    public AudioClip bgmMaingame = null;
+    public AudioClip bgmMini = null;
+    public AudioClip bgmMiniReport = null;
 
-    // 빠른 접근 - BGM
-    public AudioClip bgmTitle { get { return bgmClips[0]; } }
-    public AudioClip bgmMaingame { get { return bgmClips[1]; } }
-    public AudioClip bgmMini { get { return bgmClips[2]; } }
-    public AudioClip bgmMiniReport { get { return bgmClips[3]; } }
-
-    // 빠른 접근 - SFX
-    public AudioClip sfxButton { get { return sfxClips[0]; } }
-    public AudioClip sfxSelect { get { return sfxClips[1]; } }
-    public AudioClip sfxCreat { get { return sfxClips[2]; } }
-    public AudioClip sfxCoin { get { return sfxClips[3]; } }
-    public AudioClip sfxLife { get { return sfxClips[4]; } }
+    // SFX
+    //[System.Serializable]
+    public enum SFXtype
+    {
+        None,
+        Error,
+        Button,
+        Select,
+        Creat,
+        Apply,
+        Coin,
+        Hit,
+    }
+    [Header("SFX File")]
+    public AudioClip sfxError = null;
+    public AudioClip sfxButton = null;
+    public AudioClip sfxSelect = null;
+    public AudioClip sfxCreat = null;
+    public AudioClip sfxApply = null;
+    public AudioClip sfxCoin = null;
+    public AudioClip sfxHit = null;
 
 
 
@@ -34,5 +57,93 @@ public class AudioManager : MonoBehaviour
     {
         // 퀵등록
         script = this;
+    }
+
+    static AudioClip GetClip(BGMtype bgmType)
+    {
+        switch (bgmType)
+        {
+            case BGMtype.First:
+                return script.bgmFirst;
+
+            case BGMtype.Title:
+                return script.bgmTitle;
+
+            case BGMtype.Maingame:
+                return script.bgmMaingame;
+
+            case BGMtype.Mini:
+                return script.bgmMini;
+
+            case BGMtype.MiniReport:
+                return script.bgmMiniReport;
+        }
+        return null;
+    }
+    static AudioClip GetClip(SFXtype sfxType)
+    {
+        switch (sfxType)
+        {
+            case SFXtype.Error:
+                return script.sfxError;
+
+            case SFXtype.Button:
+                return script.sfxButton;
+
+            case SFXtype.Select:
+                return script.sfxSelect;
+
+            case SFXtype.Creat:
+                return script.sfxCreat;
+
+            case SFXtype.Apply:
+                return script.sfxApply;
+
+            case SFXtype.Coin:
+                return script.sfxCoin;
+
+            case SFXtype.Hit:
+                return script.sfxHit;
+        }
+        return null;
+    }
+    
+    public void Play(BGMtype bgmType)
+    {
+        try
+        {
+            // 재생중이면 중단
+            if (bgmPlayer.isPlaying)
+            {
+                bgmPlayer.Stop();
+                Debug.Log("사운드 :: BGM 중단 요청됨 -> " + bgmPlayer.clip.name);
+            }
+
+            // 재생 사운드 변경
+            bgmPlayer.clip = GetClip(bgmType);
+            Debug.Log("사운드 :: BGM 지정됨 -> " + bgmPlayer.clip.name);
+
+            // 재생
+            bgmPlayer.Play();
+            Debug.Log("사운드 :: BGM 재생 성공");
+        }
+        catch
+        {
+            Debug.LogWarning("사운드 :: BGM 재생 실패");
+        }
+    }
+
+    public void PlayMultiple(SFXtype sfxType)
+    {
+        try
+        {
+            // 추가 재생
+            sfxPlayer.PlayOneShot(GetClip(sfxType));
+            Debug.Log("사운드 :: SFX 지정됨 -> " + GetClip(sfxType).name);
+        }
+        catch
+        {
+            Debug.LogWarning("사운드 :: SFX 재생 실패");
+        }
     }
 }

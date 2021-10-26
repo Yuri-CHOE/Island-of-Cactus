@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 5633505923407318125}
   - component: {fileID: 3462659898670625066}
   - component: {fileID: 5264483953422924523}
+  - component: {fileID: 4622692741080039211}
   m_Layer: 5
-  m_Name: lowbtn
+  m_Name: btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +121,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3462659898670625066}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4622692741080039211}
+        m_TargetAssemblyTypeName: AudioSelector, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4622692741080039211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3992640498804892352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19679faf663d4264f8df4d06704db45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgmType: 0
+  sfxType: 0
 --- !u!1 &4603166423804249166
 GameObject:
   m_ObjectHideFlags: 0

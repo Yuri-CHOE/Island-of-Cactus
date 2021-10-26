@@ -38,6 +38,11 @@ public class ItemShop : MonoBehaviour
         // 퀵 등록
         script = this;
 
+        // 번들 셋업
+        for (int i = 0; i < bundle.Count; i++)
+        {
+            bundle[i].slot.SetUp(null, new ItemUnit());
+        }
     }
 
 

@@ -17,7 +17,7 @@ public class ItemUnit
     //public int count = 0;
     public int count { get { return effect.count; } set { effect.SetCount(value); } }
 
-    public bool isEmpty { get { return item == null; } }
+    public bool isEmpty { get { return item == null || item == Item.empty; } }
 
 
     void Change(Item newItemOrNull)
@@ -57,15 +57,19 @@ public class ItemSlot : MonoBehaviour
         {
             // 다른 아이템일 경우
             //if (value == null || itemUnit.item != value)
-            if (value == null || itemUnit.item != value)
+            if (itemUnit.item != value)
             {
                 // 아이템 교체
                 itemUnit.item = value;
 
                 // 아이콘 새로고침
-                if (value != null)
+                if (itemUnit.item != null)
                     icon.sprite = item.GetIcon();
+                else
+                    icon.sprite = Item.empty.GetIcon();
             }
+            else
+                Debug.LogWarning("아이콘 :: 인벤토리 아이콘 갱신 거부됨 -> 동일한 아이템");
         }
     }
 
