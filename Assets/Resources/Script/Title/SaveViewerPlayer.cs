@@ -69,15 +69,33 @@ public class SaveViewerPlayer : MonoBehaviour
     //public void SetUp(int characterIndex, string _playerName, int _life, int _coin, List<int> itemIndex, List<int> itemCount)
     public void SetUp(int characterIndex, string _playerName, int _life, int _coin, GameSaveStream.SaveForm.SaveFormObjectStack[] _inven)
     {
+        //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+        //watch.Start();
+        //Debug.LogError(watch.ElapsedMilliseconds);
+        //watch.Reset();
+        //watch.Start();
+
         face.sprite = Character.table[characterIndex].GetIcon();
+        //Debug.LogError(watch.ElapsedMilliseconds);
+        //watch.Reset();
+        //watch.Start();
 
         playerName.text = _playerName;
+        //Debug.LogError(watch.ElapsedMilliseconds);
+        //watch.Reset();
+        //watch.Start();
 
         lifeValue = _life;
         life.text = lifeValue.ToString();
+        //Debug.LogError(watch.ElapsedMilliseconds);
+        //watch.Reset();
+        //watch.Start();
 
         coinValue = _coin;
         coin.text = coinValue.ToString();
+        //Debug.LogError(watch.ElapsedMilliseconds);
+        //watch.Reset();
+        //watch.Start();
 
         for (int i = 0; i < slot.Count; i++)
         {
@@ -102,6 +120,10 @@ public class SaveViewerPlayer : MonoBehaviour
             // 아이콘 셋팅
             if (slot[i].item != null)
                 slot[i].icon.sprite = slot[i].item.GetIcon();
+            //Debug.LogError(watch.ElapsedMilliseconds);
+            //watch.Reset();
+            //watch.Start();
+            //Debug.Break();
         }
     }
 }

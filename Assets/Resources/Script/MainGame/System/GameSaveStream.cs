@@ -396,6 +396,9 @@ public static class GameSaveStream
     const string password = "This_is_Password";
     const string vec = "GrowupGrowupGrowupGrowup";
 
+    static ICryptoTransform encryptor = GetCcryptor(LockType.Lock);
+    static ICryptoTransform decryptor = GetCcryptor(LockType.Unlock);
+
     // 세이브 파일 관리
     public static bool isFileOpen { get { return saveFileInfo != null; } }
     static FileInfo saveFileInfo = null;
@@ -451,14 +454,64 @@ public static class GameSaveStream
 
         // 출처 : https://fred16157.github.io/.net/csharp-encryption/
     }
-    public static byte[] UnLock(byte[] origin)
-    {
-        return Ccryptor(origin, LockType.Unlock);
-    }
-    public static byte[] Lock(byte[] origin)
-    {
-        return Ccryptor(origin, LockType.Lock);
-    }
+    //public static byte[] UnLock(byte[] origin)
+    //{
+    //    return Ccryptor(origin, LockType.Unlock);
+    //}
+    //public static byte[] Lock(byte[] origin)
+    //{
+    //    return Ccryptor(origin, LockType.Lock);
+    //}
+    //public static byte[] Ccryptor(byte[] origin, LockType useEncryptor)
+    //{
+    //    // 바이트로 변환
+    //    //byte[] origin = Encoding.Default.GetBytes(code);
+    //    //Debug.LogError(origin.Length);
+
+    //    //AES 알고리즘
+    //    RijndaelManaged aes = new RijndaelManaged();
+
+    //    //키값 생성
+    //    Rfc2898DeriveBytes key = CreateKey(password);
+
+    //    //벡터 생성 
+    //    //Rfc2898DeriveBytes vector = CreateKey("GrowupGrowupGrowupGrowup");
+    //    Rfc2898DeriveBytes vector = CreateKey(vec);
+
+    //    aes.BlockSize = 128;            //AES의 블록 크기는 128 고정
+    //    aes.KeySize = 256;              //AES의 키 크기는 128, 192, 256을 지원한다.
+    //    aes.Mode = CipherMode.CBC;
+    //    aes.Padding = PaddingMode.PKCS7;
+
+    //    aes.Key = key.GetBytes(32);     //AES-256을 사용하므로 키값의 길이는 32여야 한다.
+    //    aes.IV = vector.GetBytes(16);   //초기화 벡터는 언제나 길이가 16이어야 한다.
+
+    //    //Debug.LogError("key :: " + Encoding.Default.GetString(aes.Key));
+    //    //Debug.LogError("vector :: " + Encoding.Default.GetString(aes.IV));
+
+    //    //키값과 초기화 벡터를 기반으로 암호화 또는 복호화 작업을 하는 클래스 변수를 생성
+    //    ICryptoTransform cryptor;
+    //    if (useEncryptor == LockType.Lock)
+    //        cryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+    //    else if (useEncryptor == LockType.Unlock)
+    //        cryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+    //    else
+    //        return origin;
+
+    //    //using블록으로 변수를 사용하면 블록에서 나올때 자동으로 변수가 가비지컬렉팅 된다. 
+    //    using (MemoryStream ms = new MemoryStream()) //결과를 담을 스트림 
+    //    {
+    //        //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
+    //        using (CryptoStream cs = new CryptoStream(ms, cryptor, CryptoStreamMode.Write))
+    //        {
+    //            cs.Write(origin, 0, origin.Length);
+    //        }
+    //        //return Encoding.UTF8.GetString(ms.ToArray());    //암호화된 스트링 반환
+    //        return ms.ToArray();
+    //    }
+
+    //    // 출처 : https://fred16157.github.io/.net/csharp-encryption/
+    //}
     public static ICryptoTransform GetCcryptor(LockType useEncryptor)
     {
 
@@ -495,54 +548,30 @@ public static class GameSaveStream
 
         // 원본 출처 : https://fred16157.github.io/.net/csharp-encryption/
     }
+
     public static byte[] Ccryptor(byte[] origin, LockType useEncryptor)
     {
-        // 바이트로 변환
-        //byte[] origin = Encoding.Default.GetBytes(code);
-        //Debug.LogError(origin.Length);
-
-        //AES 알고리즘
-        RijndaelManaged aes = new RijndaelManaged();
-
-        //키값 생성
-        Rfc2898DeriveBytes key = CreateKey(password);
-
-        //벡터 생성 
-        //Rfc2898DeriveBytes vector = CreateKey("GrowupGrowupGrowupGrowup");
-        Rfc2898DeriveBytes vector = CreateKey(vec);
-
-        aes.BlockSize = 128;            //AES의 블록 크기는 128 고정
-        aes.KeySize = 256;              //AES의 키 크기는 128, 192, 256을 지원한다.
-        aes.Mode = CipherMode.CBC;
-        aes.Padding = PaddingMode.PKCS7;
-        aes.Key = key.GetBytes(32);     //AES-256을 사용하므로 키값의 길이는 32여야 한다.
-        aes.IV = vector.GetBytes(16);   //초기화 벡터는 언제나 길이가 16이어야 한다.
-
-        //Debug.LogError("key :: " + Encoding.Default.GetString(aes.Key));
-        //Debug.LogError("vector :: " + Encoding.Default.GetString(aes.IV));
-
-        //키값과 초기화 벡터를 기반으로 암호화 또는 복호화 작업을 하는 클래스 변수를 생성
-        ICryptoTransform cryptor;
-        if (useEncryptor == LockType.Lock)
-            cryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-        else if (useEncryptor == LockType.Unlock)
-            cryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-        else
-            return origin;
-
         //using블록으로 변수를 사용하면 블록에서 나올때 자동으로 변수가 가비지컬렉팅 된다. 
         using (MemoryStream ms = new MemoryStream()) //결과를 담을 스트림 
         {
-            //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
-            using (CryptoStream cs = new CryptoStream(ms, cryptor, CryptoStreamMode.Write))
+            if (useEncryptor == LockType.Lock)
             {
-                cs.Write(origin, 0, origin.Length);
+                //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
+                using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                {
+                    cs.Write(origin, 0, origin.Length);
+                }
             }
-            //return Encoding.UTF8.GetString(ms.ToArray());    //암호화된 스트링 반환
+            else if (useEncryptor == LockType.Unlock)
+            {
+                //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
+                using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
+                {
+                    cs.Write(origin, 0, origin.Length);
+                }
+            }
             return ms.ToArray();
         }
-
-        // 출처 : https://fred16157.github.io/.net/csharp-encryption/
     }
 
 
@@ -583,7 +612,7 @@ public static class GameSaveStream
         saveFileInfo = new FileInfo(@fullPath);
         //최적화 Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
 
-    }
+    }    
 
     public static bool GameRead()
     {
@@ -594,13 +623,46 @@ public static class GameSaveStream
     }
     public static bool GameRead(LockType useDecryptor)
     {
-        // 파일 체크
-        if (saveFileInfo == null)
+        try
         {
-            Debug.LogWarning("error :: 세이브 파일 지정 안됨");
+            // 파일 체크
+            if (saveFileInfo == null)
+            {
+                Debug.LogWarning("error :: 세이브 파일 지정 안됨");
 
-            saveFileInfo = new FileInfo(@fullPath);
+                saveFileInfo = new FileInfo(@fullPath);
 
+            }
+
+            // 파일 오픈
+            using (MemoryStream ms = new MemoryStream())
+            {
+                // 파일 바이트화
+                byte[] origin = File.ReadAllBytes(@saveFileInfo.FullName);
+                //최적화 Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
+
+                // 복호화
+                if (useDecryptor == LockType.Unlock)
+                {
+                    //최적화 Debug.Log("세이브 :: 복호화 필요함");
+                    origin = Ccryptor(origin, useDecryptor);
+                }
+
+                //최적화 Debug.Log("세이브 :: 파일 데이터화 시작");
+                ms.Write(origin, 0, origin.Length);
+
+                // 읽기
+                BinaryFormatter bf = new BinaryFormatter();
+                ms.Position = 0;
+                saveForm = (SaveForm)bf.Deserialize(ms);
+                //최적화 Debug.Log("세이브 :: 파일 데이터화 성공");
+            }
+
+            //최적화 Debug.Log("세이브 :: 파일 읽기 성공");
+            return true;
+        }
+        catch
+        {
             // 파일 체크
             if (!saveFileInfo.Exists)
             {
@@ -612,63 +674,7 @@ public static class GameSaveStream
             {
                 //최적화 Debug.Log("세이브 :: 세이브 파일 지정 성공");
             }
-        }
 
-        // 파일 오픈
-        using (MemoryStream ms = new MemoryStream())
-        {
-            // 파일 바이트화
-            byte[] origin = File.ReadAllBytes(@saveFileInfo.FullName);
-            //최적화 Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
-
-
-            // 복호화
-            if (useDecryptor == LockType.Unlock)
-            {
-                //최적화 Debug.Log("세이브 :: 복호화 필요함");
-                origin = Ccryptor(origin, useDecryptor);
-            }
-            else
-
-            // 복호화 생략
-            if (useDecryptor == LockType.None)
-            {
-                //최적화 Debug.Log("세이브 :: 복호화 필요 없음");
-            }
-
-            //// 복호화 생략
-            //if (useDecryptor == LockType.None)
-            //{
-            //    //최적화 Debug.Log("세이브 :: 복호화 필요 없음");
-            //    //ms.Read(origin, 0, origin.Length);
-            //    ms.Write(origin, 0, origin.Length);
-            //}
-            //// 복호화
-            //else if (useDecryptor == LockType.Unlock)
-            //{
-            //    //최적화 Debug.Log("세이브 :: 복호화 필요함");
-            //    using (CryptoStream cs = new CryptoStream(ms, GetCcryptor(useDecryptor), CryptoStreamMode.Write))
-            //    {
-            //        cs.Write(origin, 0, origin.Length);
-            //    }
-            //}
-            //최적화 Debug.Log("세이브 :: 파일 데이터화 시작");
-            ms.Write(origin, 0, origin.Length);
-
-            // 읽기
-            BinaryFormatter bf = new BinaryFormatter();
-            ms.Position = 0;
-            saveForm = (SaveForm)bf.Deserialize(ms);
-            //최적화 Debug.Log("세이브 :: 파일 데이터화 성공");
-        }
-        try
-        {
-
-            //최적화 Debug.Log("세이브 :: 파일 읽기 성공");
-            return true;
-        }
-        catch
-        {
             Debug.LogError("세이브 :: 파일 읽기 실패");
             return false;
         }
