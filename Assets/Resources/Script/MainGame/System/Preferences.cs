@@ -28,10 +28,21 @@ public static class Preferences
         public void Load(string keyMute, string keyValue)
         {
             if (PlayerPrefs.HasKey(keyMute))
+            {
                 isMuteInt = PlayerPrefs.GetInt(keyMute, bgm.isMuteInt);
+                //Debug.Log("환경설정 :: ("+ keyMute + ") 값 발견 -> " + isMuteInt);
+                Debug.Log("환경설정 :: ("+ keyMute + ") 값 발견 -> " + isMuteInt);
+            }
+            else
+                Debug.LogWarning("환경설정 :: (" + keyMute + ") 값 없음 -> 기본값=" + isMuteInt);
 
             if (PlayerPrefs.HasKey(keyValue))
+            {
                 value = PlayerPrefs.GetFloat(keyValue, bgm.value);
+                Debug.Log("환경설정 :: (" + keyValue + ") 값 발견 -> " + value);
+            }
+            else
+                Debug.LogWarning("환경설정 :: (" + keyValue + ") 값 없음 -> 기본값=" + value);
         }
     }
 

@@ -12,11 +12,6 @@ public class Scene_Title : MonoBehaviour
     [SerializeField]
     Text userName = null;
 
-    [SerializeField]
-    Toggle bgm = null;
-    [SerializeField]
-    Toggle sfx = null;
-
 
     // 선택한 캐릭터 인덱스
     int _selected = 0;
@@ -25,9 +20,6 @@ public class Scene_Title : MonoBehaviour
 
     void Awake()
     {
-        // 토글 싱크
-        bgm.isOn = Preferences.bgm.isMute;
-        sfx.isOn = Preferences.sfx.isMute;
     }
 
 

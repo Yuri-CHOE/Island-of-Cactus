@@ -25,8 +25,12 @@ public class PreferencesManager : MonoBehaviour
     {
         Debug.Log("환경설정 :: 적용됨");
 
+        // 환경설정 값 반영
         bgm.value = Preferences.bgm.value;
         sfx.value = Preferences.sfx.value;
+
+        // 닫기
+        gameObject.SetActive(false);
     }
 
 
