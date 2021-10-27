@@ -780,7 +780,8 @@ public class CharacterMover : MonoBehaviour
         else if (act.progress == ActionProgress.Finish)
         {
             // 걷기 정지
-            animator.SetFloat("Speed", 0f);
+            if (owner.type != Player.Type.System)
+                animator.SetFloat("Speed", 0f);
 
             // 종료 처리
             act.isFinish = true;
@@ -888,7 +889,8 @@ public class CharacterMover : MonoBehaviour
             location = owner.location;
 
             // 걷기 정지
-            animator.SetFloat("Speed", 0f);
+            if (owner.type != Player.Type.System)
+                animator.SetFloat("Speed", 0f);
         }
     }
 
@@ -915,7 +917,8 @@ public class CharacterMover : MonoBehaviour
         isBusy = false;
 
         // 걷기 정지
-        animator.SetFloat("Speed", 0f);
+        if (owner.type != Player.Type.System)
+            animator.SetFloat("Speed", 0f);
     }
 
     /// <summary>
@@ -989,7 +992,8 @@ public class CharacterMover : MonoBehaviour
             transform.position = targetPos;
 
             // 속도 반영
-            animator.SetFloat("Speed", speed);
+            if (owner.type != Player.Type.System)
+                animator.SetFloat("Speed", speed);
             //float newSpeed = animator.GetFloat("Speed") + speed * Time.deltaTime;
             //if (newSpeed > speed)
             //    animator.SetFloat("Speed", speed);
@@ -1075,7 +1079,8 @@ public class CharacterMover : MonoBehaviour
         owner.stunCount = 3;
 
         // 걷기 정지
-        animator.SetFloat("Speed", 0f);
+        if (owner.type != Player.Type.System)
+            animator.SetFloat("Speed", 0f);
 
         // 위치 변경
         _location = -1;

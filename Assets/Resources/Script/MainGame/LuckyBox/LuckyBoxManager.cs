@@ -144,7 +144,7 @@ public class LuckyBoxManager : MonoBehaviour
 
         // 효과 적용
         yield return _luckyBox.Effect(target);
-        Debug.LogError("Lucky Box :: 효과 종료됨 = " + _luckyBox.name);
+        Debug.Log("Lucky Box :: 효과 종료됨 = " + _luckyBox.name);
 
         // 이동 종료 대기
         while (target.movement.actNow.type != Action.ActionType.None || target.movement.actionsQueue.Count > 0)
