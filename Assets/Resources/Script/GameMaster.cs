@@ -190,9 +190,6 @@ public class GameMaster : MonoBehaviour
                         // 대상 플레이어
                         Player current = Player.allPlayer[i];
 
-                        // 캐릭터 아이콘 로드
-                        current.LoadFace();
-
                         // "다른 플레이어" 구성
                         {
                             // 모든 플레이어 등록
@@ -246,6 +243,19 @@ public class GameMaster : MonoBehaviour
                         GameSaveStream.saveForm.LoadPlayer();
                         GameSaveStream.saveForm.LoadItemObject();
                         GameSaveStream.saveForm.LoadEventObject();
+                    }
+
+                    // 캐릭터 아이콘 로드 및 색상 반영
+                    for (int i = 0; i < Player.allPlayer.Count; i++)
+                    {
+                        // 대상 플레이어
+                        Player current = Player.allPlayer[i];
+
+                        // 캐릭터 아이콘 로드
+                        Player.allPlayer[i].LoadFace();
+
+                        // 캐릭터 색상 반영
+                        Player.allPlayer[i].ChangeColor();
                     }
 
                     // 캐릭터 겹침 해소

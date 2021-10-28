@@ -266,16 +266,7 @@ public class Player
             movement.location = location;
 
         // 임시 색상 변경
-        try
-        {
-            if (movement.avatarColor.materials.Length >= 2)
-                if (AvatarManager.script.avatarMaterials.Count > character.index)
-                {
-                    movement.avatarColor.materials[1].color = AvatarManager.script.avatarMaterials[character.index].color;
-                    Debug.Log("캐릭터 :: 아바타 색상 변경 성공");
-                }
-        }
-        catch { Debug.LogWarning("캐릭터 :: 아바타 색상 변경 실패"); }
+        ChangeColor();
 
         // AI 소유자 지정
         ai.SetUp(this);
@@ -287,28 +278,24 @@ public class Player
         Debug.Log("캐릭터 생성 :: " + avatar.name);
     }
 
+    public void ChangeColor()
+    {
+        // 임시 색상 변경
+        try
+        {
+            if (movement.avatarColor.materials.Length >= 2)
+                if (AvatarManager.script.avatarMaterials.Count > character.index)
+                {
+                    movement.avatarColor.materials[1].color = AvatarManager.script.avatarMaterials[character.index].color;
+                    Debug.Log("캐릭터 :: 아바타 색상 변경 성공");
+                }
+        }
+        catch { Debug.LogWarning("캐릭터 :: 아바타 색상 변경 실패"); }
+    }
+
 
     public void LoadFace()
     {
-        //// 아이콘 로드
-        //Debug.Log(@"Data/Character/Face/Face" + character.index.ToString("D4"));
-        //Sprite temp = Resources.Load<Sprite>(@"Data/Character/Face/Face" + character.index.ToString("D4"));
-
-        //// 이미지 유효 검사
-        //if (temp == null)
-        //{
-        //    // 기본 아이콘 대체 처리
-        //    Debug.Log(@"UI/playerInfo/player");
-        //    temp = Resources.Load<Sprite>(@"UI/playerInfo/player");
-        //}
-
-        //// 최종 실패 처리
-        //if (temp == null)
-        //    Debug.Log("로드 실패 :: UI/playerInfo/player");
-        //// 아이콘 변경
-        //else
-        //    face = temp;
-
         face = character.GetIcon();
     }
 
