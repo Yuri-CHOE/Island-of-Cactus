@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cm: {fileID: 0}
+  audio: {fileID: 6950535704987737716}
   minHeight: 1.9
   maxHeight: 20
   diceDistance: {x: 0, y: 3.1, z: -2}
@@ -154,7 +155,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -1791616147486338449, guid: 59296ed8c1f2e3a418d00ad3c93a6b45, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

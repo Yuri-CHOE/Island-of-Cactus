@@ -185,7 +185,11 @@ MonoBehaviour:
   sfxCreat: {fileID: 8300000, guid: 2e071f5b8b8467d45a5e6e24c23c6ad4, type: 3}
   sfxApply: {fileID: 8300000, guid: 04aaa9b70ee7dce42a52ec18a5229d57, type: 3}
   sfxCoin: {fileID: 8300000, guid: 3c9e6bc48ff4440b4ba9d7c9e4474e9f, type: 3}
-  sfxHit: {fileID: 8300000, guid: 34b439bf70b80a6409eadecc6be92d68, type: 3}
+  osfxHit: {fileID: 8300000, guid: 34b439bf70b80a6409eadecc6be92d68, type: 3}
+  osfxDice: {fileID: 8300000, guid: 9e7d29224fe414cb2b9a1a824c36e0bc, type: 3}
+  osfxFootprint: {fileID: 8300000, guid: c7e441c828a3843efb07e5665d1efb14, type: 3}
+  osfxLuckybox: {fileID: 8300000, guid: 7096c237e384d435ab4bf80e18bf6a18, type: 3}
+  osfxMonster: {fileID: 0}
 --- !u!1 &5870855180150614947
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,6 +29,11 @@ public class DiceController : MonoBehaviour
     // 소유자 확인
     public bool isMyDice { get { return owner == Player.me; } }
 
+    // 사운드
+    [SerializeField]
+    AudioSource audio = null;
+
+
     // 최소 높이
     [SerializeField]
     float minHeight = 1.9f;
@@ -66,6 +71,7 @@ public class DiceController : MonoBehaviour
     Quaternion eye4 = Quaternion.Euler(0, 0, -90);
     Quaternion eye5 = Quaternion.Euler(0, 0, 180);
     Quaternion eye6 = Quaternion.Euler(90, 0, 0);
+    
 
 
     [Header("Action")]
@@ -85,6 +91,12 @@ public class DiceController : MonoBehaviour
     public bool isBusy { get { return !isFree && !isFinish; } }
     public bool isFinish { get { return action == DiceAction.Finish && actionProgress == ActionProgress.Finish; } }
 
+
+    void Awake()
+    {
+        //// 사운드 지정
+        //audio.clip = AudioManager.script.osfxDice;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -274,6 +286,9 @@ public class DiceController : MonoBehaviour
             {
                 // 시간 초기화
                 elapsedTime = 0f;
+
+                // 사운드 재생
+                audio.PlayOneShot(AudioManager.script.osfxDice);
 
                 // 스킵
                 actionProgress = ActionProgress.Ready;
@@ -586,6 +601,8 @@ public class DiceController : MonoBehaviour
         pos += distance;
         transform.position = pos;
 
+        // 사운드 재생
+        audio.Play();
 
         // 주사위 부착
         //transform.parent = obj;

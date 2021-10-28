@@ -58,7 +58,7 @@ public class CharacterMover : MonoBehaviour
 
 
     // 이동 속도
-    float moveSpeed = 2.00f;
+    public float moveSpeed = 2.00f;
 
 
     [SerializeField]
@@ -75,6 +75,17 @@ public class CharacterMover : MonoBehaviour
 
     // 임시용 택스쳐
     public SkinnedMeshRenderer avatarColor = null;
+
+    // 사운드 제어
+    [SerializeField]
+    AudioSource audio = null;
+
+
+    void Awake()
+    {
+        //// 사운드 지정
+        //audio.clip = AudioManager.script.osfxFootprint;
+    }
 
 
     // Start is called before the first frame update
@@ -481,6 +492,9 @@ public class CharacterMover : MonoBehaviour
                 {
                     // 공격 처리
                     attackNow = true;
+
+                    // 사운드 출력
+                    audio.PlayOneShot(AudioManager.script.osfxHit);
                     
                     // 대상들에게 일괄 공격
                     for (int i = 0; i < attackTarget.Count; i++)

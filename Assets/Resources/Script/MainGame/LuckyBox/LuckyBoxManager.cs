@@ -6,6 +6,10 @@ public class LuckyBoxManager : MonoBehaviour
 {
     public static LuckyBoxManager script = null;
 
+
+    [SerializeField]
+    AudioSource audio = null;
+
     [SerializeField]
     Animator animator = null;
 
@@ -33,6 +37,9 @@ public class LuckyBoxManager : MonoBehaviour
 
         // 초기 위치 기록
         hidingPos = transform.position;
+
+        //// 사운드 지정
+        //audio.clip = AudioManager.script.osfxLuckybox;
     }
 
     
@@ -98,6 +105,9 @@ public class LuckyBoxManager : MonoBehaviour
 
         // 오브젝트 캐릭터에게 소환
         transform.position = pos;
+
+        // 사운드 출력
+        audio.PlayOneShot(AudioManager.script.osfxLuckybox);
 
         // 다음 애니메이션 진행
         animator.SetBool("isCall", true);

@@ -40,7 +40,7 @@ public class AudioManager : MonoBehaviour
         Creat,
         Apply,
         Coin,
-        Hit,
+        //Hit,
     }
     [Header("SFX File")]
     public AudioClip sfxError = null;
@@ -49,7 +49,24 @@ public class AudioManager : MonoBehaviour
     public AudioClip sfxCreat = null;
     public AudioClip sfxApply = null;
     public AudioClip sfxCoin = null;
-    public AudioClip sfxHit = null;
+    //public AudioClip sfxHit = null;
+
+    // SFX
+    //[System.Serializable]
+    public enum OSFXtype
+    {
+        None,
+        Dice,
+        Footprint,
+        Luckybox,
+        Monster,
+    }
+    [Header("ObjectSFX File")]
+    public AudioClip osfxHit = null;
+    public AudioClip osfxDice = null;
+    public AudioClip osfxFootprint = null;
+    public AudioClip osfxLuckybox = null;
+    public AudioClip osfxMonster = null;
 
 
 
@@ -102,8 +119,8 @@ public class AudioManager : MonoBehaviour
             case SFXtype.Coin:
                 return script.sfxCoin;
 
-            case SFXtype.Hit:
-                return script.sfxHit;
+            //case SFXtype.Hit:
+            //    return script.sfxHit;
         }
         return null;
     }

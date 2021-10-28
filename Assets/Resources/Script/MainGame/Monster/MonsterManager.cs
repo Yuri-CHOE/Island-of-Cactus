@@ -176,6 +176,9 @@ public class MonsterManager : MonoBehaviour
         // 생성 체크
         if (movement.bodyObject != null)
         {
+            // 속도 수정
+            movement.moveSpeed = 10f;
+
             // 계획
             movement.PlanMoveBy(blockCount);
                        
