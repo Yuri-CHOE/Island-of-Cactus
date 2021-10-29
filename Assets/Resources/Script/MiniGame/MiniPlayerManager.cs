@@ -13,7 +13,7 @@ public class MiniPlayerManager : MonoBehaviour
     public List<MiniGamePlayer> scoreList = new List<MiniGamePlayer>();
 
     // 턴 제어용
-    Queue<Player> turn = new Queue<Player>(Player.order);
+    Queue<Player> turn = null;
     public Player turnNow { get { return turn.Peek(); } }    
     public bool isFirstFrame = true;           // 턴 획득 이후 ~ 첫프레임 종료 전
 
@@ -25,7 +25,11 @@ public class MiniPlayerManager : MonoBehaviour
     int entryCount { get { return turn.Count; } }
 
 
-    //void Awake()
+    void Awake()
+    {
+        // 순서 초기화
+        turn = new Queue<Player>(Player.order);
+    }
     public void Init()
     {
         // 퀵 등록

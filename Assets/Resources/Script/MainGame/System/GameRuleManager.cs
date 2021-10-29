@@ -141,5 +141,13 @@ public class GameRuleManager : MonoBehaviour
     }
 
 
+    public void SetFullAuto()
+    {
+        Player.me.SetAutoPlay(true);
+
+        Debug.Log("game rule :: 모든 플레이어 AI ");
+    }
+
+
 
 }

@@ -26,10 +26,10 @@ public class CSVReader
 
 
     // 데이터 위치
-    //public static string basicPath { get { return (Application.dataPath + "/Resources/Data"); } }           // 프로젝트디렉토리/Assets/Resources/Data
-    public static string basicPath = null;           // 프로젝트디렉토리/Assets/Resources/Data
-    //public static string copyPath { get { return (Application.persistentDataPath + "/Data"); } }            // 기기별 데이터 폴더/Data
-    public static string copyPath = null;            // 기기별 데이터 폴더/Data
+    public static string basicPath = Application.dataPath + "/Resources/Data";           // 프로젝트디렉토리/Assets/Resources/Data
+    //public static string basicPath = null;           // 프로젝트디렉토리/Assets/Resources/Data
+    public static string copyPath = Application.persistentDataPath + "/Data";            // 기기별 데이터 폴더/Data
+    //public static string copyPath = null;            // 기기별 데이터 폴더/Data
 
 
     // 생성자
@@ -118,10 +118,10 @@ public class CSVReader
     public CSVReader(string subPathOrNull, string fileName)
     {
         // 원본 폴더 체크
-        CheckPath(basicPath);
+        CheckPath(@basicPath);
 
         // 사본 폴더 체크
-        CheckPath(copyPath);
+        CheckPath(@copyPath);
 
         //// 복사본 사용 여부 설정
         //isCopyFile = _isCopyFile;

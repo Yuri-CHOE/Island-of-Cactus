@@ -14,6 +14,10 @@ public class Scene_First : MonoBehaviour
     [SerializeField]
     Text text;
 
+    // 안드로이드 권한 체크기
+    [SerializeField] PermissionChecker permissionChecker = null;
+    GameObject dialog = null;
+
     [SerializeField]
     bool colorSwitch;
 
@@ -25,12 +29,33 @@ public class Scene_First : MonoBehaviour
     [SerializeField]
     List<Sprite> iconTable = new List<Sprite>();
 
+    [Header("Data Table")]
+    [SerializeField] UnityEditor.DefaultAsset userData = null;
+    [SerializeField] TextAsset userDataT = null;
+
     void Awake()
     {
-        CSVReader.basicPath = Application.dataPath + "/Resources/Data";
-        CSVReader.copyPath = Application.persistentDataPath + "/Data";
+        //CSVReader.basicPath = Application.dataPath + "/Resources/Data";
+        //CSVReader.copyPath = Application.persistentDataPath + "/Data";
 
+        // 아이콘 캐싱
         Item.iconTable = iconTable;
+
+        //// 안드로이드 셋업
+        //if(Application.platform == RuntimePlatform.Android)
+        //{
+        //    // 저장소 읽기 권한
+        //    if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageRead))
+        //    {
+        //        UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.ExternalStorageRead);
+        //    }
+
+        //    // 저장소 쓰기 권한
+        //    if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageWrite))
+        //    {
+        //        UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.ExternalStorageWrite);
+        //    }
+        //}
     }
 
     // Start is called before the first frame update
@@ -45,8 +70,11 @@ public class Scene_First : MonoBehaviour
         // 자동 넘어감 금지
         ao.allowSceneActivation = false;
 
-        // 테이블 로드
-        StartCoroutine(TableLoad());
+        // 셋업 - 퍼미션, 테이블
+        StartCoroutine(SetUp());
+
+        //// 테이블 로드
+        //StartCoroutine(TableLoad());
         //Item.SetUp();
         //Character.SetUp();
         //text.text = "wait...";
@@ -67,6 +95,15 @@ public class Scene_First : MonoBehaviour
             }
         }
 
+        //if (CustomInput.GetPoint())
+        //{
+        //    text.text = string.Format("isTableReady={0}, 로드={1}", isTableReady, ao.progress);
+
+        //    Debug.LogError(string.Format("touchCount={0}, pos={1}", 
+        //        UnityEngine.EventSystems.EventSystem.current.currentInputModule.input.touchCount, 
+        //        UnityEngine.EventSystems.EventSystem.current.currentInputModule.input.GetTouch(0).position.ToString()
+        //        ));
+        //}
     }
 
 
@@ -81,10 +118,58 @@ public class Scene_First : MonoBehaviour
                 // 중력 설정
                 Physics.gravity = Physics.gravity * 10;
             }
+
+        //try
+        //{
+        //    //text.text = string.Format("isTableReady={0}, 로드={1}", isTableReady, ao.progress);
+        //    Debug.LogError(string.Format("isTableReady={0}, 로드={1}, 상태={2}", isTableReady, ao.progress, (ao.progress >= 0.9f).ToString() ));
+        //    Debug.LogError(string.Format("테이블 :: 유저={0} 캐릭터={1}, 아이템={2}, 이벤트={3}, 럭키박스={4}, 유니크={5}, 미니={6}", (UserData.file!=null), Character.table.Count, Item.table.Count, IocEvent.table.Count, LuckyBox.table.Count, Unique.table.Count, Minigame.table.Count));
+
+        //    Debug.LogError(string.Format("permissionR={0}, permissionW={1}", 
+        //        UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageRead),
+        //        UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageWrite)
+        //        ));
+        //}
+        //catch { }
+
+    }
+    
+    IEnumerator SetUp()
+    {
+        yield return PermissionCheck();
+
+        yield return TableLoad();
+    }
+
+    IEnumerator PermissionCheck()
+    {
+        Debug.Log("권한 :: 읽기 권한 확인중");
+        while (!PermissionChecker.canRead)
+        {
+            // 상자 닫혀있으면 호출
+            if (!permissionChecker.gameObject.activeSelf)
+                permissionChecker.CallReadPermissionNotice();
+
+            yield return null;
+        }
+
+        Debug.Log("권한 :: 쓰기 권한 확인중");
+        while (!PermissionChecker.canWrite)
+        {
+            // 상자 닫혀있으면 호출
+            if (!permissionChecker.gameObject.activeSelf)
+                permissionChecker.CallWritePermissionNotice();
+
+            yield return null;
+        }
+
+        Debug.Log("권한 :: 모든 필요 권한 확인됨");
     }
 
     IEnumerator TableLoad()
     {
+        Debug.Log("테이블 :: 전체 데이터 테이블 셋업");
+
         // 유저 데이터 로드
         // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
         UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
