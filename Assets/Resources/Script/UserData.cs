@@ -4,90 +4,78 @@ using UnityEngine;
 
 public static class UserData 
 {
-    // 유저 데이터
-    public static CSVReader file = null;
+    public enum FieldType
+    {
+        name,
+        playTime,
+        playCount,
+        rank1,
+        rank2,
+        rank3,
+        rank4,
+    }
 
     // 셋업 확인
-    static bool checkSetup = false;
+    public static bool checkSetup = false;
 
     // 유저 이름
-    public static string userName = null;
+    static string _userName = null;
+    public static string defaultName = "DefaultUser";
+    public static string userName { get { return _userName; } set { _userName = value; Save(FieldType.name); } }
+    public const string userNameKey = "userName";
 
     // 전체 플레이 시간 (초)
-    public static int playTime = 0;
+    public static int _playTime = 0;
+    public static int playTime { get { return _playTime; } set { _playTime = value; Save(FieldType.playTime); } }
+    const string playTimeKey = "playTime";
 
     // 전체 플레이 횟수
-    public static int playCount = 0;
+    static int _playCount = 0;
+    public static int playCount { get { return _playCount; } set { _playCount = value; Save(FieldType.playCount); } }
+    const string playCountKey = "playCount";
 
     // 등수 달성 횟수
-    public static int count_1st = 0;
-    public static int count_2nd = 0;
-    public static int count_3th = 0;
-    public static int count_4th = 0;
+    static int _rank1 = 0;
+    public static int rank1 { get { return _rank1; } set { _rank1 = value; Save(FieldType.rank1); } }
+    const string rank1Key = "rank1";
+
+    static int _rank2 = 0;
+    public static int rank2 { get { return _rank2; } set { _rank2 = value; Save(FieldType.rank2); } }
+    const string rank2Key = "rank2";
+
+    static int _rank3 = 0;
+    public static int rank3 { get { return _rank3; } set { _rank3 = value; Save(FieldType.rank3); } }
+    const string rank3Key = "rank3";
+
+    static int _rank4 = 0;
+    public static int rank4 { get { return _rank4; } set { _rank4 = value; Save(FieldType.rank4); } }
+    const string rank4Key = "rank4";
 
     /// <summary>
     /// 유저 데이터 파일 데이터화
     /// </summary>
     public static void SetUp()
     {
-        if (file == null)
-        {
-            Debug.LogError("Error :: 유저 데이터 파일 지정 안됨");
-            Debug.Break();
-            return;
-        }
+        // userName
+        Load(FieldType.name);
 
-        for (int i = 0; i < file.table.Count; i++)
-        {
-            // userName
-            if (file.table[i][0] == "userName")
-            {
-                userName = file.table[i][1];
-                continue;
-            }
+        // playTime
+        Load(FieldType.playTime);
 
-            // playTime
-            if (file.table[i][0] == "playTime")
-            {
-                playTime = int.Parse(file.table[i][1]);
-                continue;
-            }
+        // playCount
+        Load(FieldType.playCount);
 
-            // playCount
-            if (file.table[i][0] == "playCount")
-            {
-                playCount = int.Parse(file.table[i][1]);
-                continue;
-            }
+        // rank1
+        Load(FieldType.rank1);
 
-            // count_1st
-            if (file.table[i][0] == "count_1st")
-            {
-                count_1st = int.Parse(file.table[i][1]);
-                continue;
-            }
+        // rank2
+        Load(FieldType.rank2);
 
-            // count_2nd
-            if (file.table[i][0] == "count_2nd")
-            {
-                count_2nd = int.Parse(file.table[i][1]);
-                continue;
-            }
+        // rank3
+        Load(FieldType.rank3);
 
-            // count_3th
-            if (file.table[i][0] == "count_3th")
-            {
-                count_3th = int.Parse(file.table[i][1]);
-                continue;
-            }
-
-            // count_4th
-            if (file.table[i][0] == "count_4th")
-            {
-                count_4th = int.Parse(file.table[i][1]);
-                continue;
-            }
-        }
+        // rank4
+        Load(FieldType.rank4);
 
         checkSetup = true;
     }
@@ -97,73 +85,92 @@ public static class UserData
     /// </summary>
     public static void SaveData()
     {
-        if (file == null)
+        // userName
+        Save(FieldType.name);
+
+        // playTime
+        Save(FieldType.playTime);
+
+        // playCount
+        Save(FieldType.playCount);
+
+        // rank1
+        Save(FieldType.rank1);
+
+        // rank2
+        Save(FieldType.rank2);
+
+        // rank3
+        Save(FieldType.rank3);
+
+        // rank4
+        Save(FieldType.rank4);
+    }
+
+    public static void Save(FieldType fieldType)
+    {
+        switch (fieldType)
         {
-            Debug.LogError("Error :: 유저 데이터 파일 지정 안됨");
-            Debug.Break();
-            return;
+            case FieldType.name:
+                PlayerPrefs.SetString(userNameKey, userName);
+                return;
+
+            case FieldType.playTime:
+                PlayerPrefs.SetInt(playTimeKey , playTime);
+                return;
+
+            case FieldType.playCount:
+                PlayerPrefs.SetInt(playCountKey, playCount);
+                return;
+
+            case FieldType.rank1:
+                PlayerPrefs.SetInt(rank1Key, rank1);
+                return;
+            case FieldType.rank2:
+                PlayerPrefs.SetInt(rank2Key, rank2);
+                return;
+            case FieldType.rank3:
+                PlayerPrefs.SetInt(rank3Key, rank3);
+                return;
+            case FieldType.rank4:
+                PlayerPrefs.SetInt(rank4Key, rank4);
+                return;
         }
-        if (!checkSetup)
+    }
+
+    public static void Load(FieldType fieldType)
+    {
+        try
         {
-            Debug.LogError("Error :: 유저 데이터 데이터( SetUp() )화 안됨");
-            Debug.Break();
-            return;
-        }
-
-        // 입력
-        for (int i = 0; i < file.table.Count; i++)
-        {
-            // userName
-            if (file.table[i][0] == "userName")
+            switch (fieldType)
             {
-                file.table[i][1] = userName;
-                continue;
-            }
+                case FieldType.name:
+                    userName = PlayerPrefs.GetString(userNameKey, defaultName);
+                    return;
 
-            // playTime
-            if (file.table[i][0] == "playTime")
-            {
-                file.table[i][1] = playTime.ToString();
-                continue;
-            }
+                case FieldType.playTime:
+                    playTime = PlayerPrefs.GetInt(playTimeKey, 0);
+                    return;
 
-            // playCount
-            if (file.table[i][0] == "playCount")
-            {
-                file.table[i][1] = playCount.ToString();
-                continue;
-            }
+                case FieldType.playCount:
+                    playCount = PlayerPrefs.GetInt(playCountKey, 0);
+                    return;
 
-            // count_1st
-            if (file.table[i][0] == "count_1st")
-            {
-                file.table[i][1] = count_1st.ToString();
-                continue;
-            }
-
-            // count_2nd
-            if (file.table[i][0] == "count_2nd")
-            {
-                file.table[i][1] = count_2nd.ToString();
-                continue;
-            }
-
-            // count_3th
-            if (file.table[i][0] == "count_3th")
-            {
-                file.table[i][1] = count_3th.ToString();
-                continue;
-            }
-
-            // count_4th
-            if (file.table[i][0] == "count_4th")
-            {
-                file.table[i][1] = count_4th.ToString();
-                continue;
+                case FieldType.rank1:
+                    rank1 = PlayerPrefs.GetInt(rank1Key, 0);
+                    return;
+                case FieldType.rank2:
+                    rank2 = PlayerPrefs.GetInt(rank2Key, 0);
+                    return;
+                case FieldType.rank3:
+                    rank3 = PlayerPrefs.GetInt(rank3Key, 0);
+                    return;
+                case FieldType.rank4:
+                    rank4 = PlayerPrefs.GetInt(rank4Key, 0);
+                    return;
             }
         }
+        catch { Debug.LogError("유저 데이터 :: 로드 실패 -> " + fieldType.ToString()); }
 
-        // 저장
-        file.Save('=');
     }
 }

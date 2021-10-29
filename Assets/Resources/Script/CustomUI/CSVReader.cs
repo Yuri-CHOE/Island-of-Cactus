@@ -140,7 +140,7 @@ public class CSVReader
     /// <param name="_path">/세부 경로</param>
     public static void CheckPath(string _path)
     {
-        Debug.Log("폴더 체크 :: " + @_path);
+        Debug.Log("폴더 체크 :: " + @_path + " -> " + Directory.Exists(@_path));
 
         if (!Directory.Exists(@_path))
         {

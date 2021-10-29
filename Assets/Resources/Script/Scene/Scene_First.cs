@@ -16,7 +16,9 @@ public class Scene_First : MonoBehaviour
 
     // 안드로이드 권한 체크기
     [SerializeField] PermissionChecker permissionChecker = null;
-    GameObject dialog = null;
+
+    // 유저명 등록기
+    [SerializeField] UserNameSetter userNameSetter = null;
 
     [SerializeField]
     bool colorSwitch;
@@ -30,32 +32,12 @@ public class Scene_First : MonoBehaviour
     List<Sprite> iconTable = new List<Sprite>();
 
     [Header("Data Table")]
-    [SerializeField] UnityEditor.DefaultAsset userData = null;
-    [SerializeField] TextAsset userDataT = null;
+    [SerializeField] TextAsset testData = null;
 
     void Awake()
     {
-        //CSVReader.basicPath = Application.dataPath + "/Resources/Data";
-        //CSVReader.copyPath = Application.persistentDataPath + "/Data";
-
         // 아이콘 캐싱
         Item.iconTable = iconTable;
-
-        //// 안드로이드 셋업
-        //if(Application.platform == RuntimePlatform.Android)
-        //{
-        //    // 저장소 읽기 권한
-        //    if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageRead))
-        //    {
-        //        UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.ExternalStorageRead);
-        //    }
-
-        //    // 저장소 쓰기 권한
-        //    if (!UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageWrite))
-        //    {
-        //        UnityEngine.Android.Permission.RequestUserPermission(UnityEngine.Android.Permission.ExternalStorageWrite);
-        //    }
-        //}
     }
 
     // Start is called before the first frame update
@@ -72,12 +54,6 @@ public class Scene_First : MonoBehaviour
 
         // 셋업 - 퍼미션, 테이블
         StartCoroutine(SetUp());
-
-        //// 테이블 로드
-        //StartCoroutine(TableLoad());
-        //Item.SetUp();
-        //Character.SetUp();
-        //text.text = "wait...";
     }
 
     // Update is called once per frame
@@ -95,15 +71,6 @@ public class Scene_First : MonoBehaviour
             }
         }
 
-        //if (CustomInput.GetPoint())
-        //{
-        //    text.text = string.Format("isTableReady={0}, 로드={1}", isTableReady, ao.progress);
-
-        //    Debug.LogError(string.Format("touchCount={0}, pos={1}", 
-        //        UnityEngine.EventSystems.EventSystem.current.currentInputModule.input.touchCount, 
-        //        UnityEngine.EventSystems.EventSystem.current.currentInputModule.input.GetTouch(0).position.ToString()
-        //        ));
-        //}
     }
 
 
@@ -118,20 +85,6 @@ public class Scene_First : MonoBehaviour
                 // 중력 설정
                 Physics.gravity = Physics.gravity * 10;
             }
-
-        //try
-        //{
-        //    //text.text = string.Format("isTableReady={0}, 로드={1}", isTableReady, ao.progress);
-        //    Debug.LogError(string.Format("isTableReady={0}, 로드={1}, 상태={2}", isTableReady, ao.progress, (ao.progress >= 0.9f).ToString() ));
-        //    Debug.LogError(string.Format("테이블 :: 유저={0} 캐릭터={1}, 아이템={2}, 이벤트={3}, 럭키박스={4}, 유니크={5}, 미니={6}", (UserData.file!=null), Character.table.Count, Item.table.Count, IocEvent.table.Count, LuckyBox.table.Count, Unique.table.Count, Minigame.table.Count));
-
-        //    Debug.LogError(string.Format("permissionR={0}, permissionW={1}", 
-        //        UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageRead),
-        //        UnityEngine.Android.Permission.HasUserAuthorizedPermission(UnityEngine.Android.Permission.ExternalStorageWrite)
-        //        ));
-        //}
-        //catch { }
-
     }
     
     IEnumerator SetUp()
@@ -170,11 +123,11 @@ public class Scene_First : MonoBehaviour
     {
         Debug.Log("테이블 :: 전체 데이터 테이블 셋업");
 
-        // 유저 데이터 로드
-        // = 로 구분되는 기기데이터경로/User/UserData.iocdata 파일을 복사본(true)으로 저장 가능(false)하게 읽어옴
-        UserData.file = new CSVReader("User", "UserData.iocdata", true, false, '=');
-        UserData.SetUp();
+        if(!UserData.checkSetup)
+            UserData.SetUp();
         yield return null;
+
+        yield return SetUserName();
 
         // 캐릭터 테이블
         Character.SetUp();
@@ -202,5 +155,17 @@ public class Scene_First : MonoBehaviour
 
         // 완료 처리
         isTableReady = true;
+    }
+
+    IEnumerator SetUserName()
+    {
+        Debug.LogWarning("유저 데이터 :: 유저 이름 셋팅");
+
+        if (UserData.userName == UserData.defaultName)
+            userNameSetter.gameObject.SetActive(true);
+        else
+            Debug.LogWarning("유저 데이터 :: 유저 이름 확인됨 -> " + UserData.userName);
+
+        yield return null;
     }
 }

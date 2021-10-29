@@ -329,19 +329,19 @@ public static class EndManager
                 switch (Player.me.trophy.final)
                 {
                     case 1:
-                        UserData.count_1st++;
+                        UserData.rank1++;
                         break;
 
                     case 2:
-                        UserData.count_2nd++;
+                        UserData.rank2++;
                         break;
 
                     case 3:
-                        UserData.count_3th++;
+                        UserData.rank3++;
                         break;
 
                     default:
-                        UserData.count_4th++;
+                        UserData.rank4++;
                         break;
                 }
                 // UserData.playTime : ¹Ì±¸Çö====================
