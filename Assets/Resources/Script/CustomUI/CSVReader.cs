@@ -132,6 +132,45 @@ public class CSVReader
         // 파일 읽기
         ReadFile(subPathOrNull, fileName);
     }
+    public CSVReader(TextAsset textAsset, bool _isCopyFile, bool _isReadOnly, char dataSeparator, char lineSeparator)
+    {
+        // 사본 폴더 체크
+        if(_isCopyFile)
+            CheckPath(copyPath);
+
+        // 저장 가능 여부 설정
+        isReadOnly = !_isReadOnly;
+
+        // 파일 읽기
+        ReadFile(textAsset, dataSeparator, lineSeparator);
+    }
+    public CSVReader(TextAsset textAsset, char dataSeparator, char lineSeparator)
+    {
+        // 파일 읽기
+        ReadFile(textAsset, dataSeparator, lineSeparator);
+    }
+    public CSVReader(TextAsset textAsset)
+    {
+        // 파일 읽기
+        ReadFile(textAsset, ',', '\n');
+    }
+    public CSVReader(TextAsset textAsset, bool _isCopyFile, bool _isReadOnly)
+    {
+        // 사본 폴더 체크
+        if (_isCopyFile)
+        {
+            // 체크
+            CheckPath(copyPath);
+
+            // 카피
+        }
+
+        // 저장 가능 여부 설정
+        isReadOnly = !_isReadOnly;
+
+        // 파일 읽기
+        ReadFile(textAsset, ',', '\n');
+    }
 
 
     /// <summary>
@@ -232,6 +271,27 @@ public class CSVReader
     }
 
 
+
+    public void ReadFile(TextAsset textAsset, char dataSeparator, char lineSeparator)
+    {
+        // 파일 누락 방지
+        if (textAsset == null)
+            return;
+
+        List<string> strLine = new List<string>();
+        string tempLine = null;
+
+        // 라인 단위 읽어오기
+        strLine.AddRange(textAsset.text.Split(lineSeparator));
+
+        // 라인을 데이터 단위로 분할
+        for (int i = 0; i < strLine.Count; i++)
+        {
+            table.Add(new List<string>( strLine[i].Split(dataSeparator) ));
+        }
+
+        Debug.Log("File close :: " + @path);
+    }
     /// <summary>
     /// 세부경로 및 파일명으로 읽어오기
     /// </summary>
@@ -247,27 +307,6 @@ public class CSVReader
         // 파일명 누락 방지
         if (fileName == null)
             return;
-
-        //// 경로 설정
-        //if (isCopyFile)
-        //    path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
-        //else
-        //    path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
-
-        //// 파일 체크
-        //CheckFile(path, fileName, isCopyFile);
-
-        //// 경로 설정
-        //if (isCopyFile)
-        //    path = string.Format("{0}/{1}/{2}", copyPath, subPathOrNull, fileName);
-        //else
-        //    path = string.Format("{0}/{1}/{2}", basicPath, subPathOrNull, fileName);
-
-        //// 파일 체크
-        //// 누락시 자동 원본 복사
-        //// 복사 실패시 중단
-        //if(!CheckFile(path, subPathOrNull, fileName, isCopyFile))
-        //    return;
 
 
         // 경로 설정

@@ -31,8 +31,27 @@ public class Scene_First : MonoBehaviour
     [SerializeField]
     List<Sprite> iconTable = new List<Sprite>();
 
+
     [Header("Data Table")]
-    [SerializeField] TextAsset testData = null;
+    [SerializeField] TextAsset charData = null;
+    [SerializeField] TextAsset charDataLocal = null;
+
+    [SerializeField] TextAsset itemData = null;
+    [SerializeField] TextAsset itemDataLocal = null;
+
+    [SerializeField] TextAsset eventData = null;
+    [SerializeField] TextAsset eventDataLocal = null;
+
+    [SerializeField] TextAsset luckyData = null;
+    [SerializeField] TextAsset luckyDataLocal = null;
+
+    [SerializeField] TextAsset uniqueData = null;
+    [SerializeField] TextAsset uniqueDataLocal = null;
+
+    [SerializeField] TextAsset minigameData = null;
+    [SerializeField] TextAsset minigameDataLocal = null;
+
+
 
     void Awake()
     {
@@ -130,27 +149,27 @@ public class Scene_First : MonoBehaviour
         yield return SetUserName();
 
         // 캐릭터 테이블
-        Character.SetUp();
+        Character.SetUp(charData, charDataLocal);
         yield return null;
 
         // 아이템 테이블
-        Item.SetUp();
+        Item.SetUp(charData, charDataLocal);
         yield return null;
 
         // 이벤트 테이블
-        IocEvent.SetUp();
+        IocEvent.SetUp(itemData, itemDataLocal);
         yield return null;
 
         // 럭키박스 테이블
-        LuckyBox.SetUp();
+        LuckyBox.SetUp(luckyData, luckyDataLocal);
         yield return null;
 
         // 유니크 테이블
-        Unique.SetUp();
+        Unique.SetUp(uniqueData, uniqueDataLocal);
         yield return null;
 
         // 미니게임 테이블
-        Minigame.SetUp();
+        Minigame.SetUp(minigameData, minigameDataLocal);
         yield return null;
 
         // 완료 처리

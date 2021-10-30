@@ -3,23 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "R3CN20T9HXZ",
         "name": "com.GrowUp.unity.IoC",
-        "processId": 1457,
+        "processId": 16408,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "R3CN20T9HXZ",
-            "name": "com.GrowUp.unity.IoC",
-            "processId": 29569,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CN20T9HXZ",
-            "name": "com.GrowUp.unity.IoC",
-            "processId": 31037,
-            "exited": true
-        },
         {
             "deviceId": "R3CN20T9HXZ",
             "name": "com.GrowUp.unity.IoC",
@@ -30,7 +18,7 @@
             "deviceId": "R3CN20T9HXZ",
             "name": "com.android.settings",
             "processId": 27735,
-            "exited": true
+            "exited": false
         },
         {
             "deviceId": "R3CN20T9HXZ",
@@ -42,12 +30,24 @@
             "deviceId": "R3CN20T9HXZ",
             "name": "com.google.android.permissioncontroller",
             "processId": 24960,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "R3CN20T9HXZ",
             "name": "com.GrowUp.unity.IoC",
             "processId": 1457,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CN20T9HXZ",
+            "name": "com.GrowUp.unity.IoC",
+            "processId": 10821,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CN20T9HXZ",
+            "name": "com.GrowUp.unity.IoC",
+            "processId": 16408,
             "exited": false
         }
     ],

@@ -86,6 +86,34 @@ public class Character
         // 준비완료
         _isReady = true;
     }
+    public static void SetUp(TextAsset dataAsset, TextAsset localAsset)
+    {
+        Debug.Log("테이블 셋팅 : " + dataAsset.name);
+        
+        // 중복 실행 방지
+        if (_isReady)
+            return;
+
+        // 테이블 읽어오기
+        CSVReader reader = new CSVReader(dataAsset);
+        //CSVReader local = new CSVReader(localAsset, true, false);
+        CSVReader local = new CSVReader(localAsset);
+        Debug.Log(reader.table.Count);
+
+        // 더미 생성
+        table.Add(new Character());
+
+        // 테이블로 리스트 셋팅
+        for (int i = 1; i < reader.table.Count; i++)
+        {
+            table.Add(new Character(reader.table[i], local.table[i]));
+        }
+
+        // 준비완료
+        _isReady = true;
+
+        Debug.Log("테이블 셋팅 : " + dataAsset.name + " -> 완료 , table.count=" + table.Count);
+    }
 
     /// <summary>
     /// 테이블 인덱스값으로 캐릭터 정보입력

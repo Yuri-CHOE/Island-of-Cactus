@@ -366,7 +366,18 @@ MonoBehaviour:
   - {fileID: 21300000, guid: cc782b34699bcd446a06594b02004c6d, type: 3}
   - {fileID: 21300000, guid: c127fd8a761bf224db94fd2f44dbcf13, type: 3}
   - {fileID: 21300000, guid: 3e44e81c9441fc545bf90aa9e8b3641e, type: 3}
-  testData: {fileID: 0}
+  charData: {fileID: 4900000, guid: 8970fcc004b5cd04985c8628ee241a38, type: 3}
+  charDataLocal: {fileID: 4900000, guid: 7d3819aec3d109a49a9a0710d2754599, type: 3}
+  itemData: {fileID: 4900000, guid: e24b65aa46429624c8d701ce7f20aea3, type: 3}
+  itemDataLocal: {fileID: 4900000, guid: 428693f556738cb47ad227c2d382eecb, type: 3}
+  eventData: {fileID: 4900000, guid: 526fa12aa1b61164f9e8cd5d481ebeb7, type: 3}
+  eventDataLocal: {fileID: 4900000, guid: 7f3a2430c237bbc4ebfa58687f2ac16d, type: 3}
+  luckyData: {fileID: 4900000, guid: b6ded581782d8a14c897a7fd9599ef6c, type: 3}
+  luckyDataLocal: {fileID: 4900000, guid: 58706ef7536afd94a9a931c12d08acbf, type: 3}
+  uniqueData: {fileID: 4900000, guid: 80d4d320413574c46909c28d70766833, type: 3}
+  uniqueDataLocal: {fileID: 4900000, guid: 68f6892fd00531a41aeda53d55897ce1, type: 3}
+  minigameData: {fileID: 4900000, guid: 5424e8c841c2ded4aa938ac0bef44947, type: 3}
+  minigameDataLocal: {fileID: 4900000, guid: 41a0e0df68688e04599ce07e8a3c9ddc, type: 3}
 --- !u!1 &1494272849
 GameObject:
   m_ObjectHideFlags: 0
