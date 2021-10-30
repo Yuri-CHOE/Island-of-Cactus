@@ -3856,7 +3856,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 0.01
   m_Viewport: {fileID: 1149078239}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 2037707110}
@@ -9066,7 +9066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
-  m_DragThreshold: 10
+  m_DragThreshold: 222
 --- !u!4 &1524022960
 Transform:
   m_ObjectHideFlags: 0
@@ -14276,10 +14276,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2128805467871089996, guid: b924c9028f0646d468e062ec1ed9ff20, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
-      value: 
-      objectReference: {fileID: 502133713}
     - target: {fileID: 2128805467871089997, guid: b924c9028f0646d468e062ec1ed9ff20, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14416,10 +14412,6 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5822065374409929056, guid: b924c9028f0646d468e062ec1ed9ff20, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
-      value: 
-      objectReference: {fileID: 502133713}
     - target: {fileID: 6397541842498693133, guid: b924c9028f0646d468e062ec1ed9ff20, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

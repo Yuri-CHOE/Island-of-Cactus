@@ -148,6 +148,14 @@ public class Scene_First : MonoBehaviour
 
         yield return SetUserName();
 
+        try
+        {
+            Debug.LogWarning(Application.dataPath);
+            Debug.LogWarning(Application.persistentDataPath);
+            Debug.LogWarning(Application.streamingAssetsPath);
+        }
+        catch { }
+
         // 캐릭터 테이블
         Character.SetUp(charData, charDataLocal);
         yield return null;

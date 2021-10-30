@@ -666,8 +666,8 @@ public static class GameSaveStream
             // 파일 체크
             if (!saveFileInfo.Exists)
             {
-                Debug.LogError("error :: 세이브 파일 없음");
-                Debug.Break();
+                Debug.LogWarning("error :: 세이브 파일 없음");
+                //Debug.Break();
                 return false;
             }
             else
