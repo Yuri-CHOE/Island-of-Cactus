@@ -584,6 +584,9 @@ public static class GameSaveStream
     }
     public static void GameSave(LockType useEncryptor)
     {
+        // 경로 체크
+        CSVReader.CheckPath(path);
+
         // 파일 오픈
         //using (FileStream fs = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.Write))
         using (FileStream fs = new FileStream(@fullPath, FileMode.Create, FileAccess.Write))
@@ -625,6 +628,9 @@ public static class GameSaveStream
     {
         try
         {
+            // 경로 체크
+            CSVReader.CheckPath(path);
+
             // 파일 체크
             if (saveFileInfo == null)
             {
