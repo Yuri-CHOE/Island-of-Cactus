@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using UnityEditor;
+
 public class Scene_First : MonoBehaviour
 {
     // 다음 씬 이름
@@ -51,17 +53,23 @@ public class Scene_First : MonoBehaviour
     [SerializeField] TextAsset minigameData = null;
     [SerializeField] TextAsset minigameDataLocal = null;
 
+    [SerializeField] List<TextAsset> mapFile = new List<TextAsset>();
+    
 
 
     void Awake()
     {
         // 아이콘 캐싱
         Item.iconTable = iconTable;
+
+        // 맵파일 싱크
+        WorldManager.worldAsset = mapFile;
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
         // 환경설정 로드
         Preferences.Load();
 
@@ -108,7 +116,12 @@ public class Scene_First : MonoBehaviour
     
     IEnumerator SetUp()
     {
-        yield return PermissionCheck();
+        // 안드로이드 셋팅
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            // 권한 요청
+            yield return PermissionCheck();
+        }
 
         yield return TableLoad();
     }
@@ -144,17 +157,8 @@ public class Scene_First : MonoBehaviour
 
         if(!UserData.checkSetup)
             UserData.SetUp();
-        yield return null;
 
         yield return SetUserName();
-
-        try
-        {
-            Debug.LogWarning(Application.dataPath);
-            Debug.LogWarning(Application.persistentDataPath);
-            Debug.LogWarning(Application.streamingAssetsPath);
-        }
-        catch { }
 
         // 캐릭터 테이블
         Character.SetUp(charData, charDataLocal);
@@ -186,12 +190,12 @@ public class Scene_First : MonoBehaviour
 
     IEnumerator SetUserName()
     {
-        Debug.LogWarning("유저 데이터 :: 유저 이름 셋팅");
+        Debug.Log("유저 데이터 :: 유저 이름 셋팅");
 
         if (UserData.userName == UserData.defaultName)
             userNameSetter.gameObject.SetActive(true);
         else
-            Debug.LogWarning("유저 데이터 :: 유저 이름 확인됨 -> " + UserData.userName);
+            Debug.Log("유저 데이터 :: 유저 이름 확인됨 -> " + UserData.userName);
 
         yield return null;
     }

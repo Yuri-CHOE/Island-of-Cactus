@@ -378,6 +378,8 @@ MonoBehaviour:
   uniqueDataLocal: {fileID: 4900000, guid: 68f6892fd00531a41aeda53d55897ce1, type: 3}
   minigameData: {fileID: 4900000, guid: 5424e8c841c2ded4aa938ac0bef44947, type: 3}
   minigameDataLocal: {fileID: 4900000, guid: 41a0e0df68688e04599ce07e8a3c9ddc, type: 3}
+  mapFile:
+  - {fileID: 4900000, guid: a62d222b2d6f83c4e9a230f16497d4e9, type: 3}
 --- !u!1 &1494272849
 GameObject:
   m_ObjectHideFlags: 0

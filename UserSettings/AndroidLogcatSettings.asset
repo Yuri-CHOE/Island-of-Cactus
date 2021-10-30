@@ -1,31 +1,13 @@
 {
     "m_SelectedDeviceId": "R3CN20T9HXZ",
     "m_SelectedPackage": {
-        "deviceId": "R3CN20T9HXZ",
-        "name": "com.GrowUp.unity.IoC",
-        "processId": 21635,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "R3CN20T9HXZ",
-            "name": "com.GrowUp.unity.IoC",
-            "processId": 1457,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CN20T9HXZ",
-            "name": "com.GrowUp.unity.IoC",
-            "processId": 10821,
-            "exited": true
-        },
-        {
-            "deviceId": "R3CN20T9HXZ",
-            "name": "com.GrowUp.unity.IoC",
-            "processId": 16408,
-            "exited": true
-        },
         {
             "deviceId": "R3CN20T9HXZ",
             "name": "com.GrowUp.unity.IoC",
@@ -42,6 +24,24 @@
             "deviceId": "R3CN20T9HXZ",
             "name": "com.GrowUp.unity.IoC",
             "processId": 21635,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CN20T9HXZ",
+            "name": "com.GrowUp.unity.IoC",
+            "processId": 23197,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CN20T9HXZ",
+            "name": "com.GrowUp.unity.IoC",
+            "processId": 25485,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CN20T9HXZ",
+            "name": "com.fineapp.yogiyo",
+            "processId": 5525,
             "exited": false
         }
     ],

@@ -85,16 +85,17 @@ public class Scene_Title : MonoBehaviour
             );
 
         // 코드 가져오기
-        WorldManager.BuildWorld(GameData.worldFileName);
+        //WorldManager.BuildWorld(GameData.worldFileName);
+        WorldManager.BuildWorld(GameRule.area, GameRule.section);
     }
-    public static void SetWorldFileName(string __worldFileName)
-    {
-        // 파일명 입력
-        GameData.SetWorldFileName(__worldFileName);
+    //public static void SetWorldFileName(string __worldFileName)
+    //{
+    //    // 파일명 입력
+    //    GameData.SetWorldFileName(__worldFileName);
 
-        // 코드 가져오기
-        WorldManager.BuildWorld(GameData.worldFileName);
-    }
+    //    // 코드 가져오기
+    //    WorldManager.BuildWorld(GameData.worldFileName);
+    //}
 
     public void Tester()
     {
