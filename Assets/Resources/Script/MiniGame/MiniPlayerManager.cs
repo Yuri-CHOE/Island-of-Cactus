@@ -194,11 +194,11 @@ public class MiniPlayerManager : MonoBehaviour
         if (sort.Count > 0)
         {
             // 공동 순위 리스트
-            List<int> temp = new List<int>();
+            List<Player> temp = new List<Player>();
             Player tempPlayer;
 
             // 등수
-            int c = 0;
+            int c = 1;
 
             // 정렬
             while (sort.Count > 0)
@@ -206,25 +206,25 @@ public class MiniPlayerManager : MonoBehaviour
                 //// 등수 추가
                 //c++;
 
-                Debug.LogError("랭크 :: 랭크 계산중 -> " + c  + " 등");
+                Debug.Log("랭크 :: 랭크 계산중 -> " + c  + " 등");
 
                 // 공동 순위 리스트 초기화
                 temp.Clear();
-                temp.Add(0);
+                temp.Add(sort[0]);
 
                 // 최고 점수자 확보
-                for (int j = 1; j < sort.Count; j++)
+                for (int i = 1; i < sort.Count; i++)
                 {
                     // 클 경우 초기화 후 확보
-                    if (sort[j].miniInfo.score > sort[temp[0]].miniInfo.score)
+                    if (sort[i].miniInfo.score > temp[0].miniInfo.score)
                     {
                         temp.Clear();
-                        temp.Add(j);
+                        temp.Add(sort[i]);
                     }
                     // 같을 경우 추가 확보
-                    else if (sort[j].miniInfo.score == sort[temp[0]].miniInfo.score)
+                    else if (sort[i].miniInfo.score == temp[0].miniInfo.score)
                     {
-                        temp.Add(j);
+                        temp.Add(sort[i]);
                     }
                 }
 
@@ -235,10 +235,8 @@ public class MiniPlayerManager : MonoBehaviour
                     if (sort.Count == 0)
                         break;
 
-                    int indexer = temp[j];
-
                     // 대상
-                    tempPlayer = sort[temp[j]];
+                    tempPlayer = temp[j];
 
                     //tempPlayer.miniInfo.rank = c;
                     //Debug.Log(string.Format("rank :: [{0}] {1} -> {2}점으로 {3}등", c, tempPlayer.name, tempPlayer.miniInfo.score, c));
