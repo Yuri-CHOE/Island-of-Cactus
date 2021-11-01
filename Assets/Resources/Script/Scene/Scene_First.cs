@@ -165,11 +165,11 @@ public class Scene_First : MonoBehaviour
         yield return null;
 
         // 아이템 테이블
-        Item.SetUp(charData, charDataLocal);
+        Item.SetUp(itemData, itemDataLocal);
         yield return null;
 
         // 이벤트 테이블
-        IocEvent.SetUp(itemData, itemDataLocal);
+        IocEvent.SetUp(eventData, eventDataLocal);
         yield return null;
 
         // 럭키박스 테이블

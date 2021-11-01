@@ -203,8 +203,10 @@ public class MiniPlayerManager : MonoBehaviour
             // 정렬
             while (sort.Count > 0)
             {
-                // 등수 추가
-                c++;
+                //// 등수 추가
+                //c++;
+
+                Debug.LogError("랭크 :: 랭크 계산중 -> " + c  + " 등");
 
                 // 공동 순위 리스트 초기화
                 temp.Clear();
@@ -271,8 +273,8 @@ public class MiniPlayerManager : MonoBehaviour
                     sort.Remove(tempPlayer);
                 }
 
-                // 동시 등수 반영
-                c += temp.Count - 1;
+                // 등수 반영
+                c += temp.Count;
             }
         }
     }
