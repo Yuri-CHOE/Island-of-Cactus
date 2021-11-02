@@ -248,9 +248,6 @@ public class GameMaster : MonoBehaviour
                     // 캐릭터 아이콘 로드 및 색상 반영
                     for (int i = 0; i < Player.allPlayer.Count; i++)
                     {
-                        // 대상 플레이어
-                        Player current = Player.allPlayer[i];
-
                         // 캐릭터 아이콘 로드
                         Player.allPlayer[i].LoadFace();
 

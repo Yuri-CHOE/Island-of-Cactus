@@ -55,7 +55,7 @@ public static class GameData
     public static void Clear()
     {
         _gameMode = GameMode.Mode.None;
-        GameMaster.Flow gameFlow = GameMaster.Flow.Wait;
+        gameFlow = GameMaster.Flow.Wait;
         _worldFileName = null;
         saveControl = null;
         Player.Clear();
@@ -63,6 +63,7 @@ public static class GameData
         Turn.Clear();
         //GameSaver.Clear();
         GameSaveStream.Clear();
+
 
         // Äüµî·Ï Á¦°Å
         GameMaster.script = null;
