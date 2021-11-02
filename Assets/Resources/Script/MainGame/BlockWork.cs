@@ -234,7 +234,7 @@ public static class BlockWork
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
-        //select = 17;
+        select = 19;
         Debug.Log("럭키박스 :: 선택됨 -> "+ select);
 
         // 럭키박스 연출 시작
@@ -328,11 +328,8 @@ public static class BlockWork
          
          */
 
-        // 퀵 등록
-        ShortcutManager sm = ShortcutManager.script;
-
         // 사용 질문 UI 호출
-        sm.CallShortcutUI(currentPlayer);
+        ShortcutManager.script.CallShortcutUI(currentPlayer);
 
     }
 

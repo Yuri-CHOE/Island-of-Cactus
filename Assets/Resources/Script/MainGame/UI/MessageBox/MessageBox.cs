@@ -40,7 +40,7 @@ public class MessageBox : MonoBehaviour
     [SerializeField]
     Button btnBuy = null;
     [SerializeField]
-    Button btnUse = null;
+    public Button btnUse = null;
     [SerializeField]
     Button btnClose = null;
 
@@ -177,55 +177,6 @@ public class MessageBox : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    ///// <summary>
-    ///// 
-    ///// </summary>
-    ///// <param name="btnPreset"></param>
-    ///// <param name="pageNum"></param>
-    //void addPreset(bool[] btnPreset, int pageNum)
-    //{
-    //    // 버튼 목록 수량 체크
-    //    if (!btnSwitch.checkCountObject(btnPreset.Length))
-    //        return;
-
-    //    // 페이지 수량 체크
-    //    if (pageNum > pageSwitch.count())
-    //    {
-    //        Debug.Log("error :: page over (Max:" + pageSwitch.count() + ") -> " + pageNum);
-    //        return;
-    //    }
-
-    //    // 페이지 룰 누락시 자동 생성
-    //    if (pageSwitch.GetObject(pageNum).GetComponent<MessageBoxRule>() == null)
-    //        pageSwitch.GetObject(pageNum).AddComponent<MessageBoxRule>();
-
-    //    mBoxPreset.Add(new int[] { btnSwitch.countPreset(), pageNum });
-    //    btnSwitch.addPreset(btnPreset);
-    //    Debug.Log("Add : " + pageNum);
-    //}
-
-    //void callPreset(int Num)
-    //{
-    //    // 지정된 번호를 사용하여 각 버튼 프리셋 제어
-
-    //    // 지정 안된 프리셋 요청시 중단
-    //    if (Num >= mBoxPreset.Count)
-    //    {
-    //        Debug.Log("error :: Out of Range (0~" + (mBoxPreset.Count-1) + ") -> " + Num);
-    //        return;
-    //    }
-
-    //    Debug.Log("test :: [" + mBoxPreset[Num][0] + "] [" + mBoxPreset[Num][1] + "]");
-
-    //    // 버튼 설정
-    //    btnSwitch.setUp(mBoxPreset[Num][0]);
-
-    //    // 페이지 설정
-    //    pageSwitch.setUp(mBoxPreset[Num][1]);
-
-    //    // 오브젝트 활성화
-    //    open();
-    //}
     void callPreset(int ruleListIndex)
     {
         // 지정된 번호를 사용하여 각 버튼 프리셋 제어

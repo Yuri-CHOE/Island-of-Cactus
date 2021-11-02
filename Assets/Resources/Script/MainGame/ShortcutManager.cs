@@ -29,7 +29,7 @@ public class ShortcutManager : MonoBehaviour
     public int price = 50;
 
     // 사용자
-    Player customer = null;
+    public Player customer = null;
     int customerCoin = 0;
 
     // 구매 가능 여부
@@ -115,6 +115,9 @@ public class ShortcutManager : MonoBehaviour
         // UI 셋팅
         shortcutPrice.text = price.ToString();
         CheckColor();
+
+        // 사용자 체크
+        GameMaster.script.messageBox.btnUse.interactable = (customer == Player.me);
 
         // UI 호출
         GameMaster.script.messageBox.PopUp(MessageBox.Type.ShortCut);

@@ -31,6 +31,7 @@ public class AIWorker : MonoBehaviour
         public AI itemUse = new ItemUseAI();
         public AI dice = new DiceAI();
         public AI itemBuy = new ItemBuyAI();
+        public AI shortcut = new ShortcutAI();
     }
 
     public void SetUp(Player _owner)
@@ -42,6 +43,7 @@ public class AIWorker : MonoBehaviour
         aiList.Add(mainGame.itemUse);
         aiList.Add(mainGame.dice);
         aiList.Add(mainGame.itemBuy);
+        aiList.Add(mainGame.shortcut);
 
         // AI 소유자 지정
         for (int i = 0; i < aiList.Count; i++)

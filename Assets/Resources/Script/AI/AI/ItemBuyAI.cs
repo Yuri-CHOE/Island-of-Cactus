@@ -7,7 +7,7 @@ namespace CustomAI
 {
     namespace MainGame
     {
-        // AI - 주사위
+        // AI - 아이템 구매
         public class ItemBuyAI : AI
         {
             public override bool CheckReset()
