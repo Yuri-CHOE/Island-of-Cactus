@@ -294,7 +294,17 @@ public static class Tool
 
 
 
-
+    public static void WebLink(string URL)
+    {
+        try
+        {
+            Application.OpenURL(URL);
+        }
+        catch
+        {
+            Debug.LogWarning("링크 :: 링크를 열수 없음");
+        }
+    }
 
 
 

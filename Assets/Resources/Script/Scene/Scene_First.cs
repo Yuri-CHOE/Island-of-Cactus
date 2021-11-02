@@ -53,6 +53,8 @@ public class Scene_First : MonoBehaviour
     [SerializeField] TextAsset minigameData = null;
     [SerializeField] TextAsset minigameDataLocal = null;
 
+    [SerializeField] TextAsset referenceData = null;
+
     [SerializeField] List<TextAsset> mapFile = new List<TextAsset>();
     
 
@@ -182,6 +184,10 @@ public class Scene_First : MonoBehaviour
 
         // 미니게임 테이블
         Minigame.SetUp(minigameData, minigameDataLocal);
+        yield return null;
+
+        // 참고 리소스 테이블
+        IocReference.SetUp(referenceData);
         yield return null;
 
         // 완료 처리
