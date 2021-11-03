@@ -234,7 +234,7 @@ public static class BlockWork
 
         // 드랍 테이블 작동 및 드랍대상 인덱스 확보
         int select = 1 + dropTable.Drop();
-        select = 19;
+        //select = 19;
         Debug.Log("럭키박스 :: 선택됨 -> "+ select);
 
         // 럭키박스 연출 시작

@@ -62,7 +62,12 @@ public class MiniPlayerManager : MonoBehaviour
                 // 시작 여부 반영
                 MiniGameManager.script.isGameStart = allReady;
                 if (allReady)
+                {
+                    // 준비 버튼 비활성화
+                    MiniGameManager.script.readyText.transform.parent.gameObject.SetActive(false);
+
                     MiniGameManager.progress = ActionProgress.Working;
+                }
             }
         }
 

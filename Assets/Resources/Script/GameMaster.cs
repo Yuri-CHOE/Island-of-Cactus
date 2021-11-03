@@ -96,6 +96,8 @@ public class GameMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // 사이클 UI 갱신
+        cycleManager.Refresh();
 
     }
 
@@ -618,17 +620,18 @@ public class GameMaster : MonoBehaviour
                 }
             }
 
-            // 사이클 UI 갱신
-            cycleManager.Refresh();
-
             // 턴 종료 처리
             Turn.Next();
+
+            // 사이클 UI 갱신
+            cycleManager.Refresh();
         }
         // 시스템 플레이어 - 미니게임
         else if(Turn.now == Player.system.Minigame)
         {
             // 미니게임 선정
             if (MiniGameManager.minigameNow == null)
+            {
                 if (MiniGameManager.progress == ActionProgress.Ready)
                 {
                     // 미니게임 알림 연출
@@ -639,6 +642,12 @@ public class GameMaster : MonoBehaviour
 
                     // Turn.Next();
                 }
+                else
+                    Debug.LogError("디버그 -> " + MiniGameManager.progress.ToString());
+
+            }
+            else
+                Debug.LogError("디버그 -> " + MiniGameManager.minigameNow.name);
 
         }
         // 시스템 플레이어 - 미니게임 엔더
@@ -664,30 +673,30 @@ public class GameMaster : MonoBehaviour
             //Transform.Destroy(report.transform.root);
 
 
-            // 모든 플레이어 대상
-            for (int i = 0; i < Player.allPlayer.Count; i++)
-            {
-                // 미니게임 정산
+            //// 모든 플레이어 대상
+            //for (int i = 0; i < Player.allPlayer.Count; i++)
+            //{
+            //    // 미니게임 정산
 
-                // 불참자 제외
-                if (!Player.allPlayer[i].miniInfo.join)
-                    continue;
+            //    // 불참자 제외
+            //    if (!Player.allPlayer[i].miniInfo.join)
+            //        continue;
 
-                // 코인 지급
-                Player.allPlayer[i].coin.Add(Player.allPlayer[i].miniInfo.reward);
+            //    // 코인 지급
+            //    Player.allPlayer[i].coin.Add(Player.allPlayer[i].miniInfo.reward);
 
-                // 기록
-                Player.allPlayer[i].miniInfo.Record();
+            //    // 기록
+            //    Player.allPlayer[i].miniInfo.Record();
 
-                // 초기화
-                Player.allPlayer[i].miniInfo.Reset();
-            }
+            //    // 초기화
+            //    Player.allPlayer[i].miniInfo.Reset();
+            //}
 
-            // 미니게임 보상 및 지분 초기화
-            MiniScore.totalReward = 0;
-            MiniScore.totalRewardRatio = 0;
-            MiniGameManager.minigameNow = null;
-            MiniGameManager.progress = ActionProgress.Ready;
+            //// 미니게임 보상 및 지분 초기화
+            //MiniScore.totalReward = 0;
+            //MiniScore.totalRewardRatio = 0;
+            //MiniGameManager.minigameNow = null;
+            //MiniGameManager.progress = ActionProgress.Ready;
 
 
             // 턴 종료 처리

@@ -52,6 +52,9 @@ public class MiniReportManager : MonoBehaviour
         // 설정
         SetUp();
 
+        // 초기화
+        MiniScore.RewardReset();
+
         // 페이드 인
         StartCoroutine(Tool.CanvasFade(curtain, false, 0.5f));
 
@@ -189,7 +192,8 @@ public class MiniReportManager : MonoBehaviour
     public void ReportFinish()
     {
         // 미니게임 종료 처리
-        MiniGameManager.progress = ActionProgress.Finish;
+        if (MiniGameManager.progress != ActionProgress.Ready)
+            MiniGameManager.progress = ActionProgress.Finish;
 
         // 페이드 아웃
         StartCoroutine(Tool.CanvasFade(curtain, true, 0.5f));

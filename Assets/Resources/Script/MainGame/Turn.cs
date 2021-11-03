@@ -44,6 +44,8 @@ public static class Turn
         // 하나 꺼내서 재입력 (순환)
         queue.Enqueue(queue.Dequeue());
 
+        Debug.Log("턴 :: 다음 턴 진행 -> " + queue.Peek().name);
+
         // 첫프레임 활성화
         isFirstFrame = true;
 

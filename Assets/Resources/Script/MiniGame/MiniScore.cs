@@ -82,4 +82,62 @@ public struct MiniScore
             Debug.Break();
         }
     }
+
+    public static void GiveRewardAll()
+    {
+        // 모든 플레이어 대상
+        for (int i = 0; i < Player.allPlayer.Count; i++)
+        {
+            // 미니게임 정산
+
+            // 불참자 제외
+            if (!Player.allPlayer[i].miniInfo.join)
+                continue;
+
+            // 코인 지급
+            Player.allPlayer[i].coin.Add(Player.allPlayer[i].miniInfo.reward);
+
+            // 기록
+            Player.allPlayer[i].miniInfo.Record();
+
+            //// 초기화
+            //Player.allPlayer[i].miniInfo.Reset();
+        }
+
+        //// 미니게임 보상 및 지분 초기화
+        //MiniScore.totalReward = 0;
+        //MiniScore.totalRewardRatio = 0;
+        //MiniGameManager.minigameNow = null;
+        //MiniGameManager.progress = ActionProgress.Ready;
+    }
+
+    public static void RewardReset()
+    {
+        // 모든 플레이어 대상
+        for (int i = 0; i < Player.allPlayer.Count; i++)
+        {
+            //// 미니게임 정산
+
+            //// 불참자 제외
+            //if (!Player.allPlayer[i].miniInfo.join)
+            //    continue;
+
+            //// 코인 지급
+            //Player.allPlayer[i].coin.Add(Player.allPlayer[i].miniInfo.reward);
+
+            //// 기록
+            //Player.allPlayer[i].miniInfo.Record();
+
+            // 초기화
+            Player.allPlayer[i].miniInfo.Reset();
+        }
+
+        // 미니게임 보상 및 지분 초기화
+        MiniScore.totalReward = 0;
+        MiniScore.totalRewardRatio = 0;
+        MiniGameManager.minigameNow = null;
+        MiniGameManager.progress = ActionProgress.Ready;
+
+        Debug.Log("미니게임 :: 이전 게임 초기화 수행됨");
+    }
 }

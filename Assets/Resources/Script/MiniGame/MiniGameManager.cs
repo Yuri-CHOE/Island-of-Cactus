@@ -27,7 +27,7 @@ public class MiniGameManager : MonoBehaviour
     [SerializeField] CanvasGroup curtain = null;
 
     // 준비 텍스트
-    [SerializeField] UnityEngine.UI.Text readyText = null;
+    public UnityEngine.UI.Text readyText = null;
 
 
     /// <summary>
@@ -130,7 +130,10 @@ public class MiniGameManager : MonoBehaviour
         // 종료 처리
         progress = ActionProgress.Finish;
 
-        // 메인게임 로딩
+        // 보상
+        MiniScore.GiveRewardAll();
+
+        // 정산 씬 로딩
         StartCoroutine(DelayedScoreScene());
     }
 
