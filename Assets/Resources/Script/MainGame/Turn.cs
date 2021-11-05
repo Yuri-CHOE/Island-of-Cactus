@@ -41,6 +41,10 @@ public static class Turn
 
     public static Player Next()
     {
+        return Next(true);
+    }
+    public static Player Next(bool useAutoSave)
+    {
         // 하나 꺼내서 재입력 (순환)
         queue.Enqueue(queue.Dequeue());
 
@@ -50,7 +54,8 @@ public static class Turn
         isFirstFrame = true;
 
         // 자동저장
-        GameMaster.script.AutoSave();
+        if(useAutoSave)
+            GameMaster.script.AutoSave();
 
         return now;
     }

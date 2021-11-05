@@ -642,12 +642,12 @@ public class GameMaster : MonoBehaviour
 
                     // Turn.Next();
                 }
-                else
-                    Debug.LogError("디버그 -> " + MiniGameManager.progress.ToString());
+                //else
+                //    Debug.LogError("디버그 -> " + MiniGameManager.progress.ToString());
 
             }
-            else
-                Debug.LogError("디버그 -> " + MiniGameManager.minigameNow.name);
+            //else
+            //    Debug.LogError("디버그 -> " + MiniGameManager.minigameNow.name);
 
         }
         // 시스템 플레이어 - 미니게임 엔더
@@ -1236,15 +1236,6 @@ public class GameMaster : MonoBehaviour
         targetPlayer.movement.GotoJail();
     }
 
-
-    /// <summary>
-    /// 테스트 전용
-    /// </summary>
-    public void SaveGame()
-    {
-        GameSaveStream.GameSave();
-    }
-
     /// <summary>
     /// 테스트 전용
     /// </summary>
@@ -1281,7 +1272,22 @@ public class GameMaster : MonoBehaviour
         if (Turn.isFirstFrame)
             // 자동저장 활성화 일경우
             if (useAutoSave)
-                GameSaveStream.GameSave();
+            {
+                SaveGame();
+            }
 
+    }
+
+    /// <summary>
+    /// 게임 저장 관리
+    /// </summary>
+    public void SaveGame()
+    {
+        // 이전 세이브 중단
+        if (GameSaveStream.saveControl != null)
+            StopCoroutine(GameSaveStream.saveControl);
+
+        // 세이브
+        GameSaveStream.saveControl = StartCoroutine(GameSaveStream.GameSave());
     }
 }

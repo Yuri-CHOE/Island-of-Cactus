@@ -378,6 +378,7 @@ public static class GameSaveStream
     static string path = string.Format("{0}/{1}", CSVReader.copyPath, saveFloder);
     const string saveFloder = "Save";
     static string fullPath { get { return string.Format("{0}/{1}/{2}{3}", CSVReader.copyPath, saveFloder, fileName, extension); } }
+    static string tempPath { get { return string.Format("{0}/{1}/_{2}{3}", CSVReader.copyPath, saveFloder, fileName, extension); } }
 
     // 세이브 파일 파일명
     static string fileName { get { return GameData.gameMode.ToString(); } }
@@ -402,6 +403,8 @@ public static class GameSaveStream
     // 세이브 파일 관리
     public static bool isFileOpen { get { return saveFileInfo != null; } }
     static FileInfo saveFileInfo = null;
+
+    public static Coroutine saveControl = null;
 
     public enum LockType
     {
@@ -575,47 +578,91 @@ public static class GameSaveStream
     }
 
 
-    public static void GameSave()
+    public static IEnumerator GameSave()
     { 
         if(useEncrypt)
-            GameSave(LockType.Lock);
+            yield return GameSave(LockType.Lock, new SaveForm(0));
         else
-            GameSave(LockType.None);
+            yield return GameSave(LockType.None, new SaveForm(0));
     }
-    public static void GameSave(LockType useEncryptor)
+    public static IEnumerator GameSave(LockType useEncryptor, SaveForm saveData)
     {
-        // 경로 체크
-        CSVReader.CheckPath(path);
-
-        // 파일 오픈
-        //using (FileStream fs = new FileStream(saveFileInfo.FullName, FileMode.Open, FileAccess.Write))
-        using (FileStream fs = new FileStream(@fullPath, FileMode.Create, FileAccess.Write))
+        // 성공 여부 제어
+        bool ctrl = true;
+        try
         {
-            //최적화 Debug.Log("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
+            // 경로 체크
+            CSVReader.CheckPath(path);
 
-            BinaryFormatter bf = new BinaryFormatter();
+            // 파일 오픈
+            using (FileStream fs = new FileStream(@tempPath, FileMode.Create, FileAccess.Write))
+            {
+                //최적화 Debug.Log("세이브 :: 파일 작성 요청됨 -> " + @fullPath);
 
-            if (useEncryptor == LockType.None)
-            {
-                bf.Serialize(fs, new SaveForm(0));
-                //최적화 Debug.Log("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
-            }
-            else
-            {
-                //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
-                using (CryptoStream cs = new CryptoStream(fs, GetCcryptor(useEncryptor), CryptoStreamMode.Write))
+                BinaryFormatter bf = new BinaryFormatter();
+
+                if (useEncryptor == LockType.None)
                 {
-                    bf.Serialize(cs, new SaveForm(0));
+                    bf.Serialize(fs, saveData);
+                    //최적화 Debug.Log("세이브 :: 암호화 사용 안함 " + fs.CanWrite);
                 }
-                //최적화 Debug.Log("세이브 :: 암호화 사용 " + fs.CanWrite);
+                else
+                {
+                    //cryptor 변수에서 암호화 또는 복호화된 데이터를 결과에 쓰는 스트림
+                    using (CryptoStream cs = new CryptoStream(fs, GetCcryptor(useEncryptor), CryptoStreamMode.Write))
+                    {
+                        bf.Serialize(cs, saveData);
+                    }
+                    //최적화 Debug.Log("세이브 :: 암호화 사용 " + fs.CanWrite);
+                }
             }
         }
+        catch
+        {
+            // 실패 처리
+            ctrl = false;
+            Debug.LogError("세이브 :: 파일 작성 실패");
+        }
 
-        // 파일 지정
-        saveFileInfo = new FileInfo(@fullPath);
-        //최적화 Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
+        if (ctrl)
+        {
+            // 파일 덮어쓰기
+            yield return SaveOverwriteTask();
 
-    }    
+            // 파일 지정
+            saveFileInfo = new FileInfo(@fullPath);
+            //최적화 Debug.Log("세이브 :: 파일 작성 결과 -> " + saveFileInfo.Exists);
+        }
+
+        // 종료처리
+        saveControl = null;
+
+        yield return null;
+    }
+
+    public static void SaveOverwrite()
+    {
+        // 임시 파일 확인
+        if (File.Exists(@tempPath))
+        {
+            // 정규 파일 확인 후 제거
+            if (File.Exists(@fullPath))
+                File.Delete(@fullPath);
+
+            // 정규 파일로 변경
+            File.Move(@tempPath, @fullPath);
+        }
+    }
+    public static IEnumerator SaveOverwriteTask()
+    {
+        // 파일 덮어쓰기
+        System.Threading.Tasks.Task overwriter = new System.Threading.Tasks.Task(() => SaveOverwrite());
+        overwriter.Start();
+
+        // 덮어쓰기 대기
+        while (!overwriter.IsCompleted)
+            yield return null;
+    }
 
     public static bool GameRead()
     {
@@ -638,6 +685,14 @@ public static class GameSaveStream
 
                 saveFileInfo = new FileInfo(@fullPath);
 
+            }
+
+            // 임시 파일 체크
+            if (File.Exists(@tempPath))
+            {
+                if (File.Exists(@fullPath))
+                    File.Delete(@fullPath);
+                File.Move(@tempPath, @fullPath);
             }
 
             // 파일 오픈

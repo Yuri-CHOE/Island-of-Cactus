@@ -168,7 +168,12 @@ public class Item
         // 테이블로 리스트 셋팅
         for (int i = 1; i < reader.table.Count; i++)
         {
-            table.Add(new Item(reader.table[i], local.table[i]));
+            Item current = new Item(reader.table[i], local.table[i]);
+            table.Add(current);
+
+            // 럭키박스 등장 아이템 테이블
+            if (current.isLuckyBoxGet)
+                tableLuckyDrop.Add(current);
         }
 
         // 준비완료

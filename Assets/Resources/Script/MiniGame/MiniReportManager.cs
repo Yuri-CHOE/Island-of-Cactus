@@ -47,7 +47,16 @@ public class MiniReportManager : MonoBehaviour
     {
         // 미니게임 정산 진입
         if(Turn.now == Player.system.Minigame)
-            Turn.Next();
+        {
+            Turn.Next(false);
+
+            // 이전 세이브 중단
+            if (GameSaveStream.saveControl != null)
+                StopCoroutine(GameSaveStream.saveControl);
+
+            // 세이브
+            GameSaveStream.saveControl = StartCoroutine(GameSaveStream.GameSave());
+        }
 
         // 설정
         SetUp();
