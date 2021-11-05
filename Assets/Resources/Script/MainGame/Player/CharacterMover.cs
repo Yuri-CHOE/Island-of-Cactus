@@ -1045,7 +1045,7 @@ public class CharacterMover : MonoBehaviour
             bodyObject.rotation = Quaternion.Lerp(
                 bodyObject.rotation,
                 look,
-                Time.deltaTime * speed
+                Time.deltaTime * speed * 5
                 );
 
             yield return null;

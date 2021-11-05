@@ -690,9 +690,47 @@ public static class GameSaveStream
             // 임시 파일 체크
             if (File.Exists(@tempPath))
             {
-                if (File.Exists(@fullPath))
-                    File.Delete(@fullPath);
-                File.Move(@tempPath, @fullPath);
+                // 임시파일 정상 여부 확인
+                try
+                {
+                    saveFileInfo = new FileInfo(@tempPath);
+
+                    // 파일 오픈
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        // 파일 바이트화
+                        byte[] origin = File.ReadAllBytes(@saveFileInfo.FullName);
+                        //최적화 Debug.Log("세이브 :: 파일 열기 성공 -> " + origin.Length);
+
+                        // 복호화
+                        if (useDecryptor == LockType.Unlock)
+                        {
+                            //최적화 Debug.Log("세이브 :: 복호화 필요함");
+                            origin = Ccryptor(origin, useDecryptor);
+                        }
+
+                        //최적화 Debug.Log("세이브 :: 파일 데이터화 시작");
+                        ms.Write(origin, 0, origin.Length);
+
+                        // 읽기
+                        BinaryFormatter bf = new BinaryFormatter();
+                        ms.Position = 0;
+                        saveForm = (SaveForm)bf.Deserialize(ms);
+                        //최적화 Debug.Log("세이브 :: 파일 데이터화 성공");
+                    }
+
+                    if (File.Exists(@fullPath))
+                        File.Delete(@fullPath);
+                    File.Move(@tempPath, @fullPath);
+
+                    //최적화 Debug.Log("세이브 :: 파일 읽기 성공");
+                    return true;
+                }
+                catch
+                {
+                    File.Delete(@tempPath);
+                    saveFileInfo = new FileInfo(@fullPath);
+                }
             }
 
             // 파일 오픈
