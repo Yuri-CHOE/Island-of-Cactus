@@ -88,6 +88,10 @@ public class GameMaster : MonoBehaviour
         flowCopy = GameData.gameFlow;
         GameData.gameFlow = Flow.Wait;
 
+        // 세이브 파일 로드
+        if (GameSaveStream.useLoad)
+            GameSaveStream.saveForm.LoadGameInfo();
+
         // 조작 차단중이지 않을때만 메인게임 bgm 수동 재생
         if (!GameMaster.isBlock)
             audioManager.bgmPlayer.Play();
@@ -126,9 +130,9 @@ public class GameMaster : MonoBehaviour
                     // 로딩 완료 대기
                     if (loadingManager.isFinish) return;
 
-                    // 세이브 파일 로드
-                    if (GameSaveStream.useLoad)
-                        GameSaveStream.saveForm.LoadGameInfo();
+                    //// 세이브 파일 로드
+                    //if (GameSaveStream.useLoad)
+                    //    GameSaveStream.saveForm.LoadGameInfo();
                     // 세이브파일 작성
                     else
                     {
