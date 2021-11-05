@@ -196,7 +196,7 @@ public class CameraController : MonoBehaviour
 
         // 좌표별 분할
         List<string> limit1 = new List<string>();
-        limit1.AddRange(code.Split(','));
+        limit1.AddRange(_code[0].Split(','));
         Vector3 temp1 = new Vector3();
         float.TryParse(limit1[0], out temp1.x);
         float.TryParse(limit1[1], out temp1.y);
@@ -204,11 +204,14 @@ public class CameraController : MonoBehaviour
 
         // 좌표별 분할
         List<string> limit2 = new List<string>();
-        limit2.AddRange(code.Split(','));
+        limit2.AddRange(_code[1].Split(','));
         Vector3 temp2 = new Vector3();
         float.TryParse(limit2[0], out temp2.x);
         float.TryParse(limit2[1], out temp2.y);
         float.TryParse(limit2[2], out temp2.z);
 
+        // 적용
+        camLimit1.position = temp1;
+        camLimit2.position = temp2;
     }
 }
