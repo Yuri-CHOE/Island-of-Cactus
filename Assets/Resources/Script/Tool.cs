@@ -60,7 +60,10 @@ public static class Tool
 
 
         RaycastHit hit = new RaycastHit();
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector2 point = CustomInput.GetPointPosition();
+        Debug.Log("Å¸°ÙÆÃ :: ÁÂÇ¥ -> " + point.ToString());
+        Ray ray = Camera.main.ScreenPointToRay(point);
         GameObject clickObj = null;
 
         if (Physics.Raycast(ray.origin, ray.direction, out hit))

@@ -26,44 +26,46 @@ public class PlayerInfoUI : MonoBehaviour
     [SerializeField]
     Text moveText;
 
+    Coroutine refresh = null;
+
 
     void Update()
     {
-        // 플레이어 지정 이후
-        if (owner != null)
-        {
-            // 라이프 갱신
-            lifeText.text = owner.life.RefreshOne().ToString();
+        //// 플레이어 지정 이후
+        //if (owner != null)
+        //{
+        //    // 라이프 갱신
+        //    lifeText.text = owner.life.RefreshOne().ToString();
 
-            // 코인 갱신
-            coinText.text = owner.coin.RefreshOne().ToString();
+        //    // 코인 갱신
+        //    coinText.text = owner.coin.RefreshOne().ToString();
 
-            // 아이템 갱신
-            //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
+        //    // 아이템 갱신
+        //    //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
 
-            // 행동력 갱신
-            moveText.text = owner.dice.valueTotal.ToString();
-
-
-            // 주인이 턴 진행중일 경우
-            if (Turn.now == owner)
-                turnOobject.setUp(1);
-            else
-                turnOobject.setUp(0);
+        //    // 행동력 갱신
+        //    moveText.text = owner.dice.valueTotal.ToString();
 
 
+        //    // 주인이 턴 진행중일 경우
+        //    if (Turn.now == owner)
+        //        turnOobject.setUp(1);
+        //    else
+        //        turnOobject.setUp(0);
 
-            // 감옥 UI 활성 , 비활성
-            if (owner.isStun || dead.gameObject.activeSelf)
-            {
-                dead.gameObject.SetActive(true);
 
-                // 라이프 반영
-                deadCounter.text = owner.stunCount.ToString();
-            }
-            //else
-                //dead.gameObject.SetActive(false);
-        }
+
+        //    // 감옥 UI 활성 , 비활성
+        //    if (owner.isStun || dead.gameObject.activeSelf)
+        //    {
+        //        dead.gameObject.SetActive(true);
+
+        //        // 라이프 반영
+        //        deadCounter.text = owner.stunCount.ToString();
+        //    }
+        //    //else
+        //        //dead.gameObject.SetActive(false);
+        //}
     }
 
 
@@ -102,6 +104,8 @@ public class PlayerInfoUI : MonoBehaviour
             if (inventory[i].item != null)
                 inventory[i].icon.sprite = inventory[i].item.GetIcon();
         }
+
+        refresh = StartCoroutine(AutoRefresh());
     }
 
 
@@ -147,6 +151,48 @@ public class PlayerInfoUI : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+
+    IEnumerator AutoRefresh()
+    {
+        // 플레이어 지정 이후
+        while (owner != null)
+        {
+            // 라이프 갱신
+            lifeText.text = owner.life.RefreshOne().ToString();
+
+            // 코인 갱신
+            coinText.text = owner.coin.RefreshOne().ToString();
+
+            // 아이템 갱신
+            //itemObject[0].슬롯 = owner.inventory.;      // 미구현==========================
+
+            // 행동력 갱신
+            moveText.text = owner.dice.valueTotal.ToString();
+
+
+            // 주인이 턴 진행중일 경우
+            if (Turn.now == owner)
+                turnOobject.setUp(1);
+            else
+                turnOobject.setUp(0);
+
+
+
+            // 감옥 UI 활성 , 비활성
+            if (owner.isStun || dead.gameObject.activeSelf)
+            {
+                dead.gameObject.SetActive(true);
+
+                // 라이프 반영
+                deadCounter.text = owner.stunCount.ToString();
+            }
+            //else
+            //dead.gameObject.SetActive(false);
+
+            yield return null;
         }
     }
 }

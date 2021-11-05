@@ -13,12 +13,14 @@ public class GameRuleManager : MonoBehaviour
     [Header("area")]
     [SerializeField]
     Text areaText = null;
+    [SerializeField]
     int areaLimit = 1;
 
     // 상세 지역
     [Header("section")]
     [SerializeField]
     Text sectionText = null;
+    [SerializeField]
     int sectionLimit = 1;
 
     // 최대 사이클 수

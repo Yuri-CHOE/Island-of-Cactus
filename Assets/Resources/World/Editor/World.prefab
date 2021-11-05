@@ -96,7 +96,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 3777823060021571821}
-  camMover: {fileID: 0}
   groundManager: {fileID: 737556260333163439}
   blockManager: {fileID: 8054697670722515734}
   decorManager: {fileID: 7303790948570327699}

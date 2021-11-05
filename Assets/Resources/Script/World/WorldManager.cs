@@ -73,6 +73,11 @@ public class WorldManager : MonoBehaviour
             BuildWorld(worldAsset[0]);
             return;
         }
+        if (area == 1 && section == 2)
+        {
+            BuildWorld(worldAsset[1]);
+            return;
+        }
     }
     public static void BuildWorld(TextAsset textAsset)
     {

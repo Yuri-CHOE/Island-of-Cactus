@@ -106,9 +106,13 @@ public class CameraController : MonoBehaviour
             return;
         }
 
+        // 게임 중단 반영
+        if (GameMaster.isBlock)
+            return;
+
         // 마우스 왼쪽 키다운 시 원점 셋팅
         //if(Input.GetMouseButtonDown(0))
-            //mouseNow = Input.mousePosition;
+        //mouseNow = Input.mousePosition;
         if (CustomInput.GetPointDown())
             mouseNow = CustomInput.GetPointPosition();
 

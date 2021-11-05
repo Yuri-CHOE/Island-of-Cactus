@@ -381,6 +381,7 @@ MonoBehaviour:
   referenceData: {fileID: 4900000, guid: d4262a006e8d05f4a83e921f96e76f42, type: 3}
   mapFile:
   - {fileID: 4900000, guid: a62d222b2d6f83c4e9a230f16497d4e9, type: 3}
+  - {fileID: 4900000, guid: f35f3c2d185340f49b98920d582bc15a, type: 3}
 --- !u!1 &1494272849
 GameObject:
   m_ObjectHideFlags: 0

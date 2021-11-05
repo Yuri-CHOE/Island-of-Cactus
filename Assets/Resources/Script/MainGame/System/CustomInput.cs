@@ -61,14 +61,14 @@ public class CustomInput : MonoBehaviour
     }
     public static Vector2 GetPointPosition()
     {
-        // 게임 중단 반영
-        if (GameMaster.isBlock)
-            return Vector2.zero;
+        //// 게임 중단 반영
+        //if (GameMaster.isBlock)
+        //    return Vector2.zero;
 
         if (screen != null && screen.press.isPressed)
             return screen.position.ReadValue();
 
-        if (mouse != null && mouse.press.isPressed)
+        if (mouse != null && (mouse.leftButton.isPressed || mouse.leftButton.wasReleasedThisFrame))
             return mouse.position.ReadValue();
 
         return Vector2.zero;
