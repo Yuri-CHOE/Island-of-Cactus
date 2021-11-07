@@ -132,8 +132,8 @@ public static class GameSaveStream
             cycleNow            = Cycle.now                     ;
             cycleGoal           = Cycle.goal                    ;
             playerCount         = Player.allPlayer.Count        ;
-            plusBlockValue      = BlockWork.plusBlockValue      ;
-            minusBlockValue     = BlockWork.minusBlockValue     ;
+            plusBlockValue      = BlockWork.plusBlockPlus;
+            minusBlockValue     = BlockWork.minusBlockPlus;
 
 
             player              = new SaveFormPlayer[Player.allPlayer.Count];
@@ -160,12 +160,10 @@ public static class GameSaveStream
             // 지역 설정
             GameRule.area = area;
             //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.area = " + GameRule.area);
-            Debug.LogError("로드 :: 게임 정보 -> GameRule.area = " + area);
 
             // 구역 설정
             GameRule.section = section;
             //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.section = " + GameRule.section);
-            Debug.LogError("로드 :: 게임 정보 -> GameRule.area = " + section);
 
             // 사이클 설정 - 현재
             Cycle.now = cycleNow;
@@ -180,9 +178,9 @@ public static class GameSaveStream
             //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.playerCount = " + GameRule.playerCount);
 
             // 노말 블럭 강화 단계
-            BlockWork.plusBlockValue =  plusBlockValue;
+            BlockWork.plusBlockPlus =  plusBlockValue;
             //최적화 Debug.Log("로드 :: 게임 정보 -> BlockWork.plusBlockValue = " + BlockWork.plusBlockValue);
-            BlockWork.minusBlockValue = minusBlockValue;
+            BlockWork.minusBlockPlus = minusBlockValue;
             //최적화 Debug.Log("로드 :: 게임 정보 -> BlockWork.minusBlockValue = " + BlockWork.minusBlockValue);
 
             //최적화 Debug.Log("로드 :: 게임 정보 -> 완료됨");

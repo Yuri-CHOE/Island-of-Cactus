@@ -75,13 +75,9 @@ public class Scene_Title : MonoBehaviour
 
     public static void SetWorldFileName()
     {
-        Debug.LogError("디버그 1 :: " + GameRule.area.ToString() + GameRule.section.ToString());
-
         // 세이브 파일 로드
         if (GameSaveStream.useLoad)
             GameSaveStream.saveForm.LoadGameInfo();
-
-        Debug.LogError("디버그 2 :: " + GameRule.area.ToString() + GameRule.section.ToString());
 
         // 파일명 입력
         GameData.SetWorldFileName(

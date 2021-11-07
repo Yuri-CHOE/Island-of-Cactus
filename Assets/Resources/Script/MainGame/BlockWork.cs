@@ -14,8 +14,10 @@ public static class BlockWork
     static float liftY = 3f;
 
     // 노말 블록 보정치
-    static public int plusBlockValue = 0;
-    static public int minusBlockValue = 0;
+    static public int plusBlockPlus = 0;
+    static public int plusBlockMultiple = 1;
+    static public int minusBlockPlus = 0;
+    static public int minusBlockMultiple = 1;
 
     /// <summary>
     /// 플레이어의 현재 위치를 기반으로 블록 작업 수행
@@ -126,7 +128,7 @@ public static class BlockWork
 
     static void BlockPlus(Player currentPlayer)
     {
-        int coinValue = 1 + plusBlockValue;
+        int coinValue = 1 * plusBlockMultiple + plusBlockPlus;
 
         // 코인 추가
         currentPlayer.coin.Add(coinValue);
@@ -138,7 +140,7 @@ public static class BlockWork
 
     static void BlockMinus(Player currentPlayer)
     {
-        int coinValue = 2 + minusBlockValue;
+        int coinValue = 2 * minusBlockMultiple + minusBlockPlus;
 
         // 코인 감소
         currentPlayer.coin.subtract(coinValue);

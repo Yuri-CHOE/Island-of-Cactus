@@ -443,7 +443,7 @@ public struct IocEffect
                 // 미구현=========
 
                 // 마이너스 블록 강화
-                BlockWork.minusBlockValue++;
+                BlockWork.minusBlockPlus++;
 
                 break;
 
@@ -454,7 +454,7 @@ public struct IocEffect
                 // 미구현=========
 
                 // 플러스 블록 강화
-                BlockWork.plusBlockValue++;
+                BlockWork.plusBlockPlus++;
 
                 break;
 
@@ -465,8 +465,10 @@ public struct IocEffect
                 // 미구현=========
 
                 // 노말 블록 강화 초기화
-                BlockWork.plusBlockValue = 0;
-                BlockWork.minusBlockValue = 0;
+                BlockWork.plusBlockPlus = 0;
+                BlockWork.plusBlockMultiple = 1;
+                BlockWork.minusBlockPlus = 0;
+                BlockWork.minusBlockMultiple = 1;
 
                 break;
         }

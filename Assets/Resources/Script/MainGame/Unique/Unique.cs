@@ -59,6 +59,8 @@ public class Unique
             loaclList[2]
         );
 
+
+        // Debug.LogError("µð¹ö±× :: [" + table.Count + "] " + index + " " + name + " " + value + " " + info);
     }
 
 

@@ -74,9 +74,11 @@ public class UniqueManager : MonoBehaviour
 
     IEnumerator Work(Player currentPlayer, Mapcode index)
     {
+        int _index = (int)index;
+
         // 메시지 박스 셋팅
-        nameText.text = Unique.table[(int)index].name;
-        info.text = Unique.table[(int)index].info;
+        nameText.text = Unique.table[_index].name;
+        info.text = Unique.table[_index].info;
 
         // 효과 설명 출력
         MessageBox mb = GameData.gameMaster.messageBox;
@@ -117,8 +119,8 @@ public class UniqueManager : MonoBehaviour
                 // 플러스 블록과 마이너스 블록의 코인 변동치를 1 증가
                 while (isWork)
                 {
-                    BlockWork.plusBlockValue += temp.value;
-                    BlockWork.minusBlockValue += temp.value;
+                    BlockWork.plusBlockPlus += temp.value;
+                    BlockWork.minusBlockPlus += temp.value;
                     isWork = false;
 
                     yield return null;
@@ -128,8 +130,8 @@ public class UniqueManager : MonoBehaviour
                 // 플러스 블록과 마이너스 블록의 코인 변동치를 2배 증가
                 while (isWork)
                 {
-                    BlockWork.plusBlockValue *= temp.value;
-                    BlockWork.minusBlockValue *= temp.value;
+                    BlockWork.plusBlockMultiple *= temp.value;
+                    BlockWork.minusBlockMultiple *= temp.value;
                     isWork = false;
 
                     yield return null;
