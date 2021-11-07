@@ -110,6 +110,14 @@ public class GameRuleManager : MonoBehaviour
 
 
 
+    public void Reset()
+    {
+        GameRule.area = 1;
+        GameRule.section = 1;
+        GameRule.cycleMax = 50;
+        GameRule.playerCount = 4;
+    }
+
     public void AreaChange(int value)
     {
         GameRule.area = Limiter(GameRule.area + value, 1, areaLimit);

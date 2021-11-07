@@ -160,10 +160,12 @@ public static class GameSaveStream
             // 지역 설정
             GameRule.area = area;
             //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.area = " + GameRule.area);
+            Debug.LogError("로드 :: 게임 정보 -> GameRule.area = " + area);
 
             // 구역 설정
             GameRule.section = section;
             //최적화 Debug.Log("로드 :: 게임 정보 -> GameRule.section = " + GameRule.section);
+            Debug.LogError("로드 :: 게임 정보 -> GameRule.area = " + section);
 
             // 사이클 설정 - 현재
             Cycle.now = cycleNow;

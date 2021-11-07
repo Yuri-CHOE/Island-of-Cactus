@@ -83,6 +83,8 @@ public class WorldManager : MonoBehaviour
     {
         try
         {
+            Debug.Log("월드 :: 사용할 맵파일 -> " + textAsset.name);
+
             // 파일 읽기
             CSVReader worldFileReader = new CSVReader(textAsset, tableSplit, endSplit);
 
