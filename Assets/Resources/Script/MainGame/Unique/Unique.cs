@@ -124,6 +124,6 @@ public class Unique
         _index = __index;
         _name = __name;
         _value = __value;
-        _info = __info;
+        _info = __info.Replace("\\n", "\n").Replace("value", __value.ToString());
     }
 }

@@ -10,6 +10,7 @@ public class UniqueManager : MonoBehaviour
     {
         none,
         world_01_01 = 1,
+        world_01_02 = 2,
     }
 
     // 퀵등록
@@ -108,14 +109,27 @@ public class UniqueManager : MonoBehaviour
     {
         isWork = true;
 
+        Unique temp = Unique.table[(int)index];
+
         switch (index)
         {
             case Mapcode.world_01_01:
                 // 플러스 블록과 마이너스 블록의 코인 변동치를 1 증가
                 while (isWork)
                 {
-                    BlockWork.plusBlockValue++;
-                    BlockWork.minusBlockValue++;
+                    BlockWork.plusBlockValue += temp.value;
+                    BlockWork.minusBlockValue += temp.value;
+                    isWork = false;
+
+                    yield return null;
+                }
+                break;
+            case Mapcode.world_01_02:
+                // 플러스 블록과 마이너스 블록의 코인 변동치를 2배 증가
+                while (isWork)
+                {
+                    BlockWork.plusBlockValue *= temp.value;
+                    BlockWork.minusBlockValue *= temp.value;
                     isWork = false;
 
                     yield return null;
