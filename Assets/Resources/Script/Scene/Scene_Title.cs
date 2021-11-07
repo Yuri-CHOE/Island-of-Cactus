@@ -78,15 +78,18 @@ public class Scene_Title : MonoBehaviour
         // 파일명 입력
         GameData.SetWorldFileName(
             string.Format(
-                "world_{0}_{1}.iocw", 
-                GameRule.area.ToString("D2"), 
-                GameRule.section.ToString("D2")
+                "world_{0}_{1}.iocw",
+                //GameRule.area.ToString("D2"),
+                //GameRule.section.ToString("D2")
+                GameSaveStream.saveForm.area.ToString("D2"),
+                GameSaveStream.saveForm.section.ToString("D2")                
                 )
             );
 
         // 코드 가져오기
         //WorldManager.BuildWorld(GameData.worldFileName);
-        WorldManager.BuildWorld(GameRule.area, GameRule.section);
+        //WorldManager.BuildWorld(GameRule.area, GameRule.section);
+        WorldManager.BuildWorld(GameSaveStream.saveForm.area, GameSaveStream.saveForm.section);
     }
     //public static void SetWorldFileName(string __worldFileName)
     //{
