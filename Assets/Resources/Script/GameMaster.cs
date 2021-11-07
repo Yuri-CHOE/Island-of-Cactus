@@ -625,6 +625,12 @@ public class GameMaster : MonoBehaviour
                     // 미니게임 알림 연출
                     // 미구현=============================
 
+                    // 모든 플레이어 미니게임 AI 초기화
+                    for(int i = 0; i < Player.allPlayer.Count; i++)
+                    {
+                        Player.allPlayer[i].miniAi.Clear();
+                    }
+
                     // 미니게임 로드
                     loadingManager.LoadAsyncMiniGameRandom();
 
