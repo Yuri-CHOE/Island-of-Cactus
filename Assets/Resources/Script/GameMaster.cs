@@ -580,22 +580,6 @@ public class GameMaster : MonoBehaviour
 
         // 라이프 체크
         CheckLife();
-        //for (int i = 0; i < Player.allPlayer.Count; i++)
-        //{
-        //    // 라이프 0 또는 음수일 경우
-        //    if (Player.allPlayer[i].life.Value < 1)
-        //    {
-        //        // 이미 감옥일 경우 중단
-        //        if (Player.allPlayer[i].isDead)
-        //        {
-        //            //Debug.LogError("라이프 체크 :: 이미 수감됨 => " + Player.allPlayer[i].name);
-        //            continue;
-        //        }
-
-        //        //Debug.LogError("라이프 체크 :: 감지됨 => " + Player.allPlayer[i].name);
-        //        Player.allPlayer[i].movement.GotoJail();
-        //    }
-        //}
 
         // 시스템 플레이어 - 스타터
         if (Turn.now == Player.system.Starter)

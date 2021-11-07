@@ -63,6 +63,7 @@ public static class GameSaveStream
             public string name;                 // player.name
             public int location;                // player.location
             public int stunCount;               // player.stunCount
+            public bool isDead;                 // player.isDead
 
             public GameResource life;           // player.life
             public GameResource coin;           // player.coin
@@ -83,6 +84,7 @@ public static class GameSaveStream
                 name = player.name;
                 location = player.location;
                 stunCount = player.stunCount;
+                isDead = player.isDead;
 
                 life = player.life;
                 coin = player.coin;
@@ -230,6 +232,9 @@ public static class GameSaveStream
                 // 이동 불가 턴수
                 current.stunCount = player[i].stunCount;
                 //최적화 Debug.Log("로드 :: 플레이어 " + current.name + "의 스턴 -> " + current.stunCount);
+
+                // 사망처리
+                current.isDead = player[i].isDead;
 
                 // 라이프
                 current.life = player[i].life;
