@@ -630,6 +630,7 @@ public class GameMaster : MonoBehaviour
                     {
                         Player.allPlayer[i].miniAi.Clear();
                     }
+                    CustomAI.MiniGame.MiniAI.ClearShared();
 
                     // 미니게임 로드
                     loadingManager.LoadAsyncMiniGameRandom();

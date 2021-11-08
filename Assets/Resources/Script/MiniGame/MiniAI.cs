@@ -125,7 +125,12 @@ namespace CustomAI
                 remember.piece.Clear();
                 remember.answer.Clear();
             }
-            
+            public static void ClearShared()
+            {
+                opendAnswer.Clear();
+                restPiece.Clear();
+            }
+
 
 
             // ÇÐ½À

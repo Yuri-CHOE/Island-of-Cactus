@@ -391,11 +391,13 @@ public class Player
 
         // 데미지 계산
         float finalDamage = battle.Damage(rawDamage);
+        int iFinalDamage = (int)finalDamage;
 
-        Debug.LogError("디버그 :: raw=" + rawDamage + "\tfinal=" + finalDamage);
+        Debug.LogError("디버그 :: raw=" + rawDamage + "\tfinal=" + iFinalDamage);
+        //GameMaster.script.messageBox.PopUpText("디버그", "raw=" + rawDamage + "\nfinal=" + iFinalDamage);
 
         // 체력 반영
-        life.subtract((int)finalDamage);
+        life.subtract(iFinalDamage);
     }
 
     /// <summary>
