@@ -133,7 +133,8 @@ public class MonsterManager : MonoBehaviour
 
 
         // 위치 지정
-        movement.bodyObject.position = new Vector3(0, -10, 0);
+        movement.transform.position = new Vector3(0, 0, 0);
+        movement.bodyObject.localPosition = new Vector3(0, -10, 0);
 
         // 애니메이션 off
         Work(false);
@@ -152,6 +153,7 @@ public class MonsterManager : MonoBehaviour
 
         // 이동
         movement.transform.position = BlockManager.script.GetBlock(blockIndex).transform.position;
+        movement.bodyObject.localPosition = new Vector3(0, movement.posMinY, 0);
 
         // 활성화
         movement.bodyObject.gameObject.SetActive(true);

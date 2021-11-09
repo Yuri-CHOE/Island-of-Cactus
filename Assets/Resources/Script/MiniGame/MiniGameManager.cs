@@ -122,6 +122,8 @@ public class MiniGameManager : MonoBehaviour
         //curtain.gameObject.SetActive(true);
 
         // 커튼 페이드 인
+        if (curtain.alpha > 0)
+            curtain.alpha = 0;
         StartCoroutine(Tool.CanvasFade(curtain, true, 0.5f));
 
         // 등수 산정

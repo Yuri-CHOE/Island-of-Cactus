@@ -198,6 +198,8 @@ public class GameMaster : MonoBehaviour
 
                         // "다른 플레이어" 구성
                         {
+                            current.otherPlayers.Clear();
+
                             // 모든 플레이어 등록
                             for (int j = 0; j < Player.allPlayer.Count; j++)
                                 current.otherPlayers.Add(Player.allPlayer[j]);

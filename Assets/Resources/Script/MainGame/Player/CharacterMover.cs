@@ -61,10 +61,8 @@ public class CharacterMover : MonoBehaviour
     public float moveSpeed = 2.00f;
 
 
-    [SerializeField]
-    float posMinY = 1.9f;           // 캐릭터 최소 높이
-    [SerializeField]
-    float posMaxY = 20f;            // 캐릭터 최대 높이
+    public float posMinY = 1.9f;           // 캐릭터 최소 높이
+    public float posMaxY = 20f;            // 캐릭터 최대 높이
 
 
     // 회전용 하위 오브젝트
