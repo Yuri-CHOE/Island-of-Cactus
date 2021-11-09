@@ -338,7 +338,7 @@ public class Player
         }
     }
 
-    public void RemoveItem(ItemSlot currentSlot) { }
+    public void RemoveItem(ItemSlot currentSlot) { RemoveItem(currentSlot.GetUnit()); }
     public void RemoveItem(ItemUnit itemUnit)
     {
         Debug.Log("인벤토리 :: 아이템 제거 요청됨 -> " + itemUnit.item.name);

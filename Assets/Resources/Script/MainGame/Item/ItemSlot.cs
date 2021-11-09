@@ -215,4 +215,9 @@ public class ItemSlot : MonoBehaviour
         target.item = null;
     }
 
+    public ItemUnit GetUnit()
+    {
+        return itemUnit;
+    }
+
 }

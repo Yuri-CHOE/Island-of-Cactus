@@ -30,6 +30,7 @@ public class UserDataViewer : MonoBehaviour
     public void SetUp()
     {
         username.text = UserData.userName;
+        playCount.text = UserData.playCount.ToString();
         rank1.text = UserData.rank1.ToString();
         rank2.text = UserData.rank2.ToString();
         rank3.text = UserData.rank3.ToString();

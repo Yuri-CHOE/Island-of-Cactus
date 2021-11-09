@@ -14,7 +14,7 @@ public class Trophy
     public int mini = 0;
 
     // 총점
-    public int score { get { return 5 * 3 - rich + runner + mini; } }
+    public int score { get { return /*5 * 3 -*/ (rich + runner + mini); } }
 
     // 최종 성적
     public int final = 0;

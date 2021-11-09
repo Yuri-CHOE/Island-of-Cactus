@@ -5692,9 +5692,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 865883151}
-        m_TargetAssemblyTypeName: GameMaster, Assembly-CSharp
-        m_MethodName: StartMiniGame
+      - m_Target: {fileID: 43447653}
+        m_TargetAssemblyTypeName: CycleManager, Assembly-CSharp
+        m_MethodName: SetUp
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

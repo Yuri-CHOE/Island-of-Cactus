@@ -189,7 +189,7 @@ public class ItemManager : MonoBehaviour
         StartCoroutine(_slot.item.Effect(targetPlayer_Or_null));
 
         // 아이템 제거
-        if(_slot.count <= 0)
+        if (_slot.count <= 0)
             Player.me.RemoveItem(_slot);
     }
 

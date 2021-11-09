@@ -33,4 +33,15 @@ public class CycleManager : MonoBehaviour
         // 목표 사이클 텍스트 갱신
         maxText.text = Cycle.goal.ToString();
     }
+
+    public void SetUp(int cycle)
+    {
+        if (cycle < 0)
+        {
+            Cycle.now = 0;
+            return;
+        }
+
+        Cycle.now = cycle;
+    }
 }

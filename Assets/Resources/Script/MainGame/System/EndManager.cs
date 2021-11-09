@@ -108,6 +108,7 @@ public static class EndManager
         else
         {
             List<Player> order = new List<Player>();
+            List<Player> temp = new List<Player>(Player.allPlayer);
             WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f);
 
             // 트로피 지급 - 코인
@@ -116,7 +117,6 @@ public static class EndManager
                 order.Clear();
 
                 // 정렬
-                List<Player> temp = new List<Player>(Player.allPlayer);
                 order = temp.OrderBy(x => x.coin.Value).Reverse().ToList();
 
                 // 트로피 지급
@@ -136,7 +136,6 @@ public static class EndManager
                 order.Clear();
 
                 // 정렬
-                List<Player> temp = new List<Player>(Player.allPlayer);
                 order = temp.OrderBy(x => x.dice.valueRecord).Reverse().ToList();
 
                 // 트로피 지급
@@ -156,7 +155,6 @@ public static class EndManager
                 order.Clear();
 
                 // 정렬
-                List<Player> temp = new List<Player>(Player.allPlayer);
                 order = temp.OrderBy(x => x.miniInfo.recordScore).Reverse().ToList();
 
                 // 트로피 지급
@@ -176,8 +174,7 @@ public static class EndManager
                 order.Clear();
 
                 // 정렬
-                List<Player> temp = new List<Player>(Player.allPlayer);
-                order = temp.OrderBy(x => x.trophy.score).Reverse().ToList();
+                order = temp.OrderBy(x => x.trophy.score)/*.Reverse()*/.ToList();
 
                 // 트로피 지급
                 yield return Trophy(TrophyType.Win, order);
@@ -206,8 +203,15 @@ public static class EndManager
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
 
+                // 트로피 지급 - 4+등
+                if (Player.allPlayer.Count >= 4)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[3].trophy.rich = 4;
+                }
+
                 // 트로피 지급 - 3등
-                if(Player.allPlayer.Count >= 3)
+                if (Player.allPlayer.Count >= 3)
                 {
                     yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
                     order[2].trophy.rich = 3;
@@ -236,6 +240,13 @@ public static class EndManager
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
+
+                // 트로피 지급 - 4+등
+                if (Player.allPlayer.Count >= 4)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[3].trophy.runner = 4;
+                }
 
                 // 트로피 지급 - 3등
                 if (Player.allPlayer.Count >= 3)
@@ -267,6 +278,13 @@ public static class EndManager
 
                 // 알림 확인 대기
                 while (GameMaster.script.messageBox.gameObject.activeSelf) yield return null;
+
+                // 트로피 지급 - 4+등
+                if (Player.allPlayer.Count >= 4)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[3].trophy.mini = 4;
+                }
 
                 // 트로피 지급 - 3등
                 if (Player.allPlayer.Count >= 3)
@@ -303,6 +321,13 @@ public static class EndManager
                 // 대기
                 WaitForSecondsRealtime wait = new WaitForSecondsRealtime(1f);
                 yield return wait;
+
+                // 트로피 지급 - 4+등
+                if (Player.allPlayer.Count >= 4)
+                {
+                    //yield return TrophyGive(GameMaster.script.Trophy3rd.transform, order[2]);
+                    order[3].trophy.final = 4;
+                }
 
                 // 트로피 지급 - 3등
                 if (Player.allPlayer.Count >= 3)
@@ -346,6 +371,7 @@ public static class EndManager
                 }
                 // UserData.playTime : 미구현====================
                 UserData.playCount++;
+                Debug.LogError(UserData.playCount);
                 UserData.SaveData();
 
                 // 세이브 파기
