@@ -475,7 +475,7 @@ public class CharacterMover : MonoBehaviour
                     // 로그
                     Debug.Log("액션 :: 플래닝 -> 공격 목록 추가 :: " + owner.otherPlayers[i].name + "가 추가됨");
                 }
-                //else Debug.LogWarning("공격 대상 아님 :: " + owner.otherPlayers[i].name);
+                else Debug.Log("액션 :: 공격 대상 아님 -> " + owner.otherPlayers[i].name);
 
             // 스킵
             act.progress = ActionProgress.Working;

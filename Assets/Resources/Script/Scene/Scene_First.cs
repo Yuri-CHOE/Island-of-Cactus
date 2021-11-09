@@ -66,6 +66,9 @@ public class Scene_First : MonoBehaviour
 
         // 甘颇老 教农
         WorldManager.worldAsset = mapFile;
+
+        // 拳搁 波咙 规瘤
+        Screen.sleepTimeout = 300;
     }
 
     // Start is called before the first frame update
