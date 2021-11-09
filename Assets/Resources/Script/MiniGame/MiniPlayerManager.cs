@@ -142,6 +142,10 @@ public class MiniPlayerManager : MonoBehaviour
                 //scoreList[i].gameObject.SetActive(false);
             }
 
+            // AI 생성
+            if (Player.system.Monster.miniAi == null)
+                Player.system.Monster.miniAi = new CustomAI.MiniGame.MiniAI(Player.system.Monster);
+
             // 턴 표시 제거
             Player.system.Monster.miniPlayerUI.BlinkOff();
 

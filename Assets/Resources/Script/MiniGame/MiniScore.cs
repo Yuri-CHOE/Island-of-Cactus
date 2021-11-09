@@ -132,6 +132,9 @@ public struct MiniScore
             Player.allPlayer[i].miniInfo.Reset();
         }
 
+        // 몬스터 초기화
+        Player.system.Monster.miniInfo.Reset();
+
         // 미니게임 보상 및 지분 초기화
         MiniScore.totalReward = 0;
         MiniScore.totalRewardRatio = 0;
