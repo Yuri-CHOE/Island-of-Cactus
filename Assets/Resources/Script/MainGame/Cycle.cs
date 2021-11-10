@@ -36,7 +36,7 @@ public static class Cycle
     {
         CheckNegativet();
 
-        if (now < goal)
+        if (now <= goal)
             return false;
         else
             return true;
