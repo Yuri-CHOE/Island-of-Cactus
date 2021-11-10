@@ -197,7 +197,8 @@ public class MiniPlayerManager : MonoBehaviour
 
     public void SetRanking()
     {
-        List<Player> sort = new List<Player>(Player.allPlayer);
+        //List<Player> sort = new List<Player>(Player.allPlayer);
+        List<Player> sort = new List<Player>(entryPlayer);
 
         // Á¤·Ä
         if (sort.Count > 0)

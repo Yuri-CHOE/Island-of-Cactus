@@ -55,7 +55,7 @@ public class MiniReportSlot : MonoBehaviour
         border.color = rankColor;
 
         // 캐릭터 아이콘
-        face.sprite = owner.face;
+        face.sprite = owner.character.GetIcon();
 
         // 점수
         score.text = owner.miniInfo.score.ToString();

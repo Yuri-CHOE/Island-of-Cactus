@@ -188,7 +188,7 @@ public class MiniReportManager : MonoBehaviour
                     return;
                 }
 
-                // 2µî
+                // ±× ¿Ü
                 else
                 {
                     reportSlots[i].SetUp(player, rankOut, rankOutText);
