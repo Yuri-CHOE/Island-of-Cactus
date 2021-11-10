@@ -158,7 +158,8 @@ public class GameMaster : MonoBehaviour
                         else if (Player.allPlayer.Count == 0)
                         {
                             // 중복 방지 작업
-                            List<int> picked = Tool.RandomNotCross(1, Character.table.Count, 4);
+                            //List<int> picked = Tool.RandomNotCross(1, Character.table.Count, 4);
+                            List<int> picked = Tool.RandomNotCross(2, Character.table.Count, 4);
                             if (picked.Contains(Player.me.character.index))
                                 picked.Remove(Player.me.character.index);
 
