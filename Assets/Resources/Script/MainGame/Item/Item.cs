@@ -402,6 +402,7 @@ public class Item
 
                 // 가져올 아이템 지정
                 ItemSlot slot = filteredTarget[0].infoUI.inventory[0];
+                Debug.Log("효과 ::  막대사탕 -> 가져올 아이템 = " + slot.item.name);
 
                 // 획득
                 // 연출 - 미구현=============
@@ -512,7 +513,8 @@ public class Item
             case 21:     // 막대사탕
                 {
                     // 타겟 리스트
-                    List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+                    //List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+                    List<Player> pl = IocEffect.TargetFiltering(IocEffect.Target.OthersPlayer, user);
 
                     // 타겟 아이템 수량 반영
                     for (int i = 0; i < pl.Count; i++)
@@ -537,7 +539,8 @@ public class Item
             case 21:     // 막대사탕
                 {
                     // 타겟 리스트
-                    List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+                    //List<Player> pl = IocEffect.TargetFiltering(__item.effect.target, user);
+                    List<Player> pl = IocEffect.TargetFiltering(IocEffect.Target.OthersPlayer, user);
 
                     // 타겟 인덱스
                     int indexer = 0;
@@ -562,6 +565,9 @@ public class Item
 
                         }
                     }
+
+                    // 반영
+                    GameMaster.script.itemManager.target = pl[indexer];
 
                     // 결과
                     return pl[indexer];

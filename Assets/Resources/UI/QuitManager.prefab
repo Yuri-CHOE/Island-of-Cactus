@@ -145,12 +145,6 @@ MonoBehaviour:
       m_Groups: Keyboard&Mouse;Touch
       m_Action: Escape
       m_Flags: 0
-  escapeMap:
-    m_Name: Escape Map
-    m_Id: 758441dd-854b-48b1-87df-040e721c6919
-    m_Asset: {fileID: 0}
-    m_Actions: []
-    m_Bindings: []
 --- !u!1 &1910003563727903192
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +638,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1910003565023811190}
   m_OnClick:
     m_PersistentCalls:
@@ -892,7 +886,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 5225623646496136263}
   m_OnClick:
     m_PersistentCalls:
