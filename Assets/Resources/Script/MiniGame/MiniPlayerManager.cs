@@ -77,7 +77,7 @@ public class MiniPlayerManager : MonoBehaviour
             Debug.Log("미니게임 :: 턴 시작됨 -> " + turnNow.name);
 
             // AI 플레이어 작동
-            if (turnNow.type == Player.Type.AI)
+            if (turnNow.type == Player.Type.AI || turnNow == Player.system.Monster)
             {
                 // AI 작동 요청
                 if (turnNow.miniAi.workControl == null)
@@ -190,7 +190,7 @@ public class MiniPlayerManager : MonoBehaviour
         // AI 등록
         for(int i = 0; i < entryPlayer.Count; i++)
         {
-            if (entryPlayer[i].type == Player.Type.AI)
+            if (entryPlayer[i].type == Player.Type.AI || turnNow == Player.system.Monster)
                 entryAI.Add(entryPlayer[i]);
         }
     }

@@ -157,7 +157,7 @@ public class CardManager : MonoBehaviour
         }
 
         // AI 처리
-        if(MiniGameManager.script.mpm.turnNow.type == Player.Type.AI)
+        if(MiniGameManager.script.mpm.turnNow.type == Player.Type.AI || MiniGameManager.script.mpm.turnNow == Player.system.Monster)
             // 채점 하지 않는중이면
             if (AnswerAI == null)
                 if(MiniGameManager.isAnswerSubmit)

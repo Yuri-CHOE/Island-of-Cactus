@@ -132,7 +132,7 @@ public class MiniGamePlayer : MonoBehaviour
             ScoreTextSync(info.score);
 
             // AI 플레이어 자동 준비
-            if (_owner.type == Player.Type.AI)
+            if (_owner.type == Player.Type.AI || _owner == Player.system.Monster)
                 _owner.miniInfo.isReady = true;
         }
     }
