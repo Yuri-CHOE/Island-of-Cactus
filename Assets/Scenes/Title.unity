@@ -11346,7 +11346,7 @@ MonoBehaviour:
   areaText: {fileID: 430460979}
   areaLimit: 1
   sectionText: {fileID: 1199026478}
-  sectionLimit: 2
+  sectionLimit: 3
   cycleMaxInput: {fileID: 50377760}
   cycleMaxSlider: {fileID: 1505472895}
   playerCountInput: {fileID: 892616035}
@@ -19942,7 +19942,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5242147915721182715, guid: fb01c8bf07517c54fad196ae2ce4c6e7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000498105
+      value: 0.00006791268
       objectReference: {fileID: 0}
     - target: {fileID: 5242147916353723793, guid: fb01c8bf07517c54fad196ae2ce4c6e7, type: 3}
       propertyPath: m_Name

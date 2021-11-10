@@ -11,6 +11,7 @@ public class UniqueManager : MonoBehaviour
         none,
         world_01_01 = 1,
         world_01_02 = 2,
+        world_01_03 = 3,
     }
 
     // 퀵등록
@@ -134,6 +135,13 @@ public class UniqueManager : MonoBehaviour
                     BlockWork.minusBlockMultiple *= temp.value;
                     isWork = false;
 
+                    yield return null;
+                }
+                break;
+            case Mapcode.world_01_03:
+                // 없음 - 추가시 테이블 먼저 추가해야함
+                while (isWork)
+                {                    
                     yield return null;
                 }
                 break;
