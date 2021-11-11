@@ -72,7 +72,16 @@ public class CharacterMover : MonoBehaviour
     public Animator animator = null;
 
     // 임시용 택스쳐
+    public static bool useTransparency = true;
     public SkinnedMeshRenderer avatarColor = null;
+    Material textureBody { get {return avatarColor.materials[0]; } }
+    Material textureArm { get { return avatarColor.materials[1]; } }
+    Material textureLeg { get { return avatarColor.materials[2]; } }
+    const float transparencyBody = 0f;
+    const float transparencyArm = 0.25f;
+    const float transparencyLeg = 0f;
+    Coroutine transparency = null;
+
 
     // 사운드 제어
     [SerializeField]
@@ -89,7 +98,7 @@ public class CharacterMover : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     void FixedUpdate()
@@ -1323,4 +1332,134 @@ public class CharacterMover : MonoBehaviour
 
         isBusy = false;
     }
+
+
+    /// <summary>
+    /// 모든 플레이어 투명도 갱신
+    /// </summary>
+    public static void RefreshTransparencyAll()
+    {
+        for(int i = 0; i < Player.allPlayer.Count; i++)
+            Player.allPlayer[i].movement.RefreshTransparency();
+    }
+    /// <summary>
+    /// 플레이어 투명도 갱신
+    /// </summary>
+    public void RefreshTransparency()
+    {
+        // 이전 투명처리 중단
+        if (transparency != null)
+            StopCoroutine(transparency);
+
+        // 투명 처리
+        transparency = StartCoroutine(
+            RefreshTransparency(2.5f)
+            );
+    }
+    IEnumerator RefreshTransparency(float speed)
+    {
+        bool isYet = true;
+
+        while (isYet)
+        {
+            // 갱신
+            isYet = RefreshTransparencyParts(
+                owner != Turn.now,          // 턴 진행자가 아닐 경우 투명처리
+                speed
+                );
+
+            yield return null;
+        }
+
+        // 종료 처리
+        transparency = null;
+    }
+    bool RefreshTransparencyParts(bool istransparent, float speed)
+    {
+        bool isYet = false;
+
+        // 투명화
+        if (istransparent)
+        {
+            // 몸체 조절
+            if (CheckTransparency(textureBody, transparencyBody))
+                isYet = SetTransparency(textureBody, transparencyBody, speed) || isYet;
+
+            // 팔 조절
+            if (CheckTransparency(textureArm, transparencyArm))
+                isYet = SetTransparency(textureArm, transparencyArm, speed) || isYet;
+
+            // 다리 조절
+            if (CheckTransparency(textureLeg, transparencyLeg))
+                isYet = SetTransparency(textureLeg, transparencyLeg, speed) || isYet;
+        }
+        // 실체화
+        else
+        {
+            // 몸체 조절
+            if (CheckTransparency(textureBody, 1f))
+                isYet =  SetTransparency(textureBody, 1f, speed) || isYet;
+
+            // 팔 조절
+            if (CheckTransparency(textureArm, 1f))
+                isYet = SetTransparency(textureArm, 1f, speed) || isYet;
+
+            // 다리 조절
+            if (CheckTransparency(textureLeg, 1f))
+                isYet = SetTransparency(textureLeg, 1f, speed) || isYet;
+        }
+
+        return isYet;
+    }
+    /// <summary>
+    /// 미완료 체크
+    /// </summary>
+    /// <param name="material"></param>
+    /// <param name="alphaGoal"></param>
+    /// <returns>true = 미완료</returns>
+    bool CheckTransparency(Material material, float alphaGoal)
+    {
+        // 미완료 체크
+        if (alphaGoal < 1f)
+            return (material.color.a > alphaGoal);
+        else
+            return (material.color.a < alphaGoal);
+
+    }
+    // 보간
+    bool SetTransparency(Material material, float alphaGoal, float speed)
+    {
+        // 색상
+        Color newColor = material.color;
+
+        // 프레임 alpha
+        newColor.a = Mathf.Lerp(
+            material.color.a,
+            alphaGoal,
+            (Time.deltaTime * speed + 0.1f)
+            );
+
+        // 색상 변경
+        material.color = newColor;
+
+        //// 완료 시 보정
+        //if (CheckTransparency(material, alphaGoal))
+        //    SetTransparency(material, alphaGoal);
+
+        // 미완료 여부 반환
+        return CheckTransparency(material, alphaGoal);
+    }
+    // 보정
+    void SetTransparency(Material material, float alphaGoal)
+    {
+        // 색상
+        Color newColor = material.color;
+
+        // alpha
+        newColor.a = alphaGoal;
+
+        // 색상 변경
+        material.color = newColor;
+    }
+
 }

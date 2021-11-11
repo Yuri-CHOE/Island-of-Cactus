@@ -41,7 +41,18 @@ public static class Turn
 
     public static Player Next()
     {
-        return Next(true);
+        if (CharacterMover.useTransparency)
+        {
+            // 턴넘기기
+            Player temp = Next(true);
+
+            // 투명도 갱신
+            CharacterMover.RefreshTransparencyAll();
+
+            return temp;
+        }
+        else
+            return Next(true);
     }
     public static Player Next(bool useAutoSave)
     {
