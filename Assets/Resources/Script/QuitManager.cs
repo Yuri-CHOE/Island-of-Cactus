@@ -18,6 +18,9 @@ public class QuitManager : MonoBehaviour
     {
         //escapeMap.Enable();
         escape.Enable();
+
+        // È­¸é ²¨Áü ¹æÁö
+        Screen.sleepTimeout = 300;
     }
 
 

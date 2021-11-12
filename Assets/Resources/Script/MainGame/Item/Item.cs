@@ -444,6 +444,12 @@ public class Item
 
             case 8:     // 수상한 우유
                 {
+                    // 인벤토리 가득 찼을때
+                    if (user.inventoryCount == Player.inventoryMax)
+                        // 라이프가 2 이상일 경우
+                        if (user.life.Value > 1)
+                            return 1f;
+
                     return 0.2f;
                 }
 
