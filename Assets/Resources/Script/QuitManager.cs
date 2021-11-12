@@ -13,7 +13,6 @@ public class QuitManager : MonoBehaviour
     //[SerializeField] InputActionMap escapeMap  = null;
 
 
-
     void Start()
     {
         //escapeMap.Enable();
@@ -70,5 +69,30 @@ public class QuitManager : MonoBehaviour
 
         // 종료
         Application.Quit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        // 저장 대기
+        if (CheckQuit())
+        {
+            // 저장 취소
+            Application.CancelQuit();
+
+            // 저장 대기후 종료
+            Quit();
+        }
+    }
+
+    public static bool CheckQuit()
+    {
+        // 저장 대기
+        if (GameSaveStream.saveControl != null)
+        {
+            Debug.LogWarning("종료 :: 게임 세이브 대기중");
+            return false;
+        }
+
+        return true;
     }
 }

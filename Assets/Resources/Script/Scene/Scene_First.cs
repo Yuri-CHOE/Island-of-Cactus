@@ -66,6 +66,16 @@ public class Scene_First : MonoBehaviour
 
         // 맵파일 싱크
         WorldManager.worldAsset = mapFile;
+
+        // 종료 조건 추가
+        EndSetting();
+    }
+
+    [RuntimeInitializeOnLoadMethod]
+    static void EndSetting()
+    {
+        // 종료 조건 추가
+        Application.wantsToQuit += QuitManager.CheckQuit;
     }
 
     // Start is called before the first frame update
