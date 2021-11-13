@@ -14,6 +14,7 @@ public class DynamicBlock : MonoBehaviour
     public BlockType.Type blockType;
 
     public BlockType.TypeDetail blockTypeDetail = BlockType.TypeDetail.plus;
+    //BlockType.TypeDetail _detailMirror = BlockType.TypeDetail.plus;
 
 
     public List<Player> guest = new List<Player>();
@@ -31,7 +32,8 @@ public class DynamicBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //if(blockTypeDetail != _detailMirror)
+        //    Refresh();
     }
 
     void SetMaterial(BlockType.TypeDetail td)
