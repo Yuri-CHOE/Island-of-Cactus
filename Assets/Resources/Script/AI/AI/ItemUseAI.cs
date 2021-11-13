@@ -107,7 +107,7 @@ namespace CustomAI
 
                         // 사용
                         Debug.Log("AI Run :: item [" + owner.inventory[i].item.name + "]을 사용 -> " + userOrTarget.name);
-                        yield return owner.inventory[i].item.Effect(userOrTarget);
+                        yield return owner.inventory[i].item.Effect(owner, userOrTarget);
 
                         // 아이템 제거
                         if (owner.inventory[i].count <= 0)

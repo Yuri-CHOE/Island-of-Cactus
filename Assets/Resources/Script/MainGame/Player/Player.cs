@@ -357,6 +357,8 @@ public class Player
         }
         else
             Debug.LogWarning("인벤토리 :: " + name + "의 아이템 제거 실패 -> 아이템 없음");
+
+        Debug.Log("인벤토리 ::  인벤 카운트 -> " + inventoryCount);
     }
 
 

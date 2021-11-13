@@ -308,16 +308,20 @@ public class Item
     /// </summary>
     /// <param name="targetPlayer_Or_null">작동시킨 플레이어</param>
     //public static void Effect(Item __item, Player targetPlayer_Or_null)
-    public IEnumerator Effect(Player targetPlayer_Or_null)
+    public IEnumerator Effect(Player user, Player targetPlayer_Or_null)
     {
         // 타겟 리스트
         List<Player> pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
+        //if(effect.target == IocEffect.Target.SelectedPlayer)
+        //    pl = IocEffect.TargetFiltering(effect.target, GameMaster.script.itemManager.target);
+        //else
+            //pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
 
         // 통합 효과
         yield return effect.GeneralEffect(targetPlayer_Or_null, pl);
 
         // 개별 특수 효과
-        yield return EachEffect(this, targetPlayer_Or_null, pl);
+        yield return EachEffect(this, user, pl);
 
         // 메인스트림 대기 해제
         GameMaster.useItemOrder = false;
@@ -402,15 +406,16 @@ public class Item
 
                 // 가져올 아이템 지정
                 ItemSlot slot = filteredTarget[0].infoUI.inventory[0];
+                Item currentItem = slot.item;
                 Debug.Log("효과 ::  막대사탕 -> 가져올 아이템 = " + slot.item.name);
-
-                // 획득
-                // 연출 - 미구현=============
-                user.AddItem(slot, slot.count);
 
                 // 강탈
                 // 연출 - 미구현=============
                 filteredTarget[0].RemoveItem(slot);
+
+                // 획득
+                // 연출 - 미구현=============
+                user.AddItem(currentItem, currentItem.effect.count);
 
                 break;
         }
