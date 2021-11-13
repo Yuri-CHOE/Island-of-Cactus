@@ -739,6 +739,7 @@ public class GameMaster : MonoBehaviour
                         // 변화
                         if (isTrans)
                         {
+                            // 아이템 슬롯이 아닌 아이템 유닛을 바로 바꾸므로 아이콘 유지됨
                             Player.allPlayer[i].inventory[j].item = Item.table[8];
                             Debug.Log("아이템 :: 변화 -> " + Player.allPlayer[i].inventory[j].item.name);
                         }

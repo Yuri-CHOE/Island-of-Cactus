@@ -167,11 +167,11 @@ public struct IocEffect
         else if (target == Target.OthersPlayer)
             pl.AddRange(targetPlayer_Or_null.otherPlayers);
 
-        // 다른 플레이어
+        // 특정 플레이어
         // 사용 시점에서 타겟 지정하기 때문에 궂이 타겟팅 호출 할 이유 없음
         else if (target == Target.SelectedPlayer)
-            //pl.Add(targetPlayer_Or_null);
-            pl.Add(GameMaster.script.itemManager.target);
+            pl.Add(targetPlayer_Or_null);
+            //pl.Add(GameMaster.script.itemManager.target);
 
         // 맵 광역
         else if (target == Target.World)
