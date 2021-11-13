@@ -335,7 +335,8 @@ public struct IocEffect
                 // 주사위 제어
                 else if (what == What.Dice)
                 {
-                    if (value != 0)
+                    //if (value != 0)
+                    if (where == 0)
                     {
                         // 주사위 추가
                         current.dice.count += value;
