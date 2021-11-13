@@ -127,13 +127,14 @@ public class ItemManager : MonoBehaviour
     /// UI를 통해 선택된 아이템을 사용
     /// 필요시 타겟팅 UI 호출됨
     /// </summary>
-    public void ItemUseByUI() { ItemUseByUI(selected.owner); }
+    public void ItemUseByUI() { ItemUseByUI(target); }
     /// <summary>
     /// UI를 통해 선택된 아이템을 특정 대상에게 사용
     /// </summary>
     /// <param name="targetPlayer_Or_null"></param>
     public void ItemUseByUI(Player targetPlayer_Or_null)
     {
+        Debug.LogError(string.Format("item use :: 아이템 = {0}   대상 = {1}", selected.item.index, targetPlayer_Or_null.name));
         // UI 활성화
         BtnUse();
 
