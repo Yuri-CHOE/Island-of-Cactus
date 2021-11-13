@@ -373,8 +373,8 @@ public static class GameSaveStream
             GameMaster.flowCopy = gameFlow;
             //최적화 Debug.Log("로드 :: 현재 게임 플로우 -> " + GameMaster.flowCopy.ToString());
 
-            // 턴 플로우 셋팅
-            Turn.turnAction = turnAction;
+            // 턴 플로우 셋팅 - 턴 시작시점으로 로드하므로 비활성
+            //Turn.turnAction = turnAction;
             //최적화 Debug.Log("로드 :: 현재 턴 플로우 -> " + Turn.turnAction.ToString());
         }
     }
