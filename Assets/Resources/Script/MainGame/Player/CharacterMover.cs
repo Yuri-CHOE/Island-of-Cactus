@@ -18,8 +18,6 @@ public class CharacterMover : MonoBehaviour
     public Action actNow = new Action();
 
 
-    // 회전 속도
-    public static float ActTurnSpeed = 5f;
 
 
     // 목표 이동 좌표
@@ -56,6 +54,8 @@ public class CharacterMover : MonoBehaviour
     public Transform locateBlock { get { if (GameData.isMainGameScene) { if (location >= 0) return GameData.blockManager.GetBlock(location).transform; else return GameData.blockManager.startBlock; } else return null; } }
 
 
+    // 회전 속도
+    public static float ActTurnSpeed = 5f;
 
     // 이동 속도
     public float moveSpeed = 2.00f;

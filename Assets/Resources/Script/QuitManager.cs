@@ -19,7 +19,8 @@ public class QuitManager : MonoBehaviour
         escape.Enable();
 
         // È­¸é ²¨Áü ¹æÁö
-        Screen.sleepTimeout = 300;
+        //Screen.sleepTimeout = 300;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
 
