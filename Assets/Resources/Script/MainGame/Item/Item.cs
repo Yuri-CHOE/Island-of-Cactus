@@ -318,7 +318,7 @@ public class Item
             //pl = IocEffect.TargetFiltering(effect.target, targetPlayer_Or_null);
 
         // 통합 효과
-        yield return effect.GeneralEffect(targetPlayer_Or_null, pl);
+        yield return effect.GeneralEffect(user, pl);
 
         // 개별 특수 효과
         yield return EachEffect(this, user, pl);

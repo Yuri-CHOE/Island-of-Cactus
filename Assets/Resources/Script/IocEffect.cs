@@ -196,14 +196,6 @@ public struct IocEffect
         }
         else
         {
-            // 선택형 선택
-            if (filteredTarget.Count == 0)
-            {
-                //=========== 미구현
-                //yield return ;
-            }
-
-
             Player current = null;
             int blockIndex;
             bool isExecute = true;
@@ -262,11 +254,12 @@ public struct IocEffect
                     }
                 }
 
-
-
                 // 효과 차단
                 if (!isExecute)
+                {
+                    isExecute = true;
                     continue;
+                }
 
                 // 대상 없음
                 if (what == What.None)
@@ -274,7 +267,6 @@ public struct IocEffect
                     Debug.Log("효과 :: 통합 효과 없음");
                     break;
                 }
-
                 // 캐릭터 (플레이어 아바타)
                 else if (what == What.Character)
                 {
