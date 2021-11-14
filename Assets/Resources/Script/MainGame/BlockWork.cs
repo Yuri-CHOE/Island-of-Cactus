@@ -5,7 +5,7 @@ using UnityEngine;
 public static class BlockWork
 {
     // 사용중 판정
-    public static bool isWork = false; 
+    public static bool isWork = false;
 
     // 종료 판정
     public static bool isEnd = false; 
@@ -158,9 +158,6 @@ public static class BlockWork
         // 미니게임
         // 미구현==================
         Minigame mini = Minigame.RandomGame(2);
-
-        
-
 
         // 참가자
         List<Player> entry = new List<Player>();

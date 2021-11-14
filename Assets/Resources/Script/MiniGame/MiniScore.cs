@@ -132,6 +132,10 @@ public struct MiniScore
             Player.allPlayer[i].miniInfo.Reset();
         }
 
+        // 보스 게임 처리
+        if (Player.system.Monster.miniInfo.join)
+            BlockWork.isEnd = true;
+
         // 몬스터 초기화
         Player.system.Monster.miniInfo.Reset();
 
