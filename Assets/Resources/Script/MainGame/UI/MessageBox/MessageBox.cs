@@ -20,6 +20,9 @@ public class MessageBox : MonoBehaviour
     }
 
     [SerializeField]
+    CanvasGroup messageBox = null;
+
+    [SerializeField]
     Image m_box;
     [SerializeField]
     GameObject Innerbox;
@@ -226,6 +229,9 @@ public class MessageBox : MonoBehaviour
             return;
         }
 
+        //입력 제어
+        InputControl(true);
+
         m_box.enabled = isBoxUse;
         Innerbox.SetActive(isInnerBoxUse);
         npcSpace.SetActive(isNpcSpaceUse);
@@ -276,4 +282,10 @@ public class MessageBox : MonoBehaviour
         BlockWork.isEnd = ruleList[pageSwitch.now].blockWorkEndWithClose;
     }
 
+
+
+    public void InputControl(bool canInput)
+    {
+        messageBox.blocksRaycasts = canInput;
+    }
 }

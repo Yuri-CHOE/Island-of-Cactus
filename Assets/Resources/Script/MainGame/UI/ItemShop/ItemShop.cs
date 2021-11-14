@@ -60,13 +60,17 @@ public class ItemShop : MonoBehaviour
 
     public void Buy()
     {
-        /*
-         전체 번들 순회해서 금액 징수 후 선택된 아이템 인벤에 추가
-         버튼으로 구동됨
-         */
+        // 구매 권한 체크 및 차단
+        if (customer != Player.me)
+            return;
+
+            /*
+             전체 번들 순회해서 금액 징수 후 선택된 아이템 인벤에 추가
+             버튼으로 구동됨
+             */
 
 
-        int buyCount = 0;
+            int buyCount = 0;
 
         // 선택된 모든 번들 구매처리
         for (int i = 0; i < bundle.Count; i++)
@@ -101,27 +105,15 @@ public class ItemShop : MonoBehaviour
 
     public void OpenShop()
     {
-        // 플레이어 본인의 턴 체크 하여 제어권 지급
-        // 테스트 목적 비활성 =======================================
-        //canvasGroup.interactable = (Player.me == Turn.now);
+        // 제어권 지급 - 본인 턴
+        GameMaster.script.messageBox.InputControl(Player.me == Turn.now);
+        //canvasGroup.blocksRaycasts = (Player.me == Turn.now);
 
         // 구매자 지정
         customer = Turn.now;
 
-        //for (int i = 0; i < bundle.Count; i++)
-        //{
-        //    // 아이템 테이블에서 랜덤하게 참조
-        //    bundle[i].item = Item.table[Random.Range(0, Item.table.Count)];
-
-        //    // 가격 텍스트 설정
-        //    bundle[i].Refresh();
-        //}
-
         // 가격 텍스트 색상 초기화
         CheckMoney();
-
-        //// 아이템 공개
-        //itemGrop.SetActive(true);
 
         // 상점 오픈
         GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);
