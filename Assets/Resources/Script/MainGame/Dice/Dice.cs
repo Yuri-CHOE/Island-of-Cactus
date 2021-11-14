@@ -75,13 +75,13 @@ public struct Dice
 
         // 특수 주사위 값 보정 - 추가
         else if (type == SpecialDice.Gold)
-            _value++;
-        
+            _valueTotal += Item.table[6].effect.value;
+
         Debug.Log("주사위 :: " + type + " 보정 값 ->" + _value);
 
         // 배율 보정
         //_value *= multypleValue;
-        _valueTotal += _value * multypleValue; ;
+        _valueTotal += _value * multypleValue;
         Debug.Log("주사위 :: " + multypleValue + "배율 보정 값 ->" + _value * multypleValue);
 
         // 주사위 개수 차감
