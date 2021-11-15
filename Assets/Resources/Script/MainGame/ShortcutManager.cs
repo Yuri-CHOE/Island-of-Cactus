@@ -116,12 +116,12 @@ public class ShortcutManager : MonoBehaviour
         shortcutPrice.text = price.ToString();
         CheckColor();
 
+        // UI 호출
+        GameMaster.script.messageBox.PopUp(MessageBox.Type.ShortCut);
+
         // 제어권 지급 - 본인 턴
         GameMaster.script.messageBox.InputControl(Player.me == Turn.now);
         GameMaster.script.messageBox.btnUse.interactable = (customer == Player.me);
-
-        // UI 호출
-        GameMaster.script.messageBox.PopUp(MessageBox.Type.ShortCut);
 
     }
 

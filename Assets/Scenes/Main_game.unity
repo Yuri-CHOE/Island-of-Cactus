@@ -2160,6 +2160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec2f6e94673314d47a608ce2e220e306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  messageBox: {fileID: 291009389}
   m_box: {fileID: 291009385}
   Innerbox: {fileID: 1057355072}
   npcSpace: {fileID: 1885171813}
