@@ -61,7 +61,7 @@ public class ItemShop : MonoBehaviour
     public void Buy()
     {
         // 구매 권한 체크 및 차단
-        if (customer != Player.me)
+        if (customer != Turn.now)
             return;
 
             /*
@@ -105,10 +105,6 @@ public class ItemShop : MonoBehaviour
 
     public void OpenShop()
     {
-        // 제어권 지급 - 본인 턴
-        GameMaster.script.messageBox.InputControl(Player.me == Turn.now);
-        //canvasGroup.blocksRaycasts = (Player.me == Turn.now);
-
         // 구매자 지정
         customer = Turn.now;
 
@@ -117,6 +113,10 @@ public class ItemShop : MonoBehaviour
 
         // 상점 오픈
         GameMaster.script.messageBox.PopUp(MessageBox.Type.Itemshop);
+
+        // 제어권 지급 - 본인 턴
+        GameMaster.script.messageBox.InputControl(Player.me == Turn.now);
+        //canvasGroup.blocksRaycasts = (Player.me == Turn.now);
     }
 
     void CheckMoney()
