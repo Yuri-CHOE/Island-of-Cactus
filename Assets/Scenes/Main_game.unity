@@ -6471,7 +6471,7 @@ MonoBehaviour:
   camLimit1: {fileID: 1673181124}
   camLimit2: {fileID: 1746778031}
   isFreeMode: 0
-  _camSpeed: 7.5
+  _camSpeed: 5
   mouseMove: {x: 0, y: 0, z: 0}
   sensitivity: {x: 5, y: 0, z: 5}
   distance: {x: 0, y: 0, z: 0}
